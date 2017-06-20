@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <com.thinkcool.circletextimageview.CircleTextImageView
+        android:id="@+id/cliv_concern_or_fans_item_touxiang"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true" />
+
+
+    <TextView
+        android:id="@+id/tv_concern_or_fans_item_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="夏天夏天"
+        android:textSize="22sp"
+        android:layout_toRightOf="@id/cliv_concern_or_fans_item_touxiang"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"/>
+    <ImageView
+        android:id="@+id/iv_concern_or_fans_item_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/concern_right"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#eeeeee"></View>
+</RelativeLayout>

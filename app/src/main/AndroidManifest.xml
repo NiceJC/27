@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lede.second_23">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 获取机型信息权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+    <!-- 查看 Wi-Fi 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 查看网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 控制振动器 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 防止设备休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!-- 获取联系人信息，demo中演示发送通讯录消息 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    //地图包、搜索包需要的基础权限
+
+    <!-- 允许程序打开网络套接字 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许程序设置内置sd卡的写权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许程序获取网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许程序访问WiFi网络信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许程序读写手机状态和身份 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application xmlns:tools="http://schemas.android.com/tools"
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon, android:theme">
+        <service android:name="com.amap.api.location.APSService" />
+        <activity android:name=".ui.activity.MainActivity" />
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="630b6444ead1f8e0ce182dd2ccb7fa69" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.lede.second_23.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+        <!--<provider-->
+            <!--android:name=".utils.MyFileProvider"-->
+            <!--android:authorities="${applicationId}.provider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_paths" />-->
+        <!--</provider>-->
+        <meta-data
+            android:name="com.lede.second_23.utils.glide.GlideConfiguration"
+            android:value="GlideModule" />
+        <!-- <activity -->
+        <!-- android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity" -->
+        <!-- android:exported="true" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity android:name=".ui.base.BaseActivity" /> -->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTop">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".ui.activity.ForgetPassword_PhoneActivity" />
+        <activity android:name=".ui.activity.ForgetPassword_PassWordActivity" />
+        <activity android:name=".ui.activity.RePwdActivity" />
+        <activity android:name=".ui.activity.EditInformationActivity" />
+        <activity android:name=".ui.activity.EditActivity" />
+        <activity android:name=".ui.activity.EditSexActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity android:name=".ui.activity.ConcernActivity" />
+        <activity android:name=".ui.activity.ConcernActivity_2" />
+        <activity android:name=".ui.activity.CheckOthersInfoActivity" />
+        <activity android:name=".ui.activity.ConcernOrFansActivity" />
+        <activity
+            android:name=".ui.activity.ConversationListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.lede.second_23"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.ConversationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.lede.second_23"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".broadcastReceiver.SealNotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="io.rong.push.intent.MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MESSAGE_CLICKED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_CLICKED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ui.activity.ConversationListDynamicActivtiy"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.lede.second_23"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.MyPhotoActivity" />
+        <activity android:name=".ui.activity.MyVideoActivity" />
+        <activity android:name=".ui.activity.OtherPersonActivity" />
+        <activity android:name=".ui.activity.PermissionsActivity" />
+        <activity android:name=".ui.activity.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.IssueActivity" />
+        <activity
+            android:name=".ui.activity.SexDialogActivity"
+            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".ui.activity.NicknameOrHobbyOrSignActivity"
+            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+        <activity android:name=".ui.activity.SetActivity" />
+        <activity android:name=".ui.activity.BilateralActivity" />
+        <activity android:name=".ui.activity.PathActivity" />
+        <activity android:name=".ui.activity.ReportActivity" />
+        <activity android:name=".ui.activity.AboutWeActivity" />
+    </application>
+
+</manifest>

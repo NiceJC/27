@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_photo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lede.second_23.ui.activity.MyPhotoActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_my_photo_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#222222">
+        <ImageView
+            android:id="@+id/iv_my_photo_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:src="@mipmap/back_white"/>
+        <TextView
+            android:id="@+id/tv_my_photo_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:textColor="#ffffff"
+            android:textSize="24sp"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:id="@+id/iv_my_photo_menu"
+            android:layout_width="34dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/menu"/>
+    </RelativeLayout>
+    <com.lede.second_23.ui.view.HackyViewPager
+        android:id="@+id/hvp_my_photo_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_my_photo_title">
+
+    </com.lede.second_23.ui.view.HackyViewPager>
+    <LinearLayout
+        android:id="@+id/ll_save"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_my_photo_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#e0000000">
+        <ImageView
+            android:id="@+id/iv_my_photo_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/btn_display_yes"/>
+
+    </LinearLayout>
+</RelativeLayout>

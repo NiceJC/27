@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+    defaultConfig {
+        applicationId "com.lede.second_23"
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+
+            abiFilters "armeabi-v7a","x86"
+
+        }
+    }
+    sourceSets{
+        main{
+            jni.srcDirs=[]
+            jniLibs.srcDirs=['libs']
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            //前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    allprojects {
+        repositories {
+            jcenter()
+            maven {
+                url 'https://dl.bintray.com/cjt/maven'
+
+
+            }
+//            maven { url "https://jitpack.io" }
+
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.githang:status-bar-compat:0.3'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.yanzhenjie.nohttp:okhttp:1.1.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.auth0:java-jwt:2.2.1'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    //    compile 'cn.finalteam.rxgalleryfinal:library:0.0.3'
+    compile 'liji.library.dev:citypickerview:1.0.0'//城市选择器
+
+    compile 'com.github.thinkcool:circletextimageview:1.0.20151218'
+    //    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    //    compile 'com.github.chrisbanes:PhotoView:latest.release.here'
+    //http://blog.csdn.net/ys408973279/article/details/50350313/圆形图片,圆形背景文字的CircleTextImageView开源组件
+//    compile 'com.qiniu:qiniu-android-sdk:7.3.+'
+    //    compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'// recycleView上下拉刷新库
+//    compile 'cjt.library.wheel:camera:1.0.2'
+    //拍照框架AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.4.0_20170427.jar
+    compile 'com.github.LuckSiege.PictureSelector:picture_library:v1.5.3'
+    //双向SeekBar
+    //    compile 'com.github.Jay-Goo:RangeSeekBar:v1.0.7'
+    //    //自定义ImageView
+    //    compile 'com.hml:DIYImage:1.0.1'
+    //viewPager指示器
+//    compile 'cn.junhua.android.view:indicatorviewlibrary:1.0.0'
+    //视频压缩
+//    compile 'com.sh.shvideo:shvideolibrary:1.5.0'
+    testCompile 'junit:junit:4.12'
+    compile project(':IMKit')
+    compile project(':jcvideoplayer-lib')
+    compile project(':librangeseekbar')
+    compile project(':DIYImageLibrary')
+    compile project(':pulToRefresh_Library')
+}

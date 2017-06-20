@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_mainfragment_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#ffffff">
+
+            <ImageView
+                android:id="@+id/iv_mainFragment_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:src="@mipmap/camera" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/titile_27"
+                 />
+
+            <ImageView
+                android:id="@+id/iv_mainFragment_person"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/personal"/>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/v_mainFragment_line"
+            android:layout_width="35dp"
+            android:layout_height="3dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/black"
+            android:layout_marginBottom="2dp"></View>
+    </RelativeLayout>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="#eeeeee"/>-->
+
+
+
+    <com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView
+        android:id="@+id/rv_mainFragment_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="@color/white"/>
+    <!--<com.chanven.lib.cptr.PtrClassicFrameLayout-->
+        <!--android:id="@+id/test_list_view_frame"-->
+        <!--xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#f0f0f0"-->
+        <!--cube_ptr:ptr_resistance="1.7"-->
+        <!--cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"-->
+        <!--cube_ptr:ptr_duration_to_close="200"-->
+        <!--cube_ptr:ptr_duration_to_close_header="1000"-->
+        <!--cube_ptr:ptr_keep_header_when_refresh="true"-->
+        <!--cube_ptr:ptr_pull_to_fresh="false">-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/rv_mainFragment_show"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
+    <!--</com.chanven.lib.cptr.PtrClassicFrameLayout>-->
+
+
+</LinearLayout>

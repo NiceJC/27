@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <SurfaceView
+        android:id="@+id/surfaceview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+
+
+    <Button
+        android:id="@+id/tingZhi_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:text="停止"/>
+
+    <ImageView
+        android:id="@+id/iv_camera_fragment_takephoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/camera_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp" />
+    
+    <ImageView
+        android:id="@+id/iv_camera_fragment_choosephoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="25dp"
+        android:layout_alignBottom="@id/iv_camera_fragment_takephoto" />
+    
+    <ImageView
+        android:id="@+id/iv_camera_fragment_switchcamera"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="25dp"
+        android:src="@mipmap/switchcamera"/>
+    <ImageView
+        android:id="@+id/iv_camera_fragment_upload"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="25dp"
+        android:layout_alignBottom="@id/iv_camera_fragment_takephoto"
+        android:src="@mipmap/right"
+        android:layout_alignParentRight="true"/>
+    <Button
+        android:id="@+id/luXiang_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/tingZhi_bt"
+        android:visibility="gone"
+        android:text="录像"/>
+
+    <Button
+        android:id="@+id/auto_focus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/luXiang_bt"
+        android:visibility="gone"
+        android:text="调焦"/>
+
+    <Button
+        android:id="@+id/screenshot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/auto_focus"
+        android:visibility="gone"
+        android:text="拍照"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:text="1秒"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
+
+
+</RelativeLayout>

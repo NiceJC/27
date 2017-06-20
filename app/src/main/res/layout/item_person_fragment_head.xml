@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.thinkcool.circletextimageview.CircleTextImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ctiv_personfragment_userimg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/test2"/>
+        <ImageView
+            android:id="@+id/iv_person_fragment_item_sex"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitEnd"
+            android:src="@mipmap/boy"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/tv_personfragment_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:text="用户昵称"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/tv_personfragment_sign"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:text="我相信,梦里能到达的地方,总有一天,脚步也能到达"
+                android:textColor="#535353" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_person_fragment_concerned"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_converned_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="5dp"
+                        android:text="899"
+                        android:gravity="center_vertical"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
+                        android:text="已关注"
+                        android:textColor="#999999"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_person_fragment_fans"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_fans_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="5dp"
+                        android:text="566"
+                        android:gravity="center_vertical"
+                        android:textColor="#000000"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
+                        android:text="粉丝"
+                        android:textColor="#999999"
+                        android:textSize="18sp"
+                        android:id="@+id/textView" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_tie_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="5dp"
+                        android:text="218"
+                        android:gravity="center_vertical"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="center_vertical"
+                        android:text="帖子"
+                        android:textColor="#999999"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/iv_personfragment_msg_test"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"
+                        android:src="@mipmap/comment_off" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

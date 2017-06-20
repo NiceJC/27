@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="#f34499">-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text="相机"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:layout_marginLeft="5dp"/>-->
+    <!--<TextView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:text="23秒"-->
+    <!--android:textColor="@color/white"/>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text="个人中心"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:layout_marginRight="5dp"/>-->
+    <!--</LinearLayout>-->
+    <!--<View-->
+    <!--android:id="@+id/v_mainFragment_line"-->
+    <!--android:layout_width="35dp"-->
+    <!--android:layout_height="3dp"-->
+    <!--android:background="@color/black"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_centerHorizontal="true">-->
+    <!--</View>-->
+    <!--</RelativeLayout>-->
+
+    <com.lede.second_23.utils.MyViewPager
+        android:id="@+id/vp_childFragment_ViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.lede.second_23.utils.MyViewPager>
+</LinearLayout>
