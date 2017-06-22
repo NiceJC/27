@@ -14,8 +14,15 @@ import android.widget.Toast;
 
 import com.lede.second_23.R;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.glide.GlideCatchUtil;
+import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.RequestMethod;
+import com.yolanda.nohttp.rest.OnResponseListener;
+import com.yolanda.nohttp.rest.Request;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.yolanda.nohttp.rest.Response;
 
 import org.ielse.widget.RangeSeekBar;
 
@@ -44,6 +51,7 @@ public class SetActivity extends AppCompatActivity {
     private Context mContext;
     private float minAge=0;
     private float maxAge=41;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,8 @@ public class SetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set);
         ButterKnife.bind(this);
         mContext=this;
+        //获取请求队列
+        requestQueue = GlobalConstants.getRequestQueue();
         initController();
         initData();
     }
@@ -112,7 +122,7 @@ public class SetActivity extends AppCompatActivity {
         }
     }
     @OnClick({R.id.rl_set_activity_sex,R.id.tv_set_activity_save,R.id.ll_set_activity_exit
-            ,R.id.ll_set_activity_clear,R.id.ll_set_activity_about,R.id.iv_set_activity_back})
+            ,R.id.ll_set_activity_clear,R.id.ll_set_activity_about,R.id.iv_set_activity_back,R.id.ll_set_activity_clear_location})
     public void onclick(View view){
         switch (view.getId()) {
             case R.id.rl_set_activity_sex:
@@ -159,7 +169,41 @@ public class SetActivity extends AppCompatActivity {
             case R.id.iv_set_activity_back:
                 finish();
                 break;
+            case R.id.ll_set_activity_clear_location:
+                clear_distance();
+                break;
         }
+    }
+
+    //// TODO: 17/6/22  设置开关界面未完善
+    /**
+     * 设置地理地址开关
+     */
+    private void clear_distance() {
+        Request<String> clear_distance_Request = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/updateLatType", RequestMethod.POST);
+        clear_distance_Request.add("userId", (String) SPUtils.get(this, GlobalConstants.USERID, ""));
+        clear_distance_Request.add("type", 1);
+        requestQueue.add(100, clear_distance_Request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                L.i(response.get());
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                L.i(response.get());
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void showDialog(){

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,6 +106,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private ConcernUserInfoBean concernUserInfoBean;
     private LatLng mStartPoint;
     private LatLng mEndPoint;
+    private int location_type=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,11 +166,16 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case R.id.iv_concern_activity_location:
                 if (concernUserInfoBean.getData().isEnd()) {
-                    intent = new Intent(this, PathActivity.class);
-                    intent.putExtra("lat", lat);
-                    intent.putExtra("lon", lon);
-                    intent.putExtra("dis", tv_distance.getText().toString().trim());
-                    startActivity(intent);
+                    if (location_type==0) {
+                        intent = new Intent(this, PathActivity.class);
+                        intent.putExtra("lat", lat);
+                        intent.putExtra("lon", lon);
+                        intent.putExtra("dis", tv_distance.getText().toString().trim());
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(this, "对方隐藏了位置信息哦", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     Toast.makeText(this, "互相关联后才能获取位置哦", Toast.LENGTH_SHORT).show();
                 }
@@ -272,6 +279,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 parserConcernMsg(response.get());
                 break;
             case 300:
+                Log.i("TAB", "onSucceed: Location"+response.get());
                 parserLocation(response.get());
                 break;
         }
@@ -287,6 +295,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private void parserLocation(String json) {
         LocationBean locationBean = mGson.fromJson(json, LocationBean.class);
         locationBean.getData().getUserAmap().getLat();
+        location_type=Integer.parseInt(locationBean.getData().getUserAmap().getType());
         lat = locationBean.getData().getUserAmap().getLat();
         lon = locationBean.getData().getUserAmap().getLon();
         mStartPoint = new LatLng(Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LATITUDE, "")), Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LONGITUDE, "")));

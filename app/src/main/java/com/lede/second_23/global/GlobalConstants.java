@@ -26,8 +26,8 @@ public class GlobalConstants {
 
     //网络访问
 //    public static final String URL = "https://api.lacoorent.com";
-    public static final String URL = "http://101.37.85.56:8000";
-//    public static final String URL = "http://192.168.0.103:8080";
+//    public static final String URL = "http://101.37.85.56:8000";
+    public static final String URL = "http://192.168.0.104:8080";
         //access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac

@@ -6,8 +6,9 @@ package com.lede.second_23.bean;
 
 public class LocationBean {
 
+
     /**
-     * data : {"userAmap":{"lat":"30.303799","lon":"120.369146","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5"}}
+     * data : {"userAmap":{"lat":"30.303972","lon":"120.369257","type":"0","userId":"9e7a060b521049bb990dedc6055b7886"}}
      * msg : 请求成功
      * result : 10000
      */
@@ -42,7 +43,7 @@ public class LocationBean {
 
     public static class DataBean {
         /**
-         * userAmap : {"lat":"30.303799","lon":"120.369146","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5"}
+         * userAmap : {"lat":"30.303972","lon":"120.369257","type":"0","userId":"9e7a060b521049bb990dedc6055b7886"}
          */
 
         private UserAmapBean userAmap;
@@ -57,13 +58,15 @@ public class LocationBean {
 
         public static class UserAmapBean {
             /**
-             * lat : 30.303799
-             * lon : 120.369146
-             * userId : 84ba77bc08ea4e1d8c03c06f6f6c79e5
+             * lat : 30.303972
+             * lon : 120.369257
+             * type : 0
+             * userId : 9e7a060b521049bb990dedc6055b7886
              */
 
             private String lat;
             private String lon;
+            private String type;
             private String userId;
 
             public String getLat() {
@@ -80,6 +83,14 @@ public class LocationBean {
 
             public void setLon(String lon) {
                 this.lon = lon;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
             }
 
             public String getUserId() {
