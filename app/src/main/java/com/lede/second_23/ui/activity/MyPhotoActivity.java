@@ -36,7 +36,6 @@ import com.yolanda.nohttp.rest.Response;
 
 import java.util.ArrayList;
 
-import static com.lede.second_23.R.id.iv_my_photo_bt;
 
 
 public class MyPhotoActivity extends AppCompatActivity implements View.OnClickListener {
@@ -53,11 +52,13 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
     private RequestQueue requestQueue;
     private ImageView iv_menu;
     private String userid;
+    private String time;
     private long forumId;
     private PopupMenu popup;
     private ImageView iv_back;
     private Dialog mDialog;
     private boolean isSelf = true;
+    private TextView tv_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
         banner = intent.getStringArrayListExtra("banner");
         sum = banner.size();
         text = intent.getStringExtra("text");
-
+        time=intent.getStringExtra("time");
         userid = intent.getStringExtra("userId");
         forumId = intent.getLongExtra("forumId", 0);
         SPUtils.put(this, GlobalConstants.CURRENT_USERID, userid);
@@ -90,6 +91,8 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
         iv_back = (ImageView) findViewById(R.id.iv_my_photo_back);
         iv_back.setOnClickListener(this);
         iv_menu = (ImageView) findViewById(R.id.iv_my_photo_menu);
+        tv_time = (TextView) findViewById(R.id.tv_my_photo_time);
+        tv_time.setText(time);
         isSelf = ((String) SPUtils.get(this, GlobalConstants.USERID, "")).equals(userid);
 //        if (((String) SPUtils.get(this, GlobalConstants.USERID,"")).equals(userid)) {
 //            /**
@@ -116,12 +119,12 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
 //        }
         iv_menu.setOnClickListener(this);
 //        ll_bottom = (LinearLayout) findViewById(R.id.ll_my_photo_bottom);
-        iv_bt = (ImageView) findViewById(iv_my_photo_bt);
+        iv_bt = (ImageView) findViewById(R.id.iv_my_photo_bt);
         iv_bt.setOnClickListener(this);
         tv_num = (TextView) findViewById(R.id.tv_my_photo_num);
         tv_num.setText("1/" + sum);
 //        tv_text = (TextView) findViewById(R.id.tv_my_photo_text);
-        ll_save = (LinearLayout) findViewById(R.id.ll_save);
+//        ll_save = (LinearLayout) findViewById(R.id.ll_save);
 //        ll_save.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
 //            public boolean onLongClick(View view) {
@@ -182,8 +185,9 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case iv_my_photo_bt:
+            case R.id.iv_my_photo_bt:
                 showPopwindow();
+                tv_time.setVisibility(View.GONE);
                 break;
             case R.id.iv_my_photo_menu:
 
@@ -344,6 +348,7 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDismiss() {
                 System.out.println("popWindow消失");
+                tv_time.setVisibility(View.VISIBLE);
             }
         });
 

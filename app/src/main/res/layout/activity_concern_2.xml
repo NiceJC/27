@@ -68,7 +68,13 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="#333333"/>
-
+            <TextView
+                android:id="@+id/tv_concern_activity_2_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="16sp"
+                android:textColor="#333333"/>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -234,7 +240,7 @@
         android:id="@+id/ll_concern_activity_2_bottom"
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center_vertical">

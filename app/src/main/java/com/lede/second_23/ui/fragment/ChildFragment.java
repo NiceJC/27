@@ -29,7 +29,7 @@ public class ChildFragment extends Fragment {
     public static ChildFragment instance;
     private ArrayList<Fragment> fragment_List;
     private MainFragment mainFragment;
-    private PersonFragment personFragment;
+    private PersonFragment_1 personFragment;
     private IUnReadMessageObserver iUnReadMessageObserver;
     @Nullable
     @Override
@@ -49,7 +49,7 @@ public class ChildFragment extends Fragment {
         fragment_List=new ArrayList<>();
         mainFragment=new MainFragment();
         fragment_List.add(mainFragment);
-        personFragment=new PersonFragment();
+        personFragment=new PersonFragment_1();
         fragment_List.add(personFragment);
         vp_childFragment_ViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(),fragment_List));
         vp_childFragment_ViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -74,10 +74,10 @@ public class ChildFragment extends Fragment {
             public void onCountChanged(int i) {
                 if (i >= 1) {
                     Log.i("TAS", "onCountChanged: " + i);
-                    PersonFragment.instance.iv_personfragment_msg_test.setImageResource(R.mipmap.grzx_message);
+                    PersonFragment_1.instance.iv_personfragment_msg_test.setImageResource(R.mipmap.grzx_message);
                     MainFragment.instance.iv_mainFragment_person.setImageResource(R.mipmap.new_personal);
                 }else {
-                    PersonFragment.instance.iv_personfragment_msg_test.setImageResource(R.mipmap.comment_off);
+                    PersonFragment_1.instance.iv_personfragment_msg_test.setImageResource(R.mipmap.comment_off_1);
                     MainFragment.instance.iv_mainFragment_person.setImageResource(R.mipmap.personal);
                 }
             }

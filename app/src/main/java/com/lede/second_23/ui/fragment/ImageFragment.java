@@ -186,12 +186,12 @@ public class ImageFragment extends Fragment {
         Date curDate    =   new    Date(System.currentTimeMillis());//获取当前时间
         String    str    =    formatter.format(curDate);
         Log.e("TAG", "保存图片");
-        File file = new File("/sdcard/23秒/");
+        File file = new File("/sdcard/27/");
         //判断文件夹是否存在,如果不存在则创建文件夹
         if (!file.exists()) {
             file.mkdir();
         }
-        File f = new File("/sdcard/23秒/", str+".png");
+        File f = new File("/sdcard/27/", str+".png");
         if (f.exists()) {
             f.delete();
         }
@@ -200,7 +200,7 @@ public class ImageFragment extends Fragment {
             bm.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
-            Toast.makeText(getActivity(), "图片已保存到23秒文件夹中", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "图片已保存到27文件夹中", Toast.LENGTH_SHORT).show();
             Log.i("TAG", "已经保存");
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block

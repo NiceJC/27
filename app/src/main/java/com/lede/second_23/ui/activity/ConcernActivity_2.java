@@ -32,6 +32,7 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.view.HackyViewPager;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -39,7 +40,10 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -91,6 +95,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     LinearLayout ll_inDicator;
     @Bind(R.id.iv_concern_activity_2_report)
     ImageView iv_report;
+    @Bind(R.id.tv_concern_activity_2_time)
+    TextView tv_time;
 
     private boolean isFriend = false;
 
@@ -387,6 +393,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 .error(R.mipmap.loading)
                 .into(diyiv_userimg);
         tv_username.setText(concernUserInfoBean.getData().getInfo().getNickName());
+
+
 //        tv_city.setText(concernUserInfoBean.getData().getInfo().getAddress());
         if (concernUserInfoBean.getData().isEnd()) {
             Glide.with(this)
@@ -412,7 +420,19 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
             iv_concern_activity_concern.setClickable(true);
         }
-        if (dataBean.getForumList()!=null) {                                    //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
+        if (dataBean.getForumList()!=null) {
+            Date createDate=null;
+            //"2017-05-19 17:15:40"
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (createDate!=null) {
+                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+            }
+            //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
             if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
                 hvp_concern_activity_2.setVisibility(View.VISIBLE);
                 jcplay_concerv_activity_2.setVisibility(View.GONE);
@@ -536,7 +556,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
             @Override
             public void onDismiss() {
-                System.out.println("popWindow消失");
+//                System.out.println("popWindow消失");
                 ll_bottom.setVisibility(View.VISIBLE);
                 iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click_up);
             }

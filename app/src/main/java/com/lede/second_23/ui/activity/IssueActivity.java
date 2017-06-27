@@ -70,7 +70,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 
     String path;//视频录制输出地址
     //视频压缩数据地址
-    private String currentOutputVideoPath = "/sdcard/23秒/out.mp4";
+    private String currentOutputVideoPath = "/sdcard/27/out.mp4";
     private Context mContext;
     private RequestQueue requestQueue;
     private List<LocalMedia> selectMedia = new ArrayList<>();

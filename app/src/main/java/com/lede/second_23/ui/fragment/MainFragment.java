@@ -135,6 +135,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                     iv_play.setVisibility(View.GONE);
                     if (forumListBean.getImgs().size()==1) {
                         iv_photos.setVisibility(View.GONE);
+                    }else {
+                        iv_photos.setVisibility(View.VISIBLE);
                     }
                 }else {
                     Glide.with(mContext)
@@ -144,6 +146,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                             .placeholder(R.mipmap.loading)
                             .into(diy_iv);
                     iv_photos.setVisibility(View.GONE);
+                    iv_play.setVisibility(View.VISIBLE);
                 }
 //                Glide.with(mContext)
 //                        .load(forumListBean.getImgUrl())

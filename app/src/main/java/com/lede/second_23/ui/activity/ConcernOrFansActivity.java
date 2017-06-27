@@ -285,7 +285,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
         if (mList.size()==0) {
 //            Toast.makeText(context, "无内容", Toast.LENGTH_SHORT).show();
             inflate.setVisibility(View.GONE);
-            tv_ifNone.setVisibility(View.VISIBLE);
+//            tv_ifNone.setVisibility(View.VISIBLE);
         }
         isRefresh=false;
         srl_refresh.setRefreshing(isRefresh);

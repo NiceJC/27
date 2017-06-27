@@ -265,7 +265,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             String path = Environment.getExternalStorageDirectory()
                     .getAbsolutePath()
                     + File.separator
-                    + "23秒"
+                    + "27"
                     + File.separator;
             // 声明存放视频的文件夹的File对象
             videoFolder = new File(path);
@@ -860,7 +860,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             Bitmap newBitmap = Bitmap.createBitmap(oldBitmap, 0, 0,
                     oldBitmap.getWidth(), oldBitmap.getHeight(),
                     matrix, true);
-            filepath = videoFolder.getAbsoluteFile() + File.separator + "23秒" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+            filepath = videoFolder.getAbsoluteFile() + File.separator + "27" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
                     + ".jpg";
             File file = new File(filepath);
             try {

@@ -10,4 +10,12 @@
 
     <!-- 默认状态 -->
     <item android:drawable="@mipmap/thumb_up" />
+    <!--<item android:id="@android:id/progress">-->
+        <!--<clip>-->
+            <!--<shape>-->
+                <!--<corners android:radius="5dp"/>-->
+                <!--<solid android:color="@color/title_darkblue" />-->
+            <!--</shape>-->
+        <!--</clip>-->
+    <!--</item>-->
 </selector>

@@ -11,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,6 +53,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private LinearLayout ll_person_fragment_fans;
     private ImageView iv_personfragment_msg_test;
     private List<PersonUtilsBean.DataBean> dataList=new ArrayList<>();
+    private List<PersonBean.DataBean.SimpleBean.ListBean>  listBeanList=new ArrayList<>();
     private CommonAdapter myCommonAdapter;
     private boolean isHasNextPage=true;
 
@@ -186,6 +185,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private void parsePersonInfoJson(String json) {
 
         personBean= mGson.fromJson(json,PersonBean.class);
+        listBeanList.addAll(personBean.getData().getSimple().getList());
         isHasNextPage=personBean.getData().getSimple().isHasNextPage();
         ArrayList<PersonBean.DataBean.SimpleBean.ListBean> list=new ArrayList<>();
         list.addAll(personBean.getData().getSimple().getList());
@@ -287,6 +287,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             public void onRefresh() {
                 pageNum=1;
                 dataList.clear();
+                int size=listBeanList.size();
+                listBeanList.clear();
+                loadMoreWrapper.notifyItemRangeRemoved(1,size);
 //                myAdapter.notifyDataSetChanged();
                 loadPersonInfoService();
                 isFresh=true;
@@ -298,80 +301,169 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
 //        gridLayoutManager.set
         myAdapter=new PersonFragmentRVAdapter(context,dataList);
-        rv_personfragment_show.setLayoutManager(linearLayoutManager);
+        rv_personfragment_show.setLayoutManager(gridLayoutManager);
 
-        myCommonAdapter= new CommonAdapter<PersonUtilsBean.DataBean>(context, R.layout.item_person_fragment_time, dataList) {
+//        myCommonAdapter= new CommonAdapter<PersonUtilsBean.DataBean>(context, R.layout.item_person_fragment_time, dataList) {
+//            @Override
+//            protected void convert(ViewHolder holder, PersonUtilsBean.DataBean dataBean, final int position) {
+//                TextView tv_time =holder.getView(R.id.tv_person_fragment_item_time);
+//                GridLayout gl_show=holder.getView(R.id.gl_person_fragment_item_show);
+//                tv_time.setText(dataList.get(position-1).getCreateTime());
+//
+//
+//                int width = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+//                gl_show.removeAllViews();
+//                for ( int i = 0; i < dataList.get(position-1).getBeanList().size(); i++) {
+//                    view = layoutInflater.inflate(R.layout.item_person_fragment_show, null);
+//                    final int currentI=i;
+////                    showViewHolder=new ShowViewHolder(view);
+//                    ImageView showView_photos=(ImageView) view.findViewById(R.id.iv_person_fragment_item_photos);
+//                    ImageView showView_show = (ImageView) view.findViewById(R.id.iv_person_fragment_item_show);
+//                    ImageView showView_play = (ImageView) view.findViewById(R.id.iv_person_fragment_item_play);
+//                    if (dataList.get(position - 1).getBeanList().get(currentI).getImgs().size()==1) {
+//                        showView_photos.setVisibility(View.GONE);
+//                    }else {
+//                        showView_photos.setVisibility(View.VISIBLE);
+//                    }
+//                    showView_show.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            ArrayList<String> imgurlList=new ArrayList<String>();
+//                            for (int i1 = 0; i1 < dataList.get(position - 1).getBeanList().get(currentI).getImgs().size(); i1++) {
+//                                imgurlList.add(dataList.get(position - 1).getBeanList().get(currentI).getImgs().get(i1).getUrl());
+//                            }
+//                            Intent intent=new Intent(context, MyPhotoActivity.class);
+//                            intent.putExtra("userId",personBean.getData().getUser().getUserId());
+//                            intent.putExtra("forumId",(long)dataList.get(position - 1).getBeanList().get(currentI).getForumId());
+//
+//
+//                            intent.putStringArrayListExtra("banner", imgurlList);
+//                            intent.putExtra("text",dataList.get(position-1).getBeanList().get(currentI).getText());
+//                            context.startActivity(intent);
+//                        }
+//                    });
+//                    showView_play.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            Intent intent=new Intent(context, MyVideoActivity.class);
+//                            intent.putExtra("videourl",dataList.get(position-1).getBeanList().get(currentI).getForumMedia().getPath());
+//                            intent.putExtra("picurl",dataList.get(position-1).getBeanList().get(currentI).getForumMedia().getPic());
+//                            intent.putExtra("text",dataList.get(position-1).getBeanList().get(currentI).getText());
+//                            context.startActivity(intent);
+//                        }
+//                    });
+//                    if (dataList.get(position-1).getBeanList().get(i).getForumMedia().getPic().equals("http://my-photo.lacoorent.com/null")) {
+//                        Glide.with(context)
+//                                .load(dataList.get(position-1).getBeanList().get(i).getImgs().get(0).getUrl())
+//                                .error(R.mipmap.loading)
+//                                .placeholder(R.mipmap.loading)
+//                                .into(showView_show);
+//                        showView_play.setVisibility(View.GONE);
+//                        showView_show.setClickable(true);
+//                    } else {
+//                        Glide.with(context)
+//                                .load(dataList.get(position-1).getBeanList().get(i).getForumMedia().getPic())
+//                                .error(R.mipmap.loading)
+//                                .placeholder(R.mipmap.loading)
+//                                .into(showView_show);
+//                        showView_photos.setVisibility(View.GONE);
+//                        showView_show.setClickable(false);
+//
+//                    }
+//
+//                    gl_show.addView(view, width / 3, width / 3);
+//                }
+//            }
+//        };
+
+        myCommonAdapter= new CommonAdapter<PersonBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show,listBeanList) {
             @Override
-            protected void convert(ViewHolder holder, PersonUtilsBean.DataBean dataBean, final int position) {
-                TextView tv_time =holder.getView(R.id.tv_person_fragment_item_time);
-                GridLayout gl_show=holder.getView(R.id.gl_person_fragment_item_show);
-                tv_time.setText(dataList.get(position-1).getCreateTime());
+            protected void convert(ViewHolder holder, final PersonBean.DataBean.SimpleBean.ListBean dataBean, final int position) {
+                Log.i("FUYONG", "convert: "+position);
+                ImageView showView_photos = (ImageView) holder.getView(R.id.iv_person_fragment_item_photos);
+                ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
+                ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
 
 
-                int width = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
-                gl_show.removeAllViews();
-                for ( int i = 0; i < dataList.get(position-1).getBeanList().size(); i++) {
-                    view = layoutInflater.inflate(R.layout.item_person_fragment_show, null);
-                    final int currentI=i;
-//                    showViewHolder=new ShowViewHolder(view);
-                    ImageView showView_photos=(ImageView) view.findViewById(R.id.iv_person_fragment_item_photos);
-                    ImageView showView_show = (ImageView) view.findViewById(R.id.iv_person_fragment_item_show);
-                    ImageView showView_play = (ImageView) view.findViewById(R.id.iv_person_fragment_item_play);
-                    if (dataList.get(position - 1).getBeanList().get(currentI).getImgs().size()==1) {
-                        showView_photos.setVisibility(View.GONE);
-                    }else {
-                        showView_photos.setVisibility(View.VISIBLE);
-                    }
-                    showView_show.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ArrayList<String> imgurlList=new ArrayList<String>();
-                            for (int i1 = 0; i1 < dataList.get(position - 1).getBeanList().get(currentI).getImgs().size(); i1++) {
-                                imgurlList.add(dataList.get(position - 1).getBeanList().get(currentI).getImgs().get(i1).getUrl());
-                            }
-                            Intent intent=new Intent(context, MyPhotoActivity.class);
-                            intent.putExtra("userId",personBean.getData().getUser().getUserId());
-                            intent.putExtra("forumId",(long)dataList.get(position - 1).getBeanList().get(currentI).getForumId());
-
-
-                            intent.putStringArrayListExtra("banner", imgurlList);
-                            intent.putExtra("text",dataList.get(position-1).getBeanList().get(currentI).getText());
-                            context.startActivity(intent);
-                        }
-                    });
-                    showView_play.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent=new Intent(context, MyVideoActivity.class);
-                            intent.putExtra("videourl",dataList.get(position-1).getBeanList().get(currentI).getForumMedia().getPath());
-                            intent.putExtra("picurl",dataList.get(position-1).getBeanList().get(currentI).getForumMedia().getPic());
-                            intent.putExtra("text",dataList.get(position-1).getBeanList().get(currentI).getText());
-                            context.startActivity(intent);
-                        }
-                    });
-                    if (dataList.get(position-1).getBeanList().get(i).getForumMedia().getPic().equals("http://my-photo.lacoorent.com/null")) {
-                        Glide.with(context)
-                                .load(dataList.get(position-1).getBeanList().get(i).getImgs().get(0).getUrl())
-                                .error(R.mipmap.loading)
-                                .placeholder(R.mipmap.loading)
-                                .into(showView_show);
-                        showView_play.setVisibility(View.GONE);
-                        showView_show.setClickable(true);
-                    } else {
-                        Glide.with(context)
-                                .load(dataList.get(position-1).getBeanList().get(i).getForumMedia().getPic())
-                                .error(R.mipmap.loading)
-                                .placeholder(R.mipmap.loading)
-                                .into(showView_show);
-                        showView_photos.setVisibility(View.GONE);
-                        showView_show.setClickable(false);
-
-                    }
-
-                    gl_show.addView(view, width / 3, width / 3);
+                if (dataBean.getImgs().size() == 1) {
+                    showView_photos.setVisibility(View.GONE);
+                } else {
+                    showView_photos.setVisibility(View.VISIBLE);
                 }
+                if (dataBean.getForumMedia().getPic().equals("http://my-photo.lacoorent.com/null")) {
+
+                    Glide.with(context)
+                            .load(dataBean.getImgs().get(0).getUrl())
+                            .error(R.mipmap.loading)
+                            .placeholder(R.mipmap.loading)
+                            .into(showView_show);
+                    showView_play.setVisibility(View.GONE);
+//                    Log.i("FUYONG", "显示或隐藏播放按钮: "+position);
+//                    showView_show.setClickable(true);
+                } else {
+                    Glide.with(context)
+                            .load(dataBean.getForumMedia().getPic())
+                            .error(R.mipmap.loading)
+                            .placeholder(R.mipmap.loading)
+                            .into(showView_show);
+                    showView_photos.setVisibility(View.GONE);
+                    showView_play.setVisibility(View.VISIBLE);
+//                    showView_show.setClickable(false);
+                }
+                showView_show.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=null;
+                        if (dataBean.getForumMedia().getPic().equals("http://my-photo.lacoorent.com/null")) {
+
+                            ArrayList<String> imgurlList = new ArrayList<String>();
+                            for (int i1 = 0; i1 < dataBean.getImgs().size(); i1++) {
+                                imgurlList.add(dataBean.getImgs().get(i1).getUrl());
+                            }
+//                            ArrayList<LocalMedia> selectMeida=new ArrayList<LocalMedia>();
+//                            for (int i1 = 0; i1 < dataList.get(position - 1).getBeanList().get(currentI).getImgs().size(); i1++) {
+//                                LocalMedia localMedia=new LocalMedia();
+//                                localMedia.setPath(dataList.get(position - 1).getBeanList().get(currentI).getImgs().get(i1).getUrl());
+//                                selectMeida.add(localMedia);
+//                            }
+
+                            intent = new Intent(context, MyPhotoActivity.class);
+                            intent.putExtra("userId", personBean.getData().getUser().getUserId());
+                            intent.putExtra("forumId", (long) dataBean.getForumId());
+                            intent.putStringArrayListExtra("banner", imgurlList);
+                            intent.putExtra("text", dataBean.getText());
+                            intent.putExtra("time",dataBean.getCreateTime().substring(0,10));
+                            context.startActivity(intent);
+//                            PictureConfig.getInstance().externalPicturePreview((Activity) context, "/23秒", 0, selectMeida);
+                        }else {
+                            intent = new Intent(context, MyVideoActivity.class);
+                            intent.putExtra("videourl", dataBean.getForumMedia().getPath());
+                            intent.putExtra("picurl", dataBean.getForumMedia().getPic());
+                            intent.putExtra("text", dataBean.getText());
+                            intent.putExtra("userId", personBean.getData().getUser().getUserId());
+                            intent.putExtra("forumId", (long) dataBean.getForumId());
+                            intent.putExtra("time",dataBean.getCreateTime().substring(0,10));
+                            context.startActivity(intent);
+                        }
+                    }
+                });
+//                showView_play.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(context, MyVideoActivity.class);
+//                        intent.putExtra("videourl", dataBean.getForumMedia().getPath());
+//                        intent.putExtra("picurl", dataBean.getForumMedia().getPic());
+//                        intent.putExtra("text", dataBean.getText());
+//                        intent.putExtra("userId", personBean.getData().getUser().getUserId());
+//                        intent.putExtra("forumId", (long) dataBean.getForumId());
+//                        context.startActivity(intent);
+//                    }
+//                });
+
+
             }
         };
+
         //添加头布局
         addHeadView(myCommonAdapter);
 

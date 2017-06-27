@@ -217,9 +217,10 @@ public class LoginActivity extends AppCompatActivity {
 //        SPUtils.put(this, GlobalConstants.CERTIFICATION, loginBean.certification);
             //提示用户登陆成功并退出登陆界面
             T.showShort(this, "登陆成功");
+            SPUtils.put(LoginActivity.this, GlobalConstants.TOKENUNUSEFULL,false);
             loadUserInfo();
 
-            finish();
+
         }
 
     }
@@ -268,6 +269,7 @@ public class LoginActivity extends AppCompatActivity {
             MyApplication.instance.getRongIMTokenService();
             startActivity(new Intent(this,TestActivity.class));
         }
+        finish();
     }
 
 }

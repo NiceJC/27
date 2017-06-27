@@ -61,6 +61,7 @@ public class OtherPersonFragment extends Fragment implements View.OnClickListene
     private LinearLayout ll_person_fragment_fans;
     private ImageView iv_personfragment_msg_test;
     private List<PersonUtilsBean.DataBean> dataList=new ArrayList<>();
+    private List<PersonBean.DataBean.SimpleBean.ListBean>  listBeanList=new ArrayList<>();
     private CommonAdapter myCommonAdapter;
     private boolean isHasNextPage=false;
 

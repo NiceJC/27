@@ -151,9 +151,11 @@
             android:id="@+id/sb_set_activity_distance"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:maxHeight="5dp"
             android:max="9"
             android:progress="0"
-            android:thumb="@drawable/thumb_bar"/>
+            android:thumb="@drawable/thumb_bar"
+            android:progressDrawable="@drawable/seekbar_drawable"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -192,6 +194,7 @@
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/ll_set_activity_update"
         android:layout_width="match_parent"

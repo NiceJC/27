@@ -24,10 +24,11 @@ public class GlobalConstants {
         return mRequestQueue;
     }
 
+    // TODO: 17/6/22  本地测试发布记得改回去
     //网络访问
 //    public static final String URL = "https://api.lacoorent.com";
-//    public static final String URL = "http://101.37.85.56:8000";
-    public static final String URL = "http://192.168.0.104:8080";
+    public static final String URL = "http://101.37.85.56:8000";  //服务器地址
+//    public static final String URL = "http://192.168.0.106:8080";
         //access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac
@@ -61,6 +62,7 @@ public class GlobalConstants {
     //ACCESS_TOKEN是否过期
     public static final String TOKENUNUSEFULL = "TOKENUNUSEFULL";
 
+    public static final String IS_SHOW_LOCATION="IS_SHOWLOCATION";
     //是否刚刚发布过动态
     public static final String IS_ISSUE="IS_ISSUE";
     //是否刚刚修改过用户信息

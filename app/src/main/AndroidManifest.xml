@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <!-- 查看 Wi-Fi 状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 查看网络状态 -->
@@ -65,6 +67,29 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="630b6444ead1f8e0ce182dd2ccb7fa69" />
+        <!--360更新-->
+        <activity
+            android:name="com.qihoo.appstore.common.updatesdk.lib.UpdateTipDialogActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <service
+            android:name="com.qihoo.appstore.updatelib.CheckUpdateService"
+            android:exported="false" />
+
+        <provider
+            android:name="com.qihoo.appstore.updatelib.UpdateProvider"
+            android:authorities="com.lede.second_23"
+            android:grantUriPermissions="true"
+            android:exported="false">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_apk_path" />
+        </provider>
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

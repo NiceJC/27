@@ -72,12 +72,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/layout/abc_action_mode_close_item_material.xml"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/layout/abc_action_menu_item_layout.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/layout/abc_action_menu_item_layout.xml"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/layout/notification_template_big_media_narrow.xml",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/layout/notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/layout/abc_action_menu_item_layout.xml",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/layout/abc_action_menu_item_layout.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/layout/abc_alert_dialog_material.xml",

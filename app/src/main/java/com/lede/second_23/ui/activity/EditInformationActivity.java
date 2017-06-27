@@ -470,7 +470,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 Toast.makeText(mContext, "保存信息成功", Toast.LENGTH_SHORT).show();
                 SPUtils.put(mContext,GlobalConstants.IS_EDITINFO,true);
                 if (jumpType==1) {
-                    SPUtils.put(EditInformationActivity.this, GlobalConstants.TOKENUNUSEFULL,true);
+
                     Intent intent=new Intent(this,TestActivity.class);
                     startActivity(intent);
                     MyApplication.instance.getRongIMTokenService();

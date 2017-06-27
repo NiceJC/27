@@ -604,12 +604,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_edit_text_background_hover.9.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_cs_follow.png",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_cs_follow.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_ic_volume_cancel.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_ic_volume_cancel.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_cs_follow.png",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_cs_follow.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u1f630.png",

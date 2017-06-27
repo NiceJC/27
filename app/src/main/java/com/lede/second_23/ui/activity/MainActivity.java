@@ -2,6 +2,7 @@ package com.lede.second_23.ui.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,7 @@ import com.lede.second_23.adapter.MyFragmentPagerAdapter;
 import com.lede.second_23.ui.fragment.ChildFragment;
 import com.lede.second_23.ui.fragment.MainFragment;
 import com.lede.second_23.utils.MyViewPager;
+import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 
 import java.util.ArrayList;
 
@@ -40,7 +42,9 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         instance=this;
         Log.i("TAC", "onCreate: ");
-
+        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#3b5998"));
+        UpdateHelper.getInstance().autoUpdate("com.lede.second_23", false, 5000);
+        UpdateHelper.getInstance().setDebugMode(true);
 //        StatusBarCompat.setStatusBarColor(this, Color.parseColor("#77cbd8"), lightStatusBar);
 //        Window window = getWindow();
 //        ViewGroup decorViewGroup = (ViewGroup) window.getDecorView();
