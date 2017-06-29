@@ -20,12 +20,24 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/default_ptr_rotate.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_019.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_019.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_list_pressed_holo_light.9.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_list_pressed_holo_light.9.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_014.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_014.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_022.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_022.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_ic_menu_copy_mtrl_am_alpha.png",
@@ -56,12 +68,28 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_000.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_018.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_018.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_012.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_012.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_015.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_015.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_list_pressed_holo_dark.9.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_list_pressed_holo_dark.9.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_023.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_023.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_020.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_020.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_ic_star_black_48dp.png",
@@ -148,6 +176,10 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_017.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_017.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_003.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_003.png"
     },
@@ -196,12 +228,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_list_divider_mtrl_alpha.9.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",
@@ -220,6 +252,14 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_021.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_021.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_024.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_024.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_ic_star_black_36dp.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_ic_star_black_36dp.png"
     },
@@ -230,6 +270,10 @@
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_ic_star_black_16dp.png",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-xhdpi-v4/abc_ic_star_black_16dp.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/progressbar_016.png",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/progressbar_016.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_015.png",

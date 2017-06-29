@@ -602,6 +602,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             case 400:
                 pageNum=1;
                 dataList.clear();
+                listBeanList.clear();
                 isFresh=true;
 //                myAdapter.notifyDataSetChanged();
                 loadPersonInfoService();

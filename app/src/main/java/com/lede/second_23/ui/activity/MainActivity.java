@@ -106,7 +106,7 @@ public class MainActivity extends FragmentActivity {
                 //mainFragment.v_mainFragment_line
 //                animator.ofFloat(line,"translationX",100,100);
 //                animator.setDuration(400);
-//                animator.start();
+//                animator.start_1();
 //                if (vp_main_fg.getMoveRight()) {
 //                    positionOffset=positionOffset-1;
 //                }else if(vp_main_fg.getMoveLeft()){

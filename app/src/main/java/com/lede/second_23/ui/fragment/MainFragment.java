@@ -172,8 +172,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         initView(view);
         //添加头布局
         addHeadView(mAdapter);
-
-
         return view;
     }
 

@@ -14,18 +14,20 @@
         <RelativeLayout
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:background="@drawable/shape__img"
+
             android:layout_gravity="center_vertical">
             <com.example.myapplication.views.diyimage.DIYImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:diy_image_Type="circle"
+                android:src="@mipmap/myself"
+                android:layout_centerInParent="true"/>
+            <com.example.myapplication.views.diyimage.DIYImageView
                 android:id="@+id/xcriv_main_head_myimg"
-                android:layout_width="71dp"
-                android:layout_height="71dp"
-                android:layout_marginTop="5dp"
-                android:padding="1dp"
-                android:scaleType="centerCrop"
-                app:diy_image_Type="round"
-                app:diy_border_color="@color/title_darkblue"
-                app:diy_round_radius="9dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                app:diy_image_Type="circle"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 

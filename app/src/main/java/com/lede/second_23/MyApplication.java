@@ -26,7 +26,6 @@ import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 import com.yolanda.nohttp.Logger;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.cache.DBCacheStore;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
@@ -128,13 +127,13 @@ public class MyApplication extends Application {
                 //切换底层为okHttp
                 .setNetworkExecutor(new OkHttpNetworkExecutor())
                 // 设置全局连接超时时间，单位毫秒
-                .setConnectTimeout(15 * 1000)
+                .setConnectTimeout(15 * 1000*1000)
                 // 设置全局服务器响应超时时间，单位毫秒
-                .setReadTimeout(15 * 1000)
+                .setReadTimeout(15 * 1000*1000)
                 // 保存到数据库
-                .setCacheStore(
-                        new DBCacheStore(this).setEnable(true) // 如果不使用缓存，设置false禁用。
-                )
+//                .setCacheStore(
+//                        new DBCacheStore(this).setEnable(true) // 如果不使用缓存，设置false禁用。
+//                )
         );
         //日志工具
         Logger.setDebug(true);

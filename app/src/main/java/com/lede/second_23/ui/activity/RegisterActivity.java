@@ -207,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                 if (response.responseCode() == 200) {
                     //修改按钮
 //                    TimeCountUtil timeCountUtil = new TimeCountUtil(this, 60000, 1000, btnRegisterPassWordNextStep);
-//                    timeCountUtil.start();
+//                    timeCountUtil.start_1();
                     String json = response.get();
                     try {
                         JSONObject jsonobject = new JSONObject(json);

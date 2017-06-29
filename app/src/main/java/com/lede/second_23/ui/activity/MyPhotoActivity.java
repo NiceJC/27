@@ -93,6 +93,7 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
         iv_menu = (ImageView) findViewById(R.id.iv_my_photo_menu);
         tv_time = (TextView) findViewById(R.id.tv_my_photo_time);
         tv_time.setText(time);
+
         isSelf = ((String) SPUtils.get(this, GlobalConstants.USERID, "")).equals(userid);
 //        if (((String) SPUtils.get(this, GlobalConstants.USERID,"")).equals(userid)) {
 //            /**

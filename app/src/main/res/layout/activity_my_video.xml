@@ -40,19 +40,28 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_centerVertical="true"/>
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_my_video_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+
         android:layout_alignParentBottom="true"
         android:background="#e0000000">
         <ImageView
             android:id="@+id/iv_my_video_bt"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:src="@mipmap/btn_display_yes"/>
-
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_my_video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="123"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
 </RelativeLayout>

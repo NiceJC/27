@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lede.second_23.R;
 import com.lede.second_23.global.GlobalConstants;
@@ -65,14 +64,14 @@ public class ForgetPassword_PassWordActivity extends BaseActivity implements OnR
         Intent intent=getIntent();
         safeCode=intent.getStringExtra("safeCode");
         type=intent.getIntExtra("type",0);
-        if (type==0) {
-            url="/register";
-            Toast.makeText(this, "注册时设置密码", Toast.LENGTH_SHORT).show();
-        }else{
+//        if (type==0) {
+//            url="/register";
+//            Toast.makeText(this, "注册时设置密码", Toast.LENGTH_SHORT).show();
+//        }else{
             url="/forgetPassword";
-            Toast.makeText(this, "忘记密码时设置密码", Toast.LENGTH_SHORT).show();
-        }
-        Toast.makeText(this, "safeCode"+safeCode, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "忘记密码时设置密码", Toast.LENGTH_SHORT).show();
+//        }
+//        Toast.makeText(this, "safeCode"+safeCode, Toast.LENGTH_SHORT).show();
 
         //获取服务器队列
         requestQueue = GlobalConstants.getRequestQueue();
@@ -118,7 +117,7 @@ public class ForgetPassword_PassWordActivity extends BaseActivity implements OnR
                 if (response.responseCode() == 200) {
                     //修改按钮
 //                    TimeCountUtil timeCountUtil = new TimeCountUtil(this, 60000, 1000, tv_forget_password_activity_next);
-//                    timeCountUtil.start();
+//                    timeCountUtil.start_1();
 //                    Toast.makeText(this, "提交密码返回的数据"+response.get(), Toast.LENGTH_SHORT).show();
                     Log.i("TAG", "注册onSucceed: "+response.get());
                     finish();

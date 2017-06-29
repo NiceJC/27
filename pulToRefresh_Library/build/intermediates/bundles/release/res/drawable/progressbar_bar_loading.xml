@@ -39,5 +39,38 @@
         android:drawable="@drawable/progressbar_012"/>
     <item
         android:duration="100"
-        android:drawable="@drawable/progressbar_013"/>  
+        android:drawable="@drawable/progressbar_013"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_014"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_015"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_016"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_017"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_018"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_019"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_020"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_021"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_022"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_023"/>
+    <item
+        android:duration="100"
+        android:drawable="@drawable/progressbar_024"/> 
 </animation-list>

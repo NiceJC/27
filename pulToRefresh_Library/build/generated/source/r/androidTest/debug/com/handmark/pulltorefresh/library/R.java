@@ -708,8 +708,8 @@ public final class R {
 		public static final int notification_bg_normal = 0x7f020062;
 		public static final int notification_bg_normal_pressed = 0x7f020063;
 		public static final int notification_icon_background = 0x7f020064;
-		public static final int notification_template_icon_bg = 0x7f020075;
-		public static final int notification_template_icon_low_bg = 0x7f020076;
+		public static final int notification_template_icon_bg = 0x7f020080;
+		public static final int notification_template_icon_low_bg = 0x7f020081;
 		public static final int notification_tile_bg = 0x7f020065;
 		public static final int notify_panel_notification_icon_bg = 0x7f020066;
 		public static final int progressbar_001 = 0x7f020067;
@@ -725,7 +725,18 @@ public final class R {
 		public static final int progressbar_011 = 0x7f020071;
 		public static final int progressbar_012 = 0x7f020072;
 		public static final int progressbar_013 = 0x7f020073;
-		public static final int progressbar_bar_loading = 0x7f020074;
+		public static final int progressbar_014 = 0x7f020074;
+		public static final int progressbar_015 = 0x7f020075;
+		public static final int progressbar_016 = 0x7f020076;
+		public static final int progressbar_017 = 0x7f020077;
+		public static final int progressbar_018 = 0x7f020078;
+		public static final int progressbar_019 = 0x7f020079;
+		public static final int progressbar_020 = 0x7f02007a;
+		public static final int progressbar_021 = 0x7f02007b;
+		public static final int progressbar_022 = 0x7f02007c;
+		public static final int progressbar_023 = 0x7f02007d;
+		public static final int progressbar_024 = 0x7f02007e;
+		public static final int progressbar_bar_loading = 0x7f02007f;
 	}
 	public static final class id {
 		public static final int action0 = 0x7f0b008a;

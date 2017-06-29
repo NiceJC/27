@@ -30,6 +30,7 @@ public class ConversationListDynamicActivtiy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RongIM.init(getApplicationContext());
         if (!(boolean) SPUtils.get(this, GlobalConstants.ISCONNECTED_RONGIM,true)) {
             MyApplication.instance.getRongIMTokenService();
         }

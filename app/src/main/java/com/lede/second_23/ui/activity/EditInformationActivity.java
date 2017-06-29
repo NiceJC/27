@@ -47,8 +47,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-
-
 public class EditInformationActivity extends AppCompatActivity implements OnResponseListener<String> {
 
 
@@ -76,13 +74,13 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private boolean isBoy = true;
     private Context mContext;
     private int jumpType;
-    private boolean isEditNickName=false;
+    private boolean isEditNickName = false;
 
     private static final int CREATE_USER = 1000;
     private static final int LOAD_USER = 2000;
     private static final int UPDATE_USER = 3000;
     private static final int UPIMG_USER = 4000;
-    private String currentNickName="";
+    private String currentNickName = "";
     private Dialog dialog;
 
 
@@ -93,9 +91,9 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         ButterKnife.bind(this);
         mContext = this;
         requestQueue = GlobalConstants.getRequestQueue();
-        Intent intent=getIntent();
-        jumpType=intent.getIntExtra("jumpType",2);
-        if (jumpType!=1) {
+        Intent intent = getIntent();
+        jumpType = intent.getIntExtra("jumpType", 2);
+        if (jumpType != 1) {
             loadUserInfo();
         }
 
@@ -111,7 +109,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             , R.id.rl_edit_information_activity_sex, R.id.rl_edit_information_activity_age
             , R.id.tv_edit_information_activity_updata, R.id.rl_edit_information_activity_city
             , R.id.rl_edit_information_activity_job, R.id.circle_iv_editinformation_touxiang
-            ,R.id.iv_edit_information_activity_back})
+            , R.id.iv_edit_information_activity_back})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -142,14 +140,14 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 showAgeDialog();
                 break;
             case R.id.tv_edit_information_activity_updata:
-                if (jumpType==1) {
+                if (jumpType == 1) {
                     if (!TextUtils.isEmpty(tv_edit_information_activity_nickname.getText().toString().trim())) {
                         CreateUserInfo();//创建用户请求
-                    }else {
+                    } else {
                         Toast.makeText(mContext, "昵称不能为空", Toast.LENGTH_SHORT).show();
                     }
 
-                }else {
+                } else {
                     if (selectedImg != null) {
                         updateUserImg();
                         updateUserInfo();
@@ -187,7 +185,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                         .setVideoS(0)// 查询多少秒内的视频 单位:秒
                         .setShowCamera(true) //是否显示拍照选项 这里自动根据type 启动拍照或录视频
                         .setEnablePreview(true) // 是否打开预览选项
-                        .setEnableCrop(true ) // 是否打开剪切选项
+                        .setEnableCrop(true) // 是否打开剪切选项
                         .setCircularCut(true)// 是否采用圆形裁剪
 //                        .setCheckedBoxDrawable() // 选择图片样式
 //                        .setRecordVideoDefinition() // 视频清晰度
@@ -331,9 +329,9 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                      * 要判断是否修改了用户名
                      */
                     if (currentNickName.equals(data.getStringExtra("body"))) {
-                        isEditNickName=false;
-                    }else {
-                        isEditNickName=true;
+                        isEditNickName = false;
+                    } else {
+                        isEditNickName = true;
                     }
                     tv_edit_information_activity_nickname.setText(data.getStringExtra("body"));
                 }
@@ -404,7 +402,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         Request<String> createUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/create", RequestMethod.POST);
 
         createUserRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        if (selectedImg==null) {
+        if (selectedImg == null) {
             Toast.makeText(mContext, "请选择头像", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -457,27 +455,28 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     }
 
     private void parseUpdate_UserInfo(String json) {
-        Gson mGson=new Gson();
-        UpUserInfoBean upUserInfoBean=mGson.fromJson(json,UpUserInfoBean.class);
+        Gson mGson = new Gson();
+        UpUserInfoBean upUserInfoBean = mGson.fromJson(json, UpUserInfoBean.class);
         if (upUserInfoBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this,LoginActivity.class));
-        }else {
-            if (upUserInfoBean.getResult()==10000) {
-                if (dialog!=null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            if (upUserInfoBean.getResult() == 10000) {
+                if (dialog != null) {
                     dialog.dismiss();
                 }
                 Toast.makeText(mContext, "保存信息成功", Toast.LENGTH_SHORT).show();
-                SPUtils.put(mContext,GlobalConstants.IS_EDITINFO,true);
-                if (jumpType==1) {
+                SPUtils.put(mContext, GlobalConstants.IS_EDITINFO, true);
+                if (jumpType == 1) {
 
-                    Intent intent=new Intent(this,TestActivity.class);
+                    Intent intent = new Intent(this, TestActivity.class);
                     startActivity(intent);
                     MyApplication.instance.getRongIMTokenService();
                 }
 
                 finish();
-            }else if (upUserInfoBean.getResult()==10019){
+            } else if (upUserInfoBean.getResult() == 10019) {
                 Toast.makeText(mContext, "用户名已存在", Toast.LENGTH_SHORT).show();
             }
         }
@@ -519,27 +518,33 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private void parmeUserInfoJson(String json) {
         Gson gson = new Gson();
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
-        tv_edit_information_activity_nickname.setText(userInfoBean.getData().getInfo().getNickName());
-        currentNickName=userInfoBean.getData().getInfo().getNickName();
-        if (userInfoBean.getData().getInfo().getSex().toString().trim().equals("男")) {
-            isBoy = true;
-            tv_edit_information_activity_sex.setText("男");
-//            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_boy);
+        if (userInfoBean.getMsg().equals("用户没有登录")) {
+            Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         } else {
-            isBoy = false;
-            tv_edit_information_activity_sex.setText("女");
+            tv_edit_information_activity_nickname.setText(userInfoBean.getData().getInfo().getNickName());
+            currentNickName = userInfoBean.getData().getInfo().getNickName();
+            if (userInfoBean.getData().getInfo().getSex().toString().trim().equals("男")) {
+                isBoy = true;
+                tv_edit_information_activity_sex.setText("男");
+//            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_boy);
+            } else {
+                isBoy = false;
+                tv_edit_information_activity_sex.setText("女");
 //            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_girl);
-        }
-        tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
-        tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
-        tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
+            }
+            tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
+            tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
+            tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
 //        tv_edit_information_activity_marry.setText(userInfoBean.getData().getInfo().getHometown());
-        tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
-        tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
-        Glide.with(this)
-                .load(userInfoBean.getData().getInfo().getImgUrl())
-                .placeholder(R.mipmap.loading)
-                .into(circle_iv_editinformation_touxiang);
+            tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
+            tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
+            Glide.with(this)
+                    .load(userInfoBean.getData().getInfo().getImgUrl())
+//                .placeholder(R.mipmap.loading)
+                    .into(circle_iv_editinformation_touxiang);
+        }
     }
 
     /**

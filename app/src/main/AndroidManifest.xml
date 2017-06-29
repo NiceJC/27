@@ -100,6 +100,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rc_file_path" />
         </provider>
+        <!--TODO  -->
         <!--<provider-->
             <!--android:name=".utils.MyFileProvider"-->
             <!--android:authorities="${applicationId}.provider"-->

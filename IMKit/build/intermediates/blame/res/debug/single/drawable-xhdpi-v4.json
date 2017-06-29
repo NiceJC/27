@@ -144,12 +144,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_ic_voice_receive_play3.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_picsel_back_pressed.png",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_picsel_back_pressed.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u1f44c.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/u1f44c.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_picsel_back_pressed.png",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_picsel_back_pressed.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_picsel_catalog_selected.png",

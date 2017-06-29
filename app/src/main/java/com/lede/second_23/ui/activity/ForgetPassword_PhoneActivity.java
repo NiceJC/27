@@ -32,6 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.attr.type;
+
 /**
  * 注册、忘记密码页面 根据intent传来的type判断
  * type 0: 注册 type 1:忘记密码
@@ -59,7 +61,7 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
     //json返回的msg
     private String msg;
     //
-    private int type;
+
 
     private String url = "/sendForgetSms";
 
@@ -87,7 +89,7 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
     }
 
     @OnClick({R.id.tv_forget_password_activity_next, R.id.bt_forget_password_activity_send
-            ,R.id.iv_forget_password_activity_back})
+            , R.id.iv_forget_password_activity_back})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.bt_forget_password_activity_send:
@@ -134,11 +136,9 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
     public void getValidateFromServce(String phone) {
         //创建获取验证码的请求
         Request<String> sendRequest = NoHttp.createStringRequest(GlobalConstants.URL + url, RequestMethod.POST);
-        if (type == 0) {
-            sendRequest.add("phone", phone);
-        } else {
-            sendRequest.add("keyword", phone);
-        }
+
+        sendRequest.add("keyword", phone);
+
 
         requestQueue.add(SEND_REQUEST, sendRequest, this);
     }
@@ -185,12 +185,12 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
                             JSONObject jo_data = jsonobject.getJSONObject("data");
                             safeCode = jo_data.getString("safeCode");
                             Intent intent = new Intent(this, ForgetPassword_PassWordActivity.class);
-                            intent.putExtra("type", type);
+//                            intent.putExtra("type", type);
                             intent.putExtra("safeCode", safeCode);
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(this, "验证失败:" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "验证失败", Toast.LENGTH_SHORT).show();
                         }
 
 //                        Toast.makeText(this, "注册返回的safeCode:"+safeCode, Toast.LENGTH_LONG).show();
@@ -200,7 +200,7 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
                     }
 
 //                    parseJson(json);
-                    Log.i("TAG", "onSucceed: 验证验证码返回的数据" + response.get());
+//                    Log.i("TAG", "onSucceed: 验证验证码返回的数据" + response.get());
 //                    Toast.makeText(this, "验证验证码返回的数据"+response.get(), Toast.LENGTH_SHORT).show();
 
 //                    finish();

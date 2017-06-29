@@ -174,6 +174,6 @@ public class TestActivity extends AppCompatActivity {
                 }
                 finish();
             }
-        }, 2000);
+        }, 3000);
     }
 }

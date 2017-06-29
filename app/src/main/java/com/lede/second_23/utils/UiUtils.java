@@ -102,7 +102,7 @@ public class UiUtils {
 	//Runnable:任务
 	public static void runOnUiThread(Runnable r) {
 		if(isRunOnUiThread()) {
-			//new Thread(r).start();
+			//new Thread(r).start_1();
 			r.run();//在当前的线程中进行方法的调用
 		} else {
 			getMainThreadHandler().post(r);//将r丢到主线程的消息队列

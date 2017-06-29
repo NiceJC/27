@@ -609,10 +609,10 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 //    }
 //    int progress=0;
 //    private int getProgress(String source) {
-//        // Duration: 00:00:22.50, start: 0.000000, bitrate: 13995 kb/s
+//        // Duration: 00:00:22.50, start_1: 0.000000, bitrate: 13995 kb/s
 //
 //        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
-//        if (source.contains("start: 0.000000")) {
+//        if (source.contains("start_1: 0.000000")) {
 //            return progress;
 //        }
 //        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");

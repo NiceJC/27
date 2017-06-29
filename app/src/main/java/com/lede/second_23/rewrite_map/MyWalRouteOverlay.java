@@ -30,7 +30,7 @@ public class MyWalRouteOverlay extends WalkRouteOverlay {
     @Override
     protected BitmapDescriptor getStartBitmapDescriptor() {
         Bitmap bitmap=null;
-        bitmap= BitmapFactory.decodeResource(MyApplication.instance.getResources(), R.mipmap.location_start);
+        bitmap= BitmapFactory.decodeResource(MyApplication.instance.getResources(), R.mipmap.my_p);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
@@ -38,7 +38,7 @@ public class MyWalRouteOverlay extends WalkRouteOverlay {
     @Override
     protected BitmapDescriptor getEndBitmapDescriptor() {
         Bitmap bitmap=null;
-        bitmap= BitmapFactory.decodeResource(MyApplication.instance.getResources(), R.mipmap.location_end);
+        bitmap= BitmapFactory.decodeResource(MyApplication.instance.getResources(), R.mipmap.your_p);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }

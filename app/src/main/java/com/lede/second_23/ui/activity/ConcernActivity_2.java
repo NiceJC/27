@@ -3,6 +3,7 @@ package com.lede.second_23.ui.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -97,6 +99,10 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     ImageView iv_report;
     @Bind(R.id.tv_concern_activity_2_time)
     TextView tv_time;
+    @Bind(R.id.tv_concern_activity_2_title)
+    TextView tv_title;
+    @Bind(R.id.iv_concern_activity_2_declaration)
+    ImageView iv_declaration;
 
     private boolean isFriend = false;
 
@@ -127,8 +133,14 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             iv_concern_activity_concern.setVisibility(View.GONE);
             iv_concern_activity_message.setVisibility(View.GONE);
             iv_concern_activity_location.setVisibility(View.GONE);
+            tv_title.setText("自己的动态");
         }
-
+        if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATION,true))) {
+            iv_declaration.setVisibility(View.VISIBLE);
+        }else {
+            iv_declaration.setVisibility(View.GONE);
+            iv_declaration.setClickable(false);
+        }
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
@@ -147,7 +159,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     @OnClick({R.id.iv_concern_activity_person, R.id.iv_concern_activity_concern
             , R.id.iv_concern_activity_back, R.id.iv_concern_activity_message
             , R.id.iv_concern_activity_location, R.id.iv_concern_activity_2_up
-            , R.id.ll_concern_activity_2_info, R.id.iv_concern_activity_2_report})
+            , R.id.ll_concern_activity_2_info, R.id.iv_concern_activity_2_report
+            ,R.id.iv_concern_activity_2_declaration})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -157,7 +170,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_concern:
-                concernService();
+                if (!isFriend) {
+                    concernService();
+                }else {
+                    destroyService();
+                }
+
                 break;
             case R.id.iv_concern_activity_back:
                 finish();
@@ -166,7 +184,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 if (concernUserInfoBean.getData().isEnd()) {
                     RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userid, username);
                 } else {
-                    Toast.makeText(this, "互相关联后才能开启聊天哦", Toast.LENGTH_SHORT).show();
+                    showHintDialog(1);
+//                    Toast.makeText(this, "互相关联后才能开启聊天哦", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -183,7 +202,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                     }
 
                 } else {
-                    Toast.makeText(this, "互相关联后才能获取位置哦", Toast.LENGTH_SHORT).show();
+                    showHintDialog(0);
+//                    Toast.makeText(this, "互相关联后才能获取位置哦", Toast.LENGTH_SHORT).show();
                 }
 
 //                intent=new Intent(this,PathActivity.class);
@@ -201,7 +221,19 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             case R.id.iv_concern_activity_2_report:
                 showDialog();
                 break;
+            case R.id.iv_concern_activity_2_declaration:
+                iv_declaration.setVisibility(View.GONE);
+                iv_declaration.setClickable(false);
+                SPUtils.put(this, GlobalConstants.DECLARATION,false);
+                break;
         }
+    }
+
+    private void destroyService() {
+        Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/destroy", RequestMethod.POST);
+        concernRequest.add("id", userid);
+        concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
+        requestQueue.add(400, concernRequest, this);
     }
 
     private void showDialog() {
@@ -288,6 +320,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 Log.i("TAB", "onSucceed: Location"+response.get());
                 parserLocation(response.get());
                 break;
+            case 400:
+                parserConcernMsg(response.get());
+                break;
         }
     }
 
@@ -316,12 +351,13 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this,LoginActivity.class));
         }else {
-            Toast.makeText(this, "关联成功", Toast.LENGTH_SHORT).show();
+
             if (concernMsgBean.getMsg().equals("关注成功")) {
+                Toast.makeText(this, "关联成功", Toast.LENGTH_SHORT).show();
                 ll_inDicator.removeAllViews();
                 userInfoService(userid);
                 iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
-                iv_concern_activity_concern.setClickable(false);
+//                iv_concern_activity_concern.setClickable(false);
 //            // 构造 TextMessage 实例
 //            TextMessage myTextMessage = TextMessage.obtain("我是消息内容");
 //            /* 生成 Message 对象。
@@ -361,9 +397,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 //            });
 //            RongIM.getInstance().sendMessage(new Message());
             } else {
-                iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
-                iv_concern_activity_concern.setClickable(true);
-                Toast.makeText(this, "关注失败", Toast.LENGTH_SHORT).show();
+                ll_inDicator.removeAllViews();
+                userInfoService(userid);
+//                iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
+//                iv_concern_activity_concern.setClickable(true);
+
+                Toast.makeText(this, "取消关联成功", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -408,14 +447,20 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                     .into(iv_concern_activity_location);
             iv_concern_activity_location.setClickable(true);
         } else {
-//            iv_concern_activity_message.setClickable(false);
-//            iv_concern_activity_location.setClickable(false);
+            Glide.with(this)
+                    .load(R.mipmap.comment_off)
+                    .error(R.mipmap.loading)
+                    .into(iv_concern_activity_message);
+            Glide.with(this)
+                    .load(R.mipmap.position_off)
+                    .error(R.mipmap.loading)
+                    .into(iv_concern_activity_location);
         }
         ConcernUserInfoBean.DataBean dataBean = concernUserInfoBean.getData();
         isFriend = dataBean.isFirend();
         if (isFriend) {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
-            iv_concern_activity_concern.setClickable(false);
+//            iv_concern_activity_concern.setClickable(false);
         } else {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
             iv_concern_activity_concern.setClickable(true);
@@ -527,9 +572,10 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);
 
-//        // 实例化一个ColorDrawable颜色为半透明
+        // 实例化一个ColorDrawable颜色为半透明
 //        ColorDrawable dw = new ColorDrawable(0xb0000000);
-//        window.setBackgroundDrawable(dw);
+        ColorDrawable dw = new ColorDrawable(0xffffffff);
+        window.setBackgroundDrawable(dw);
 
 
         // 设置popWindow的显示和消失动画
@@ -562,5 +608,19 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             }
         });
 
+    }
+
+    public void showHintDialog(int type){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.layout_hint_dialog,(ViewGroup) findViewById(R.id.ll_hint_dialog));
+        ImageView iv=(ImageView) layout.findViewById(R.id.iv_layout_hint_dialog);
+        if (type==0) {
+            iv.setImageResource(R.mipmap.hintlocation);
+        }else {
+            iv.setImageResource(R.mipmap.hintmessage);
+        }
+        Dialog hintDialog=new Dialog(this);
+        hintDialog.setContentView(layout);
+        hintDialog.show();
     }
 }

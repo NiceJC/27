@@ -48,6 +48,8 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
     private RequestQueue requestQueue;
     private boolean isSelf=true;
     private Dialog mDialog;
+    private TextView tv_time;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
         picUrl=intent.getStringExtra("picurl");
         text=intent.getStringExtra("text");
         userid=intent.getStringExtra("userId");
+        time=intent.getStringExtra("time");
         forumId=intent.getLongExtra("forumId",0);
         //获取服务器队列
         requestQueue = GlobalConstants.getRequestQueue();
@@ -73,6 +76,8 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
         iv_back = (ImageView) findViewById(R.id.iv_my_video_back);
         iv_back.setOnClickListener(this);
         iv_menu = (ImageView) findViewById(R.id.iv_my_video_menu);
+        tv_time = (TextView) findViewById(R.id.tv_my_video_time);
+        tv_time.setText(time);
         isSelf = ((String) SPUtils.get(this, GlobalConstants.USERID, "")).equals(userid);
 //        if (((String) SPUtils.get(this, GlobalConstants.USERID,"")).equals(userid)) {
 //            popup = new PopupMenu(this, iv_menu);
@@ -145,6 +150,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_my_video_bt:
+                tv_time.setVisibility(View.GONE);
                 showPopwindow();
                 break;
             case R.id.iv_my_video_back:
@@ -194,7 +200,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_save: // 保存图片
+                case R.id.btn_save: //删除动态
                     mDialog.dismiss();
 //                    saveBitmap(bitmap);
                     if (isSelf) {
@@ -261,6 +267,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onDismiss() {
+                tv_time.setVisibility(View.VISIBLE);
                 System.out.println("popWindow消失");
             }
         });

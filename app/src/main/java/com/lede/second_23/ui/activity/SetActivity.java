@@ -289,7 +289,7 @@ public class SetActivity extends AppCompatActivity {
 
 
     private void show_loactionChoiceDialog() {
-        final String[] items = {"打开向好友分享位置", "关闭向好友分享位置"};
+        final String[] items = {"向好友打开位置分享", "向好友关闭位置分享"};
 
         AlertDialog.Builder singleChoiceDialog =
                 new AlertDialog.Builder(SetActivity.this);
