@@ -100,6 +100,10 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable/rc_keyboard_selector.xml"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable/rc_message_checkbox.xml",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable/rc_message_checkbox.xml"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable/rc_cs_group_dialog_ok_selector.xml",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable/rc_cs_group_dialog_ok_selector.xml"
     },

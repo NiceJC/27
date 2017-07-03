@@ -54,8 +54,9 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
-import static com.lede.second_23.R.id.ll_concern_activity_2_bottom;
-
+/**
+ * 动态点击页
+ */
 public class ConcernActivity_2 extends AppCompatActivity implements OnResponseListener<String> {
 
 
@@ -91,7 +92,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     TextView tv_username;
     @Bind(R.id.tv_concern_activity_2_distance)
     TextView tv_distance;
-    @Bind(ll_concern_activity_2_bottom)
+    @Bind(R.id.ll_concern_activity_2_bottom)
     LinearLayout ll_bottom;
     @Bind(R.id.ll_concern_activity_2_indicator)
     LinearLayout ll_inDicator;

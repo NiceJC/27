@@ -630,7 +630,6 @@
     <string name="rc_info_not_in_chatroom">你不在该聊天室</string>
     <string name="rc_info_not_in_discussion">你不在该讨论组</string>
     <string name="rc_info_not_in_group">你不在该群</string>
-    <string name="rc_init_failed">连接客服失败</string>
     <string name="rc_input_send">发送</string>
     <string name="rc_input_voice">按住 说话</string>
     <string name="rc_item_change_group_name">%1$s修改群名称为%2$s</string>
@@ -652,7 +651,6 @@
     <string name="rc_kicked_from_chatroom">你已被踢出聊天室</string>
     <string name="rc_location_fail">定位失败</string>
     <string name="rc_location_fetching">获取中……</string>
-    <string name="rc_location_sharing_ended">位置共享已结束</string>
     <string name="rc_location_sharing_exceed_max">超过最大位置共享人数</string>
     <string name="rc_media_message_default_save_path">/RongCloud/Media/</string>
     <string name="rc_message_content_draft">[草稿]</string>
@@ -686,9 +684,6 @@
     <string name="rc_notice_network_unavailable">网络连接不可用</string>
     <string name="rc_notice_select_one_picture_at_last">请至少选择一张图片</string>
     <string name="rc_notice_tick">该帐号已经在其他设备登录</string>
-    <string name="rc_notification_new_msg">%1$s发来了%2$d条消息</string>
-    <string name="rc_notification_new_plural_msg">%1$d个联系人发来了%2$d条消息</string>
-    <string name="rc_notification_ticker_text">您有了一条新消息</string>
     <string name="rc_other_is_sharing_location">%s正在共享位置</string>
     <string name="rc_others_are_sharing_location">%d人正在共享位置</string>
     <string name="rc_permission_camera">（相机）。</string>
@@ -721,7 +716,6 @@
     <string name="rc_pub_service_info_enter">进入公众号</string>
     <string name="rc_pub_service_info_follow">关注</string>
     <string name="rc_pub_service_info_unfollow">取消关注</string>
-    <string name="rc_quit_custom_service">客服已结束</string>
     <string name="rc_read_all">阅读全文</string>
     <string name="rc_read_receipt_status">%d人已读</string>
     <string name="rc_real_time_exit_notification">离开会话，位置共享也会结束，确定离开？</string>

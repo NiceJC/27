@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f1f1f1"
+    android:background="#ffffff"
     tools:context="com.lede.second_23.ui.activity.SetActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/iv_set_activity_back"
             android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_height="20dp"
             android:src="@mipmap/back"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp" />
@@ -294,14 +294,14 @@
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
-        android:background="@drawable/shape_linearlayout">
+        android:background="@drawable/shape_linearlayout_all">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退出登录"
             android:textSize="20sp"
-            android:textColor="@color/title_darkblue"/>
+            android:textColor="#222222"/>
     </LinearLayout>
 </LinearLayout>

@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/iv_my_video_back"
             android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:src="@mipmap/back_white"/>
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"/>
         <ImageView
             android:id="@+id/iv_my_video_menu"
-            android:layout_width="34dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"

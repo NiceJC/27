@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
 //  SPUtils.put(this, GlobalConstants.NAME, loginBean.name);
 //        SPUtils.put(this, GlobalConstants.CERTIFICATION, loginBean.certification);
             //提示用户登陆成功并退出登陆界面
-            T.showShort(this, "登陆成功");
+            T.showShort(this, "登录成功");
             SPUtils.put(LoginActivity.this, GlobalConstants.TOKENUNUSEFULL,false);
             loadUserInfo();
 

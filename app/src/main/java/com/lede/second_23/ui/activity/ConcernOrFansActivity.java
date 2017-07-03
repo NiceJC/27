@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -124,6 +123,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
                 TextView tv_nickName=holder.getView(R.id.tv_concern_or_fans_item_nickname);
 
                 tv_right=holder.getView(R.id.iv_concern_or_fans_item_right);
+//                tv_right.setClickable(true);
 //                if (type==0) {
 //                    tv_right.setImageResource(R.mipmap.concern_right);
 //                }else {
@@ -142,7 +142,13 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
                 tv_right.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (tv_right.getDrawable().getCurrent().getConstantState()==getResources().getDrawable(R.mipmap.concern_right).getConstantState()) {
+//                        if (tv_right.getDrawable().getCurrent().getConstantState()==getResources().getDrawable(R.mipmap.concern_right).getConstantState()) {
+//                            cancelCollect(listBean.getUserId());
+//                        }else {
+//                            createCollect(listBean.getUserId());
+//                        }
+//                        tv_right.setClickable(false);
+                        if (listBean.isFriend()) {
                             cancelCollect(listBean.getUserId());
                         }else {
                             createCollect(listBean.getUserId());
@@ -296,7 +302,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
     public void onLoadMoreRequested() {
         if (!isHasNextPage) {
             inflate.setVisibility(View.GONE);
-            Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
         }else {
             pageNum++;
             if (type==0) {

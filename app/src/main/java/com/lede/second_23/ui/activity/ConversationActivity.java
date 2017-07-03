@@ -21,6 +21,9 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
 
+/**
+ * 融云单聊页
+ */
 public class ConversationActivity extends AppCompatActivity {
 
     @Bind(R.id.tv_conversation_activity_title)

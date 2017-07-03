@@ -23,6 +23,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 查看别人个人中心
+ */
 public class CheckOthersInfoActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     @Bind(R.id.tv_edit_information_activity_nickname)

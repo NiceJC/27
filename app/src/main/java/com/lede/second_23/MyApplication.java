@@ -326,7 +326,7 @@ public class MyApplication extends Application {
         @Override
         public boolean onReceived(Message message, int left) {
             //开发者根据自己需求自行处理
-//
+            // 收到点笑脸请求 显示通知 ios无法实现  废弃
             if (message.getConversationType() == Conversation.ConversationType.SYSTEM) {
                 showSystemNotification(message.getSenderUserId());
                 Log.i("TAG", "收到新消息:" + message.getSenderUserId());
@@ -348,10 +348,16 @@ public class MyApplication extends Application {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        SPUtils.put(context,GlobalConstants.ISCONNECTED_RONGIM,false);
-        RongIM.getInstance().disconnect();
+        if (RongIM.getInstance()==null) {
+            SPUtils.put(context, GlobalConstants.ISCONNECTED_RONGIM, false);
+            RongIM.getInstance().disconnect();
+        }
     }
 
+    /**
+     * 收到点笑脸请求 显示通知 ios无法实现  废弃
+     * @param userid
+     */
     public void showSystemNotification(String userid) {
         //创建大图标的Bitmap
         LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);

@@ -9,6 +9,9 @@ import com.lede.second_23.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 关于我们
+ */
 public class AboutWeActivity extends AppCompatActivity {
 
     @Override
@@ -17,9 +20,6 @@ public class AboutWeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about_we);
         ButterKnife.bind(this);
 
-    }
-    public void test(){
-        return;
     }
 
     @OnClick({R.id.iv_about_activity_back})

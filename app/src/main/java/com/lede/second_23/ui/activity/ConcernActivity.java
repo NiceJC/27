@@ -34,6 +34,9 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
 
+/**
+ * 原动态点击页  废弃
+ */
 public class ConcernActivity extends AppCompatActivity implements OnResponseListener<String> {
 
 

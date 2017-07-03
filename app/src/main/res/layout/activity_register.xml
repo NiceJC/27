@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/iv_register_activity_back"
         android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:src="@mipmap/back"/>

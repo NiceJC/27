@@ -111,6 +111,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                     Glide.with(mContext)
                             .load(R.mipmap.add)
                             .into(iv_show);
+                    iv_delete.setVisibility(View.GONE);
                 } else {
                     Glide.with(mContext)
                             .load(new File(localMedia.getPath()))
