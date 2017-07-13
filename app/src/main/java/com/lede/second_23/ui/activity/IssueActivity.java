@@ -35,7 +35,9 @@ import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
 import com.yalantis.ucrop.entity.LocalMedia;
+import com.yolanda.nohttp.FileBinary;
 import com.yolanda.nohttp.NoHttp;
+import com.yolanda.nohttp.OnUploadListener;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
@@ -425,7 +427,36 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         Request<String> uploadVideoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/upload_media", RequestMethod.POST);
         uploadVideoRequest.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
         uploadVideoRequest.add("pic", new File(VideoUtils.bitmap2File(VideoUtils.getVideoThumb(selectMedia.get(0).getPath()), "cacher")));
-        uploadVideoRequest.add("media", new File(selectMedia.get(0).getPath()));
+//        uploadVideoRequest.add("media", new File(selectMedia.get(0).getPath()));
+        File file=new File(selectMedia.get(0).getPath());
+        FileBinary binary=new FileBinary(file,file.getName());
+        binary.setUploadListener(88, new OnUploadListener() {
+            @Override
+            public void onStart(int what) {
+                Log.i("up", "onStart: "+"开始上传");
+            }
+
+            @Override
+            public void onCancel(int what) {
+
+            }
+
+            @Override
+            public void onProgress(int what, int progress) {
+                Log.i("up", "onProgress: 上传进度"+progress);
+            }
+
+            @Override
+            public void onFinish(int what) {
+                Log.i("up", "onFinish: 上传结束");
+            }
+
+            @Override
+            public void onError(int what, Exception exception) {
+                Log.i("up", "onError: "+exception.getMessage());
+            }
+        });
+        uploadVideoRequest.add("media",binary);
         uploadVideoRequest.add("forumId", forumId);
 //        uploadRequest.add("labels","");
         requestQueue.add(UPLOADVIDEO_REQUEST, uploadVideoRequest, new OnResponseListener<String>() {

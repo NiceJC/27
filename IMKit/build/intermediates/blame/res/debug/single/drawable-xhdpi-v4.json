@@ -604,12 +604,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_keyboard.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_btn_download_cancel.png",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_btn_download_cancel.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_ad_list_pdf_icon.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_ad_list_pdf_icon.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_btn_download_cancel.png",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_btn_download_cancel.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u1f356.png",
@@ -884,12 +884,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_icon_rt_message_left.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u26bd.png",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/u26bd.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_file_icon_pdf.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_file_icon_pdf.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u26bd.png",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/u26bd.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/u1f4de.png",
@@ -1112,16 +1112,16 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/u1f4e2.png"
     },
     {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_ic_checkbox_none.png",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_ic_checkbox_none.png"
+    },
+    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_cs_group_uncheck.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_cs_group_uncheck.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_plugin_default.png",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_plugin_default.png"
-    },
-    {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_ic_checkbox_none.png",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/drawable-xhdpi/rc_ic_checkbox_none.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/drawable-xhdpi-v4/rc_ic_def_rich_content.png",

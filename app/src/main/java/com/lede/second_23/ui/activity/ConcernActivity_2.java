@@ -161,7 +161,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             , R.id.iv_concern_activity_back, R.id.iv_concern_activity_message
             , R.id.iv_concern_activity_location, R.id.iv_concern_activity_2_up
             , R.id.ll_concern_activity_2_info, R.id.iv_concern_activity_2_report
-            ,R.id.iv_concern_activity_2_declaration})
+            ,R.id.iv_concern_activity_2_declaration,R.id.bt_concern_acitivity_2_like})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -227,7 +227,21 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 iv_declaration.setClickable(false);
                 SPUtils.put(this, GlobalConstants.DECLARATION,false);
                 break;
+            case R.id.bt_concern_acitivity_2_like:
+//                likeRequest();
+                break;
         }
+    }
+
+
+    /**
+     * 点赞
+     */
+    private void likeRequest() {
+        Request<String> likeRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/"+concernUserInfoBean.getData().getForumList().get(0).getForumId()+"/like", RequestMethod.POST);
+//        concernRequest.add("id", userid);
+        likeRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
+        requestQueue.add(500,likeRequest,this);
     }
 
     private void destroyService() {
@@ -323,6 +337,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case 400:
                 parserConcernMsg(response.get());
+                break;
+            case 500:
+
                 break;
         }
     }

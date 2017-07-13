@@ -4,15 +4,13 @@
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 获取机型信息权限 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- 查看 Wi-Fi 状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -63,18 +61,19 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme">
         <service android:name="com.amap.api.location.APSService" />
+
         <activity android:name=".ui.activity.MainActivity" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="630b6444ead1f8e0ce182dd2ccb7fa69" />
-        <!--360更新-->
+        <!-- 360更新 -->
         <activity
             android:name="com.qihoo.appstore.common.updatesdk.lib.UpdateTipDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <service
             android:name="com.qihoo.appstore.updatelib.CheckUpdateService"
@@ -83,15 +82,12 @@
         <provider
             android:name="com.qihoo.appstore.updatelib.UpdateProvider"
             android:authorities="com.lede.second_23"
-            android:grantUriPermissions="true"
-            android:exported="false">
-
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/update_apk_path" />
         </provider>
-
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.lede.second_23.FileProvider"
@@ -101,7 +97,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rc_file_path" />
         </provider>
-        <!--TODO  -->
+        <!-- TODO -->
         <provider
             android:name=".utils.MyFileProvider"
             android:authorities="${applicationId}.provider"
@@ -111,6 +107,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <meta-data
             android:name="com.lede.second_23.utils.glide.GlideConfiguration"
             android:value="GlideModule" />

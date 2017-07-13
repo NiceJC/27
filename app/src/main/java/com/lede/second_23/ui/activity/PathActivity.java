@@ -71,6 +71,8 @@ public class PathActivity extends AppCompatActivity implements RouteSearch.OnRou
         mStartPoint=new LatLonPoint(Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LATITUDE,"")),Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LONGITUDE,"")));
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         aMap = mapView.getMap();
+//        aMap.setCustomMapStylePath(  "file:///android_asset/mymapblack.data");
+//        aMap.setMapCustomEnable(true);
         initMap();
 
 
