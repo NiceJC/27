@@ -88,7 +88,6 @@
                 <Button
                     android:id="@+id/bt_concern_acitivity_2_like"
                     android:text="点赞"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView

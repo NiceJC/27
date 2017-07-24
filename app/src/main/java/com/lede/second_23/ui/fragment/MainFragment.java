@@ -29,6 +29,7 @@ import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
+import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.FriendBean;
 import com.lede.second_23.bean.HomePagerBean;
@@ -39,6 +40,7 @@ import com.lede.second_23.ui.activity.IssueActivity;
 import com.lede.second_23.ui.activity.LoginActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.T;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -541,18 +543,20 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                 df.format(date);//定位时间
                 Log.i("TAB", "onLocationChanged: 纬度:"+myLatitude+",经度:"+myLongitude+","+aMapLocation.getAccuracy()+"地址"+aMapLocation.getAddress());
                 mlocationClient.stopLocation();
-                upLoaction();
+                upLocation();
                 userService();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError","location Error, ErrCode:"
                         + aMapLocation.getErrorCode() + ", errInfo:"
                         + aMapLocation.getErrorInfo());
+                T.showShort(MyApplication.getInstance(),"定位失败,请检查是否开启应用定位权限");
+                rv_mainFragment_show.onRefreshComplete();
             }
         }
     }
 
-    private void upLoaction() {
+    private void upLocation() {
         //构造上传位置信息
         UploadInfo loadInfo = new UploadInfo();
         //设置上传位置的坐标系支持AMap坐标数据与GPS数据
@@ -577,11 +581,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             @Override
             public void onNearbyInfoUploaded(int i) {
                 Log.i("TAB", "onNearbyInfoUploaded: 上报位置"+i);
-
             }
         });
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -200,11 +200,7 @@
         <activity android:name=".ui.activity.OtherPersonActivity" />
         <activity android:name=".ui.activity.PermissionsActivity" />
         <activity android:name=".ui.activity.TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.activity.IssueActivity" />
         <activity
@@ -218,6 +214,14 @@
         <activity android:name=".ui.activity.PathActivity" />
         <activity android:name=".ui.activity.ReportActivity" />
         <activity android:name=".ui.activity.AboutWeActivity" />
+        <activity android:name=".ui.activity.AllIssueActivity"
+            android:theme="@style/MyFullScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

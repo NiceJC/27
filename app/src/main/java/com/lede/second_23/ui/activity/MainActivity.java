@@ -30,7 +30,7 @@ public class MainActivity extends FragmentActivity {
     private boolean isScrolling=false;
     private boolean isRight=false;
     private ChildFragment childFragment;
-//    private CameraFragment cameraFragment;
+//    private OldCameraFragment cameraFragment;
 //    private IssueFragment issueFragment;
     // 用来计算返回键的点击间隔时间
     private long exitTime = 0;
@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity {
     private void initFragmentViewPager() {
         fragmentList = new ArrayList<Fragment>();
 
-//        cameraFragment = new CameraFragment();
+//        cameraFragment = new OldCameraFragment();
 //        fragmentList.add(cameraFragment);
 
 //        mainFragment=new MainFragment();

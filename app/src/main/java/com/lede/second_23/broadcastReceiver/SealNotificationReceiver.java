@@ -18,7 +18,7 @@ public class SealNotificationReceiver extends PushMessageReceiver {
     public boolean onNotificationMessageArrived(Context context, PushNotificationMessage message) {
         if (message.getConversationType() == RongPushClient.ConversationType.SYSTEM) {
             MyApplication.instance.showSystemNotification(message.getSenderId());
-            Log.i("TAG", "push收到新消息:" + message.getSenderId());
+            Log.i("TAG", "push收到新消息:pushID" + message.getPushId()+"targetID"+message.getTargetId());
             return true;
         }
 //        message.getPushContent()

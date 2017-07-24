@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -52,7 +51,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import io.rong.imkit.RongIM;
+import io.rong.imlib.IRongCallback;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
+import io.rong.message.TextMessage;
 
 /**
  * 动态点击页
@@ -229,8 +232,50 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case R.id.bt_concern_acitivity_2_like:
 //                likeRequest();
+                pushSystemMessage();
                 break;
         }
+    }
+
+    private void pushSystemMessage() {
+        // 构造 TextMessage 实例
+            TextMessage myTextMessage = TextMessage.obtain("我是消息内容");
+            /* 生成 Message 对象。
+             * "7127" 为目标 Id。根据不同的 conversationType，可能是用户 Id、讨论组 Id、群组 Id 或聊天室 Id。
+             * Conversation.ConversationType.PRIVATE 为私聊会话类型，根据需要，也可以传入其它会话类型，如群组，讨论组等。
+             */
+            Message myMessage = Message.obtain("40a0f4aef97e4f7f8ff2e86220e8bfd2", Conversation.ConversationType.SYSTEM, myTextMessage);
+            /**
+             * <p>发送消息。
+             * 通过 {@link IRongCallback.ISendMessageCallback}
+             * 中的方法回调发送的消息状态及消息体。</p>
+             *
+             * @param message     将要发送的消息体。
+             * @param pushContent 当下发 push 消息时，在通知栏里会显示这个字段。
+             *                    如果发送的是自定义消息，该字段必须填写，否则无法收到 push 消息。
+             *                    如果发送 sdk 中默认的消息类型，例如 RC:TxtMsg, RC:VcMsg, RC:ImgMsg，则不需要填写，默认已经指定。
+             * @param pushData    push 附加信息。如果设置该字段，用户在收到 push 消息时，能通过 {@link io.rong.push.notification.PushNotificationMessage#getPushData()} 方法获取。
+             * @param callback    发送消息的回调，参考 {@link IRongCallback.ISendMessageCallback}。
+             */
+            RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
+                @Override
+                public void onAttached(Message message) {
+                    //消息本地数据库存储成功的回调
+                }
+
+                @Override
+                public void onSuccess(Message message) {
+                    //消息通过网络发送成功的回调
+                    Toast.makeText(ConcernActivity_2.this, "点心成功", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(Message message, RongIMClient.ErrorCode errorCode) {
+                    //消息发送失败的回调
+                    Toast.makeText(ConcernActivity_2.this, "点心失败", Toast.LENGTH_SHORT).show();
+                }
+            });
+//            RongIM.getInstance().sendMessage(new Message());
     }
 
 
@@ -630,7 +675,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     public void showHintDialog(int type){
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.layout_hint_dialog,(ViewGroup) findViewById(R.id.ll_hint_dialog));
+        View layout = inflater.inflate(R.layout.layout_hint_dialog,null);
         ImageView iv=(ImageView) layout.findViewById(R.id.iv_layout_hint_dialog);
         if (type==0) {
             iv.setImageResource(R.mipmap.hintlocation);

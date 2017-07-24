@@ -206,8 +206,8 @@ public class LoginActivity extends AppCompatActivity {
     public void parseJson(String json) {
 
         LoginBean loginBean = mGson.fromJson(json, LoginBean.class);
-        if (loginBean.getResult()==10001) {
-            Toast.makeText(this, "用户名密码错误", Toast.LENGTH_SHORT).show();
+        if (loginBean.getResult()==10001||loginBean.getResult()==10002) {
+            Toast.makeText(this, loginBean.getMsg(), Toast.LENGTH_SHORT).show();
         }else {
             //把access_token存储到sp中
             SPUtils.put(this, GlobalConstants.TOKEN, loginBean.getData().getAccess_token());

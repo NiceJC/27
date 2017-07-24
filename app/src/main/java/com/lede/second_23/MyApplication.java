@@ -255,13 +255,14 @@ public class MyApplication extends Application {
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //                    finish();
                     SPUtils.put(context, GlobalConstants.ISCONNECTED_RONGIM, true);
-                    RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-                        @Override
-                        public UserInfo getUserInfo(String userId) {
-//                            return new UserInfo("9e7a060b521049bb990dedc6055b7886","axe",Uri.parse("http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg"));
-                            return getUserInfoFromServer(userId);
-                        }
-                    }, true);
+                    //TODO
+//                    RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+//                        @Override
+//                        public UserInfo getUserInfo(String userId) {
+////                            return new UserInfo("9e7a060b521049bb990dedc6055b7886","axe",Uri.parse("http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg"));
+//                            return getUserInfoFromServer(userId);
+//                        }
+//                    }, true);
 
                 }
 

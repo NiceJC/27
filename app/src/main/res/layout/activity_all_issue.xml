@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_all_issue"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lede.second_23.ui.activity.AllIssueActivity">
+    <RelativeLayout
+        android:id="@+id/rr_all_issue_activity_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+    <ImageButton
+        android:id="@+id/ib_all_issue_activity_change"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:background="@mipmap/change_video"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="39dp"/>
+</RelativeLayout>
