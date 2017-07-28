@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,13 +25,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.myapplication.views.diyimage.DIYImageView;
 import com.lede.second_23.AppConstant;
 import com.lede.second_23.R;
+import com.lede.second_23.ui.activity.AllIssueActivity;
+import com.lede.second_23.ui.activity.ShowPicActivity;
 import com.lede.second_23.utils.BitmapUtils;
 import com.lede.second_23.utils.CameraUtil;
 import com.lede.second_23.utils.UiUtils;
 
-import java.io.File;
 import java.io.IOException;
 
 import static android.R.attr.path;
@@ -78,6 +80,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     private ImageView img_camera;
     private int picHeight;
     private View view;
+    private DIYImageView diyiv_all_issue_activity_show;
 
     @Override
     public void onAttach(Context context) {
@@ -101,6 +104,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         mHolder.addCallback(this);
         img_camera = (ImageView) view.findViewById(R.id.img_camera);
         img_camera.setOnClickListener(this);
+
 
         //关闭相机界面按钮
         camera_close = (ImageView) view.findViewById(R.id.camera_close);
@@ -459,8 +463,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4/3);
                 }
 
-                String img_path = getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM).getPath() +
-                        File.separator + System.currentTimeMillis() + ".jpeg";
+                String img_path = "/sdcard/27/" + System.currentTimeMillis() + ".jpeg";
                 Log.i("TAG", "onPictureTaken: "+img_path);
                 BitmapUtils.saveJPGE_After(context, saveBitmap, img_path, 100);
 
@@ -471,15 +474,19 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                 if(!saveBitmap.isRecycled()){
                     saveBitmap.recycle();
                 }
-                // 最后通知图库更新
+                               // 最后通知图库更新
                 context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
 
-                Intent intent = new Intent();
+                Glide.with(context).load(img_path).into(AllIssueActivity.instance.diyivAllIssueActivityShow);
+                Intent intent=new Intent(context, ShowPicActivity.class);
                 intent.putExtra(AppConstant.KEY.IMG_PATH, img_path);
                 intent.putExtra(AppConstant.KEY.PIC_WIDTH, screenWidth);
                 intent.putExtra(AppConstant.KEY.PIC_HEIGHT, picHeight);
-                getActivity().setResult(AppConstant.RESULT_CODE.RESULT_OK, intent);
-                getActivity().finish();
+                startActivity(intent);
+//                Intent intent = new Intent();
+//
+//                getActivity().setResult(AppConstant.RESULT_CODE.RESULT_OK, intent);
+//                getActivity().finish();
 
                 //这里打印宽高 就能看到 CameraUtil.getInstance().getPropPictureSize(parameters.getSupportedPictureSizes(), 200);
                 // 这设置的最小宽度影响返回图片的大小 所以这里一般这是1000左右把我觉得

@@ -22,7 +22,6 @@ import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
-import com.lede.second_23.utils.Validator;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -53,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView btnLoginForgetPwd;
     @Bind(R.id.activity_login)
     LinearLayout activityLogin;
-//    @Bind(R.id.iv_login_back)
+    //    @Bind(R.id.iv_login_back)
 //    ImageView ivLoginBack;
     private RequestQueue requestQueue;
     private Gson mGson;
@@ -86,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick({R.id.tv_login_activity_login, R.id.btn_login_register, R.id.btn_login_forget_pwd})
     public void onClick(View view) {
-        Intent intent=null;
+        Intent intent = null;
         switch (view.getId()) {
 
             case R.id.tv_login_activity_login:
@@ -96,13 +95,13 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.btn_login_register:
                 //跳转到注册页面
-                intent=new Intent(this, RegisterActivity.class);
+                intent = new Intent(this, RegisterActivity.class);
 //                intent.putExtra("type",0);
                 startActivity(intent);
                 break;
             case R.id.btn_login_forget_pwd:
                 //跳转到忘记密码页面
-                intent=new Intent(this, ForgetPassword_PhoneActivity.class);
+                intent = new Intent(this, ForgetPassword_PhoneActivity.class);
                 startActivity(intent);
 //                startActivity(new Intent(this,RePwdActivity.class));
                 break;
@@ -121,10 +120,10 @@ public class LoginActivity extends AppCompatActivity {
             T.showShort(this, "手机号码不能为空哦");
             return;
         }
-        if (!Validator.isMobile(phone)) {
-            T.showShort(this, "请输入正确的手机号码");
-            return;
-        }
+//        if (!Validator.isMobile(phone)) {
+//            T.showShort(this, "请输入正确的手机号码");
+//            return;
+//        }
         if (TextUtils.isEmpty(pwd)) {
             T.showShort(this, "密码不能为空哦");
             return;
@@ -162,9 +161,9 @@ public class LoginActivity extends AppCompatActivity {
         loginRequest.add("keyword", keyword);
 //        loginRequest.add("tm", String.valueOf(time));
 //        loginRequest.add("sign", sign);
-        loginRequest.add("password",pwd);
+        loginRequest.add("password", pwd);
 
-        Log.i("TAGG", "Login2Sezrvce: --------->loginRequest"+loginRequest.url());
+        Log.i("TAGG", "Login2Sezrvce: --------->loginRequest" + loginRequest.url());
         //添加请求到请求队列中
         requestQueue.add(LOGIN_REQUEST, loginRequest, new OnResponseListener<String>() {
             @Override
@@ -178,10 +177,10 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("TAGG", "onSucceed: ");
                 if (response.responseCode() == 200) {
                     String json = response.get();
-                    Log.i("TAGG", "onSucceed: 登录的response:"+response.get());
+                    Log.i("TAGG", "onSucceed: 登录的response:" + response.get());
                     parseJson(json);
                 } else {
-                    if(!TextUtils.isEmpty(response.get())){
+                    if (!TextUtils.isEmpty(response.get())) {
                         MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
                         T.showShort(LoginActivity.this, msgBean.msg);
                     }
@@ -191,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailed(int i, Response<String> response) {
                 T.showShort(LoginActivity.this, "网络访问失败，请重新登陆");
-                Log.i("TAGG", "onFailed: --------->"+response.responseCode());
+                Log.i("TAGG", "onFailed: --------->" + response.responseCode());
                 tv_login_activity_login.setClickable(true);
             }
 
@@ -206,18 +205,17 @@ public class LoginActivity extends AppCompatActivity {
     public void parseJson(String json) {
 
         LoginBean loginBean = mGson.fromJson(json, LoginBean.class);
-        if (loginBean.getResult()==10001||loginBean.getResult()==10002) {
+        if (loginBean.getResult() == 10001 || loginBean.getResult() == 10002) {
             Toast.makeText(this, loginBean.getMsg(), Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             //把access_token存储到sp中
             SPUtils.put(this, GlobalConstants.TOKEN, loginBean.getData().getAccess_token());
             SPUtils.put(this, GlobalConstants.EXPIRES_IN, loginBean.getData().getExpires_in());
-            SPUtils.put(this, GlobalConstants.USERID,loginBean.getData().getUser().getId());
-//  SPUtils.put(this, GlobalConstants.NAME, loginBean.name);
+            SPUtils.put(this, GlobalConstants.USERID, loginBean.getData().getUser().getId());
 //        SPUtils.put(this, GlobalConstants.CERTIFICATION, loginBean.certification);
             //提示用户登陆成功并退出登陆界面
             T.showShort(this, "登录成功");
-            SPUtils.put(LoginActivity.this, GlobalConstants.TOKENUNUSEFULL,false);
+            SPUtils.put(LoginActivity.this, GlobalConstants.TOKENUNUSEFULL, false);
             loadUserInfo();
 
 
@@ -253,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     /**
      * 解析用户信息
      */
@@ -260,14 +259,15 @@ public class LoginActivity extends AppCompatActivity {
         Gson gson = new Gson();
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
 
-        if (userInfoBean.getData().getInfo()==null) {
-            SPUtils.put(this,GlobalConstants.HEAD_IMG,"");
-            Intent intent=new Intent(this,EditInformationActivity.class);
-            intent.putExtra("jumpType",1);
+        if (userInfoBean.getData().getInfo() == null) {
+            SPUtils.put(this, GlobalConstants.HEAD_IMG, "");
+            Intent intent = new Intent(this, EditInformationActivity.class);
+            intent.putExtra("jumpType", 1);
             startActivity(intent);
-        }else {
+        } else {
             MyApplication.instance.getRongIMTokenService();
-            startActivity(new Intent(this,TestActivity.class));
+            SPUtils.put(this,GlobalConstants.NAME,userInfoBean.getData().getInfo().getNickName());
+            startActivity(new Intent(this, TestActivity.class));
         }
         finish();
     }

@@ -4,7 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-
+import android.util.Log;
+import android.view.View;
 
 
 /**
@@ -72,9 +73,36 @@ public class PullToRrefreshRecyclerView extends PullToRefreshBase<RecyclerView> 
      */
     @Override
     protected boolean isReadyForPullStart() {
-        if (((LinearLayoutManager) mRefreshableView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+//        if (((LinearLayoutManager) mRefreshableView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+//            return true;
+//        }else
+//            return false;
+
+        final RecyclerView.Adapter adapter = mRefreshableView.getAdapter();
+
+        if (null == adapter) {
+            if (DEBUG) {
+                Log.d(LOG_TAG, "isFirstItemVisible. Empty View.");
+            }
             return true;
-        }else
-            return false;
+
+        } else {
+
+            /**
+             * This check should really just be:
+             * mRefreshableView.getFirstVisiblePosition() == 0, but PtRListView
+             * internally use a HeaderView which messes the positions up. For
+             * now we'll just add one to account for it and rely on the inner
+             * condition which checks getTop().
+             */
+            if (((LinearLayoutManager)mRefreshableView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
+                final View firstVisibleChild = mRefreshableView.getChildAt(0);
+                if (firstVisibleChild != null) {
+                    return firstVisibleChild.getTop() >= mRefreshableView.getTop();
+                }
+            }
+        }
+
+        return false;
     }
 }

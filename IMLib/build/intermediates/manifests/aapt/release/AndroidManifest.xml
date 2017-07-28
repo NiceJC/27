@@ -24,6 +24,7 @@
     <application>
 
         <!-- imlib config begin -->
+        <!-- TODO key值 -->
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="pwe86ga5e5hw6" />

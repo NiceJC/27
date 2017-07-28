@@ -26,11 +26,10 @@ public class GlobalConstants {
 
 
     //网络访问
-//    public static final String URL = "https://api.lacoorent.com";
 //    public static final String URL = "http://101.37.85.56:8000";  //服务器生产环境
 //    public static final String URL = "http://101.37.85.56:8080";  //服务器开发环境
-    public static final String URL = "http://192.168.31.81:8080";
-        //access_token
+    public static final String URL = "http://192.168.31.81:8080"; //联调环境
+    // access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac
     public static final String HEAD_IMG = "HEAD_IMG";

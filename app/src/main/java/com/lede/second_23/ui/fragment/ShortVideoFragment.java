@@ -252,6 +252,7 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                 @Override
                 public void onInfo(MediaRecorder mr, int what, int extra) {
                     //录制完成
+                    Log.i("TAG", "onInfo: "+what+","+extra);
                     // 最后通知图库更新
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
 

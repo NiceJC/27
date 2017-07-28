@@ -2,42 +2,40 @@ package com.lede.second_23.ui.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
-import com.lede.second_23.bean.UploadTextBean;
+import com.lede.second_23.bean.AllForum;
+import com.lede.second_23.bean.AllRecord;
+import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.utils.L;
+import com.lede.second_23.utils.FileUtils;
 import com.lede.second_23.utils.SPUtils;
-import com.lede.second_23.utils.VideoUtils;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
 import com.yalantis.ucrop.entity.LocalMedia;
-import com.yolanda.nohttp.FileBinary;
 import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.OnUploadListener;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
@@ -47,32 +45,42 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class IssueActivity extends AppCompatActivity implements OnResponseListener<String> {
+public class AllIssueTextActivity extends AppCompatActivity implements OnResponseListener<String> {
 
-    @Bind(R.id.iv_issue_activity_back)
-    ImageView iv_back;
-    @Bind(R.id.et_issue_activity_text)
-    EditText et_text;
-    @Bind(R.id.rv_issue_activity_show)
-    RecyclerView rv_show;
-    @Bind(R.id.iv_issue_activity_send)
-    ImageView iv_send;
-    @Bind(R.id.progressBar)
-    ProgressBar bar;
+    @Bind(R.id.iv_all_issue_text_activity_back)
+    ImageView ivAllIssueTextActivityBack;
+    @Bind(R.id.iv_all_issue_text_activity_send)
+    ImageView ivAllIssueTextActivitySend;
+    @Bind(R.id.et_all_issue_text_activity_text)
+    EditText etAllIssueTextActivityText;
+    @Bind(R.id.ll_all_issue_text_activity_text_area)
+    LinearLayout llAllIssueTextActivityTextArea;
+    @Bind(R.id.rv_all_issue_text_activity_show)
+    RecyclerView rvAllIssueTextActivityShow;
 
-//    sex  agemin 0 agemax 99 juli  userid
+    private static final int GET_QIUNIUTOKEN=1000;
+    private static final int UP_SERVICE=2000;
 
-    String path;//视频录制输出地址
-    //视频压缩数据地址
-    private String currentOutputVideoPath = "/sdcard/27/out.mp4";
+    UploadManager uploadManager;
+    private ArrayList<String> tokenList=new ArrayList<>();
+    ArrayList<AllRecord> recordArrayList = new ArrayList<>();
+    private ArrayList<Integer> successList=new ArrayList<>();
+    private final int num=0;
+    private Random random;
+    private long forumId;
+
+
     private Context mContext;
     private RequestQueue requestQueue;
     private List<LocalMedia> selectMedia = new ArrayList<>();
@@ -82,27 +90,22 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 
     private FunctionOptions options1;
     private FunctionOptions options;
-
-    private static final int UPLOADVIDEO_REQUEST = 3000;
-    private static final int UPLOADIMG_REQUEST = 2000;
-    private static final int UPLOADTEXT_REQUEST = 1000;
-
-    private GridLayoutManager gridLayoutManager;
-    private Dialog loadingDialog2;
-    private int num = 0;//计数
-//    TextView back;
-    Double videoLength=0.0;//视频时长
     private String img_path;
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue);
-        mContext = IssueActivity.this;
+        setContentView(R.layout.activity_all_issue_text);
+        ButterKnife.bind(this);
         selectMedia.add(null);
+        mContext=this;
         ButterKnife.bind(this);
         img_path=getIntent().getStringExtra("img_path");
         initFunctionOptions();
+        uploadManager= MyApplication.getUploadManager();
+        random = new Random();
+        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000000);
         if (img_path!=null) {
             LocalMedia localMedia=new LocalMedia();
             File file=new File(img_path);
@@ -129,7 +132,6 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 
 
         initRecyclerView();
-
     }
 
     private void initFunctionOptions() {
@@ -236,8 +238,8 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         };
         gridLayoutManager = new GridLayoutManager(mContext, 3, LinearLayoutManager.VERTICAL, false);
 //        new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        rv_show.setLayoutManager(gridLayoutManager);
-        rv_show.setAdapter(mAdapter);
+        rvAllIssueTextActivityShow.setLayoutManager(gridLayoutManager);
+        rvAllIssueTextActivityShow.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
@@ -286,37 +288,6 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                 PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
 //                selectMedia.add(null);
                 break;
-        }
-    }
-
-
-    @OnClick({R.id.iv_issue_activity_back, R.id.iv_issue_activity_send})
-    public void click(View view) {
-        switch (view.getId()) {
-            case R.id.iv_issue_activity_back:
-                finish();
-                break;
-            case R.id.iv_issue_activity_send:
-                if ((selectMedia.size() == 1 && selectMedia.get(0) == null)) {
-                    Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    if (imgOrVideoType==1) {
-                        if (getlongFileSize(selectMedia.get(0).getPath())>=9) {
-                            Toast.makeText(mContext, "当前选择视频过大无法上传,我们正在尝试修复这个bug", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-                    uploadTextService();
-                }
-//                try {
-//                    Log.i("TAB", "click:" + et_text.getText() + "123");
-//                } catch (Exception e) {
-//                    Log.i("TAB", "click: error" + e.getMessage());
-//                }
-
-                break;
-
         }
     }
 
@@ -394,144 +365,30 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         }
     };
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case PictureConfig.CHOOSE_REQUEST:
-//                    // 图片选择结果回调
-//                    selectMedia.clear();
-//                    selectMedia.addAll(PictureSelector.obtainMultipleResult(data));
-//                    selectMedia.add(null);
-////                    selectMedia = PictureSelector.obtainMultipleResult(data);
-//                    // 例如 LocalMedia 里面返回三种path
-//                    // 1.media.getPath(); 为原图path
-//                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-//                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-//                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-////                    adapter.setList(selectList);
-////                    adapter.notifyDataSetChanged();
-////                    DebugUtil.i(TAG, "onActivityResult:" + selectList.size());
-//                    if (selectMedia != null) {
-//                        Log.i("TAG", "onSelectSuccess: selectMedia != null");
-//                        mAdapter.notifyDataSetChanged();
-////            }
-//
-//                    }
-//                    break;
-//
-//            }
-//        }
-//    }
+    @OnClick({R.id.iv_all_issue_text_activity_back,R.id.iv_all_issue_text_activity_send})
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.iv_all_issue_text_activity_back:
+                finish();
+                break;
+            case R.id.iv_all_issue_text_activity_send:
+                if ((selectMedia.size() == 1 && selectMedia.get(0) == null)) {
+                    Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
+                    break;
+                } else {
+                    if (imgOrVideoType==0) {
+                        for (int i = 0; i < selectMedia.size() - 1; i++) {
 
-    /**
-     * 上传文字请求
-     */
-    private void uploadTextService() {
-        loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
-        loadingDialog2.show();
-        Request<String> uploadTextRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/update", RequestMethod.POST);
-        uploadTextRequest.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
-        uploadTextRequest.add("text", et_text.getText().toString().trim());
-        requestQueue.add(UPLOADTEXT_REQUEST, uploadTextRequest, this);
-    }
-
-    /**
-     * 上传图片
-     */
-    public void uploadImgServce(int forumId) {
-//        loadingDialog2 = ProgressDialogUtils.createLoadingDialog(mContext, "正在上传请稍等...");
-//        loadingDialog2.show();
-        for (int i = 0; i < selectMedia.size() - 1; i++) {
-            Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/upload", RequestMethod.POST);
-            uploadRequest.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
-            uploadRequest.add("pic", new File(selectMedia.get(i).getCutPath()));
-            uploadRequest.add("forumId", forumId);
-            requestQueue.add(UPLOADIMG_REQUEST, uploadRequest, this);
-        }
-
-    }
-
-    /**
-     * 上传视频请求
-     *
-     * @param forumId
-     */
-    public void uploadVideoServce(int forumId) {
-
-//        loadingDialog2.show();
-        Request<String> uploadVideoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/upload_media", RequestMethod.POST);
-        uploadVideoRequest.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
-        uploadVideoRequest.add("pic", new File(VideoUtils.bitmap2File(VideoUtils.getVideoThumb(selectMedia.get(0).getPath()), "cacher")));
-//        uploadVideoRequest.add("media", new File(selectMedia.get(0).getPath()));
-        File file=new File(selectMedia.get(0).getPath());
-        FileBinary binary=new FileBinary(file,file.getName());
-        binary.setUploadListener(88, new OnUploadListener() {
-            @Override
-            public void onStart(int what) {
-                Log.i("up", "onStart: "+"开始上传");
-            }
-
-            @Override
-            public void onCancel(int what) {
-
-            }
-
-            @Override
-            public void onProgress(int what, int progress) {
-                Log.i("up", "onProgress: 上传进度"+progress);
-            }
-
-            @Override
-            public void onFinish(int what) {
-                Log.i("up", "onFinish: 上传结束");
-            }
-
-            @Override
-            public void onError(int what, Exception exception) {
-                Log.i("up", "onError: "+exception.getMessage());
-            }
-        });
-        uploadVideoRequest.add("media",binary);
-        uploadVideoRequest.add("forumId", forumId);
-//        uploadRequest.add("labels","");
-        requestQueue.add(UPLOADVIDEO_REQUEST, uploadVideoRequest, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                switch (what) {
-                    case UPLOADVIDEO_REQUEST:
-                        num++;
-                        if (num == selectMedia.size()) {
-                            if (loadingDialog2 != null) {
-                                loadingDialog2.dismiss();
-                                Toast.makeText(mContext, "视频上传成功", Toast.LENGTH_SHORT).show();
-                            }
+                            getQiniuToken(i,new File(selectMedia.get(0).getCutPath()));
                         }
-                        SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
-                        finish();
-                        break;
+                    }
+
                 }
-
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-                Log.i("TAG", "onFailed: 上传视频"+response.get());
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
-//
+                break;
+        }
     }
+
+
 
     @Override
     protected void onResume() {
@@ -553,6 +410,89 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         Log.i("TAB", "onRestart: ");
     }
 
+
+    /**
+     * 获取七牛上传token
+     * @param i
+     * @param file
+     */
+    private void getQiniuToken(final int i, final File file){
+        Request<String> getQiniuRequest= NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/getToken", RequestMethod.GET);
+        NoHttp.getRequestQueueInstance().add(GET_QIUNIUTOKEN, getQiniuRequest, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                parseQiNiuToken(response.get(),i,file);
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+
+    private void parseQiNiuToken(String json,int index,File file) {
+        QiNiuTokenBean qiNiuTokenBean=mGson.fromJson(json,QiNiuTokenBean.class);
+        upload(qiNiuTokenBean.getData().getUptoken(),index,file);
+    }
+
+    /**
+     * 上传文件
+     * @param token
+     * @param i
+     * @param file
+     */
+    private void upload(String token, final int i, File file) {
+
+        final int num = random.nextInt(100);
+        String key = System.currentTimeMillis() + "" + num + "." + FileUtils.getExtensionName(file.getName());
+        uploadManager.put(file,key , token,
+                new UpCompletionHandler() {
+
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject res) {
+                        //res包含hash、key等信息，具体字段取决于上传策略的设置
+                        if (info.isOK()) {
+                            Log.i("qiniu", "Success---->"+key);
+                            successList.add(i);
+                            recordArrayList.add(new AllRecord(imgOrVideoType,i,null,null,key,(String) SPUtils.get(mContext,GlobalConstants.USERID,""),forumId,null));
+                            if (successList.size()==selectMedia.size()-1) {
+                                uploadService();
+                                successList.clear();
+                            }
+                        } else {
+                            Log.i("qiniu", "Fail----->"+key);
+                            //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                        }
+                        Log.i("qiniu", "name--->" + key + ",\r\n " + info + ",\r\n " + res);
+                    }
+                }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                    @Override
+                    public void progress(String key, double percent) {
+                        Log.i("七牛", "progress: " + key + ": " + percent);
+                    }
+                }, null));
+    }
+
+    private void uploadService() {
+        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/creatFroum", RequestMethod.POST);
+        AllForum allForum = new AllForum((String) SPUtils.get(mContext,GlobalConstants.TOKEN,""), forumId, (String) SPUtils.get(mContext,GlobalConstants.USERID,""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+        String str = mGson.toJson(allForum);
+        Log.i("json", "uploadService: "+str);
+        uploadRequest.setDefineRequestBodyForJson(str);
+        NoHttp.getRequestQueueInstance().add(UP_SERVICE, uploadRequest,this );
+    }
+
     @Override
     public void onStart(int what) {
 
@@ -560,147 +500,16 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 
     @Override
     public void onSucceed(int what, Response<String> response) {
-        L.i(response.get());
-        switch (what) {
-            case UPLOADTEXT_REQUEST:
-                parseUpTextJson(response.get());
-                break;
-            case UPLOADIMG_REQUEST:
-                num++;
-                if (num == selectMedia.size()) {
-                    if (loadingDialog2 != null) {
-                        loadingDialog2.dismiss();
-                        Toast.makeText(mContext, "图片上传成功", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-                SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
-                finish();
-                break;
-            case UPLOADVIDEO_REQUEST:
-                num++;
-                if (num == selectMedia.size()) {
-                    if (loadingDialog2 != null) {
-                        loadingDialog2.dismiss();
-                        Toast.makeText(mContext, "视频上传成功", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
-                finish();
-
-                break;
-        }
+        Log.i("up", "onSucceed: "+response.get());
     }
 
     @Override
     public void onFailed(int what, Response<String> response) {
-        Log.i("TAG", "onFailed: "+response.get());
+
     }
 
     @Override
     public void onFinish(int what) {
 
     }
-
-    private void parseUpTextJson(String json) {
-        UploadTextBean uploadTextBean = mGson.fromJson(json, UploadTextBean.class);
-        if (uploadTextBean.getMsg().equals("用户没有登录")) {
-            Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            if (imgOrVideoType == 0) {
-                uploadImgServce(uploadTextBean.getData().getForumId());
-            } else {
-                uploadVideoServce(uploadTextBean.getData().getForumId());
-            }
-        }
-
-
-//        uploadVideoServce(uploadTextBean.getData().getForumId());
-    }
-
-    public Dialog createLoadingDialog(Context context, String msg) {
-
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.loading_dialog_2, null);// 得到加载view
-        LinearLayout layout = (LinearLayout) v.findViewById(R.id.dialog_view);// 加载布局
-        // main.xml中的ImageView
-//        ImageView spaceshipImage = (ImageView) v.findViewById(R.id.img);
-        TextView tipTextView = (TextView) v.findViewById(R.id.tipTextView);// 提示文字
-        // 加载动画
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
-                context, R.anim.loading_animation);
-        // 使用ImageView显示动画
-//        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
-        tipTextView.setText(msg);// 设置加载信息
-
-        Dialog loadingDialog = new Dialog(context, R.style.loading_dialog);// 创建自定义样式dialog
-
-
-        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.FILL_PARENT));// 设置布局
-        return loadingDialog;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (loadingDialog2 != null) {
-            loadingDialog2.dismiss();
-        }
-    }
-
-    private String getFileSize(String path) {
-        File f = new File(path);
-        if (!f.exists()) {
-            return "0 MB";
-        } else {
-            long size = f.length();
-            return (size / 1024f) / 1024f + "MB";
-        }
-    }
-
-    private float getlongFileSize(String path){
-        File f = new File(path);
-        if (!f.exists()) {
-            return 0;
-        } else {
-            long size = f.length();
-            return (size / 1024f) / 1024f ;
-        }
-    }
-
-//    private void textAppend(String text) {
-//        if (!TextUtils.isEmpty(text)) {
-//            Log.e("日志", text);
-//        }
-//    }
-//    int progress=0;
-//    private int getProgress(String source) {
-//        // Duration: 00:00:22.50, start_1: 0.000000, bitrate: 13995 kb/s
-//
-//        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
-//        if (source.contains("start_1: 0.000000")) {
-//            return progress;
-//        }
-//        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
-//        Matcher m = p.matcher(source);
-//        if (m.find()) {
-//            //00:00:00
-//            String result = m.group(0);
-//            String temp[] = result.split(":");
-//            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
-//
-//            if (0 != videoLength) {
-//                Log.v("进度长度", "current second = " + seconds + "/videoLength=" + videoLength);
-//                progress = (int) (seconds * 100 / videoLength);
-//
-//                return progress;
-//            }
-//            return progress;
-//        }
-//        return progress;
-//    }
-
 }

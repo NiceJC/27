@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -34,9 +35,10 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.FriendBean;
 import com.lede.second_23.bean.HomePagerBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.activity.AllIssueActivity;
 import com.lede.second_23.ui.activity.BilateralActivity;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
-import com.lede.second_23.ui.activity.IssueActivity;
+import com.lede.second_23.ui.activity.ForumActivity;
 import com.lede.second_23.ui.activity.LoginActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
@@ -94,6 +96,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     private float lineLeft;
 
     private float lineX;
+    private boolean isshowBottom=true;
+    private RelativeLayout ll_mainfragment_bottom;
+    private ImageView iv_mainFragment_send;
 
 
     @Override
@@ -188,11 +193,67 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         }
     }
 
+
+
     private void addHeadView(CommonAdapter myCommonAdapter) {
         //装饰者设计模式，把原来的adapter传入
         headerAndFooterWrapper = new HeaderAndFooterWrapper(myCommonAdapter);
         //添加头布局View对象
         headerAndFooterWrapper.addHeaderView(setHeadView());
+
+        rv_mainFragment_show.getRefreshableView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                Log.i("newState", "onScrollStateChanged: "+newState);
+//                if (newState==0) {
+//                    if (isshowBottom) {
+//
+//                    }
+//                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                Log.i("onScrolled", "onScrolled: dx"+dx+"---->dy"+dy);
+                if (dy>=30) {
+                    if (isshowBottom) {
+                        return;
+                    }else {
+                        isshowBottom=true;
+                        Log.i("onScrolled", "onScrolled: 向下滑动");
+                        bottom_show(0);
+                    }
+
+                }else if(dy<=-30){
+                    if (isshowBottom) {
+                        isshowBottom=false;
+                        Log.i("onScrolled", "onScrolled: 向上滑动");
+                        bottom_show(1);
+                    }else {
+                        return;
+                    }
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+//        rv_mainFragment_show.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+////                switch (motionEvent.getAction()) {
+////                    case MotionEvent.ACTION_MOVE:
+////                        Log.i("onTouch", "onTouch: "+motionEvent.getY());
+////                        break;
+////                }
+//                Log.i("onTouch", "onTouch: "+motionEvent.getY());
+////                int action=motionEvent.getAction();
+////                if (action== MotionEvent.ACTION_MOVE) {
+////                    Log.i("onTouch", "onTouch: "+motionEvent.getY());
+////                }
+//                return false;
+//            }
+//        });
+//        rv_mainFragment_show.getRefreshableView().onTouchEvent()
         rv_mainFragment_show.getRefreshableView().setAdapter(headerAndFooterWrapper);
         rv_mainFragment_show.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         rv_mainFragment_show.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {
@@ -201,7 +262,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //                Toast.makeText(mContext, "下拉刷新", Toast.LENGTH_SHORT).show();
                 isRefreshCompleted=false;
                 friendList.clear();
-                userList.clear();
+//                userList.clear();
                 Glide.with(mContext)
                         .load(SPUtils.get(mContext,GlobalConstants.HEAD_IMG,""))
                         .asBitmap()
@@ -221,6 +282,20 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         //设置上拉加载更多
 //        setLoadMore();
     }
+
+    private void bottom_show(int i) {
+        animator=null;
+        if (i==0) {
+            animator = ObjectAnimator.ofFloat(ll_mainfragment_bottom,"translationY",0,ll_mainfragment_bottom.getHeight());
+            animator.setDuration(500);
+            animator.start();
+        }else {
+            animator = ObjectAnimator.ofFloat(ll_mainfragment_bottom,"translationY",ll_mainfragment_bottom.getHeight(),0);
+            animator.setDuration(500);
+            animator.start();
+        }
+    }
+
     private View setHeadView() {
         View view=layoutInflater.inflate(R.layout.layout_main_head,rv_mainFragment_show,false);
         diyiv_main_head_myimg = (DIYImageView) view.findViewById(xcriv_main_head_myimg);
@@ -251,6 +326,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                         .into(iv);
             }
         } ;
+
         friendAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
@@ -371,10 +447,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                         friendList.add(friendBean.getData().get(i));
                     }
                 }
+//                for (int i = 0; i < friendBean.getData().size(); i++) {
+//                    if (!friendBean.getData().get(i).isFriend()) {
+//                        friendList.add(friendBean.getData().get(i));
+//                    }
+//                }
 //            friendList.addAll(friendBean.getData());
                 Glide.with(mContext)
                         .load(SPUtils.get(mContext,GlobalConstants.HEAD_IMG,""))
-                        .asBitmap()
                         .error(R.mipmap.loading)
                         .placeholder(R.mipmap.loading)
                         .into(diyiv_main_head_myimg);
@@ -401,8 +481,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 
     private void initView(View view) {
 //        vp_mainFragment_carousel = (ViewPager) view.findViewById(vp_mainFragment_carousel);
+        iv_mainFragment_send = (ImageView)view.findViewById(R.id.iv_mainfragment_send);
+        iv_mainFragment_send.setOnClickListener(this);
         rv_mainFragment_show = (PullToRrefreshRecyclerView) view.findViewById(R.id.rv_mainFragment_show);
         v_mainFragment_line =  view.findViewById(R.id.v_mainFragment_line);
+        ll_mainfragment_bottom = (RelativeLayout)view.findViewById(R.id.ll_mainfragment_bottom);
         lineX=v_mainFragment_line.getTranslationX();
         lineLeft=v_mainFragment_line.getLeft();
         iv_mainFragment_person = (ImageView) view.findViewById(R.id.iv_mainFragment_person);
@@ -492,7 +575,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             case R.id.iv_mainFragment_camera:
 //                ViewPager viewPager=(ViewPager)getActivity().findViewById(R.id.vp_main_fg);
 //                viewPager.setCurrentItem(0);
-                startActivity(new Intent(getActivity(), IssueActivity.class));
+                startActivity(new Intent(getActivity(), ForumActivity.class));
+                break;
+            case R.id.iv_mainfragment_send:
+                startActivity(new Intent(getActivity(), AllIssueActivity.class));
                 break;
         }
     }
@@ -522,7 +608,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         //启动定位
         mlocationClient.startLocation();
 //        mlocationClient.startAssistantLocation();
-
     }
 
     @Override

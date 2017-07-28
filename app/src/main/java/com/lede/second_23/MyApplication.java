@@ -22,6 +22,8 @@ import com.lede.second_23.ui.activity.OtherPersonActivity;
 import com.lede.second_23.utils.SPUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.qiniu.android.storage.Configuration;
+import com.qiniu.android.storage.UploadManager;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 import com.yolanda.nohttp.Logger;
 import com.yolanda.nohttp.NoHttp;
@@ -56,7 +58,8 @@ public class MyApplication extends Application {
     private Bitmap LargeBitmap;
     private Notification myNotification;
 
-
+    private static UploadManager uploadManager;
+    private static Configuration config;
 
     @Override
     public void onCreate() {
@@ -94,8 +97,8 @@ public class MyApplication extends Application {
         RongIM.setConversationBehaviorListener(new RongIM.ConversationBehaviorListener() {
             @Override
             public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-                Intent intent=new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("id",userInfo.getUserId());
+                Intent intent = new Intent(context, OtherPersonActivity.class);
+                intent.putExtra("id", userInfo.getUserId());
                 startActivity(intent);
 
                 return true;
@@ -124,12 +127,12 @@ public class MyApplication extends Application {
 
         //初始化nohttp
         NoHttp.initialize(this, new NoHttp.Config()
-                //切换底层为okHttp
-                .setNetworkExecutor(new OkHttpNetworkExecutor())
-                // 设置全局连接超时时间，单位毫秒
-                .setConnectTimeout(15 * 1000*1000)
-                // 设置全局服务器响应超时时间，单位毫秒
-                .setReadTimeout(15 * 1000*1000)
+                        //切换底层为okHttp
+                        .setNetworkExecutor(new OkHttpNetworkExecutor())
+                        // 设置全局连接超时时间，单位毫秒
+                        .setConnectTimeout(15 * 1000 * 1000)
+                        // 设置全局服务器响应超时时间，单位毫秒
+                        .setReadTimeout(15 * 1000 * 1000)
                 // 保存到数据库
 //                .setCacheStore(
 //                        new DBCacheStore(this).setEnable(true) // 如果不使用缓存，设置false禁用。
@@ -138,11 +141,17 @@ public class MyApplication extends Application {
         //日志工具
         Logger.setDebug(true);
         Logger.setTag("ledi");
-//        //七牛云初始化    使用默认配置
-//        Configuration configuration = new Configuration.Builder()
-//                .build();
-//        // 重用uploadManager。一般地，只需要创建一个uploadManager对象
-//        uploadManager = new UploadManager(configuration);
+        config = new Configuration.Builder()
+                .chunkSize(256 * 1024)  //分片上传时，每片的大小。 默认256K
+                .putThreshhold(512 * 1024)  // 启用分片上传阀值。默认512K
+                .connectTimeout(10) // 链接超时。默认10秒
+                .responseTimeout(60) // 服务器响应超时。默认60秒
+//                .recorder(recorder)  // recorder分片上传时，已上传片记录器。默认null
+//                .recorder(recorder, keyGen)  // keyGen 分片上传时，生成标识符，用于片记录器区分是那个文件的上传记录
+//                .zone(Zone.zone0) // 设置区域，指定不同区域的上传域名、备用域名、备用IP。
+                .build();
+// 重用uploadManager。一般地，只需要创建一个uploadManager对象
+        uploadManager = new UploadManager(config);
         requestQueue = GlobalConstants.getRequestQueue();
         if (SPUtils.contains(this, GlobalConstants.TOKEN)) {
             Log.i("TAG", "onCreate: 保存了用户token 获取融云token");
@@ -194,11 +203,11 @@ public class MyApplication extends Application {
         Gson mGson = new Gson();
         RongIMBean rongIMBean = mGson.fromJson(json, RongIMBean.class);
         if (rongIMBean.getMsg().equals("用户没有登录")) {
-           SPUtils.put(getApplicationContext(),GlobalConstants.TOKENUNUSEFULL,true);
-        }else {
+            SPUtils.put(getApplicationContext(), GlobalConstants.TOKENUNUSEFULL, true);
+        } else {
 
-            SPUtils.put(getApplicationContext(),GlobalConstants.TOKENUNUSEFULL,false);
-            if (rongIMBean.getResult()!=100205) {
+            SPUtils.put(getApplicationContext(), GlobalConstants.TOKENUNUSEFULL, false);
+            if (rongIMBean.getResult() != 100205) {
                 connect(rongIMBean.getData());
             }
         }
@@ -207,14 +216,17 @@ public class MyApplication extends Application {
     }
 
 
-//        //友盟初始化
+    //        //友盟初始化
 //        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 //    }
 //
 //    //获取七牛上传管理类
-//    public UploadManager getQiNiu(){
-//        return uploadManager;
-//    }
+    public static UploadManager getUploadManager() {
+        if (uploadManager == null) {
+            uploadManager = new UploadManager(config);
+        }
+        return uploadManager;
+    }
 
     /**
      * <p>连接服务器，在整个应用程序全局，只需要调用一次，需在 {@link #init(Context)} 之后调用。</p>
@@ -332,7 +344,7 @@ public class MyApplication extends Application {
                 showSystemNotification(message.getSenderUserId());
                 Log.i("TAG", "收到新消息:" + message.getSenderUserId());
                 return true;
-            }else {
+            } else {
 //                showMessageNotification(message);
                 return false;
             }
@@ -342,14 +354,14 @@ public class MyApplication extends Application {
         }
     }
 
-    public static MyApplication getInstance(){
+    public static MyApplication getInstance() {
         return instance;
     }
 
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        if (RongIM.getInstance()==null) {
+        if (RongIM.getInstance() == null) {
             SPUtils.put(context, GlobalConstants.ISCONNECTED_RONGIM, false);
             RongIM.getInstance().disconnect();
         }
@@ -357,6 +369,7 @@ public class MyApplication extends Application {
 
     /**
      * 收到点笑脸请求 显示通知 ios无法实现  废弃
+     *
      * @param userid
      */
     public void showSystemNotification(String userid) {
@@ -367,7 +380,7 @@ public class MyApplication extends Application {
 
         //3.定义一个PendingIntent，点击Notification后启动一个Activity
         Intent intent = new Intent(context, ConcernActivity_2.class);
-        intent.putExtra("userid",userid);
+        intent.putExtra("userid", userid);
         PendingIntent pi = PendingIntent.getActivity(
                 context,
                 100,
