@@ -17,7 +17,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
@@ -250,7 +249,7 @@ public class DIYImageView extends ImageView{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        Log.e(TAG, "onMeasure");
+//        Log.e(TAG, "onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         /**

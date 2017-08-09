@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_show_all_forum_by_video"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lede.second_23.ui.activity.ShowAllForumByVideoActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/iv_show_all_forum_video_back"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/back" />
+
+    </RelativeLayout>
+    <com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView
+        android:id="@+id/prv_show_all_forum_video_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView>
+</LinearLayout>

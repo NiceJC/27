@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.bean.RongIMBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.ui.activity.ConcernActivity_2;
+import com.lede.second_23.ui.activity.GetReplyActivity;
 import com.lede.second_23.ui.activity.OtherPersonActivity;
 import com.lede.second_23.utils.SPUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -268,13 +268,13 @@ public class MyApplication extends Application {
 //                    finish();
                     SPUtils.put(context, GlobalConstants.ISCONNECTED_RONGIM, true);
                     //TODO
-//                    RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-//                        @Override
-//                        public UserInfo getUserInfo(String userId) {
-////                            return new UserInfo("9e7a060b521049bb990dedc6055b7886","axe",Uri.parse("http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg"));
-//                            return getUserInfoFromServer(userId);
-//                        }
-//                    }, true);
+                    RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+                        @Override
+                        public UserInfo getUserInfo(String userId) {
+//                            return new UserInfo("9e7a060b521049bb990dedc6055b7886","axe",Uri.parse("http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg"));
+                            return getUserInfoFromServer(userId);
+                        }
+                    }, true);
 
                 }
 
@@ -379,8 +379,7 @@ public class MyApplication extends Application {
         myManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         //3.定义一个PendingIntent，点击Notification后启动一个Activity
-        Intent intent = new Intent(context, ConcernActivity_2.class);
-        intent.putExtra("userid", userid);
+        Intent intent = new Intent(context, GetReplyActivity.class);
         PendingIntent pi = PendingIntent.getActivity(
                 context,
                 100,
@@ -390,9 +389,9 @@ public class MyApplication extends Application {
 
         //2.通过Notification.Builder来创建通知
         Notification.Builder myBuilder = new Notification.Builder(context);
-        myBuilder.setContentTitle("23's")
-                .setContentText("打招呼")
-                .setSubText("您收到一条新的招呼")
+        myBuilder.setContentTitle("27")
+                .setContentText("通知")
+                .setSubText("您收到一条新的评论")
 //                .setTicker("您收到新的消息")
                 //设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示
                 .setSmallIcon(R.mipmap.logo)

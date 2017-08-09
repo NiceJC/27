@@ -60,12 +60,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable/notification_bg.xml"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable/indicator_bg_bottom.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable/indicator_bg_bottom.xml"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable/abc_cab_background_internal_bg.xml",
         "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable/abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable/indicator_bg_bottom.xml",
+        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/bundles/debug/res/drawable/indicator_bg_bottom.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable/abc_edit_text_material.xml",

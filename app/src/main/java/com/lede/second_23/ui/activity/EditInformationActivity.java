@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
@@ -29,7 +30,6 @@ import com.lljjcoder.citypickerview.widget.CityPicker;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
-import com.thinkcool.circletextimageview.CircleTextImageView;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -67,7 +67,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     @Bind(R.id.tv_edit_information_activity_hobby)
     TextView tv_edit_information_activity_hobby;
     @Bind(R.id.circle_iv_editinformation_touxiang)
-    CircleTextImageView circle_iv_editinformation_touxiang;
+    DIYImageView circle_iv_editinformation_touxiang;
 
     private String selectedImg;
     private RequestQueue requestQueue;

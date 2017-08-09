@@ -15,8 +15,10 @@
 
     </com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView>
     <LinearLayout
+        android:id="@+id/ll_prv_forum_detail_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:gravity="center">
         <EditText
             android:id="@+id/et_forum_detail_comment"
@@ -28,6 +30,8 @@
             android:id="@+id/tv_forum_detail_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="评论"/>
+            android:text="评论"
+            android:padding="2dp"
+            android:textSize="18sp"/>
     </LinearLayout>
 </LinearLayout>

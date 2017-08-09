@@ -22,7 +22,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:src="@mipmap/camera" />
+                android:src="@mipmap/community" />
 
             <ImageView
                 android:layout_width="wrap_content"

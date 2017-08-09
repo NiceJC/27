@@ -7,7 +7,7 @@ import java.util.List;
  * Created by ld on 17/7/27.
  */
 
-public class ForumDetailBean {
+public class ForumDetailCommentBean {
 
     /**
      * data : {"simple":{"hasNextPage":false,"list":[{"allReplies":[{"commentId":150114068057991,"creatTime":"2017-07-27 15:29:55","forumId":1500457954715536282,"toUserId":"0c264a82887746e4a35b3b2c4006891c","type":0,"userId":"1fa48078987d405baeefc6d94e4fc216"}],"commentId":150114068057991,"commentLike":0,"commentText":"评论微博，第二次测试","creatTime":"2017-07-27 15:29:55","forumId":1500457954715536282,"id":32,"replyCount":4,"toUserId":"0c264a82887746e4a35b3b2c4006891c","type":0,"userId":"1fa48078987d405baeefc6d94e4fc216","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"哈喽"}},{"allReplies":[{"commentId":150114052704921,"creatTime":"2017-07-27 15:27:21","forumId":1500457954715536282,"toUserId":"0c264a82887746e4a35b3b2c4006891c","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}],"commentId":150114052704921,"commentLike":0,"commentText":"评论微博，第一次测试","creatTime":"2017-07-27 15:27:21","forumId":1500457954715536282,"id":31,"replyCount":2,"toUserId":"0c264a82887746e4a35b3b2c4006891c","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170622152734253454155.jpg","nickName":"某宇"}}],"nextPage":0,"pageNum":1,"pageSize":2,"total":2}}

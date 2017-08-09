@@ -225,7 +225,18 @@
         <activity android:name=".ui.activity.ForumActivity" />
         <activity android:name=".ui.activity.ForumDetailActivity" />
         <activity android:name=".ui.activity.AllReplyActivity" />
-        <activity android:name=".ui.activity.AllIssueTextActivity"></activity>
+        <activity android:name=".ui.activity.AllIssueTextActivity" />
+        <activity android:name=".ui.activity.ShowAllForumByVideoActivity" />
+        <activity
+            android:name=".ui.activity.PicOrVideoChooseActivity"
+            android:theme="@style/myTransparent" />
+        <activity android:name=".ui.activity.GetReplyActivity" />
+        <activity android:name=".ui.activity.GetZanActivity" />
+        <activity android:name=".ui.activity.ForumVideoReplyActivity" />
+        <activity android:name=".ui.activity.PlayVideoActivity" />
+        <activity android:name=".ui.activity.GetVideoReplyActivity" />
+        <activity android:name=".ui.activity.ForumReplyVideoPlayActivity" />
+        <activity android:name=".ui.activity.ForumVideoPlayActivity"></activity>
     </application>
 
 </manifest>

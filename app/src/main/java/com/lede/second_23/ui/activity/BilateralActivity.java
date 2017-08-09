@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,12 @@ import butterknife.OnClick;
  */
 public class BilateralActivity extends AppCompatActivity {
 
+    @Bind(R.id.iv_bilateral_activity_reply)
+    ImageView ivBilateralActivityReply;
+    @Bind(R.id.iv_bilateral_activity_videoreply)
+    ImageView ivBilateralActivityVideoreply;
+    @Bind(R.id.iv_bilateral_activity_zan)
+    ImageView ivBilateralActivityZan;
     private RequestQueue requestQueue;
     private Gson mGson;
 
@@ -47,36 +54,37 @@ public class BilateralActivity extends AppCompatActivity {
 
     private CommonAdapter mAdapter;
     private Context mContext;
-    private ArrayList<BilateralBean.DataBean.ListBean> dataList=new ArrayList<>();
+    private ArrayList<BilateralBean.DataBean.ListBean> dataList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bilateral);
         ButterKnife.bind(this);
-        mGson=new Gson();
-        mContext=this;
+        mGson = new Gson();
+        mContext = this;
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
-        rv_show.setLayoutManager(new GridLayoutManager(mContext,3));
-        mAdapter= new CommonAdapter<BilateralBean.DataBean.ListBean>(mContext, R.layout.layout_bilateral_item, dataList) {
+        rv_show.setLayoutManager(new GridLayoutManager(mContext, 3));
+        mAdapter = new CommonAdapter<BilateralBean.DataBean.ListBean>(mContext, R.layout.layout_bilateral_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, BilateralBean.DataBean.ListBean listBean, int position) {
-                DIYImageView iv=holder.getView(R.id.iv_bilateral_item_test);
-                TextView tv_name=holder.getView(R.id.iv_bilateral_item_name);
-                    Glide.with(mContext)
-                            .load(listBean.getImgUrl())
-                            .asBitmap()
-                            .error(R.mipmap.loading)
-                            .placeholder(R.mipmap.loading)
-                            .into(iv);
+                DIYImageView iv = holder.getView(R.id.iv_bilateral_item_test);
+                TextView tv_name = holder.getView(R.id.iv_bilateral_item_name);
+                Glide.with(mContext)
+                        .load(listBean.getImgUrl())
+                        .asBitmap()
+                        .error(R.mipmap.loading)
+                        .placeholder(R.mipmap.loading)
+                        .into(iv);
                 tv_name.setText(listBean.getNickName());
             }
         };
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(mContext, ConcernActivity_2.class);
-                intent.putExtra("userid",dataList.get(position).getUserId());
+                Intent intent = new Intent(mContext, ConcernActivity_2.class);
+                intent.putExtra("userId", dataList.get(position).getUserId());
                 mContext.startActivity(intent);
             }
 
@@ -90,10 +98,10 @@ public class BilateralActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        Request<String> bilateral_Request=NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/friends/bilateral", RequestMethod.POST);
-        bilateral_Request.add("access_token",(String) SPUtils.get(mContext,GlobalConstants.TOKEN,""));
-        bilateral_Request.add("pageNum",1);
-        bilateral_Request.add("pageSize",100);
+        Request<String> bilateral_Request = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/friends/bilateral", RequestMethod.POST);
+        bilateral_Request.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
+        bilateral_Request.add("pageNum", 1);
+        bilateral_Request.add("pageSize", 100);
         requestQueue.add(100, bilateral_Request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -102,7 +110,7 @@ public class BilateralActivity extends AppCompatActivity {
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                L.i("TAB",response.get());
+                L.i("TAB", response.get());
                 parserJson(response.get());
             }
 
@@ -119,22 +127,37 @@ public class BilateralActivity extends AppCompatActivity {
     }
 
     private void parserJson(String json) {
-        BilateralBean bilateralBean=mGson.fromJson(json,BilateralBean.class);
+        BilateralBean bilateralBean = mGson.fromJson(json, BilateralBean.class);
         if (bilateralBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this,LoginActivity.class));
-        }else {
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
             dataList.addAll(bilateralBean.getData().getList());
             mAdapter.notifyDataSetChanged();
         }
 
     }
 
-    @OnClick({R.id.iv_bilateral_activity_back})
-    public  void onClick(View view){
+    @OnClick({R.id.iv_bilateral_activity_back,R.id.iv_bilateral_activity_reply
+            ,R.id.iv_bilateral_activity_zan,R.id.iv_bilateral_activity_videoreply})
+    public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.iv_bilateral_activity_back:
                 finish();
+                break;
+            case R.id.iv_bilateral_activity_reply:
+                intent=new Intent(this, GetReplyActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.iv_bilateral_activity_zan:
+                intent=new Intent(this,GetZanActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.iv_bilateral_activity_videoreply:
+                intent=new Intent(this,GetVideoReplyActivity.class);
+                startActivity(intent);
+
                 break;
         }
 

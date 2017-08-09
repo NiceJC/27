@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class AllRecord {
 
-    public AllRecord(Integer type, Integer recordOrder, String videoFirst, String videoName, String photoName, String userId, Long forumId,Date creatTime) {
+    public AllRecord(Integer type, Integer recordOrder, String videoFirst, String videoName, String photoName, String userId, Long forumId,Date creatTime,String dspe) {
         this.type = type;
         this.recordOrder = recordOrder;
         this.videoFirst = videoFirst;
@@ -17,6 +17,7 @@ public class AllRecord {
         this.userId = userId;
         this.forumId = forumId;
         this.creatTime=creatTime;
+        this.dspe=dspe;// 九宫格 或者图层标示 0 1
     }
 
     private Integer id;
@@ -39,4 +40,5 @@ public class AllRecord {
     private Integer type;
 
     private Date creatTime;
+    private String dspe;
 }

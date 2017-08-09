@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     if (!TextUtils.isEmpty(response.get())) {
                         MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
-                        T.showShort(LoginActivity.this, msgBean.msg);
+                        T.showShort(LoginActivity.this, msgBean.getMsg());
                     }
                 }
             }

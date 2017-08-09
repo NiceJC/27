@@ -44,6 +44,7 @@ public class TestActivity extends AppCompatActivity {
     private PermissionsChecker mPermissionsChecker; // 权限检测器
     private ImageView iv_logo;
     private RequestQueue requestQueue;
+    private boolean isNetWork=true;
 
     private boolean isHasInfo=false;
 
@@ -116,7 +117,7 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(int what, Response<String> response) {
-
+                isNetWork=false;
             }
 
             @Override
@@ -157,21 +158,27 @@ public class TestActivity extends AppCompatActivity {
 //
 //                }
                 Intent intent=null;
-                if (SPUtils.contains(TestActivity.this, GlobalConstants.TOKEN)&&!(Boolean) SPUtils.get(TestActivity.this, GlobalConstants.TOKENUNUSEFULL,true)) {
-                    if (isHasInfo) {
-                        intent=new Intent(TestActivity.this,MainActivity.class);
-                        startActivity(intent);
-                    }else {
-                        intent=new Intent(TestActivity.this,EditInformationActivity.class);
-                        intent.putExtra("jumpType",1);
-                        Toast.makeText(TestActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
-                    }
+                if (isNetWork) {
+                    if (SPUtils.contains(TestActivity.this, GlobalConstants.TOKEN)&&!(Boolean) SPUtils.get(TestActivity.this, GlobalConstants.TOKENUNUSEFULL,true)) {
+                        if (isHasInfo) {
+                            intent=new Intent(TestActivity.this,MainActivity.class);
+                            startActivity(intent);
+                        }else {
+                            intent=new Intent(TestActivity.this,EditInformationActivity.class);
+                            intent.putExtra("jumpType",1);
+                            Toast.makeText(TestActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                        }
 
+                    }else {
+
+                    }
                 }else {
+                    Toast.makeText(TestActivity.this, "无法连接到服务器,请检查网络", Toast.LENGTH_SHORT).show();
                     intent=new Intent(TestActivity.this,LoginActivity.class);
                     startActivity(intent);
                 }
+
                 finish();
             }
         }, 3000);

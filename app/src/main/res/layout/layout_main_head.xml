@@ -39,7 +39,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
+    <TextView
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#222222"
+        android:gravity="center"
+        android:text="我的好友"
+        android:layout_marginLeft="5dp"/>
 
+        <ImageView
+            android:id="@+id/iv_main_head_show_video"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:src="@mipmap/photo_27"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:scaleType="centerCrop"/>
 
         <!--<View-->
             <!--android:layout_width="match_parent"-->

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_edit_information"
     android:layout_width="match_parent"
@@ -10,113 +11,93 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f1f1f1">
+        android:layout_height="295dp"
+        android:background="#8181ff">
+
+        <ImageView
+            android:id="@+id/iv_edit_information_activity_back"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/back_white" />
+
+        <TextView
+            android:id="@+id/tv_edit_information_activity_updata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="保存"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
         <RelativeLayout
+            android:id="@+id/rl_editinformation_touxiang"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="#3b5998">
+            android:layout_height="100dp"
+            android:layout_marginTop="50dp">
 
-            <ImageView
-                android:id="@+id/iv_edit_information_activity_back"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@mipmap/back_white" />
-
-            <TextView
-                android:id="@+id/tv_edit_information_activity_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.example.myapplication.views.diyimage.DIYImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerInParent="true"
-                android:text="编辑资料"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:scaleType="centerCrop"
+                android:src="@mipmap/head_bg_info"
+                app:diy_image_Type="circle" />
 
-            <TextView
-                android:id="@+id/tv_edit_information_activity_updata"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:text="保存"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
+            <com.example.myapplication.views.diyimage.DIYImageView
+                android:id="@+id/circle_iv_editinformation_touxiang"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/test7"
+                app:diy_image_Type="circle" />
         </RelativeLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_edit_information_activity_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_editinformation_touxiang"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="昵称"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_edit_information_activity_sign"
             android:layout_width="match_parent"
-            android:layout_height="94dp"
-            android:layout_marginTop="44dp"
-            android:background="#3b5998"></LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="345dp"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_edit_information_activity_nickname"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="101dp"
-            android:background="@drawable/shape_linearlayout_all">
-            <TextView
-                android:id="@+id/tv_edit_information_activity_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="昵称"
-                android:layout_centerHorizontal="true"
-                android:textColor="#333333"
-                android:textSize="18sp" />
-            <TextView
-                android:id="@+id/tv_edit_information_activity_sign"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/tv_edit_information_activity_nickname"
-                android:text="签名"
-                android:layout_centerHorizontal="true"
-                android:textColor="#919191"
-                android:textSize="16sp"/>
-        </RelativeLayout>
-
-        <com.thinkcool.circletextimageview.CircleTextImageView
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="63dp"
-            android:src="@mipmap/head_bg" />
-
-        <com.thinkcool.circletextimageview.CircleTextImageView
-            android:id="@+id/circle_iv_editinformation_touxiang"
-            android:layout_width="71dp"
-            android:layout_height="71dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="65.5dp"
-            android:padding="1dp"
-            android:src="@mipmap/loading"/>
-
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="22dp"
+            android:gravity="center"
+            android:text="签名"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="345dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        android:background="@drawable/shape_linearlayout_all">
+        android:background="#ffffff"
+        android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/rl_edit_information_activity_sex"
             android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="2dp"
-            android:background="#ffffff">
+            android:layout_marginTop="2dp">
+
 
             <TextView
                 android:id="@+id/tv_edit_information_activity_sex_title"
@@ -125,19 +106,21 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="性别"
-                android:textColor="#919191"
-                android:textSize="16sp" />
+                android:textColor="#8181ff"
+                android:textSize="17sp"
+                android:drawableLeft="@mipmap/sex"
+                android:drawablePadding="16dp"/>
+
             <TextView
                 android:id="@+id/tv_edit_information_activity_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="性别"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/tv_edit_information_activity_sex_title"
                 android:layout_marginLeft="20dp"
-                android:textColor="#333333"
-                android:textSize="18sp"
-                />
+                android:layout_toRightOf="@id/tv_edit_information_activity_sex_title"
+                android:text="性别"
+                android:textColor="#3333ff"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/iv_editinformation_go2"
@@ -148,30 +131,23 @@
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/back_grey" />
 
-            <!--<ImageView-->
-                <!--android:id="@+id/iv_edit_information_activity_sex"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:layout_toLeftOf="@id/iv_editinformation_go2"-->
-                <!--android:src="@mipmap/sex_girl"-->
-                <!--android:textColor="#919191"-->
-                <!--android:textSize="20sp" />-->
+
             <View
-                android:layout_width="315dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="#cccccc"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_edit_information_activity_age"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="#ffffff">
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:id="@+id/tv_edit_information_activity_age_title"
@@ -180,8 +156,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="年龄"
-                android:textColor="#919191"
-                android:textSize="16sp" />
+                android:textColor="#8181ff"
+                android:textSize="17sp"
+                android:drawableLeft="@mipmap/age"
+                android:drawablePadding="16dp"/>
+
             <TextView
                 android:id="@+id/tv_edit_information_activity_age"
                 android:layout_width="wrap_content"
@@ -190,8 +169,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/tv_edit_information_activity_age_title"
                 android:text="年龄"
-                android:textColor="#333333"
+                android:textColor="#3333ff"
                 android:textSize="18sp" />
+
             <ImageView
                 android:id="@+id/iv_editinformation_go4"
                 android:layout_width="wrap_content"
@@ -209,33 +189,50 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/tv_edit_information_activity_age"
                 android:text="星座"
-                android:textColor="#333333"
+                android:textColor="#3333ff"
                 android:textSize="18sp" />
+
             <View
-                android:layout_width="315dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="#cccccc"/>
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="#cccccc" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_edit_information_activity_city"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="#ffffff">
+            android:layout_marginRight="5dp">
+
 
             <TextView
-                android:id="@+id/iv_edit_information_activity_city_title"
+                android:id="@+id/tv_edit_information_activity_city_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="城市"
-                android:textColor="#919191"
-                android:textSize="16sp" />
+                android:textColor="#8181ff"
+                android:textSize="17sp"
+                android:drawableLeft="@mipmap/city"
+                android:drawablePadding="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_edit_information_activity_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/tv_edit_information_activity_city_title"
+                android:text="杭州"
+                android:textColor="#3333ff"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/iv_editinformation_go6"
@@ -246,31 +243,68 @@
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/back_grey" />
 
-            <TextView
-                android:id="@+id/tv_edit_information_activity_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/iv_edit_information_activity_city_title"
-                android:text="浙江省 杭州市"
-                android:textColor="#333333"
-                android:textSize="18sp" />
+
             <View
-                android:layout_width="315dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="#cccccc"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#cccccc" />
+
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_editinformation_go6"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:src="@mipmap/back_grey" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_edit_information_activity_city"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_toRightOf="@id/iv_edit_information_activity_city_title"-->
+                <!--android:text="浙江省 杭州市"-->
+                <!--android:textColor="#3333ff"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:background="#cccccc"-->
+                <!--android:id="@+id/view" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/iv_edit_information_activity_city_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:text="城市"-->
+                <!--android:textColor="#8181ff"-->
+                <!--android:textSize="17sp"-->
+                <!--android:drawableLeft="@mipmap/city"-->
+                <!--android:drawablePadding="16dp"-->
+                <!--android:layout_alignBottom="@+id/tv_edit_information_activity_city"-->
+                <!--android:layout_alignStart="@+id/view" />-->
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_edit_information_activity_job"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:background="#ffffff">
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:id="@+id/tv_edit_information_activity_hobby_title"
@@ -279,8 +313,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="爱好"
-                android:textColor="#919191"
-                android:textSize="16sp" />
+                android:textColor="#8181ff"
+                android:textSize="17sp"
+                android:drawableLeft="@mipmap/interest"
+                android:drawablePadding="16dp"/>
 
             <ImageView
                 android:id="@+id/iv_editinformation_go7"
@@ -299,110 +335,237 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/tv_edit_information_activity_hobby_title"
                 android:text="爱好"
-                android:textColor="#333333"
+                android:textColor="#3333ff"
                 android:textSize="18sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="#cccccc" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_information_activity_school"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:id="@+id/tv_edit_information_activity_school_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:text="学校"
+                android:textColor="#8181ff"
+                android:textSize="17sp"
+                android:drawableLeft="@mipmap/school"
+                android:drawablePadding="16dp"/>
+
+            <ImageView
+                android:id="@+id/iv_editinformation_go8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/back_grey" />
+
+            <TextView
+                android:id="@+id/tv_edit_information_activity_school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/tv_edit_information_activity_school_title"
+                android:text="学校"
+                android:textColor="#3333ff"
+                android:textSize="18sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="#cccccc" />
         </RelativeLayout>
     </LinearLayout>
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="#8181ff">-->
 
-    
 
     <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_edit_information_activity_nickname"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:background="#ffffff">-->
+    <!--android:layout_width="345dp"-->
+    <!--android:layout_height="120dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="101dp"-->
+    <!--android:background="@drawable/shape_linearlayout_all">-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_edit_information_activity_nickname"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:text="昵称"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:textColor="#333333"-->
+    <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_edit_information_activity_sign"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--android:layout_marginRight="20dp"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_below="@id/tv_edit_information_activity_nickname"-->
+    <!--android:text="签名"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:textColor="#919191"-->
+    <!--android:textSize="16sp"/>-->
+    <!--</RelativeLayout>-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:text="昵称"-->
-            <!--android:textColor="#919191"-->
-            <!--android:textSize="19sp" />-->
+    <!--<com.thinkcool.circletextimageview.CircleTextImageView-->
+    <!--android:layout_width="76dp"-->
+    <!--android:layout_height="76dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="63dp"-->
+    <!--android:src="@mipmap/head_bg" />-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_editinformation_go1"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:src="@mipmap/back_grey" />-->
+    <!--<com.thinkcool.circletextimageview.CircleTextImageView-->
+    <!--android:id="@+id/circle_iv_editinformation_touxiang"-->
+    <!--android:layout_width="71dp"-->
+    <!--android:layout_height="71dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="65.5dp"-->
+    <!--android:padding="1dp"-->
+    <!--android:src="@mipmap/loading"/>-->
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="44dp"-->
+    <!--android:background="#3b5998"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_alignParentStart="true">-->
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_edit_information_activity_title"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:text="编辑资料"-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:textSize="20sp" />-->
+
+
+    <!--</RelativeLayout>-->
+
+    <!--</RelativeLayout>-->
+
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/rl_edit_information_activity_nickname"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="15dp"-->
+    <!--android:background="#ffffff">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="昵称"-->
+    <!--android:textColor="#919191"-->
+    <!--android:textSize="19sp" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_editinformation_go1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:src="@mipmap/back_grey" />-->
 
 
     <!--</RelativeLayout>-->
 
 
-
     <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_edit_information_activity_sign"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_marginTop="2dp"-->
-        <!--android:background="#ffffff">-->
+    <!--android:id="@+id/rl_edit_information_activity_sign"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="2dp"-->
+    <!--android:background="#ffffff">-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:text="个人签名"-->
-            <!--android:textColor="#919191"-->
-            <!--android:textSize="19sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="个人签名"-->
+    <!--android:textColor="#919191"-->
+    <!--android:textSize="19sp" />-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_editinformation_go3"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:src="@mipmap/back_grey" />-->
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_editinformation_go3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:src="@mipmap/back_grey" />-->
 
 
     <!--</RelativeLayout>-->
 
 
-
     <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_edit_information_activity_marry"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_marginTop="2dp"-->
-        <!--android:background="#ffffff">-->
+    <!--android:id="@+id/rl_edit_information_activity_marry"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="2dp"-->
+    <!--android:background="#ffffff">-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:text="情感状态"-->
-            <!--android:textColor="#919191"-->
-            <!--android:textSize="19sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="情感状态"-->
+    <!--android:textColor="#919191"-->
+    <!--android:textSize="19sp" />-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_editinformation_go5"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:src="@mipmap/back_grey" />-->
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_editinformation_go5"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:src="@mipmap/back_grey" />-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_edit_information_activity_marry"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_toLeftOf="@id/iv_editinformation_go5"-->
-            <!--android:text="单身"-->
-            <!--android:textColor="#919191"-->
-            <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_edit_information_activity_marry"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:layout_toLeftOf="@id/iv_editinformation_go5"-->
+    <!--android:text="单身"-->
+    <!--android:textColor="#919191"-->
+    <!--android:textSize="18sp" />-->
     <!--</RelativeLayout>-->
-
 
 
 </LinearLayout>

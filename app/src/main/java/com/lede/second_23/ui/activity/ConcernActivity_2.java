@@ -115,7 +115,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private String lon;
     private Gson mGson;
     private RequestQueue requestQueue;
-    private String userid;
+    private String userId;
     private ArrayList<String> banner = new ArrayList<>();
     private String username;
     private Dialog mDialog;
@@ -129,9 +129,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_concern_2);
         ButterKnife.bind(this);
-        userid = getIntent().getStringExtra("userid");
+        userId = getIntent().getStringExtra("userId");
 //        userid="84ba77bc08ea4e1d8c03c06f6f6c79e5";
-        if (userid.equals((String) SPUtils.get(this, GlobalConstants.USERID, ""))) {
+        if (userId.equals((String) SPUtils.get(this, GlobalConstants.USERID, ""))) {
 //            ll_bottom.setVisibility(View.GONE);
             iv_report.setVisibility(View.GONE);
             iv_concern_activity_concern.setVisibility(View.GONE);
@@ -149,14 +149,14 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
         userLocation();
-        userInfoService(userid);
+        userInfoService(userId);
 //        Glide.with(this).fromResource(R.mipmap.test7).transform(new OvalImageView(this))
     }
 
-    private void userInfoService(String userid) {
+    private void userInfoService(String userId) {
         Request<String> userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/relationship", RequestMethod.POST);
         userInfoRequest.add("user_id", (String) SPUtils.get(this, GlobalConstants.USERID, ""));
-        userInfoRequest.add("to_user_id", userid);
+        userInfoRequest.add("to_user_id", userId);
         requestQueue.add(100, userInfoRequest, this);
     }
 
@@ -170,7 +170,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         switch (view.getId()) {
             case R.id.iv_concern_activity_person:
                 intent = new Intent(this, CheckOthersInfoActivity.class);
-                intent.putExtra("userid", userid);
+                intent.putExtra("userid", userId);
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_concern:
@@ -186,7 +186,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case R.id.iv_concern_activity_message:
                 if (concernUserInfoBean.getData().isEnd()) {
-                    RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userid, username);
+                    RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
                 } else {
                     showHintDialog(1);
 //                    Toast.makeText(this, "互相关联后才能开启聊天哦", Toast.LENGTH_SHORT).show();
@@ -219,7 +219,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case R.id.ll_concern_activity_2_info:
                 intent = new Intent(this, OtherPersonActivity.class);
-                intent.putExtra("id", userid);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_2_report:
@@ -291,11 +291,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     private void destroyService() {
         Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/destroy", RequestMethod.POST);
-        concernRequest.add("id", userid);
+        concernRequest.add("id", userId);
         concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
         requestQueue.add(400, concernRequest, this);
     }
 
+    //TODO 高度需要修改
     private void showDialog() {
         mDialog = new Dialog(this, R.style.my_dialog);
         LinearLayout root = (LinearLayout) LayoutInflater.from(this).inflate(
@@ -345,7 +346,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     private void userLocation() {
         Request<String> userLocationRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/userDistance", RequestMethod.POST);
-        userLocationRequest.add("userId", userid);
+        userLocationRequest.add("userId", userId);
         requestQueue.add(300, userLocationRequest, this);
 
     }
@@ -356,7 +357,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private void concernService() {
 //        Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
         Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
-        concernRequest.add("id", userid);
+        concernRequest.add("id", userId);
         concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
         requestQueue.add(200, concernRequest, this);
     }
@@ -418,7 +419,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             if (concernMsgBean.getMsg().equals("关注成功")) {
                 Toast.makeText(this, "关联成功", Toast.LENGTH_SHORT).show();
                 ll_inDicator.removeAllViews();
-                userInfoService(userid);
+                userInfoService(userId);
                 iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
 //                iv_concern_activity_concern.setClickable(false);
 //            // 构造 TextMessage 实例
@@ -461,7 +462,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 //            RongIM.getInstance().sendMessage(new Message());
             } else {
                 ll_inDicator.removeAllViews();
-                userInfoService(userid);
+                userInfoService(userId);
 //                iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
 //                iv_concern_activity_concern.setClickable(true);
 
@@ -483,7 +484,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     private void parserConcernUserInfo(String json) {
         concernUserInfoBean = mGson.fromJson(json, ConcernUserInfoBean.class);
-        SPUtils.put(this, GlobalConstants.CURRENT_USERID, userid);
+        SPUtils.put(this, GlobalConstants.CURRENT_USERID, userId);
         if (concernUserInfoBean.getData().getForumList() != null) {
             SPUtils.put(this, GlobalConstants.CURRENT_FORUMID, concernUserInfoBean.getData().getForumList().get(0).getForumId() + "");
 

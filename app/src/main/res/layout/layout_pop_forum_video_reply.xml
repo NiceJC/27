@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:background="@drawable/shape_linearlayout"
+    android:orientation="vertical">
+    <com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView
+        android:id="@+id/prv_pop_forum_video_reply_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView>
+</LinearLayout>

@@ -102,6 +102,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         selectMedia.add(null);
         ButterKnife.bind(this);
         img_path=getIntent().getStringExtra("img_path");
+        imgOrVideoType=getIntent().getIntExtra("imgOrVideoType",3);
         initFunctionOptions();
         if (img_path!=null) {
             LocalMedia localMedia=new LocalMedia();

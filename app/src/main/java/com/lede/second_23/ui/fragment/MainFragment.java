@@ -40,6 +40,7 @@ import com.lede.second_23.ui.activity.BilateralActivity;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.ui.activity.ForumActivity;
 import com.lede.second_23.ui.activity.LoginActivity;
+import com.lede.second_23.ui.activity.ShowAllForumByVideoActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
@@ -99,6 +100,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     private boolean isshowBottom=true;
     private RelativeLayout ll_mainfragment_bottom;
     private ImageView iv_mainFragment_send;
+    private ImageView iv_show_video;
 
 
     @Override
@@ -167,7 +169,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent=new Intent(mContext, ConcernActivity_2.class);
-                intent.putExtra("userid",userList.get(position-1).getUserId());
+                intent.putExtra("userId",userList.get(position-1).getUserId());
                 mContext.startActivity(intent);
             }
 
@@ -262,7 +264,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //                Toast.makeText(mContext, "下拉刷新", Toast.LENGTH_SHORT).show();
                 isRefreshCompleted=false;
                 friendList.clear();
-//                userList.clear();
+                userList.clear();
                 Glide.with(mContext)
                         .load(SPUtils.get(mContext,GlobalConstants.HEAD_IMG,""))
                         .asBitmap()
@@ -299,6 +301,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     private View setHeadView() {
         View view=layoutInflater.inflate(R.layout.layout_main_head,rv_mainFragment_show,false);
         diyiv_main_head_myimg = (DIYImageView) view.findViewById(xcriv_main_head_myimg);
+        iv_show_video = (ImageView) view.findViewById(R.id.iv_main_head_show_video);
+        iv_show_video.setOnClickListener(this);
         Glide.with(mContext)
                 .load(SPUtils.get(mContext,GlobalConstants.HEAD_IMG,""))
                 .asBitmap()
@@ -331,7 +335,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent=new Intent(mContext, ConcernActivity_2.class);
-                intent.putExtra("userid",friendList.get(position).getUserId());
+                intent.putExtra("userId",friendList.get(position).getUserId());
                 Toast.makeText(mContext, "已有人向你打招呼了\n" +
                         "点击笑脸可以互动了", Toast.LENGTH_LONG).show();
                 mContext.startActivity(intent);
@@ -578,7 +582,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                 startActivity(new Intent(getActivity(), ForumActivity.class));
                 break;
             case R.id.iv_mainfragment_send:
-                startActivity(new Intent(getActivity(), AllIssueActivity.class));
+                Intent intent=new Intent(getActivity(), AllIssueActivity.class);
+                intent.putExtra("type",0);
+                startActivity(intent);
+                break;
+            case R.id.iv_main_head_show_video:
+
+
+                startActivity(new Intent(getActivity(), ShowAllForumByVideoActivity.class));
                 break;
         }
     }

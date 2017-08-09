@@ -22,10 +22,12 @@ import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.AllForum;
 import com.lede.second_23.bean.AllRecord;
+import com.lede.second_23.bean.ForumSuccessBean;
 import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.FileUtils;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.VideoUtils;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
@@ -69,14 +71,14 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     @Bind(R.id.rv_all_issue_text_activity_show)
     RecyclerView rvAllIssueTextActivityShow;
 
-    private static final int GET_QIUNIUTOKEN=1000;
-    private static final int UP_SERVICE=2000;
+    private static final int GET_QIUNIUTOKEN = 1000;
+    private static final int PIC_UP_SERVICE = 2000;
 
     UploadManager uploadManager;
-    private ArrayList<String> tokenList=new ArrayList<>();
+    private ArrayList<String> tokenList = new ArrayList<>();
     ArrayList<AllRecord> recordArrayList = new ArrayList<>();
-    private ArrayList<Integer> successList=new ArrayList<>();
-    private final int num=0;
+    private ArrayList<Integer> successList = new ArrayList<>();
+    private final int num = 0;
     private Random random;
     private long forumId;
 
@@ -88,10 +90,15 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     private CommonAdapter mAdapter;
     private int imgOrVideoType = 3;//3表示未选择图片或者视频 0图片 1视频
 
-    private FunctionOptions options1;
-    private FunctionOptions options;
+    private FunctionOptions options1; //选择图片
+    private FunctionOptions options; //选择视频
     private String img_path;
     private GridLayoutManager gridLayoutManager;
+    private boolean isCrop;  //表示是否裁剪 对应发布后显示状态为 true 图层  false 宫格
+    private boolean isVideoFirstOK;
+    private String qiniuvideoFirst;
+    private boolean isVideoOK;
+    private String qiniuVieoPatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,18 +106,20 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         setContentView(R.layout.activity_all_issue_text);
         ButterKnife.bind(this);
         selectMedia.add(null);
-        mContext=this;
+        mContext = this;
         ButterKnife.bind(this);
-        img_path=getIntent().getStringExtra("img_path");
+        img_path = getIntent().getStringExtra("img_path");
+        imgOrVideoType = getIntent().getIntExtra("imgOrVideoType", 0);
+        isCrop = getIntent().getBooleanExtra("isCrop", true);
         initFunctionOptions();
-        uploadManager= MyApplication.getUploadManager();
+        uploadManager = MyApplication.getUploadManager();
         random = new Random();
-        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000000);
-        if (img_path!=null) {
-            LocalMedia localMedia=new LocalMedia();
-            File file=new File(img_path);
-            localMedia.setPath("/storage/emulated/0/27/"+file.getName());
-            file=null;
+        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
+        if (img_path != null) {
+            LocalMedia localMedia = new LocalMedia();
+            File file = new File(img_path);
+            localMedia.setPath("/storage/emulated/0/27/" + file.getName());
+            file = null;
             localMedia.setChecked(true);
             localMedia.setNum(1);
             localMedia.setDuration(0);
@@ -119,12 +128,19 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
             localMedia.setType(0);
             localMedia.setCompressPath("123");
             localMedia.setCutPath("123");
-            selectMedia.add(selectMedia.size()-1,localMedia);
-
-            Log.i("onCreate", "onCreate: "+mGson.toJson(localMedia));
+            selectMedia.add(selectMedia.size() - 1, localMedia);
+            Log.i("onCreate", "onCreate: " + mGson.toJson(localMedia));
             selectMedia.remove(selectMedia.get(selectMedia.size() - 1));
-
             PictureConfig.getInstance().init(options1).openPhoto((Activity) mContext, resultCallback);
+
+        } else {
+            selectMedia.remove(selectMedia.get(selectMedia.size() - 1));
+            if (imgOrVideoType == 0) {
+                PictureConfig.getInstance().init(options1).openPhoto((Activity) mContext, resultCallback);
+            } else {
+                PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
+            }
+
         }
 
         //获取服务器队列
@@ -147,7 +163,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 .setVideoS(0)// 查询多少秒内的视频 单位:秒
                 .setShowCamera(true) //是否显示拍照选项 这里自动根据type 启动拍照或录视频
                 .setEnablePreview(true) // 是否打开预览选项
-                .setEnableCrop(true) // 是否打开剪切选项
+                .setEnableCrop(isCrop) // 是否打开剪切选项
                 .setCircularCut(false)// 是否采用圆形裁剪
                 .setPreviewVideo(true) // 是否预览视频(播放) mode or 多选有效
 //                        .setCheckedBoxDrawable() // 选择图片样式
@@ -205,6 +221,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 .setRecordVideoSecond(15)
                 .create();
     }
+
 
     private void initRecyclerView() {
         mAdapter = new CommonAdapter<LocalMedia>(mContext, R.layout.item, selectMedia) {
@@ -283,7 +300,6 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 break;
             case 1:
                 imgOrVideoType = 1;
-
                 selectMedia.remove(selectMedia.get(selectMedia.size() - 1));
                 PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
 //                selectMedia.add(null);
@@ -365,8 +381,8 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         }
     };
 
-    @OnClick({R.id.iv_all_issue_text_activity_back,R.id.iv_all_issue_text_activity_send})
-    public void onClick(View view){
+    @OnClick({R.id.iv_all_issue_text_activity_back, R.id.iv_all_issue_text_activity_send})
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_all_issue_text_activity_back:
                 finish();
@@ -376,10 +392,21 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
                     break;
                 } else {
-                    if (imgOrVideoType==0) {
+                    if (imgOrVideoType == 0) {
                         for (int i = 0; i < selectMedia.size() - 1; i++) {
+                            if (isCrop) {
+                                getQiniuToken(i, new File(selectMedia.get(i).getCutPath()));
+                            } else {
+                                getQiniuToken(i, new File(selectMedia.get(i).getPath()));
+                            }
+                        }
 
-                            getQiniuToken(i,new File(selectMedia.get(0).getCutPath()));
+                    } else if (imgOrVideoType == 1) {
+                        ArrayList<File> videoList = new ArrayList<>();
+                        videoList.add(new File(VideoUtils.bitmap2File(VideoUtils.getVideoThumb(selectMedia.get(0).getPath()), "cacher")));
+                        videoList.add(new File(selectMedia.get(0).getPath()));
+                        for (int i = 0; i < videoList.size(); i++) {
+                            getQiniuToken(i, videoList.get(i));
                         }
                     }
 
@@ -387,7 +414,6 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 break;
         }
     }
-
 
 
     @Override
@@ -413,12 +439,13 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 
     /**
      * 获取七牛上传token
+     *
      * @param i
      * @param file
      */
-    private void getQiniuToken(final int i, final File file){
-        Request<String> getQiniuRequest= NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/getToken", RequestMethod.GET);
-        NoHttp.getRequestQueueInstance().add(GET_QIUNIUTOKEN, getQiniuRequest, new OnResponseListener<String>() {
+    private void getQiniuToken(final int i, final File file) {
+        Request<String> getQiniuRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/getToken", RequestMethod.GET);
+        requestQueue.add(GET_QIUNIUTOKEN, getQiniuRequest, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
 
@@ -426,7 +453,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                parseQiNiuToken(response.get(),i,file);
+                parseQiNiuToken(response.get(), i, file);
             }
 
             @Override
@@ -441,37 +468,116 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         });
     }
 
-    private void parseQiNiuToken(String json,int index,File file) {
-        QiNiuTokenBean qiNiuTokenBean=mGson.fromJson(json,QiNiuTokenBean.class);
-        upload(qiNiuTokenBean.getData().getUptoken(),index,file);
+    private void parseQiNiuToken(String json, int index, File file) {
+        QiNiuTokenBean qiNiuTokenBean = mGson.fromJson(json, QiNiuTokenBean.class);
+        if (imgOrVideoType == 0) {
+            uploadPic(qiNiuTokenBean.getData().getUptoken(), index, file);
+        } else {
+            uploadVideo(qiNiuTokenBean.getData().getUptoken(), index, file);
+        }
+
     }
 
     /**
-     * 上传文件
+     * 上传视频文件
+     *
+     * @param uptoken
+     * @param index
+     * @param file
+     */
+    private void uploadVideo(String uptoken, int index, File file) {
+        final int num = random.nextInt(100001);
+
+
+        if (index == 0) {
+            String key = (System.currentTimeMillis() * 100000 + num) + ".jpg";
+            uploadManager.put(file, key, uptoken,
+                    new UpCompletionHandler() {
+
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject res) {
+                            //res包含hash、key等信息，具体字段取决于上传策略的设置
+                            if (info.isOK()) {
+                                Log.i("qiniu", "VideoFirst_Upload Success");
+                                isVideoFirstOK = info.isOK();
+                                qiniuvideoFirst = key;
+                            } else {
+                                Log.i("qiniu", "VideoFirst_Upload Fail");
+                                //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                            }
+                            Log.i("qiniu", "VideoFirst_" + key + ",\r\n " + info + ",\r\n " + res);
+                        }
+                    }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                        @Override
+                        public void progress(String key, double percent) {
+                            Log.i("七牛", "VideoFirst_progress: " + key + ": " + percent);
+                        }
+                    }, null));
+        } else {
+            String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
+            uploadManager.put(file, key, uptoken,
+                    new UpCompletionHandler() {
+
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject res) {
+                            //res包含hash、key等信息，具体字段取决于上传策略的设置
+                            if (info.isOK()) {
+                                Log.i("qiniu", "Video_Upload Success");
+                                isVideoOK = info.isOK();
+                                qiniuVieoPatch = key;
+                                if (isVideoOK && isVideoFirstOK) {
+                                    uploadService();
+                                } else {
+                                    Log.i("qiniu", "complete: 视频第一帧图片或者视频上传中出错");
+                                }
+                            } else {
+                                Log.i("qiniu", "Video_Upload Fail");
+                                //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                            }
+                            Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
+                        }
+                    }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                        @Override
+                        public void progress(String key, double percent) {
+                            Log.i("七牛", "Video_progress: " + key + ": " + percent);
+                        }
+                    }, null));
+        }
+    }
+
+
+    /**
+     * 上传图片文件
+     *
      * @param token
      * @param i
      * @param file
      */
-    private void upload(String token, final int i, File file) {
+    private void uploadPic(String token, final int i, File file) {
 
-        final int num = random.nextInt(100);
-        String key = System.currentTimeMillis() + "" + num + "." + FileUtils.getExtensionName(file.getName());
-        uploadManager.put(file,key , token,
+        final int num = random.nextInt(100001);
+        String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
+        uploadManager.put(file, key, token,
                 new UpCompletionHandler() {
 
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //res包含hash、key等信息，具体字段取决于上传策略的设置
                         if (info.isOK()) {
-                            Log.i("qiniu", "Success---->"+key);
+                            Log.i("qiniu", "Success---->" + key);
                             successList.add(i);
-                            recordArrayList.add(new AllRecord(imgOrVideoType,i,null,null,key,(String) SPUtils.get(mContext,GlobalConstants.USERID,""),forumId,null));
-                            if (successList.size()==selectMedia.size()-1) {
+                            if (isCrop) {
+                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"0"));
+                            }else {
+                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"1"));
+
+                            }
+                            if (successList.size() == selectMedia.size() - 1) {
                                 uploadService();
                                 successList.clear();
                             }
                         } else {
-                            Log.i("qiniu", "Fail----->"+key);
+                            Log.i("qiniu", "Fail----->" + key);
                             //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
                         }
                         Log.i("qiniu", "name--->" + key + ",\r\n " + info + ",\r\n " + res);
@@ -485,12 +591,21 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     }
 
     private void uploadService() {
-        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/creatFroum", RequestMethod.POST);
-        AllForum allForum = new AllForum((String) SPUtils.get(mContext,GlobalConstants.TOKEN,""), forumId, (String) SPUtils.get(mContext,GlobalConstants.USERID,""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/creatFroum", RequestMethod.POST);
+        AllForum allForum = null;
+        if (imgOrVideoType == 0) {
+            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+
+        } else {
+            ArrayList<AllRecord> recordArrayList = new ArrayList<>();
+            recordArrayList.add(new AllRecord(1, 0, qiniuvideoFirst, qiniuVieoPatch, null, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,null));
+            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+
+        }
         String str = mGson.toJson(allForum);
-        Log.i("json", "uploadService: "+str);
+        Log.i("json", "uploadService: " + str);
         uploadRequest.setDefineRequestBodyForJson(str);
-        NoHttp.getRequestQueueInstance().add(UP_SERVICE, uploadRequest,this );
+        requestQueue.add(PIC_UP_SERVICE, uploadRequest, this);
     }
 
     @Override
@@ -500,7 +615,23 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 
     @Override
     public void onSucceed(int what, Response<String> response) {
-        Log.i("up", "onSucceed: "+response.get());
+        Log.i("up", "onSucceed: " + response.get());
+        switch (what) {
+            case PIC_UP_SERVICE:
+                parseForum(response.get());
+                break;
+        }
+    }
+
+    private void parseForum(String json) {
+        ForumSuccessBean foumSuccessBean = mGson.fromJson(json, ForumSuccessBean.class);
+        if (foumSuccessBean.getResult() == 10000) {
+            Toast.makeText(mContext, "发布成功", Toast.LENGTH_SHORT).show();
+            finish();
+            AllIssueActivity.instance.finish();
+        } else {
+            Toast.makeText(mContext, "发布失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

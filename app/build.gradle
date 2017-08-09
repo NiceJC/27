@@ -68,6 +68,7 @@ dependencies {
     compile 'liji.library.dev:citypickerview:1.0.0'//城市选择器
 
     compile 'com.github.thinkcool:circletextimageview:1.0.20151218'
+    compile 'com.zhy:percent-support-extends:1.1.1'
     //    compile 'com.github.chrisbanes:PhotoView:1.2.6'
     //    compile 'com.github.chrisbanes:PhotoView:latest.release.here'
     //http://blog.csdn.net/ys408973279/article/details/50350313/圆形图片,圆形背景文字的CircleTextImageView开源组件

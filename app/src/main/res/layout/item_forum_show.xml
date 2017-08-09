@@ -41,8 +41,8 @@
     <RelativeLayout
         android:id="@+id/rl_item_forum_pic"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@mipmap/test3">
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
     </RelativeLayout>
     <TextView
@@ -60,14 +60,16 @@
         android:layout_height="wrap_content"
         android:padding="5dp">
         <ImageView
+            android:id="@+id/iv_item_forum_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/praise"
             android:layout_marginLeft="5dp"/>
         <TextView
+            android:id="@+id/tv_item_forum_likecount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="x赞"
+            android:text="x"
             android:layout_marginLeft="5dp"
             android:textColor="#444444"/>
         <ImageView
@@ -76,10 +78,32 @@
             android:src="@mipmap/comment"
             android:layout_marginLeft="45dp"/>
         <TextView
+            android:id="@+id/tv_item_forum_commentcount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="x评论"
+            android:text="x"
             android:layout_marginLeft="5dp"
             android:textColor="#444444"/>
+        <ImageView
+            android:id="@+id/iv_item_forum_video_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/forum_video"
+            android:layout_marginLeft="45dp"/>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_item_forum_video_reply"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="x"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:textColor="#444444"/>-->
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#cccccc" />
 </LinearLayout>

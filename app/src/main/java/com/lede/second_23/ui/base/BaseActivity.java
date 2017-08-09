@@ -86,7 +86,7 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
             L.e("basePager:" + response.responseCode() + response.get());
 
             MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
-            if ("token超时重新登录".equals(msgBean.msg) || "用户不存在".equals(msgBean.msg)) {
+            if ("token超时重新登录".equals(msgBean.getMsg()) || "用户不存在".equals(msgBean.getMsg())) {
                 //登陆过期
 
                 T.showShort(this, "登陆过期请重新登陆");

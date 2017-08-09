@@ -46,8 +46,8 @@ public class CheckOthersInfoActivity extends AppCompatActivity implements OnResp
     TextView tv_job;
     @Bind(R.id.circle_iv_editinformation_touxiang)
     CircleTextImageView circle_iv_touxiang;
-    @Bind(R.id.tv_edit_information_activity_title)
-    TextView tv_tilte;
+//    @Bind(R.id.tv_edit_information_activity_title)
+//    TextView tv_tilte;
     @Bind(R.id.tv_edit_information_activity_updata)
     TextView tv_update;
 
@@ -67,7 +67,7 @@ public class CheckOthersInfoActivity extends AppCompatActivity implements OnResp
         requestQueue = GlobalConstants.getRequestQueue();
         userInfoService(userid);
         tv_update.setVisibility(View.GONE);
-        tv_tilte.setText("查看他人资料");
+//        tv_tilte.setText("查看他人资料");
 
     }
 
@@ -113,7 +113,7 @@ public class CheckOthersInfoActivity extends AppCompatActivity implements OnResp
         UserInfoBean userInfoBean=mGson.fromJson(s, UserInfoBean.class);
         UserInfoBean.DataBean.InfoBean infoBean=userInfoBean.getData().getInfo();
         tv_nickname.setText(infoBean.getNickName());
-        tv_tilte.setText(infoBean.getNickName());
+//        tv_tilte.setText(infoBean.getNickName());
         tv_age.setText(infoBean.getHobby());
         tv_constellation.setText(infoBean.getQq());
         tv_sign.setText(infoBean.getNote());

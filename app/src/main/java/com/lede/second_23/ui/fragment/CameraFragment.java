@@ -459,7 +459,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                     //正方形 animHeight(动画高度)
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + UiUtils.dip2px( 44), screenWidth, screenWidth);
                 } else {
-                    //正方形 animHeight(动画高度)
+                    //长方形 animHeight(动画高度)
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4/3);
                 }
 
@@ -482,6 +482,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                 intent.putExtra(AppConstant.KEY.IMG_PATH, img_path);
                 intent.putExtra(AppConstant.KEY.PIC_WIDTH, screenWidth);
                 intent.putExtra(AppConstant.KEY.PIC_HEIGHT, picHeight);
+                intent.putExtra("type",AllIssueActivity.instance.type);
                 startActivity(intent);
 //                Intent intent = new Intent();
 //
@@ -551,8 +552,11 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        mCamera.stopPreview();
-        startPreview(mCamera, surfaceHolder);
+        if (mCamera!=null){
+            mCamera.stopPreview();
+            startPreview(mCamera, surfaceHolder);
+        }
+
     }
 
     @Override
