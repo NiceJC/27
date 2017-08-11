@@ -6,12 +6,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.L;
-import com.thinkcool.circletextimageview.CircleTextImageView;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 查看别人个人中心
+ * 查看别人资料
  */
 public class CheckOthersInfoActivity extends AppCompatActivity implements OnResponseListener<String> {
 
@@ -45,7 +45,7 @@ public class CheckOthersInfoActivity extends AppCompatActivity implements OnResp
     @Bind(R.id.tv_edit_information_activity_hobby)
     TextView tv_job;
     @Bind(R.id.circle_iv_editinformation_touxiang)
-    CircleTextImageView circle_iv_touxiang;
+    DIYImageView circle_iv_touxiang;
 //    @Bind(R.id.tv_edit_information_activity_title)
 //    TextView tv_tilte;
     @Bind(R.id.tv_edit_information_activity_updata)
@@ -61,7 +61,7 @@ public class CheckOthersInfoActivity extends AppCompatActivity implements OnResp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
         ButterKnife.bind(this);
-        userid=getIntent().getStringExtra("userid");
+        userid=getIntent().getStringExtra("userId");
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();

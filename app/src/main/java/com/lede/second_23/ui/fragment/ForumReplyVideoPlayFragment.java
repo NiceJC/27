@@ -24,7 +24,7 @@ import java.util.Date;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
  * Created by ld on 17/8/8.
@@ -33,7 +33,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 public class ForumReplyVideoPlayFragment extends Fragment {
 
     @Bind(R.id.jcplay_reply_video_fragment_play)
-    JCVideoPlayer jcplayReplyVideoFragmentPlay;
+    JCVideoPlayerStandard jcplayReplyVideoFragmentPlay;
     @Bind(R.id.diyiv_reply_video_fragment_userimg)
     DIYImageView diyivReplyVideoFragmentUserimg;
     @Bind(R.id.tv_reply_video_fragment_nickname)
@@ -68,7 +68,9 @@ public class ForumReplyVideoPlayFragment extends Fragment {
     }
 
     private void initView() {
-        jcplayReplyVideoFragmentPlay.setUp(listBean.getUrlVideoRecord(), listBean.getUrlVideoPic(), null);
+        jcplayReplyVideoFragmentPlay.setUp(listBean.getUrlVideoRecord(),JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL , "");
+        Glide.with(context).load(listBean.getUrlVideoPic()).into(jcplayReplyVideoFragmentPlay.thumbImageView);
+
         Glide.with(context).load(listBean.getUserInfo().getImgUrl()).into(diyivReplyVideoFragmentUserimg);
         tvReplyVideoFragmentNickname.setText(listBean.getUserInfo().getNickName());
         Date createDate=null;

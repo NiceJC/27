@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,10 +27,12 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
+import com.lede.second_23.adapter.ImageViewPagerAdapter_2;
 import com.lede.second_23.bean.AllForumBean;
 import com.lede.second_23.bean.ForumVideoReplyBean;
 import com.lede.second_23.bean.PushUserBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.view.HackyViewPager;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
@@ -92,6 +95,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     private List<AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean> list;
     private int width;
     private long currentForumId;
+    private ArrayList<ImageView> imgViews;
+    private ArrayList<String> banner;
 
 
     @Override
@@ -143,122 +148,247 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 rl_pic.removeAllViews();
                 View view = null;
                 if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-
-//                    creatShowPic(rl_pic, listBean.getAllRecords());
                     list = listBean.getAllRecords();
                     width = rl_pic.getWidth();
-
-                    if (list.size() == 1) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_1, rl_pic, true);
-                        ImageView iv_1_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_1_1);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_1_1);
-                    } else if (list.size() == 2) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_2, rl_pic, true);
-                        ImageView iv_2_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_2_1);
-                        ImageView iv_2_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_2_2);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_2_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_2_2);
-                    } else if (list.size() == 3) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_3, rl_pic, true);
-                        ImageView iv_3_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_1);
-                        ImageView iv_3_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_2);
-                        ImageView iv_3_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_3);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_3_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_3_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_3_3);
-                    } else if (list.size() == 4) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_4, rl_pic, true);
-                        ImageView iv_4_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_1);
-                        ImageView iv_4_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_2);
-                        ImageView iv_4_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_3);
-                        ImageView iv_4_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_4);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_4_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_4_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_4_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_4_4);
-                    } else if (list.size() == 5) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_5, rl_pic, true);
-                        ImageView iv_5_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_1);
-                        ImageView iv_5_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_2);
-                        ImageView iv_5_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_3);
-                        ImageView iv_5_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_4);
-                        ImageView iv_5_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_5);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_5_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_5_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_5_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_5_4);
-                        Glide.with(context).load(list.get(4).getUrl()).into(iv_5_5);
-                    } else if (list.size() == 6) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_6, rl_pic, true);
-                        ImageView iv_6_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_1);
-                        ImageView iv_6_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_2);
-                        ImageView iv_6_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_3);
-                        ImageView iv_6_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_4);
-                        ImageView iv_6_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_5);
-                        ImageView iv_6_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_6);
-                        iv_6_6.setLayoutParams(new LinearLayout.LayoutParams(width / 3, width / 3));
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_6_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_6_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_6_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_6_4);
-                        Glide.with(context).load(list.get(4).getUrl()).into(iv_6_5);
-
-                        Glide.with(context).load(list.get(5).getUrl()).into(iv_6_6);
-                    } else if (list.size() == 7) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_7, rl_pic, true);
-                        ImageView iv_7_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_1);
-                        ImageView iv_7_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_2);
-                        ImageView iv_7_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_3);
-                        ImageView iv_7_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_4);
-                        ImageView iv_7_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_5);
-                        ImageView iv_7_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_6);
-                        ImageView iv_7_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_7);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_7_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_7_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_7_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_7_4);
-                        Glide.with(context).load(list.get(4).getUrl()).into(iv_7_5);
-                        Glide.with(context).load(list.get(5).getUrl()).into(iv_7_6);
-                        Glide.with(context).load(list.get(6).getUrl()).into(iv_7_7);
-                    } else if (list.size() == 8) {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_8, rl_pic, true);
-                        ImageView iv_8_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_1);
-                        ImageView iv_8_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_2);
-                        ImageView iv_8_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_3);
-                        ImageView iv_8_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_4);
-                        ImageView iv_8_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_5);
-                        ImageView iv_8_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_6);
-                        ImageView iv_8_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_7);
-                        ImageView iv_8_8 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_8);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_8_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_8_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_8_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_8_4);
-                        Glide.with(context).load(list.get(4).getUrl()).into(iv_8_5);
-                        Glide.with(context).load(list.get(5).getUrl()).into(iv_8_6);
-                        Glide.with(context).load(list.get(6).getUrl()).into(iv_8_7);
-                        Glide.with(context).load(list.get(7).getUrl()).into(iv_8_8);
-                    } else {
-                        view = layoutInflater.inflate(R.layout.item_9gongge_9, rl_pic, true);
-                        ImageView iv_9_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_1);
-                        ImageView iv_9_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_2);
-                        ImageView iv_9_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_3);
-                        ImageView iv_9_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_4);
-                        ImageView iv_9_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_5);
-                        ImageView iv_9_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_6);
-                        ImageView iv_9_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_7);
-                        ImageView iv_9_8 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_8);
-                        ImageView iv_9_9 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_9);
-                        Glide.with(context).load(list.get(0).getUrl()).into(iv_9_1);
-                        Glide.with(context).load(list.get(1).getUrl()).into(iv_9_2);
-                        Glide.with(context).load(list.get(2).getUrl()).into(iv_9_3);
-                        Glide.with(context).load(list.get(3).getUrl()).into(iv_9_4);
-                        Glide.with(context).load(list.get(4).getUrl()).into(iv_9_5);
-                        Glide.with(context).load(list.get(5).getUrl()).into(iv_9_6);
-                        Glide.with(context).load(list.get(6).getUrl()).into(iv_9_7);
-                        Glide.with(context).load(list.get(7).getUrl()).into(iv_9_8);
-                        Glide.with(context).load(list.get(8).getUrl()).into(iv_9_9);
+                    imgViews=null;
+                    imgViews=new ArrayList<>();
+                    ArrayList<String> banner=null;
+                    banner=new ArrayList<>();
+                    for (int i = 0; i < listBean.getAllRecords().size(); i++) {
+                        banner.add(listBean.getAllRecords().get(i).getUrl());
                     }
+                    if (listBean.getAllRecords().get(0).getDspe().equals("0")) {
+                        if (list.size() == 1) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_1, rl_pic, true);
+                            ImageView iv_1_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_1_1);
+                            imgViews.clear();
+                            imgViews.add(iv_1_1);
+
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_1_1);
+                        } else if (list.size() == 2) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_2, rl_pic, true);
+                            ImageView iv_2_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_2_1);
+                            ImageView iv_2_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_2_2);
+                            imgViews.clear();
+                            imgViews.add(iv_2_1);
+                            imgViews.add(iv_2_2);
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_2_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_2_2);
+                        } else if (list.size() == 3) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_3, rl_pic, true);
+                            ImageView iv_3_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_1);
+                            ImageView iv_3_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_2);
+                            ImageView iv_3_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_3);
+                            imgViews.add(iv_3_1);
+                            imgViews.add(iv_3_2);
+                            imgViews.add(iv_3_3);
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_3_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_3_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_3_3);
+                        } else if (list.size() == 4) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_4, rl_pic, true);
+                            ImageView iv_4_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_1);
+                            ImageView iv_4_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_2);
+                            ImageView iv_4_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_3);
+                            ImageView iv_4_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_4);
+                            imgViews.add(iv_4_1);
+                            imgViews.add(iv_4_2);
+                            imgViews.add(iv_4_3);
+                            imgViews.add(iv_4_4);
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_4_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_4_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_4_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_4_4);
+                        } else if (list.size() == 5) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_5, rl_pic, true);
+                            ImageView iv_5_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_1);
+                            ImageView iv_5_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_2);
+                            ImageView iv_5_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_3);
+                            ImageView iv_5_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_4);
+                            ImageView iv_5_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_5);
+                            imgViews.add(iv_5_1);
+                            imgViews.add(iv_5_2);
+                            imgViews.add(iv_5_3);
+                            imgViews.add(iv_5_4);
+                            imgViews.add(iv_5_5);
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_5_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_5_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_5_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_5_4);
+//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_5_5);
+                        } else if (list.size() == 6) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_6, rl_pic, true);
+                            ImageView iv_6_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_1);
+                            ImageView iv_6_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_2);
+                            ImageView iv_6_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_3);
+                            ImageView iv_6_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_4);
+                            ImageView iv_6_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_5);
+                            ImageView iv_6_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_6);
+                            imgViews.add(iv_6_1);
+                            imgViews.add(iv_6_2);
+                            imgViews.add(iv_6_3);
+                            imgViews.add(iv_6_4);
+                            imgViews.add(iv_6_5);
+                            imgViews.add(iv_6_6);
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_6_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_6_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_6_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_6_4);
+//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_6_5);
+//
+//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_6_6);
+                        } else if (list.size() == 7) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_7, rl_pic, true);
+                            ImageView iv_7_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_1);
+                            ImageView iv_7_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_2);
+                            ImageView iv_7_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_3);
+                            ImageView iv_7_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_4);
+                            ImageView iv_7_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_5);
+                            ImageView iv_7_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_6);
+                            ImageView iv_7_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_7);
+                            imgViews.add(iv_7_1);
+                            imgViews.add(iv_7_2);
+                            imgViews.add(iv_7_3);
+                            imgViews.add(iv_7_4);
+                            imgViews.add(iv_7_5);
+                            imgViews.add(iv_7_6);
+                            imgViews.add(iv_7_7);
+
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_7_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_7_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_7_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_7_4);
+//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_7_5);
+//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_7_6);
+//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_7_7);
+                        } else if (list.size() == 8) {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_8, rl_pic, true);
+                            ImageView iv_8_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_1);
+                            ImageView iv_8_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_2);
+                            ImageView iv_8_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_3);
+                            ImageView iv_8_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_4);
+                            ImageView iv_8_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_5);
+                            ImageView iv_8_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_6);
+                            ImageView iv_8_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_7);
+                            ImageView iv_8_8 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_8);
+
+                            imgViews.add(iv_8_1);
+                            imgViews.add(iv_8_2);
+                            imgViews.add(iv_8_3);
+                            imgViews.add(iv_8_4);
+                            imgViews.add(iv_8_5);
+                            imgViews.add(iv_8_6);
+                            imgViews.add(iv_8_7);
+                            imgViews.add(iv_8_8);
+
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_8_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_8_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_8_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_8_4);
+//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_8_5);
+//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_8_6);
+//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_8_7);
+//                        Glide.with(context).load(list.get(7).getUrl()).into(iv_8_8);
+                        } else {
+                            view = layoutInflater.inflate(R.layout.item_9gongge_9, rl_pic, true);
+                            ImageView iv_9_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_1);
+                            ImageView iv_9_2 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_2);
+                            ImageView iv_9_3 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_3);
+                            ImageView iv_9_4 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_4);
+                            ImageView iv_9_5 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_5);
+                            ImageView iv_9_6 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_6);
+                            ImageView iv_9_7 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_7);
+                            ImageView iv_9_8 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_8);
+                            ImageView iv_9_9 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_9);
+
+                            imgViews.add(iv_9_1);
+                            imgViews.add(iv_9_2);
+                            imgViews.add(iv_9_3);
+                            imgViews.add(iv_9_4);
+                            imgViews.add(iv_9_5);
+                            imgViews.add(iv_9_6);
+                            imgViews.add(iv_9_7);
+                            imgViews.add(iv_9_8);
+                            imgViews.add(iv_9_9);
+
+//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_9_1);
+//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_9_2);
+//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_9_3);
+//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_9_4);
+//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_9_5);
+//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_9_6);
+//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_9_7);
+//                        Glide.with(context).load(list.get(7).getUrl()).into(iv_9_8);
+//                        Glide.with(context).load(list.get(8).getUrl()).into(iv_9_9);
+                        }
+
+                        for (int i = 0; i < imgViews.size(); i++) {
+                            final int finalI = i;
+                            final ArrayList<String> finalBanner = banner;
+                            imgViews.get(i).setOnClickListener(new View.OnClickListener() {
+
+                                @Override
+                                public void onClick(View view) {
+//                                banner=new ArrayList<>();
+//                                for (int i = 0; i < listBean.getAllRecords().size(); i++) {
+//                                    banner.add(listBean.getAllRecords().get(i).getUrl());
+//                                }
+                                    Intent intent=new Intent(context,ForumPicActivity.class);
+                                    intent.putExtra("banner", finalBanner);
+                                    intent.putExtra("position", finalI);
+                                    startActivity(intent);
+                                }
+                            });
+                            Glide.with(context).load(banner.get(i)).into(imgViews.get(i));
+                        }
+                    }else {
+                        view=layoutInflater.inflate(R.layout.item_tuceng_pic,rl_pic,true);
+                        HackyViewPager hvp_imgs=(HackyViewPager)view.findViewById(R.id.hvp_item_tuceng_imgs);
+                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(),banner));
+                        final LinearLayout ll_inDicator=(LinearLayout) view.findViewById(R.id.ll_item_tuceng_indicator);
+                        for (int i = 0; i < banner.size(); i++) {
+                            ImageView inDicator = (ImageView) LayoutInflater.from(context).inflate(R.layout.layout_indicator, ll_inDicator, false);
+                            if (i == 0) {
+                                inDicator.setImageResource(R.mipmap.current);
+                            }
+                            ll_inDicator.addView(inDicator);
+                        }
+                        hvp_imgs.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
+                                    if (i == position) {
+                                        ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
+                                    } else {
+                                        ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+                    }
+//                    creatShowPic(rl_pic, listBean.getAllRecords());
+
+
+
+
+//                    for (int i = 0; i < percentLinearLayout.getChildCount(); i++) {
+//                        percentLinearLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//
+//                            }
+//                        });
+//                    }
                 } else {
                     view = layoutInflater.inflate(R.layout.item_video, rl_pic, true);
 //                    JCVideoPlayer jc_play = (JCVideoPlayer) view.findViewById(R.id.jc_player_item_video);
@@ -563,7 +693,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(context, ConcernActivity_2.class);
-                intent.putExtra("userid", pushUserList.get(position).getUserId());
+                intent.putExtra("userId", pushUserList.get(position).getUserId());
                 startActivity(intent);
             }
 

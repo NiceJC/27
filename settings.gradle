@@ -1,1 +1,1 @@
-include ':app', ':IMLib', ':IMKit', ':jcvideoplayer-lib', ':librangeseekbar', ':DIYImageLibrary', ':pulToRefresh_Library'
+include ':app', ':IMLib', ':IMKit', ':librangeseekbar', ':DIYImageLibrary', ':pulToRefresh_Library', ':jcvideoplayer-lib'

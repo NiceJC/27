@@ -164,14 +164,15 @@ public class TestActivity extends AppCompatActivity {
                             intent=new Intent(TestActivity.this,MainActivity.class);
                             startActivity(intent);
                         }else {
-                            intent=new Intent(TestActivity.this,EditInformationActivity.class);
-                            intent.putExtra("jumpType",1);
-                            Toast.makeText(TestActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
-                            startActivity(intent);
+                                intent=new Intent(TestActivity.this,EditInformationActivity.class);
+                                intent.putExtra("jumpType",1);
+                                Toast.makeText(TestActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
+                                startActivity(intent);
                         }
 
                     }else {
-
+                        intent=new Intent(TestActivity.this,LoginActivity.class);
+                        startActivity(intent);
                     }
                 }else {
                     Toast.makeText(TestActivity.this, "无法连接到服务器,请检查网络", Toast.LENGTH_SHORT).show();

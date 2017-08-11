@@ -7,11 +7,11 @@
     android:background="#000000"
     tools:context="com.lede.second_23.ui.activity.ForumVideoPlayActivity">
 
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
         android:id="@+id/jcplay_forum_video_play_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"></fm.jiecao.jcvideoplayer_lib.JCVideoPlayer>
+        android:layout_centerInParent="true"></fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard>
     <ImageView
         android:id="@+id/iv_forum_video_play_close"
         android:layout_width="37dp"

@@ -60,8 +60,7 @@
 
 
 
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
-
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
         android:id="@+id/jcplay_reply_video_fragment_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

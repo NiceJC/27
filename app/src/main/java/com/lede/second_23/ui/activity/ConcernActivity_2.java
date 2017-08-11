@@ -49,7 +49,7 @@ import java.util.Date;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
@@ -86,7 +86,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     @Bind(R.id.hvp_concern_activity_2)
     HackyViewPager hvp_concern_activity_2;
     @Bind(R.id.jcplay_concerv_activity_2)
-    JCVideoPlayer jcplay_concerv_activity_2;
+    JCVideoPlayerStandard jcplay_concerv_activity_2;
     @Bind(R.id.iv_concern_activity_2_up)
     ImageView iv_concern_activity_2_up;
     @Bind(R.id.diyiv_conern_activity_2_userimg)
@@ -219,7 +219,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 break;
             case R.id.ll_concern_activity_2_info:
                 intent = new Intent(this, OtherPersonActivity.class);
-                intent.putExtra("id", userId);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_2_report:
@@ -598,8 +598,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 hvp_concern_activity_2.setVisibility(View.GONE);
                 jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
                 jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
-                        dataBean.getForumList().get(0).getForumMedia().getPic(),
-                        null, false);
+                        JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+                Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
+
 //            Glide.with(this)
 //                    .load(dataBean.getForumList().get(0).getForumMedia().getPic())
 //                    .error(R.mipmap.ic_launcher)

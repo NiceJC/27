@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
+import com.lede.second_23.ui.activity.AllIssueTextActivity;
 import com.lede.second_23.utils.BitmapUtils;
 import com.lede.second_23.utils.CameraUtil;
 
@@ -128,6 +129,10 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                                                              mediaRecorder = null;
                                                              releaseCamera();
                                                          }
+                                                         Intent intent = new Intent(getActivity(), AllIssueTextActivity.class);
+                                                         intent.putExtra("video_path", file.getPath());
+                                                         intent.putExtra("imgOrVideoType",1);
+                                                         startActivity(intent);
                                                      }
 //                                                     switch (motionEvent.getAction()) {
 //                                                         case MotionEvent.ACTION_DOWN:

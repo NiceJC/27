@@ -171,7 +171,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent=new Intent(context,OtherPersonActivity.class);
-                intent.putExtra("id",mList.get(position).getUserId());
+                intent.putExtra("userId",mList.get(position).getUserId());
                 context.startActivity(intent);
             }
 

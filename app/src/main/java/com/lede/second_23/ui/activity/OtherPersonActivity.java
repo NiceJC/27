@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.PersonFragmentRVAdapter;
 import com.lede.second_23.bean.IsCollectBean;
+import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.bean.PersonBean;
 import com.lede.second_23.bean.PersonUtilsBean;
 import com.lede.second_23.global.GlobalConstants;
@@ -35,12 +36,15 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class OtherPersonActivity extends AppCompatActivity implements View.OnClickListener, LoadMoreWrapper.OnLoadMoreListener, OnResponseListener<String> {
 
@@ -54,14 +58,16 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private ImageView iv_personfragment_msg_test;
     private List<PersonUtilsBean.DataBean> dataList=new ArrayList<>();
     private List<PersonBean.DataBean.SimpleBean.ListBean>  listBeanList=new ArrayList<>();
-    private CommonAdapter myCommonAdapter;
+    private CommonAdapter nearAdapter;
     private boolean isHasNextPage=true;
 
-
-
+    private static final int GETPERSON_FORUM=3000;
+    private ArrayList<PersonAllForumBean.DataBean.SimpleBean.ListBean> personAllForumList=new ArrayList<>();
     private RequestQueue requestQueue;
     private int pageNum=1;
+    private int forumPageNum=1;
     private int pageSize=20;
+    private CommonAdapter allForumAdapter;
     private RecyclerView rv_personfragment_show;
     private GridLayoutManager gridLayoutManager;
     private PersonFragmentRVAdapter myAdapter;
@@ -81,7 +87,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private TextView tv_converned_num;
     private TextView tv_fans_num;
     private TextView tv_tie_num;
-    private String id;
+    private String userId;
     private ImageView iv_back;
     private ImageView iv_userSex;
     private boolean isSelf;
@@ -89,6 +95,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private IsCollectBean isCollectBean;
     private ImageView iv_set;
     private TextView tv_title;
+    private TextView tv_near;
+    private TextView tv_all;
+    private boolean isNear=true;
 
 
     @Override
@@ -100,8 +109,8 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         mGson = new Gson();
         //获取请求队列
         Intent intent=getIntent();
-        id = intent.getStringExtra("id");
-        isSelf=id.equals(SPUtils.get(this,GlobalConstants.USERID,""));
+        userId = intent.getStringExtra("userId");
+        isSelf=userId.equals(SPUtils.get(this,GlobalConstants.USERID,""));
         requestQueue = GlobalConstants.getRequestQueue();
         loadPersonInfoService();
         isConcern();
@@ -110,7 +119,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private void isConcern() {
         Request<String> isConcern_request = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/collectReship", RequestMethod.POST);
         isConcern_request.add("userId",(String)SPUtils.get(this,GlobalConstants.USERID,""));
-        isConcern_request.add("toUserId",id);
+        isConcern_request.add("toUserId",userId);
         requestQueue.add(200, isConcern_request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -152,7 +161,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
 
     private void loadPersonInfoService() {
         Request<String> loadPersonInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/showHome", RequestMethod.POST);
-        loadPersonInfoRequest.add("userId", id);
+        loadPersonInfoRequest.add("userId", userId);
         loadPersonInfoRequest.add("pageNum",pageNum);
         loadPersonInfoRequest.add("pageSize",pageSize);
 //        loadPersonInfoRequest.add("text","乐可快乐出行0123456789asdzxcvbhfgrty");
@@ -263,6 +272,19 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
                     .load(R.mipmap.gril)
                     .into(iv_userSex);
         }
+        if (isCollectBean!=null) {
+            if (!isSelf) {
+
+                iv_personfragment_msg_test.setClickable(true);
+                if (isCollectBean.getData().isCollect()) {
+                    iv_personfragment_msg_test.setImageResource(R.mipmap.concern);
+                }else {
+                    iv_personfragment_msg_test.setImageResource(R.mipmap.follow);
+                }
+
+            }
+        }
+
         Glide.with(context)
                 .load(personBean.getData().getUser().getImgUrl())
                 .into(ctiv_userimg);
@@ -285,23 +307,31 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         srl_home.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                pageNum=1;
-                dataList.clear();
-                int size=listBeanList.size();
-                listBeanList.clear();
-                loadMoreWrapper.notifyItemRangeRemoved(1,size);
+                int size;
+                if (isNear) {
+                    pageNum=1;
+                    size=listBeanList.size();
+                    listBeanList.clear();
+                    loadMoreWrapper.notifyItemRangeRemoved(1,size);
 //                myAdapter.notifyDataSetChanged();
-                loadPersonInfoService();
+                    loadPersonInfoService();
+                }else {
+                    forumPageNum=1;
+                    size=personAllForumList.size();
+                    personAllForumList.clear();
+                    loadMoreWrapper.notifyItemRangeRemoved(1,size);
+                    getPersonAllForum();
+                }
                 isFresh=true;
                 srl_home.setRefreshing(isFresh);
             }
         });
         rv_personfragment_show = (RecyclerView) findViewById(R.id.rv_personfragment_show);
-        gridLayoutManager = new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
-        linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-//        gridLayoutManager.set
-        myAdapter=new PersonFragmentRVAdapter(context,dataList);
-        rv_personfragment_show.setLayoutManager(gridLayoutManager);
+//        gridLayoutManager = new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
+//        linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+////        gridLayoutManager.set
+//        myAdapter=new PersonFragmentRVAdapter(context,dataList);
+//        rv_personfragment_show.setLayoutManager(gridLayoutManager);
 
 //        myCommonAdapter= new CommonAdapter<PersonUtilsBean.DataBean>(context, R.layout.item_person_fragment_time, dataList) {
 //            @Override
@@ -376,7 +406,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
 //            }
 //        };
 
-        myCommonAdapter= new CommonAdapter<PersonBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show,listBeanList) {
+        nearAdapter= new CommonAdapter<PersonBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show,listBeanList) {
             @Override
             protected void convert(ViewHolder holder, final PersonBean.DataBean.SimpleBean.ListBean dataBean, final int position) {
                 Log.i("FUYONG", "convert: "+position);
@@ -464,8 +494,40 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             }
         };
 
+        allForumAdapter= new CommonAdapter<PersonAllForumBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show, personAllForumList) {
+            @Override
+            protected void convert(ViewHolder holder, PersonAllForumBean.DataBean.SimpleBean.ListBean listBean, int position) {
+                ImageView showView_photos = (ImageView) holder.getView(R.id.iv_person_fragment_item_photos);
+                ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
+                ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
+                if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    Glide.with(context).load(listBean.getAllRecords().get(0).getUrl()).into(showView_show);
+                    showView_play.setVisibility(View.GONE);
+                    showView_photos.setVisibility(View.VISIBLE);
+                }else {
+                    Log.i("videopic", "convert: "+listBean.getAllRecords().get(0).getUrlThree());
+                    Glide.with(context).load(listBean.getAllRecords().get(0).getUrlThree()).into(showView_show);
+                    showView_play.setVisibility(View.VISIBLE);
+                    showView_photos.setVisibility(View.GONE);
+                }
+            }
+        };
+        allForumAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent=new Intent(context,ForumDetailActivity.class);
+                intent.putExtra("forumId",personAllForumList.get(position-1).getForumId());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+
         //添加头布局
-        addHeadView(myCommonAdapter);
+        addHeadView(nearAdapter);
 
     }
 
@@ -484,8 +546,13 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         View view=layoutInflater.inflate(R.layout.item_person_fragment_head,null);
         iv_userSex = (ImageView) view.findViewById(R.id.iv_person_fragment_item_sex);
         tv_username = (TextView) view.findViewById(R.id.tv_personfragment_username);
+        tv_near = (TextView) view.findViewById(R.id.tv_personfragment_near);
+        tv_near.setOnClickListener(this);
+        tv_all = (TextView) view.findViewById(R.id.tv_personfragment_all);
+        tv_all.setOnClickListener(this);
         tv_sign = (TextView) view.findViewById(R.id.tv_personfragment_sign);
         ctiv_userimg = (CircleTextImageView) view.findViewById(R.id.ctiv_personfragment_userimg);
+        ctiv_userimg.setOnClickListener(this);
         tv_converned_num = (TextView) view.findViewById(R.id.tv_converned_num);
         tv_fans_num = (TextView) view.findViewById(R.id.tv_fans_num);
         tv_tie_num = (TextView) view.findViewById(R.id.tv_tie_num);
@@ -504,10 +571,16 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private void setLoadMore() {
         //定义请求页数
         pageNum = 1;
+        forumPageNum=1;
         loadMoreWrapper = new LoadMoreWrapper<>(headerAndFooterWrapper);
         inflate=layoutInflater.inflate(R.layout.item_loading,null);
         loadMoreWrapper.setLoadMoreView(inflate);
         loadMoreWrapper.setOnLoadMoreListener(this);
+        gridLayoutManager = new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
+        linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+//        gridLayoutManager.set
+//        myAdapter=new PersonFragmentRVAdapter(context,dataList);
+        rv_personfragment_show.setLayoutManager(gridLayoutManager);
         rv_personfragment_show.setAdapter(loadMoreWrapper);
     }
 
@@ -517,17 +590,24 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             inflate.setVisibility(View.GONE);
             Toast.makeText(context, "没有更多的动态了", Toast.LENGTH_SHORT).show();
         }else {
-            pageNum++;
-            loadPersonInfoService();
+
+            if (isNear) {
+                pageNum++;
+                loadPersonInfoService();
+            }else {
+                forumPageNum++;
+                getPersonAllForum();
+            }
+
         }
     }
 
     /**
      * 关注用户
      */
-    private void createCollect(String id) {
+    private void createCollect(String userId) {
         Request<String> createCollectRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/createCollect", RequestMethod.POST);
-        createCollectRequest.add("id",id);
+        createCollectRequest.add("id",userId);
         createCollectRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
         requestQueue.add(300,createCollectRequest,this);
     }
@@ -535,9 +615,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     /**
      * 取消关注
      */
-    private void cancelCollect(String id) {
+    private void cancelCollect(String userId) {
         Request<String> cancelCollectRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/cancelCollect", RequestMethod.POST);
-        cancelCollectRequest.add("id",id);
+        cancelCollectRequest.add("id",userId);
         cancelCollectRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
         requestQueue.add(400,cancelCollectRequest,this);
     }
@@ -546,20 +626,22 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         Intent intent=null;
         switch (view.getId()) {
+            case R.id.ctiv_personfragment_userimg:
             case R.id.tv_personfragment_username:
                 intent=new Intent(this,CheckOthersInfoActivity.class);
-                intent.putExtra("userid",id);
+                intent.putExtra("userId",userId);
+                context.startActivity(intent);
                 break;
             case R.id.ll_person_fragment_concerned:
                 intent=new Intent(context, ConcernOrFansActivity.class);
                 intent.putExtra("type",0);
-                intent.putExtra("id",id);
+                intent.putExtra("id",userId);
                 context.startActivity(intent);
                 break;
             case R.id.ll_person_fragment_fans:
                 intent=new Intent(context, ConcernOrFansActivity.class);
                 intent.putExtra("type",1);
-                intent.putExtra("id",id);
+                intent.putExtra("id",userId);
                 context.startActivity(intent);
                 break;
             case R.id.iv_personfragment_msg_test:
@@ -573,9 +655,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
                     iv_personfragment_msg_test.setClickable(false);
                     if (isCollectBean.getData().isCollect()) {
 
-                        cancelCollect(id);
+                        cancelCollect(userId);
                     }else {
-                        createCollect(id);
+                        createCollect(userId);
                     }
                 }
 
@@ -583,7 +665,38 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             case R.id.iv_personfragment_back:
                 finish();
                 break;
+            case R.id.tv_personfragment_near:
+                if (isNear) {
+
+                }else {
+                    isNear =true;
+                    addHeadView(nearAdapter);
+                    reFreshHead();
+                    pageNum=1;
+                    listBeanList.clear();
+                    loadPersonInfoService();
+                }
+                break;
+            case R.id.tv_personfragment_all:
+                if (isNear) {
+                    isNear =false;
+                    addHeadView(allForumAdapter);
+                    reFreshHead();
+                    forumPageNum=1;
+                    personAllForumList.clear();
+                    getPersonAllForum();
+                }else {
+
+                }
+                break;
         }
+    }
+    public void getPersonAllForum(){
+        Request<String> getAllForumRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/showForumByHome",RequestMethod.POST);
+        getAllForumRequest.add("userId",userId);
+        getAllForumRequest.add("pageNum",forumPageNum);
+        getAllForumRequest.add("pageSize",pageSize);
+        requestQueue.add(GETPERSON_FORUM,getAllForumRequest,this);
     }
 
     @Override
@@ -609,6 +722,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
                 isConcern();
 
                 break;
+            case GETPERSON_FORUM:
+                parsePersonAllForum(response.get());
+                break;
         }
     }
 
@@ -619,6 +735,28 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onFinish(int what) {
+
+    }
+
+    /**
+     * 解析个人全国微博
+     * @param json
+     */
+    private void parsePersonAllForum(String json) {
+        PersonAllForumBean personAllForumBean=mGson.fromJson(json,PersonAllForumBean.class);
+        if (personAllForumBean.getResult()==10000) {
+            if (personAllForumBean.getData().getSimple().getList().size()==0) {
+                Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
+            }else {
+                isHasNextPage=personAllForumBean.getData().getSimple().isHasNextPage();
+                personAllForumList.addAll(personAllForumBean.getData().getSimple().getList());
+                isFresh=false;
+
+                srl_home.setRefreshing(isFresh);
+                loadMoreWrapper.notifyDataSetChanged();
+            }
+
+        }
 
     }
 }

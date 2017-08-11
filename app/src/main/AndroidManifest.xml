@@ -236,7 +236,9 @@
         <activity android:name=".ui.activity.PlayVideoActivity" />
         <activity android:name=".ui.activity.GetVideoReplyActivity" />
         <activity android:name=".ui.activity.ForumReplyVideoPlayActivity" />
-        <activity android:name=".ui.activity.ForumVideoPlayActivity"></activity>
+        <activity android:name=".ui.activity.ForumVideoPlayActivity" />
+        <activity android:name=".ui.activity.TrimmerActivity" />
+        <activity android:name=".ui.activity.ForumPicActivity"></activity>
     </application>
 
 </manifest>

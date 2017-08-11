@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:src="@mipmap/menu"/>
     </RelativeLayout>
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
         android:id="@+id/videocontroller1"
         android:layout_width="match_parent"
         android:layout_height="200dp"

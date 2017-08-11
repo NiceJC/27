@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
+    android:layout_height="wrap_content">
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_item_reply_menu"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:src="@mipmap/menu3"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="10dp"/>-->
+    <com.lede.second_23.ui.view.TextViewFixTouchConsume
         android:id="@+id/tv_item_reply_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_marginLeft="60dp"
+        android:layout_marginRight="10dp"
         android:text="回复内容"
         android:padding="5dp"/>
-</LinearLayout>
+</RelativeLayout>

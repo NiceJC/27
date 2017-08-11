@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 import com.google.gson.Gson;
 import com.lede.second_23.bean.RongIMBean;
 import com.lede.second_23.bean.UserInfoBean;
@@ -20,8 +23,11 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.GetReplyActivity;
 import com.lede.second_23.ui.activity.OtherPersonActivity;
 import com.lede.second_23.utils.SPUtils;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LRULimitedMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UploadManager;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
@@ -33,6 +39,7 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
+import iknow.android.utils.BaseUtils;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -64,7 +71,9 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        BaseUtils.init(this);
+        initImageLoader(this);
+        initFFmpegBinary(this);
 //        RongIM.init(this);
 
         //获取全局Context对象
@@ -159,6 +168,31 @@ public class MyApplication extends Application {
 //            connect("ZgU68prjr5SVhfGceF9m8Ugxox7xGbbHONh06/q+EdEoGkqKdceqFvp2CVydaLqJZWYCtLjFupEEGvYyvOHKi1KPgEBu8qlVrUeFrPqy7S8XdpdCGD+0mr3IH8DLcEEc1QUKJ6gFn2Q=");
         }
 
+    }
+
+    public static void initImageLoader(Context context) {
+        int memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 10);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .memoryCache(new LRULimitedMemoryCache(memoryCacheSize))
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .build();
+        // Initialize ImageLoader with configuration.
+        ImageLoader.getInstance().init(config);
+    }
+
+    private void initFFmpegBinary(Context context) {
+
+        try {
+            FFmpeg.getInstance(context).loadBinary(new LoadBinaryResponseHandler() {
+                @Override
+                public void onFailure() {
+                }
+            });
+
+        } catch (FFmpegNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
 

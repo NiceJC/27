@@ -22,12 +22,13 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.PersonFragmentRVAdapter;
+import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.bean.PersonBean;
-import com.lede.second_23.bean.PersonUtilsBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
 import com.lede.second_23.ui.activity.EditInformationActivity;
+import com.lede.second_23.ui.activity.ForumDetailActivity;
 import com.lede.second_23.ui.activity.MyPhotoActivity;
 import com.lede.second_23.ui.activity.MyVideoActivity;
 import com.lede.second_23.ui.activity.SetActivity;
@@ -41,6 +42,7 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
@@ -52,7 +54,7 @@ import java.util.List;
  * Created by ld on 17/2/22.
  */
 
-public class PersonFragment_1 extends Fragment implements View.OnClickListener , LoadMoreWrapper.OnLoadMoreListener{
+public class PersonFragment_1 extends Fragment implements View.OnClickListener , LoadMoreWrapper.OnLoadMoreListener, OnResponseListener<String> {
     private View view;
     private ImageView iv_personfragment_msgtest;
     private TextView tv_personfragment_username;
@@ -60,15 +62,18 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private LinearLayout ll_person_fragment_concerned;
     private LinearLayout ll_person_fragment_fans;
     public ImageView iv_personfragment_msg_test;
-    private List<PersonUtilsBean.DataBean> dataList=new ArrayList<>();
+//    private List<PersonUtilsBean.DataBean> dataList=new ArrayList<>();
+    private ArrayList<PersonAllForumBean.DataBean.SimpleBean.ListBean> personAllForumList=new ArrayList<>();
     private CommonAdapter myCommonAdapter;
     private List<PersonBean.DataBean.SimpleBean.ListBean>  listBeanList=new ArrayList<>();
     private boolean isHasNextPage=true;
 
+    private static final int GETPERSON_FORUM=3000;
 
     private RequestQueue requestQueue;
     private int pageNum=1;
-    private int pageSize=20;
+    private int forumPageNum=1;
+    private int pageSize=100;
     private RecyclerView rv_personfragment_show;
     private GridLayoutManager gridLayoutManager;
     private PersonFragmentRVAdapter myAdapter;
@@ -91,6 +96,12 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private ImageView iv_set;
     private ImageView iv_userSex;
     private ImageView iv_back;
+    private TextView tv_near;
+    private TextView tv_all;
+    private boolean isNear=true;
+    private CommonAdapter nearAdapter;
+    private CommonAdapter allForumAdapter;
+    private Gson gson;
 
     @Override
     public void onAttach(Context context) {
@@ -113,6 +124,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
 //        isFresh=true;
 //        srl_home.setRefreshing(isFresh);
         //获取请求队列
+        gson = new Gson();
         requestQueue = GlobalConstants.getRequestQueue();
         loadPersonInfoService();
 
@@ -124,13 +136,21 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
         super.onResume();
         if (((Boolean) SPUtils.get(context, GlobalConstants.IS_EDITINFO,false))) {
             pageNum=1;
-            dataList.clear();
+            forumPageNum=1;
+//            dataList.clear();
             //TODO
             int size= listBeanList.size();
-            listBeanList.clear();
-            loadMoreWrapper.notifyItemRangeRemoved(1,size);
+//            if (isNear) {
+                listBeanList.clear();
+                loadMoreWrapper.notifyItemRangeRemoved(1,size);
 //                myAdapter.notifyDataSetChanged();
-            loadPersonInfoService();
+                loadPersonInfoService();
+//            }else {
+//                personAllForumList.clear();
+//                loadMoreWrapper.notifyItemRangeRemoved(1,size);
+//                getPersonAllForum();
+//            }
+
             isFresh=true;
             srl_home.setRefreshing(isFresh);
             SPUtils.put(context, GlobalConstants.IS_EDITINFO,false);
@@ -170,7 +190,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     }
 
     private void parsePersonInfoJson(String json) {
-        Gson gson=new Gson();
+
         personBean= gson.fromJson(json,PersonBean.class);
         listBeanList.addAll(personBean.getData().getSimple().getList());
         isHasNextPage=personBean.getData().getSimple().isHasNextPage();
@@ -188,48 +208,48 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
 //            }
 //            dataList.add(list.get(i));
 //        }
-        PersonUtilsBean personUtilsBean=new PersonUtilsBean();
-        ArrayList<PersonUtilsBean.DataBean> utilsList=new ArrayList<>();
-        PersonUtilsBean.DataBean dataBean=new PersonUtilsBean.DataBean();
-        PersonBean.DataBean.SimpleBean.ListBean listBean=new PersonBean.DataBean.SimpleBean.ListBean();
-        ArrayList<PersonBean.DataBean.SimpleBean.ListBean> listBeanList=new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (timeTag.equals(list.get(i).getCreateTime().substring(0,10))) {
-                listBean=list.get(i);
-                listBeanList.add(listBean);
-            }else {
-                if (dataBean!=null) {
-                    dataBean=null;
-                    dataBean=new PersonUtilsBean.DataBean();
-                }
-                if (listBean!=null) {
-                    listBean=null;
-                    listBean=new PersonBean.DataBean.SimpleBean.ListBean();
-                }
-                if (listBeanList!=null) {
-                    listBeanList=null;
-                    listBeanList=new ArrayList<>();
-                }
-
-                timeTag=list.get(i).getCreateTime().substring(0,10);
-                dataBean.setCreateTime(timeTag);
-                listBean=list.get(i);
-                listBeanList.add(listBean);
-                dataBean.setBeanList(listBeanList);
-                utilsList.add(dataBean);
-            }
-        }
-        personUtilsBean.setList(utilsList);
-        for (int i = 0; i < personUtilsBean.getList().size(); i++) {
-//            personUtilsBean.getList().get(i).getCreateTime();
-            Log.i("TAF", "parsePersonInfoJson: createTime"+personUtilsBean.getList().get(i).getCreateTime());
-            for (int i1 = 0; i1 < personUtilsBean.getList().get(i).getBeanList().size(); i1++) {
-//                personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId()
-                Log.i("TAF", "parsePersonInfoJson: personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId()"+personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId());
-            }
-        }
-        Log.i("TAG", "parsePersonInfoJson: "+personUtilsBean+"personUtilsBean.list.size"+personUtilsBean.getList().size());
-        dataList.addAll(personUtilsBean.getList());
+//        PersonUtilsBean personUtilsBean=new PersonUtilsBean();
+//        ArrayList<PersonUtilsBean.DataBean> utilsList=new ArrayList<>();
+//        PersonUtilsBean.DataBean dataBean=new PersonUtilsBean.DataBean();
+//        PersonBean.DataBean.SimpleBean.ListBean listBean=new PersonBean.DataBean.SimpleBean.ListBean();
+//        ArrayList<PersonBean.DataBean.SimpleBean.ListBean> listBeanList=new ArrayList<>();
+//        for (int i = 0; i < list.size(); i++) {
+//            if (timeTag.equals(list.get(i).getCreateTime().substring(0,10))) {
+//                listBean=list.get(i);
+//                listBeanList.add(listBean);
+//            }else {
+//                if (dataBean!=null) {
+//                    dataBean=null;
+//                    dataBean=new PersonUtilsBean.DataBean();
+//                }
+//                if (listBean!=null) {
+//                    listBean=null;
+//                    listBean=new PersonBean.DataBean.SimpleBean.ListBean();
+//                }
+//                if (listBeanList!=null) {
+//                    listBeanList=null;
+//                    listBeanList=new ArrayList<>();
+//                }
+//
+//                timeTag=list.get(i).getCreateTime().substring(0,10);
+//                dataBean.setCreateTime(timeTag);
+//                listBean=list.get(i);
+//                listBeanList.add(listBean);
+//                dataBean.setBeanList(listBeanList);
+//                utilsList.add(dataBean);
+//            }
+//        }
+//        personUtilsBean.setList(utilsList);
+//        for (int i = 0; i < personUtilsBean.getList().size(); i++) {
+////            personUtilsBean.getList().get(i).getCreateTime();
+//            Log.i("TAF", "parsePersonInfoJson: createTime"+personUtilsBean.getList().get(i).getCreateTime());
+//            for (int i1 = 0; i1 < personUtilsBean.getList().get(i).getBeanList().size(); i1++) {
+////                personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId()
+//                Log.i("TAF", "parsePersonInfoJson: personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId()"+personUtilsBean.getList().get(i).getBeanList().get(i1).getForumId());
+//            }
+//        }
+//        Log.i("TAG", "parsePersonInfoJson: "+personUtilsBean+"personUtilsBean.list.size"+personUtilsBean.getList().size());
+//        dataList.addAll(personUtilsBean.getList());
         if (isFresh&&SPUtils.contains(context,GlobalConstants.USERID)) {
             reFreshHead();
         }
@@ -270,23 +290,31 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
         srl_home.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                pageNum=1;
-                dataList.clear();
-                int size=listBeanList.size();
-                listBeanList.clear();
-                loadMoreWrapper.notifyItemRangeRemoved(1,size);
+
+//                dataList.clear();
+
+                int size;
+                if (isNear) {
+                    pageNum=1;
+                    size=listBeanList.size();
+                    listBeanList.clear();
+                    loadMoreWrapper.notifyItemRangeRemoved(1,size);
 //                myAdapter.notifyDataSetChanged();
-                loadPersonInfoService();
+                    loadPersonInfoService();
+                }else {
+                    forumPageNum=1;
+                    size=personAllForumList.size();
+                    personAllForumList.clear();
+                    loadMoreWrapper.notifyItemRangeRemoved(1,size);
+                    getPersonAllForum();
+                }
+
                 isFresh=true;
                 srl_home.setRefreshing(isFresh);
             }
         });
         rv_personfragment_show = (RecyclerView) view.findViewById(R.id.rv_personfragment_show);
-        gridLayoutManager = new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
-        linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-//        gridLayoutManager.set
-        myAdapter=new PersonFragmentRVAdapter(context,dataList);
-        rv_personfragment_show.setLayoutManager(gridLayoutManager);
+
 
 //        myCommonAdapter= new CommonAdapter<PersonUtilsBean.DataBean>(context, R.layout.item_person_fragment_time, dataList) {
 //            @Override
@@ -368,7 +396,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
 //                }
 //            }
 //        };
-        myCommonAdapter= new CommonAdapter<PersonBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show,listBeanList) {
+         nearAdapter= new CommonAdapter<PersonBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show,listBeanList) {
             @Override
             protected void convert(ViewHolder holder, final PersonBean.DataBean.SimpleBean.ListBean dataBean, final int position) {
                 Log.i("FUYONG", "convert: "+position);
@@ -455,6 +483,38 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
 
             }
         };
+        allForumAdapter= new CommonAdapter<PersonAllForumBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show, personAllForumList) {
+            @Override
+            protected void convert(ViewHolder holder, PersonAllForumBean.DataBean.SimpleBean.ListBean listBean, int position) {
+                ImageView showView_photos = (ImageView) holder.getView(R.id.iv_person_fragment_item_photos);
+                ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
+                ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
+                if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    Glide.with(context).load(listBean.getAllRecords().get(0).getUrl()).into(showView_show);
+                    showView_play.setVisibility(View.GONE);
+                    showView_photos.setVisibility(View.VISIBLE);
+                }else {
+                    Log.i("videopic", "convert: "+listBean.getAllRecords().get(0).getUrlThree());
+                    Glide.with(context).load(listBean.getAllRecords().get(0).getUrlThree()).into(showView_show);
+                    showView_play.setVisibility(View.VISIBLE);
+                    showView_photos.setVisibility(View.GONE);
+                }
+            }
+        };
+        allForumAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent=new Intent(context,ForumDetailActivity.class);
+                intent.putExtra("forumId",personAllForumList.get(position-1).getForumId());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+        myCommonAdapter=nearAdapter;
         //添加头布局
         addHeadView(myCommonAdapter);
 
@@ -466,8 +526,8 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
         headerAndFooterWrapper = new HeaderAndFooterWrapper(myCommonAdapter);
         //添加头布局View对象
         headerAndFooterWrapper.addHeaderView(setHeadView());
-        rv_personfragment_show.setAdapter(myCommonAdapter);
-        headerAndFooterWrapper.notifyDataSetChanged();
+//        rv_personfragment_show.setAdapter(myCommonAdapter);
+//        headerAndFooterWrapper.notifyDataSetChanged();
         //设置上拉加载更多
         setLoadMore();
     }
@@ -475,6 +535,10 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private View setHeadView() {
         View view=layoutInflater.inflate(R.layout.item_person_fragment_head,null);
         iv_userSex = (ImageView) view.findViewById(R.id.iv_person_fragment_item_sex);
+        tv_near = (TextView) view.findViewById(R.id.tv_personfragment_near);
+        tv_near.setOnClickListener(this);
+        tv_all = (TextView) view.findViewById(R.id.tv_personfragment_all);
+        tv_all.setOnClickListener(this);
         tv_username = (TextView) view.findViewById(R.id.tv_personfragment_username);
         tv_sign = (TextView) view.findViewById(R.id.tv_personfragment_sign);
         ctiv_userimg = (CircleTextImageView) view.findViewById(R.id.ctiv_personfragment_userimg);
@@ -497,10 +561,16 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private void setLoadMore() {
         //定义请求页数
         pageNum = 1;
+        forumPageNum=1;
         loadMoreWrapper = new LoadMoreWrapper<>(headerAndFooterWrapper);
         inflate=layoutInflater.inflate(R.layout.item_loading,null);
         loadMoreWrapper.setLoadMoreView(inflate);
         loadMoreWrapper.setOnLoadMoreListener(this);
+        gridLayoutManager = new GridLayoutManager(context,3, LinearLayoutManager.VERTICAL,false);
+        linearLayoutManager = new WrapContentLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+//        gridLayoutManager.set
+//        myAdapter=new PersonFragmentRVAdapter(context,dataList);
+        rv_personfragment_show.setLayoutManager(gridLayoutManager);
         rv_personfragment_show.setAdapter(loadMoreWrapper);
     }
 
@@ -510,8 +580,15 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
             inflate.setVisibility(View.GONE);
             Toast.makeText(context, "没有更多的动态了", Toast.LENGTH_SHORT).show();
         }else {
-            pageNum++;
-            loadPersonInfoService();
+
+            if (isNear) {
+                pageNum++;
+                loadPersonInfoService();
+            }else {
+                forumPageNum++;
+                getPersonAllForum();
+            }
+
         }
     }
 
@@ -553,12 +630,92 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
             case R.id.iv_personfragment_back:
                 ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
                 break;
+            case R.id.tv_personfragment_near:
+                if (isNear) {
+
+                }else {
+                    isNear=true;
+                    addHeadView(nearAdapter);
+                    reFreshHead();
+                    pageNum=1;
+                    listBeanList.clear();
+                    loadPersonInfoService();
+                }
+                break;
+            case R.id.tv_personfragment_all:
+                if (isNear) {
+                    isNear = false;
+                    addHeadView(allForumAdapter);
+                    reFreshHead();
+                    forumPageNum = 1;
+                    personAllForumList.clear();
+                    getPersonAllForum();
+                }else {
+
+                }
+                break;
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+    }
+
+    public void getPersonAllForum(){
+        Request<String> getAllForumRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/showForumByHome",RequestMethod.POST);
+        getAllForumRequest.add("userId",(String)SPUtils.get(context,GlobalConstants.USERID,""));
+        getAllForumRequest.add("pageNum",forumPageNum);
+        getAllForumRequest.add("pageSize",pageSize);
+        requestQueue.add(GETPERSON_FORUM,getAllForumRequest,this);
+    }
+
+    @Override
+    public void onStart(int what) {
+
+    }
+
+    @Override
+    public void onSucceed(int what, Response<String> response) {
+        switch (what) {
+            case GETPERSON_FORUM:
+                parsePersonAllForum(response.get());
+                break;
+        }
+    }
+
+
+
+    @Override
+    public void onFailed(int what, Response<String> response) {
+
+    }
+
+    @Override
+    public void onFinish(int what) {
+
+    }
+
+    /**
+     * 解析个人全国微博
+     * @param json
+     */
+    private void parsePersonAllForum(String json) {
+        PersonAllForumBean personAllForumBean=gson.fromJson(json,PersonAllForumBean.class);
+        if (personAllForumBean.getResult()==10000) {
+            if (personAllForumBean.getData().getSimple().getList().size()==0) {
+                Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
+            }else {
+                isHasNextPage=personAllForumBean.getData().getSimple().isHasNextPage();
+                personAllForumList.addAll(personAllForumBean.getData().getSimple().getList());
+                isFresh=false;
+
+                srl_home.setRefreshing(isFresh);
+                loadMoreWrapper.notifyDataSetChanged();
+            }
+
+        }
 
     }
 }

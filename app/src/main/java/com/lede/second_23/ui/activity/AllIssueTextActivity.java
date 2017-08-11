@@ -2,8 +2,10 @@ package com.lede.second_23.ui.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -58,6 +60,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.utils.ProgressDialogUtils.createLoadingDialog;
+
 public class AllIssueTextActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     @Bind(R.id.iv_all_issue_text_activity_back)
@@ -99,6 +103,9 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     private String qiniuvideoFirst;
     private boolean isVideoOK;
     private String qiniuVieoPatch;
+    private Dialog loadingDialog2;
+    private Intent intent;
+    private String video_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +115,15 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         selectMedia.add(null);
         mContext = this;
         ButterKnife.bind(this);
-        img_path = getIntent().getStringExtra("img_path");
-        imgOrVideoType = getIntent().getIntExtra("imgOrVideoType", 0);
-        isCrop = getIntent().getBooleanExtra("isCrop", true);
-        initFunctionOptions();
+
         uploadManager = MyApplication.getUploadManager();
         random = new Random();
+        intent = getIntent();
         forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
+        imgOrVideoType = intent.getIntExtra("imgOrVideoType", 0);
+        img_path = intent.getStringExtra("img_path");
+        isCrop = intent.getBooleanExtra("isCrop", true);
+        initFunctionOptions();
         if (img_path != null) {
             LocalMedia localMedia = new LocalMedia();
             File file = new File(img_path);
@@ -138,7 +147,15 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
             if (imgOrVideoType == 0) {
                 PictureConfig.getInstance().init(options1).openPhoto((Activity) mContext, resultCallback);
             } else {
-                PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
+                video_path = intent.getStringExtra("video_path");
+                if (video_path!=null) {
+                    Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
+                    intent.putExtra("path",video_path);
+                    startActivityForResult(intent,3333);
+                }else {
+                    PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
+                }
+
             }
 
         }
@@ -204,7 +221,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 .setMaxSelectNum(1) // 可选择图片的数量
                 .setMinSelectNum(1)// 图片或视频最低选择数量，默认代表无限制
                 .setSelectMode(FunctionConfig.MODE_MULTIPLE) // 单选 or 多选 FunctionConfig.MODE_SINGLE FunctionConfig.MODE_MULTIPLE
-                .setVideoS(15)// 查询多少秒内的视频 单位:秒
+                .setVideoS(60)// 查询多少秒内的视频 单位:秒
                 .setShowCamera(true) //是否显示拍照选项 这里自动根据type 启动拍照或录视频
                 .setEnablePreview(true) // 是否打开预览选项
                 .setEnableCrop(false) // 是否打开剪切选项
@@ -310,29 +327,37 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     private PictureConfig.OnSelectResultCallback resultCallback = new PictureConfig.OnSelectResultCallback() {
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
-            // 多选回调
-            selectMedia.clear();
-            selectMedia.addAll(resultList);
-            selectMedia.add(null);
+
+            if (imgOrVideoType==0) {
+                // 多选回调
+                selectMedia.clear();
+                selectMedia.addAll(resultList);
+                selectMedia.add(null);
 //            Log.i("resultList", "onSelectSuccess: " +mGson.toJson(resultList.get(1)));
 //            Log.i("TAG", "onSelectSuccess: "+selectMedia.size());
-            Log.i("callBack_result", selectMedia.size() + "");
-            LocalMedia media = resultList.get(0);
-            if (media.isCut() && !media.isCompressed()) {
-                // 裁剪过
-                String path = media.getCutPath();
-            } else if (media.isCompressed() || (media.isCut() && media.isCompressed())) {
-                // 压缩过,或者裁剪同时压缩过,以最终压缩过图片为准
-                String path = media.getCompressPath();
-            } else {
-                // 原图地址
-                String path = media.getPath();
-            }
-            if (selectMedia != null) {
+                Log.i("callBack_result", selectMedia.size() + "");
+                LocalMedia media = resultList.get(0);
+                if (media.isCut() && !media.isCompressed()) {
+                    // 裁剪过
+                    String path = media.getCutPath();
+                } else if (media.isCompressed() || (media.isCut() && media.isCompressed())) {
+                    // 压缩过,或者裁剪同时压缩过,以最终压缩过图片为准
+                    String path = media.getCompressPath();
+                } else {
+                    // 原图地址
+                    String path = media.getPath();
+                }
+                if (selectMedia != null) {
 //                madapter.setList(selectMedia);
-                Log.i("TAG", "onSelectSuccess: selectMedia != null");
-                mAdapter.notifyDataSetChanged();
+                    Log.i("TAG", "onSelectSuccess: selectMedia != null");
+                    mAdapter.notifyDataSetChanged();
+                }
+            }else {
+                Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
+                intent.putExtra("path",resultList.get(0).getPath());
+                startActivityForResult(intent,3333);
             }
+
 //            if (imgOrVideoType==1){
 //                path=selectMedia.get(0).getPath();
 //                CompressorUtils compressorUtils = new CompressorUtils(path, currentOutputVideoPath, IssueActivity.this);
@@ -369,17 +394,36 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         @Override
         public void onSelectSuccess(LocalMedia media) {
             // 单选回调
-            selectMedia.clear();
-            selectMedia.add(media);
-            selectMedia.add(null);
-            if (selectMedia != null) {
-//                adapter.setList(selectMedia);
-                mAdapter.notifyDataSetChanged();
-            }
-
+//            selectMedia.clear();
+//            selectMedia.add(media);
+//            selectMedia.add(null);
+//            if (selectMedia != null) {
+////                adapter.setList(selectMedia);
+//
+//                mAdapter.notifyDataSetChanged();
+//            }
+            Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
+            intent.putExtra("path",media.getPath());
+            startActivityForResult(intent,3333);
 
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 3333:
+                LocalMedia localMedia=new LocalMedia();
+                Log.i("onActivityResult", "onActivityResult: "+data.getStringExtra("path"));
+                localMedia.setPath(data.getStringExtra("path"));
+                selectMedia.clear();
+            selectMedia.add(localMedia);
+            selectMedia.add(null);
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
 
     @OnClick({R.id.iv_all_issue_text_activity_back, R.id.iv_all_issue_text_activity_send})
     public void onClick(View view) {
@@ -392,6 +436,8 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
                     break;
                 } else {
+                    loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
+                    loadingDialog2.show();
                     if (imgOrVideoType == 0) {
                         for (int i = 0; i < selectMedia.size() - 1; i++) {
                             if (isCrop) {
@@ -427,6 +473,8 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 //        }
         if (selectMedia.size() == 1 && selectMedia.get(0) == null) {
             imgOrVideoType = 3;
+        }else if(selectMedia.size()==0){
+            selectMedia.add(null);
         }
     }
 
@@ -567,9 +615,9 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                             Log.i("qiniu", "Success---->" + key);
                             successList.add(i);
                             if (isCrop) {
-                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"0"));
-                            }else {
                                 recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"1"));
+                            }else {
+                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"0"));
 
                             }
                             if (successList.size() == selectMedia.size() - 1) {
@@ -619,7 +667,6 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         switch (what) {
             case PIC_UP_SERVICE:
                 parseForum(response.get());
-                break;
         }
     }
 
@@ -628,6 +675,9 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         if (foumSuccessBean.getResult() == 10000) {
             Toast.makeText(mContext, "发布成功", Toast.LENGTH_SHORT).show();
             finish();
+            if (loadingDialog2!=null) {
+                loadingDialog2.dismiss();
+            }
             AllIssueActivity.instance.finish();
         } else {
             Toast.makeText(mContext, "发布失败", Toast.LENGTH_SHORT).show();

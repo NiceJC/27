@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +28,10 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.ForumDetailCommentBean;
 import com.lede.second_23.bean.ReplyBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.view.TextViewFixTouchConsume;
 import com.lede.second_23.utils.NoLineCllikcSpan;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -42,7 +43,10 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -81,8 +85,9 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
     private String currentUserId;
     private int replyId;
     //    指定下拉列表的显示数据
-    final String[] items1 = {"回复", "删除"};
-    final String[] items2 = {"回复"};
+    final String[] items1 = {"回复","举报", "删除"};
+    final String[] items2 = {"回复","举报"};
+    final String[] items3={"删除"};
     private ForumDetailCommentBean.DataBean.SimpleBean.ListBean listBean;
     private HeaderAndFooterWrapper headerAndFooterWrapper;
     private LayoutInflater layoutInflater;
@@ -141,7 +146,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
         replyAdapter = new CommonAdapter<ReplyBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_reply, replyList) {
             @Override
             protected void convert(ViewHolder holder, final ReplyBean.DataBean.SimpleBean.ListBean listBean, int position) {
-                TextView tv_reply = holder.getView(R.id.tv_item_reply_reply);
+                TextViewFixTouchConsume tv_reply = holder.getView(R.id.tv_item_reply_reply);
                 if (listBean.getToUserName() == null) {
                     SpannableString sbs = new SpannableString(listBean.getUserInfo().getNickName() + ":" + listBean.getReplyText());
                     sbs.setSpan(new NoLineCllikcSpan() {
@@ -158,7 +163,8 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                         }
                     }, 0, listBean.getUserInfo().getNickName().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     tv_reply.setText(sbs);
-                    tv_reply.setMovementMethod(LinkMovementMethod.getInstance());  //很重要，点击无效就是由于没有设置这个引起
+                    tv_reply.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
+//                    tv_reply.setMovementMethod(LinkMovementMethod.getInstance());  //很重要，点击无效就是由于没有设置这个引起
 
                 } else {
 
@@ -191,8 +197,10 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     }, listBean.getUserInfo().getNickName().length() + replyStr.length(), listBean.getUserInfo().getNickName().length() + replyStr.length() + listBean.getToUserName().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                     tv_reply.setText(sbs);
-                    tv_reply.setMovementMethod(LinkMovementMethod.getInstance());  //很重要，点击无效就是由于没有设置这个引起
+                    tv_reply.setMovementMethod(TextViewFixTouchConsume.LocalLinkMovementMethod.getInstance());
+
                 }
+
             }
         };
 
@@ -207,23 +215,47 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setIcon(R.mipmap.add);
                 builder.setTitle("选择操作");
+                Log.i("shanchu", "onClick: commentuserId"+commentuserId+"    forumuserId"+forumuserId+"     listBean.getUserId()"+replyList.get(position-1).getUserId()+"   "+currentUserId+"这里应该只显示删除");
 
-                if (commentuserId.equals(currentUserId) || forumuserId.equals(currentUserId) || replyList.get(position - 1).getUserId().equals(currentUserId)) {
-                    builder.setItems(items1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                if (commentuserId.equals(currentUserId) || forumuserId.equals(currentUserId) || replyList.get(position-1).getUserId().equals(currentUserId)) {
+                    if (replyList.get(position-1).getUserId().equals(currentUserId)) {
+                        Log.i("shanchu", "onClick: "+listBean.getUserId()+"   "+currentUserId+"这里应该只显示删除");
+                        builder.setItems(items3, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                            switch (which) {
-                                case 0:
-                                    showReplyDialog();
-                                    break;
-                                case 1:
-                                    showDeleteDialog();
-                                    break;
+                                switch (which) {
+                                    case 0:
+                                        showDeleteDialog();
+                                        break;
+                                }
+
                             }
+                        });
+                    }else {
+                        builder.setItems(items1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
+                                switch (which) {
+                                    case 0:
+                                        showReplyDialog();
+                                        break;
+                                    case 1:
+                                        Intent intent=new Intent(context,ReportActivity.class);
+                                        intent.putExtra("forumId",forumId);
+                                        intent.putExtra("commentId",commentId);
+                                        intent.putExtra("replyId",listBean.getId());
+                                        startActivity(intent);
+                                        break;
+                                    case 2:
+                                        showDeleteDialog();
+                                        break;
+                                }
+
+                            }
+                        });
+                    }
                 } else {
                     builder.setItems(items2, new DialogInterface.OnClickListener() {
                         @Override
@@ -231,6 +263,13 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                             switch (which) {
                                 case 0:
                                     showReplyDialog();
+                                    break;
+                                case 1:
+                                    Intent intent=new Intent(context,ReportActivity.class);
+                                    intent.putExtra("forumId",forumId);
+                                    intent.putExtra("commentId",commentId);
+                                    intent.putExtra("replyId",listBean.getId());
+                                    startActivity(intent);
                                     break;
                             }
 
@@ -240,6 +279,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
 
 
                 builder.show();
+//
             }
 
             @Override
@@ -300,7 +340,17 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
         tv_showReply.setVisibility(View.GONE);
         Glide.with(context).load(listBean.getUserInfo().getImgUrl()).into(diyiv_userimg);
         tv_nickname.setText(listBean.getUserInfo().getNickName());
-        tv_time.setText(listBean.getCreatTime());
+//        tv_time.setText(listBean.getCreatTime());
+        Date createDate=null;
+        //"2017-05-19 17:15:40"
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            createDate=formatter.parse(listBean.getCreatTime());
+            tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tv_body.setText(listBean.getCommentText());
 
         return view;
@@ -315,14 +365,14 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteCommentOrReply();
-                Toast.makeText(context, "确认" + which, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "删除成功,刷新后将无法看到该条评论", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { //设置取消按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                Toast.makeText(context, "取消" + which, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "取消" + which, Toast.LENGTH_SHORT).show();
             }
         });
         //参数都设置完成了，创建并显示出来

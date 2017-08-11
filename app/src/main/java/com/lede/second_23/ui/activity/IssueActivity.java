@@ -25,15 +25,24 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
+import com.lede.second_23.bean.ForumImg;
+import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.bean.UploadTextBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.utils.FileUtils;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.VideoUtils;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.FileBinary;
 import com.yolanda.nohttp.NoHttp;
@@ -47,9 +56,12 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -67,7 +79,8 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     ImageView iv_send;
     @Bind(R.id.progressBar)
     ProgressBar bar;
-
+    private static final int GET_QIUNIUTOKEN = 1000;
+    private static final int PIC_UP_SERVICE = 2000;
 //    sex  agemin 0 agemax 99 juli  userid
 
     String path;//视频录制输出地址
@@ -80,6 +93,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     private CommonAdapter mAdapter;
     private int imgOrVideoType = 3;//3表示未选择图片或者视频 0图片 1视频
 
+    private ArrayList<ForumImg> forumImgs=new ArrayList<>();
     private FunctionOptions options1;
     private FunctionOptions options;
 
@@ -87,12 +101,21 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     private static final int UPLOADIMG_REQUEST = 2000;
     private static final int UPLOADTEXT_REQUEST = 1000;
 
+    private ArrayList<String> successList = new ArrayList<>();
     private GridLayoutManager gridLayoutManager;
     private Dialog loadingDialog2;
     private int num = 0;//计数
 //    TextView back;
     Double videoLength=0.0;//视频时长
     private String img_path;
+    private Random random;
+    private Context context;
+    private UploadManager uploadManager;
+    private boolean isVideoFirstOK;
+    private boolean isVideoOK;
+    private String qiniuVieoPatch;
+    private String qiniuvideoFirst;
+    private long forumId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +124,12 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         mContext = IssueActivity.this;
         selectMedia.add(null);
         ButterKnife.bind(this);
+        context=this;
         img_path=getIntent().getStringExtra("img_path");
         imgOrVideoType=getIntent().getIntExtra("imgOrVideoType",3);
+        random = new Random();
+//        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
+        uploadManager = MyApplication.getUploadManager();
         initFunctionOptions();
         if (img_path!=null) {
             LocalMedia localMedia=new LocalMedia();
@@ -302,14 +329,24 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
                     break;
                 } else {
-                    if (imgOrVideoType==1) {
-                        if (getlongFileSize(selectMedia.get(0).getPath())>=9) {
-                            Toast.makeText(mContext, "当前选择视频过大无法上传,我们正在尝试修复这个bug", Toast.LENGTH_SHORT).show();
-                            return;
+                    loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
+                    loadingDialog2.show();
+                    if (imgOrVideoType == 0) {
+//                        for (int i = 0; i < selectMedia.size() - 1; i++) {
+//                                getQiniuToken(i, new File(selectMedia.get(i).getCutPath()));
+//                        }
+                        uploadTextService();
+                    } else if (imgOrVideoType == 1) {
+                        ArrayList<File> videoList = new ArrayList<>();
+                        videoList.add(new File(VideoUtils.bitmap2File(VideoUtils.getVideoThumb(selectMedia.get(0).getPath()), "cacher")));
+                        videoList.add(new File(selectMedia.get(0).getPath()));
+                        for (int i = 0; i < videoList.size(); i++) {
+                            getQiniuToken(i, videoList.get(i));
                         }
                     }
-                    uploadTextService();
+
                 }
+
 //                try {
 //                    Log.i("TAB", "click:" + et_text.getText() + "123");
 //                } catch (Exception e) {
@@ -347,37 +384,8 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                 Log.i("TAG", "onSelectSuccess: selectMedia != null");
                 mAdapter.notifyDataSetChanged();
             }
-//            if (imgOrVideoType==1){
-//                path=selectMedia.get(0).getPath();
-//                CompressorUtils compressorUtils = new CompressorUtils(path, currentOutputVideoPath, IssueActivity.this);
-//                compressorUtils.execCommand(new CompressListener() {
-//                    @Override
-//                    public void onExecSuccess(String message) {
-//                        Log.i("TAG", "success " + message);
-//                        bar.setVisibility(View.INVISIBLE);
-//                        textAppend(getString(R.string.compress_succeed));
-////                    back.setText(getFileSize(currentOutputVideoPath));
-//                        //获取缩略图
-//                        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(currentOutputVideoPath, MediaStore.Video.Thumbnails.MINI_KIND);
-////                    imag2.setImageBitmap(bitmap);
-//                    }
 //
-//                    @Override
-//                    public void onExecFail(String reason) {
-//                        Log.i("TAG", "fail " + reason);
-//                    }
-//
-//                    @Override
-//                    public void onExecProgress(String message) {
-//                        bar.setVisibility(View.VISIBLE);
-//                        textAppend(getString(R.string.compress_progress, message));
-//
-//                        int i = getProgress(message);
-//                        Log.e("进度", i + "");
-//                        bar.setProgress(i);
-//                    }
-//                });
-//            }
+
         }
 
         @Override
@@ -395,43 +403,199 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         }
     };
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case PictureConfig.CHOOSE_REQUEST:
-//                    // 图片选择结果回调
-//                    selectMedia.clear();
-//                    selectMedia.addAll(PictureSelector.obtainMultipleResult(data));
-//                    selectMedia.add(null);
-////                    selectMedia = PictureSelector.obtainMultipleResult(data);
-//                    // 例如 LocalMedia 里面返回三种path
-//                    // 1.media.getPath(); 为原图path
-//                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-//                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-//                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-////                    adapter.setList(selectList);
-////                    adapter.notifyDataSetChanged();
-////                    DebugUtil.i(TAG, "onActivityResult:" + selectList.size());
-//                    if (selectMedia != null) {
-//                        Log.i("TAG", "onSelectSuccess: selectMedia != null");
-//                        mAdapter.notifyDataSetChanged();
-////            }
+    /**
+     * 获取七牛上传token
+     *
+     * @param i
+     * @param file
+     */
+    private void getQiniuToken(final int i, final File file) {
+        Request<String> getQiniuRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/getToken", RequestMethod.GET);
+        requestQueue.add(GET_QIUNIUTOKEN, getQiniuRequest, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                parseQiNiuToken(response.get(), i, file);
+            }
+            private void parseQiNiuToken(String json, int index, File file) {
+                QiNiuTokenBean qiNiuTokenBean = mGson.fromJson(json, QiNiuTokenBean.class);
+                if (imgOrVideoType == 0) {
+                    uploadPic(qiNiuTokenBean.getData().getUptoken(), index, file);
+                } else {
+                    uploadVideo(qiNiuTokenBean.getData().getUptoken(), index, file);
+                }
+
+            }
+            @Override
+            public void onFailed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
+    }
+    /**
+     * 上传图片文件
+     *
+     * @param token
+     * @param i
+     * @param file
+     */
+    private void uploadPic(String token, final int i, File file) {
+
+        final int num = random.nextInt(100001);
+        String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
+        uploadManager.put(file, key, token,
+                new UpCompletionHandler() {
+
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject res) {
+                        //res包含hash、key等信息，具体字段取决于上传策略的设置
+                        if (info.isOK()) {
+                            Log.i("qiniu", "Success---->" + key);
+                            successList.add(key);
+//                            if (isCrop) {
+//                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"1"));
+//                            }else {
+//                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"0"));
 //
-//                    }
-//                    break;
+//                            }
+                            if (successList.size() == selectMedia.size() - 1) {
+                                uploadTextService();
+                                successList.clear();
+                            }
+                        } else {
+                            Log.i("qiniu", "Fail----->" + key);
+                            //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                        }
+                        Log.i("qiniu", "name--->" + key + ",\r\n " + info + ",\r\n " + res);
+                    }
+                }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                    @Override
+                    public void progress(String key, double percent) {
+                        Log.i("七牛", "progress: " + key + ": " + percent);
+                    }
+                }, null));
+    }
+
+    /**
+     * 上传视频文件
+     *
+     * @param uptoken
+     * @param index
+     * @param file
+     */
+    private void uploadVideo(String uptoken, int index, File file) {
+        final int num = random.nextInt(100001);
+
+
+        if (index == 0) {
+            String key = (System.currentTimeMillis() * 100000 + num) + ".jpg";
+            uploadManager.put(file, key, uptoken,
+                    new UpCompletionHandler() {
+
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject res) {
+                            //res包含hash、key等信息，具体字段取决于上传策略的设置
+                            if (info.isOK()) {
+                                Log.i("qiniu", "VideoFirst_Upload Success");
+                                isVideoFirstOK = info.isOK();
+                                qiniuvideoFirst = key;
+                            } else {
+                                Log.i("qiniu", "VideoFirst_Upload Fail");
+                                //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                            }
+                            Log.i("qiniu", "VideoFirst_" + key + ",\r\n " + info + ",\r\n " + res);
+                        }
+                    }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                        @Override
+                        public void progress(String key, double percent) {
+                            Log.i("七牛", "VideoFirst_progress: " + key + ": " + percent);
+                        }
+                    }, null));
+        } else {
+            String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
+            uploadManager.put(file, key, uptoken,
+                    new UpCompletionHandler() {
+
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject res) {
+                            //res包含hash、key等信息，具体字段取决于上传策略的设置
+                            if (info.isOK()) {
+                                Log.i("qiniu", "Video_Upload Success");
+                                isVideoOK = info.isOK();
+                                qiniuVieoPatch = key;
+                                if (isVideoOK && isVideoFirstOK) {
+                                    uploadTextService();
+                                } else {
+                                    Log.i("qiniu", "complete: 视频第一帧图片或者视频上传中出错");
+                                }
+                            } else {
+                                Log.i("qiniu", "Video_Upload Fail");
+                                //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                            }
+                            Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
+                        }
+                    }, new UploadOptions(null, null, false, new UpProgressHandler() {
+                        @Override
+                        public void progress(String key, double percent) {
+                            Log.i("七牛", "Video_progress: " + key + ": " + percent);
+                        }
+                    }, null));
+        }
+    }
+
+    /**
+     * 上传信息到服务器
+     */
+    private void uploadService() {
+        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/newCreatForumByVideo", RequestMethod.POST);
+//        AllForum allForum = null;
+//        Forum forum=null;
+//        if (imgOrVideoType == 0) {
+//            for (int i = 0; i < successList.size(); i++) {
+//                long imgId=System.currentTimeMillis() * 1000 + random.nextInt(1001);
+//                forumImgs.add(new ForumImg(imgId,forumId,(String) SPUtils.get(context,GlobalConstants.USERID,""),successList.get(i)));
 //
 //            }
+//            forum=new Forum((String) SPUtils.get(this, GlobalConstants.TOKEN,""),forumId,(String)SPUtils.get(context,GlobalConstants.USERID,""),1,et_text.getText().toString().trim(),forumImgs);
+//        } else {
+////            ArrayList<AllRecord> recordArrayList = new ArrayList<>();
+////            recordArrayList.add(new AllRecord(1, 0, qiniuvideoFirst, qiniuVieoPatch, null, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,null));
+////            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), et_text.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+//            long mediaId=System.currentTimeMillis() * 1000 + random.nextInt(1001);
+//            forum=new Forum((String) SPUtils.get(this, GlobalConstants.TOKEN,""),forumId,(String)SPUtils.get(context,GlobalConstants.USERID,""),2,et_text.getText().toString().trim(),new ForumMedia(mediaId,forumId,qiniuVieoPatch,qiniuvideoFirst,(String) SPUtils.get(mContext, GlobalConstants.USERID, "")));
 //        }
-//    }
+////        String str = mGson.toJson(allForum);
+////        Log.i("json", "uploadService: " + str);
+////        uploadRequest.setDefineRequestBodyForJson(str);
+////        uploadRequest.add("access_token",(String) SPUtils.get(this, GlobalConstants.TOKEN,""));
+//        String str = mGson.toJson(forum);
+////        uploadRequest.add("Forum",str);
+//        Log.i("IssueActivity", "uploadService: "+str);
+//        uploadRequest.setDefineRequestBodyForJson(str);
+        uploadRequest.add("userId",(String)SPUtils.get(context,GlobalConstants.USERID,""));
+        uploadRequest.add("mediaName",qiniuVieoPatch);
+        uploadRequest.add("forumId",forumId);
+        uploadRequest.add("mediaPicturePath",qiniuvideoFirst);
+        requestQueue.add(PIC_UP_SERVICE, uploadRequest, this);
+    }
+
+//
 
     /**
      * 上传文字请求
      */
     private void uploadTextService() {
-        loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
-        loadingDialog2.show();
+//        loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
+//        loadingDialog2.show();
         Request<String> uploadTextRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/update", RequestMethod.POST);
         uploadTextRequest.add("access_token", (String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""));
         uploadTextRequest.add("text", et_text.getText().toString().trim());
@@ -562,6 +726,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     @Override
     public void onSucceed(int what, Response<String> response) {
         L.i(response.get());
+        Log.i("IssueActivity", "onSucceed: "+response);
         switch (what) {
             case UPLOADTEXT_REQUEST:
                 parseUpTextJson(response.get());
@@ -588,7 +753,6 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                 }
                 SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
                 finish();
-
                 break;
         }
     }
@@ -612,8 +776,10 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
             if (imgOrVideoType == 0) {
                 uploadImgServce(uploadTextBean.getData().getForumId());
             } else {
-                uploadVideoServce(uploadTextBean.getData().getForumId());
+                forumId=uploadTextBean.getData().getForumId();
+                uploadService();
             }
+
         }
 
 
@@ -672,36 +838,5 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         }
     }
 
-//    private void textAppend(String text) {
-//        if (!TextUtils.isEmpty(text)) {
-//            Log.e("日志", text);
-//        }
-//    }
-//    int progress=0;
-//    private int getProgress(String source) {
-//        // Duration: 00:00:22.50, start_1: 0.000000, bitrate: 13995 kb/s
-//
-//        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
-//        if (source.contains("start_1: 0.000000")) {
-//            return progress;
-//        }
-//        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
-//        Matcher m = p.matcher(source);
-//        if (m.find()) {
-//            //00:00:00
-//            String result = m.group(0);
-//            String temp[] = result.split(":");
-//            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
-//
-//            if (0 != videoLength) {
-//                Log.v("进度长度", "current second = " + seconds + "/videoLength=" + videoLength);
-//                progress = (int) (seconds * 100 / videoLength);
-//
-//                return progress;
-//            }
-//            return progress;
-//        }
-//        return progress;
-//    }
 
 }

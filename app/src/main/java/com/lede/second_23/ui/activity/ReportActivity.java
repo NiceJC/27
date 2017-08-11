@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -27,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     @Bind(R.id.et_report_activity_text)
     EditText et_text;
@@ -36,8 +37,13 @@ public class ReportActivity extends AppCompatActivity {
     @Bind(R.id.rg_report_activity_type)
     RadioGroup rg_type;
     private String[] strs={"色情","暴力","广告","欺诈","违法","头像","用户名","其他"};
-    private int current;
+    private int current=7;
     private RequestQueue requestQueue;
+    private Intent intent;
+    private long forumId;
+    private long commentId;
+    private int replyId;
+    private long videoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,11 @@ public class ReportActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //获取服务器队列
         requestQueue = GlobalConstants.getRequestQueue();
-
+        intent = getIntent();
+        forumId = intent.getLongExtra("forumId",0l);
+        commentId = intent.getLongExtra("commentId",0);
+        replyId = intent.getIntExtra("replyId",0);
+        videoId = intent.getLongExtra("videoId", 0);
         rg_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -79,10 +89,33 @@ public class ReportActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_report_activity_commit:
+                if (forumId==0) {
+                    userReport();
+                }else {
+                    forumReport();
+                }
 
-                userReport();
                 break;
         }
+    }
+
+    private void forumReport() {
+        Request<String> forumReportRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/SysReport/commentReport",RequestMethod.POST);
+        forumReportRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
+        forumReportRequest.add("forumId",forumId);
+        if (commentId!=0) {
+            forumReportRequest.add("commentId",commentId);
+        }
+        if (replyId!=0) {
+            forumReportRequest.add("replyId",replyId);
+        }
+        if (videoId!=0) {
+            forumReportRequest.add("videoId",videoId);
+
+        }
+        forumReportRequest.add("reportText",strs[current-1]+" : "+et_text.getText().toString().trim());
+        requestQueue.add(2000,forumReportRequest,this);
+
     }
 
     private void userReport() {
@@ -91,28 +124,7 @@ public class ReportActivity extends AppCompatActivity {
         userReport.add("forumId",(String) SPUtils.get(this,GlobalConstants.CURRENT_FORUMID,""));
         userReport.add("reportTyep",strs[current-1]);
         userReport.add("reportText",et_text.getText().toString().trim());
-        requestQueue.add(100, userReport, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                L.i("TAB",response.get());
-                parseJson(response.get());
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-                Toast.makeText(ReportActivity.this, "网络出错,请检查网络后,重新举报", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
+        requestQueue.add(1000, userReport, this);
     }
 
     private void parseJson(String json) {
@@ -124,5 +136,34 @@ public class ReportActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "网络出错,请检查网络后,重新举报", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onStart(int what) {
+
+    }
+
+    @Override
+    public void onSucceed(int what, Response<String> response) {
+        L.i("TAB",response.get());
+        switch (what) {
+            case 1000:
+                parseJson(response.get());
+                break;
+            case 2000:
+
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFailed(int what, Response<String> response) {
+
+    }
+
+    @Override
+    public void onFinish(int what) {
+
     }
 }

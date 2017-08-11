@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="460dp"></com.lede.second_23.ui.view.HackyViewPager>
 
-            <fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
+            <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
                 android:id="@+id/jcplay_concerv_activity_2"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"

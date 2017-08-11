@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.DeleteBean;
@@ -32,13 +33,14 @@ import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class MyVideoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String videoUrl;
     private String picUrl;
     private String text;
-    private JCVideoPlayer videoController;
+    private JCVideoPlayerStandard videoController;
     private ImageView iv_bt;
     private ImageView iv_back;
     private ImageView iv_menu;
@@ -100,10 +102,10 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
 //        }
         iv_menu.setOnClickListener(this);
         iv_bt.setOnClickListener(this);
-        videoController = (JCVideoPlayer) findViewById(R.id.videocontroller1);
-        videoController.setUp(videoUrl,
-                picUrl,
-                text,false);
+        videoController = (JCVideoPlayerStandard) findViewById(R.id.videocontroller1);
+        videoController.setUp(videoUrl,JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,"");
+        Glide.with(this).load(picUrl).into(videoController.thumbImageView);
+//        videoController.thumbImageView.setImage("http://p.qpic.cn/videoyun/0/2449_43b6f696980311e59ed467f22794e792_1/640");
     }
     private void deleteDynamic(){
         Request<String> deleteRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/deleteForumbyId", RequestMethod.POST);
@@ -162,6 +164,20 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
+    }
+
     private void showDialog() {
         mDialog = new Dialog(this, R.style.my_dialog);
         LinearLayout root = (LinearLayout) LayoutInflater.from(this).inflate(
