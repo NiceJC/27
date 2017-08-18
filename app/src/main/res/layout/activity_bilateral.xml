@@ -12,8 +12,8 @@
         android:background="@color/white">
         <ImageView
             android:id="@+id/iv_bilateral_activity_back"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@mipmap/back"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp" />
@@ -99,8 +99,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee"/>
-    <android.support.v7.widget.RecyclerView
+    <com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView
         android:id="@+id/rv_bilateral_activity_show"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView>
 </LinearLayout>

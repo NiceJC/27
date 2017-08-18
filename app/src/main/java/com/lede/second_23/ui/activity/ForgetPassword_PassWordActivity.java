@@ -1,8 +1,6 @@
 package com.lede.second_23.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -49,21 +47,10 @@ public class ForgetPassword_PassWordActivity extends BaseActivity implements OnR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //设置5.0以上隐藏actionBar
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                View decorView = getWindow().getDecorView();
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
-        }
         setContentView(R.layout.activity_forget_password__pass_word);
         ButterKnife.bind(this);
         Intent intent=getIntent();
         safeCode=intent.getStringExtra("safeCode");
-        type=intent.getIntExtra("type",0);
 //        if (type==0) {
 //            url="/register";
 //            Toast.makeText(this, "注册时设置密码", Toast.LENGTH_SHORT).show();

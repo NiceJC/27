@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
         setContentView(R.layout.activity_get_reply);
         ButterKnife.bind(this);
         context=this;
+        SPUtils.put(context,GlobalConstants.GETREPLY,0);
         requestQueue = GlobalConstants.getRequestQueue();
         mGson = new Gson();
         initView();
@@ -104,6 +106,7 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
         getReplyAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                // TODO  直接回复
                 Intent intent=new Intent(context,ForumDetailActivity.class);
                 intent.putExtra("forumId",getReplyList.get(position).getForumId());
                 startActivity(intent);
@@ -142,6 +145,7 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
 
     @Override
     public void onSucceed(int what, Response<String> response) {
+        Log.i("GetReplyActivity", "onSucceed: "+response.get());
             parseGetReplyJson(response.get());
     }
 

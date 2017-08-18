@@ -48,9 +48,10 @@ public class GetZanActivity extends AppCompatActivity implements OnResponseListe
     private RequestQueue requestQueue;
     private Gson mGson;
     private Context context;
+    private ArrayList<GetZanBean.DataBean.SimpleBean.ListBean> getZanHeplerList=new ArrayList<>();
     private ArrayList<GetZanBean.DataBean.SimpleBean.ListBean> getZanList=new ArrayList<>();
     private int pageNum=1;
-    private int pageSize=20;
+    private int pageSize=100;
     private CommonAdapter getZanAdapter;
     private boolean isOnRefreshing=false;
 
@@ -77,23 +78,31 @@ public class GetZanActivity extends AppCompatActivity implements OnResponseListe
     private void initView() {
         getZanAdapter= new CommonAdapter<GetZanBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_get_zan, getZanList) {
             @Override
-            protected void convert(ViewHolder holder, GetZanBean.DataBean.SimpleBean.ListBean listBean, int position) {
+            protected void convert(ViewHolder holder, final GetZanBean.DataBean.SimpleBean.ListBean listBean, int position) {
                 DIYImageView diyiv_userimg=holder.getView(R.id.diyiv_item_get_zan_userimg);
                 TextView tv_nickname=holder.getView(R.id.tv_item_get_zan_nickname);
                 ImageView iv_forum_pic=holder.getView(R.id.iv_item_get_zan_forum_pic);
-                Glide.with(context).load(listBean.getUserInfo().getImgUrl()).into(diyiv_userimg);
+                iv_forum_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(context,ForumDetailActivity.class);
+                        intent.putExtra("forumId",listBean.getForumId());
+                        startActivity(intent);
+                    }
+                });
+                Glide.with(context).load(listBean.getUserInfo().get(0).getImgUrl()).into(diyiv_userimg);
                 if (listBean.getAllRecord().getUrl().equals("http://my-photo.lacoorent.com/null")) {
                     Glide.with(context).load(listBean.getAllRecord().getUrlThree()).into(iv_forum_pic);
                 }else {
                     Glide.with(context).load(listBean.getAllRecord().getUrl()).into(iv_forum_pic);
                 }
-                tv_nickname.setText(listBean.getUserInfo().getNickName()+"等"+listBean.getCountLike()+"人赞了你");
+                tv_nickname.setText(listBean.getUserInfo().get(0).getNickName()+"等"+listBean.getCountLike()+"人赞了你");
             }
         };
         getZanAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(context,ForumDetailActivity.class);
+                Intent intent=new Intent(context,ForumZanActivity.class);
                 intent.putExtra("forumId",getZanList.get(position).getForumId());
                 startActivity(intent);
             }

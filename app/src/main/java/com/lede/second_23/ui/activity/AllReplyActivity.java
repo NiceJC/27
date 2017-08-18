@@ -15,6 +15,7 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +26,15 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
+import com.lede.second_23.bean.DeleteReplyBean;
 import com.lede.second_23.bean.ForumDetailCommentBean;
 import com.lede.second_23.bean.ReplyBean;
+import com.lede.second_23.bean.ReplyForCommentBean;
+import com.lede.second_23.bean.ReplyForUserBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.view.TextViewFixTouchConsume;
 import com.lede.second_23.utils.NoLineCllikcSpan;
+import com.lede.second_23.utils.PushUserUtil;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
@@ -117,7 +122,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
 
     }
 
-    @OnClick({R.id.tv_all_reply_send})
+    @OnClick({R.id.tv_all_reply_send,R.id.iv_all_reply_activity_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_all_reply_send:
@@ -128,6 +133,9 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     commentForReply();
                 }
                 break;
+            case R.id.iv_all_reply_activity_back:
+                finish();
+                break;
 
         }
     }
@@ -135,6 +143,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
     private void commentForReply() {
         Request<String> commentForReplyRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/comment/commentForReply", RequestMethod.POST);
         commentForReplyRequest.add("access_token", (String) SPUtils.get(context, GlobalConstants.TOKEN, ""));
+        commentForReplyRequest.add("toUserId",commentuserId);
         commentForReplyRequest.add("forunId", forumId);
         commentForReplyRequest.add("commentId", commentId);
         commentForReplyRequest.add("replyText", replyText);
@@ -152,7 +161,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, ConcernActivity_2.class);
+                            Intent intent=new Intent(context, OtherPersonActivity.class);
                             intent.putExtra("userId",listBean.getUserId());
                             startActivity(intent);
                         }
@@ -172,7 +181,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, ConcernActivity_2.class);
+                            Intent intent=new Intent(context, OtherPersonActivity.class);
                             intent.putExtra("userId",listBean.getUserId());
                             startActivity(intent);
                         }
@@ -185,7 +194,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, ConcernActivity_2.class);
+                            Intent intent=new Intent(context, OtherPersonActivity.class);
                             intent.putExtra("userId",listBean.getToUserId());
                             startActivity(intent);
                         }
@@ -217,7 +226,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                 builder.setTitle("选择操作");
                 Log.i("shanchu", "onClick: commentuserId"+commentuserId+"    forumuserId"+forumuserId+"     listBean.getUserId()"+replyList.get(position-1).getUserId()+"   "+currentUserId+"这里应该只显示删除");
 
-                if (commentuserId.equals(currentUserId) || forumuserId.equals(currentUserId) || replyList.get(position-1).getUserId().equals(currentUserId)) {
+                if (commentuserId.equals(currentUserId) || forumuserId.equals(currentUserId) || replyList.get(position-1).getUserId().equals(currentUserId)||(replyList.get(position-1).getToUserId()!=null&&replyList.get(position-1).getToUserId().equals(currentUserId))) {
                     if (replyList.get(position-1).getUserId().equals(currentUserId)) {
                         Log.i("shanchu", "onClick: "+listBean.getUserId()+"   "+currentUserId+"这里应该只显示删除");
                         builder.setItems(items3, new DialogInterface.OnClickListener() {
@@ -365,7 +374,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteCommentOrReply();
-                Toast.makeText(context, "删除成功,刷新后将无法看到该条评论", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "删除成功,刷新后将无法看到该条评论", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { //设置取消按钮
@@ -446,9 +455,75 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
             case REPLY_REQUEST:
                 parseReply(response.get());
                 break;
+            case COMMENT_FOR_REPLY:
+                parseReplyForCommentJson(response.get());
+                break;
+            case REPLY_FOR_USER:
+                parseReplyForUser(response.get());
+                break;
+            case DELETE_REPLY:
+                parseDeleteReplyJson(response.get());
+                break;
+
         }
     }
 
+    /**
+     * 解析删除reply
+     * @param json
+     */
+    private void parseDeleteReplyJson(String json) {
+        DeleteReplyBean deleteReplyBean=mGson.fromJson(json,DeleteReplyBean.class);
+        if (deleteReplyBean.getResult()==10000) {
+            Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            replyList.clear();
+            initData();
+        }else {
+            Toast.makeText(context, deleteReplyBean.getMsg(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * 解析回复用户
+     * @param json
+     */
+    private void parseReplyForUser(String json) {
+        ReplyForUserBean replyForUserBean=mGson.fromJson(json,ReplyForUserBean.class);
+        if (replyForUserBean.getResult()==10000) {
+            Toast.makeText(context, "回复成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            replyList.clear();
+            initData();
+            PushUserUtil.pushUser(toUserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+//            if (!commentuserId.equals(currentUserId)) {
+//                PushUserUtil.pushUser(commentuserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+//            }
+        }else {
+            Toast.makeText(context, "回复失败，请检查网络", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 解析回复评论微博成功
+     * @param json
+     */
+    private void parseReplyForCommentJson(String json) {
+        ReplyForCommentBean replyForCommentBean=mGson.fromJson(json,ReplyForCommentBean.class);
+        if (replyForCommentBean.getResult()==10000) {
+            Toast.makeText(context, "回复成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            replyList.clear();
+            initData();
+            PushUserUtil.pushUser(commentuserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+            InputMethodManager imm1 = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            etAllReplyReply.setText("");
+            imm1.hideSoftInputFromWindow(etAllReplyReply.getWindowToken(), 0);//从控件所在的窗口中隐藏
+        }else {
+            Toast.makeText(context, replyForCommentBean.getMsg(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onFailed(int what, Response<String> response) {

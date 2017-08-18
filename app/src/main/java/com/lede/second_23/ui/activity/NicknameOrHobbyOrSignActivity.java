@@ -42,7 +42,9 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
         Intent intent=getIntent();
         type=intent.getIntExtra("type",0);
         body=intent.getStringExtra("body");
-        et_text.setText(body);
+        if (body!=null) {
+            et_text.setText(body);
+        }
         switch (type) {
             case 0:
                 et_text.setMaxLines(8);
@@ -55,6 +57,10 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
             case 2:
                 et_text.setMaxLines(10);
                 et_text.setHint("请输入爱好");
+                break;
+            case 4:
+                et_text.setMaxLines(10);
+                et_text.setHint("请输入学校");
                 break;
         }
     }

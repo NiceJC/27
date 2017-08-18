@@ -12,8 +12,8 @@
         android:background="#ffffff">
         <ImageView
             android:id="@+id/iv_all_issue_text_activity_back"
-            android:layout_width="25dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_centerVertical="true"
@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发表状态"
+            android:text="编辑动态"
             android:layout_centerInParent="true"
             android:textColor="#333333"
             android:textSize="20sp"/>

@@ -118,7 +118,8 @@
         <!-- <activity android:name=".ui.base.BaseActivity" /> -->
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/MyFullScreenTheme">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -127,17 +128,24 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".ui.activity.ForgetPassword_PhoneActivity" />
-        <activity android:name=".ui.activity.ForgetPassword_PassWordActivity" />
+        <activity
+            android:name=".ui.activity.ForgetPassword_PhoneActivity"
+            android:theme="@style/MyFullScreenTheme" />
+        <activity
+            android:name=".ui.activity.ForgetPassword_PassWordActivity"
+            android:theme="@style/MyFullScreenTheme" />
         <activity android:name=".ui.activity.RePwdActivity" />
         <activity android:name=".ui.activity.EditInformationActivity" />
         <activity android:name=".ui.activity.EditActivity" />
         <activity android:name=".ui.activity.EditSexActivity" />
-        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:theme="@style/MyFullScreenTheme" />
         <activity android:name=".ui.activity.ConcernActivity" />
         <activity android:name=".ui.activity.ConcernActivity_2" />
         <activity android:name=".ui.activity.CheckOthersInfoActivity" />
-        <activity android:name=".ui.activity.ConcernOrFansActivity" />
+        <activity android:name=".ui.activity.ConcernOrFansActivity"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".ui.activity.ConversationListActivity"
             android:screenOrientation="portrait"
@@ -199,7 +207,9 @@
         <activity android:name=".ui.activity.MyVideoActivity" />
         <activity android:name=".ui.activity.OtherPersonActivity" />
         <activity android:name=".ui.activity.PermissionsActivity" />
-        <activity android:name=".ui.activity.TestActivity">
+        <activity android:name=".ui.activity.WelcomeActivity">
+
+            <!-- TODO main -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -235,10 +245,22 @@
         <activity android:name=".ui.activity.ForumVideoReplyActivity" />
         <activity android:name=".ui.activity.PlayVideoActivity" />
         <activity android:name=".ui.activity.GetVideoReplyActivity" />
-        <activity android:name=".ui.activity.ForumReplyVideoPlayActivity" />
-        <activity android:name=".ui.activity.ForumVideoPlayActivity" />
+        <activity
+            android:name=".ui.activity.ForumReplyVideoPlayActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyFullScreenTheme" />
+        <activity
+            android:name=".ui.activity.ForumVideoPlayActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyFullScreenTheme" />
         <activity android:name=".ui.activity.TrimmerActivity" />
-        <activity android:name=".ui.activity.ForumPicActivity"></activity>
+        <activity android:name=".ui.activity.ForumPicActivity" />
+        <activity
+            android:name=".ui.activity.LoginOrRegisterActivity"
+            android:theme="@style/MyFullScreenTheme"></activity>
+        <activity android:name=".ui.activity.ForumZanActivity"></activity>
     </application>
 
 </manifest>

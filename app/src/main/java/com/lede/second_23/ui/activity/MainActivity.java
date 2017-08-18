@@ -9,13 +9,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Toast;
 
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.MyFragmentPagerAdapter;
 import com.lede.second_23.ui.fragment.ChildFragment;
+import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment;
+import com.lede.second_23.ui.fragment.PersonFragment_1;
 import com.lede.second_23.utils.MyViewPager;
 import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 
@@ -34,6 +35,9 @@ public class MainActivity extends FragmentActivity {
 //    private IssueFragment issueFragment;
     // 用来计算返回键的点击间隔时间
     private long exitTime = 0;
+    private ForumFragment forumFragment;
+    private MainFragment mainFragment;
+    private PersonFragment_1 personFragment_1;
 
 
     @Override
@@ -63,6 +67,9 @@ public class MainActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         Log.i("TAC", "onResume: ");
+//        if ((int) SPUtils.get(instance, GlobalConstants.GETREPLY,0)>0) {
+//            Toast.makeText(instance, "收到评论", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
@@ -87,8 +94,15 @@ public class MainActivity extends FragmentActivity {
 
 //        issueFragment=new IssueFragment();
 //        fragmentList.add(issueFragment);
+        forumFragment = new ForumFragment();
+        fragmentList.add(forumFragment);
         childFragment=new ChildFragment();
         fragmentList.add(childFragment);
+        mainFragment = new MainFragment();
+        personFragment_1 = new PersonFragment_1();
+        fragmentList.add(mainFragment);
+        fragmentList.add(personFragment_1);
+
         /**
          * 获取屏幕像素密度
          */
@@ -142,12 +156,12 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position==0) {
-                    vp_main_fg.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-                }else{
-                    vp_main_fg.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                }
+//                if (position==0) {
+//                    vp_main_fg.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//
+//                }else{
+//                    vp_main_fg.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+//                }
             }
 
             @Override

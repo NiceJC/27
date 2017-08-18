@@ -41,13 +41,6 @@ public class ConversationListDynamicActivtiy extends AppCompatActivity {
         setContentView(R.layout.activity_conversation_list_dynamic_activtiy);
         ConversationListFragment fragment = new ConversationListFragment();
         fragment.setAdapter(new ConversationListAdapterEx(RongContext.getInstance()));
-//        Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
-//                .appendPath("conversationlist")
-//                .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话，该会话聚合显示
-////                .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "false")//设置群组会话，该会话非聚合显示
-////                .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(),"false") //设置系统会话
-//                .build();
-        //TODO 调试修改  记得改回去
         Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
                 .appendPath("conversationlist")
                 .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话，该会话聚合显示

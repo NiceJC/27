@@ -164,7 +164,8 @@ public class SetActivity extends AppCompatActivity {
 //                SPUtils.remove(this,GlobalConstants.SET_MAXAGE);
 //                SPUtils.remove(this,GlobalConstants.SET_DISTANCE);
                 SPUtils.clear(this);
-                startActivity(new Intent(this, LoginActivity.class));
+                SPUtils.put(this, GlobalConstants.ISFIRST, "ISFRIST");
+                startActivity(new Intent(this, WelcomeActivity.class));
 //                MainActivity.instance.onDestroy();
                 MainActivity.instance.finish();
                 finish();

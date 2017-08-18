@@ -10,7 +10,7 @@ import io.rong.push.notification.PushMessageReceiver;
 import io.rong.push.notification.PushNotificationMessage;
 
 /**
- * Created by ld on 17/4/about.
+ * Created by ld on 17/4/about_we.
  */
 
 public class SealNotificationReceiver extends PushMessageReceiver {

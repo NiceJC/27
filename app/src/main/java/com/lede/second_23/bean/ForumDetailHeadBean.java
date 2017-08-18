@@ -9,7 +9,7 @@ import java.util.List;
 public class ForumDetailHeadBean {
 
     /**
-     * data : {"allForum":{"allRecords":[{"dspe":"1","forumId":1502187056968087570,"recordOrder":0,"url":"http://my-photo.lacoorent.com/1502187057080002188.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":1,"url":"http://my-photo.lacoorent.com/1502187057145035634.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":2,"url":"http://my-photo.lacoorent.com/1502187057209021626.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"}],"clickCount":0,"creatTime":"2017-08-08 18:09:19","forumId":1502187056968087570,"forumText":"图层","latitude":"30.303792","like":false,"likeCount":0,"longitude":"120.369033","type":0,"user":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"哈喽","userId":"1fa48078987d405baeefc6d94e4fc216"},"userId":"1fa48078987d405baeefc6d94e4fc216"}}
+     * data : {"allForum":{"allRecords":[{"dspe":"0","forumId":1501232407681475146,"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},{"forumId":1501232407681475146,"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}],"clickCount":0,"creatTime":"2017-07-28 16:59:06","forumId":1501232407681475146,"forumText":"发布第一次测试","latitude":"1321321","like":true,"likeCount":1,"longitude":"4654231","type":0,"user":{"imgUrl":"http://my-photo.lacoorent.com/20170622152734253454155.jpg","nickName":"某宇","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","videoCount":2}}
      * msg : 通用微博查询
      * result : 10000
      */
@@ -44,7 +44,7 @@ public class ForumDetailHeadBean {
 
     public static class DataBean {
         /**
-         * allForum : {"allRecords":[{"dspe":"1","forumId":1502187056968087570,"recordOrder":0,"url":"http://my-photo.lacoorent.com/1502187057080002188.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":1,"url":"http://my-photo.lacoorent.com/1502187057145035634.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":2,"url":"http://my-photo.lacoorent.com/1502187057209021626.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"}],"clickCount":0,"creatTime":"2017-08-08 18:09:19","forumId":1502187056968087570,"forumText":"图层","latitude":"30.303792","like":false,"likeCount":0,"longitude":"120.369033","type":0,"user":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"哈喽","userId":"1fa48078987d405baeefc6d94e4fc216"},"userId":"1fa48078987d405baeefc6d94e4fc216"}
+         * allForum : {"allRecords":[{"dspe":"0","forumId":1501232407681475146,"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},{"forumId":1501232407681475146,"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}],"clickCount":0,"creatTime":"2017-07-28 16:59:06","forumId":1501232407681475146,"forumText":"发布第一次测试","latitude":"1321321","like":true,"likeCount":1,"longitude":"4654231","type":0,"user":{"imgUrl":"http://my-photo.lacoorent.com/20170622152734253454155.jpg","nickName":"某宇","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","videoCount":2}
          */
 
         private AllForumBean allForum;
@@ -59,18 +59,19 @@ public class ForumDetailHeadBean {
 
         public static class AllForumBean {
             /**
-             * allRecords : [{"dspe":"1","forumId":1502187056968087570,"recordOrder":0,"url":"http://my-photo.lacoorent.com/1502187057080002188.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":1,"url":"http://my-photo.lacoorent.com/1502187057145035634.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"},{"dspe":"1","forumId":1502187056968087570,"recordOrder":2,"url":"http://my-photo.lacoorent.com/1502187057209021626.png","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"1fa48078987d405baeefc6d94e4fc216"}]
+             * allRecords : [{"dspe":"0","forumId":1501232407681475146,"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},{"forumId":1501232407681475146,"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}]
              * clickCount : 0
-             * creatTime : 2017-08-08 18:09:19
-             * forumId : 1502187056968087570
-             * forumText : 图层
-             * latitude : 30.303792
-             * like : false
-             * likeCount : 0
-             * longitude : 120.369033
+             * creatTime : 2017-07-28 16:59:06
+             * forumId : 1501232407681475146
+             * forumText : 发布第一次测试
+             * latitude : 1321321
+             * like : true
+             * likeCount : 1
+             * longitude : 4654231
              * type : 0
-             * user : {"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"哈喽","userId":"1fa48078987d405baeefc6d94e4fc216"}
-             * userId : 1fa48078987d405baeefc6d94e4fc216
+             * user : {"imgUrl":"http://my-photo.lacoorent.com/20170622152734253454155.jpg","nickName":"某宇","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}
+             * userId : 40a0f4aef97e4f7f8ff2e86220e8bfd2
+             * videoCount : 2
              */
 
             private int clickCount;
@@ -84,6 +85,7 @@ public class ForumDetailHeadBean {
             private int type;
             private UserBean user;
             private String userId;
+            private int videoCount;
             private List<AllRecordsBean> allRecords;
 
             public int getClickCount() {
@@ -174,6 +176,14 @@ public class ForumDetailHeadBean {
                 this.userId = userId;
             }
 
+            public int getVideoCount() {
+                return videoCount;
+            }
+
+            public void setVideoCount(int videoCount) {
+                this.videoCount = videoCount;
+            }
+
             public List<AllRecordsBean> getAllRecords() {
                 return allRecords;
             }
@@ -184,9 +194,9 @@ public class ForumDetailHeadBean {
 
             public static class UserBean {
                 /**
-                 * imgUrl : http://my-photo.lacoorent.com/20170627160236786746479.jpg
-                 * nickName : 哈喽
-                 * userId : 1fa48078987d405baeefc6d94e4fc216
+                 * imgUrl : http://my-photo.lacoorent.com/20170622152734253454155.jpg
+                 * nickName : 某宇
+                 * userId : 40a0f4aef97e4f7f8ff2e86220e8bfd2
                  */
 
                 private String imgUrl;
@@ -220,13 +230,13 @@ public class ForumDetailHeadBean {
 
             public static class AllRecordsBean {
                 /**
-                 * dspe : 1
-                 * forumId : 1502187056968087570
-                 * recordOrder : 0
-                 * url : http://my-photo.lacoorent.com/1502187057080002188.png
+                 * dspe : 0
+                 * forumId : 1501232407681475146
+                 * recordOrder : 1
+                 * url : http://my-photo.lacoorent.com/150123243252187.jpg
                  * urlThree : http://my-photo.lacoorent.com/null
                  * urlTwo : http://my-photo.lacoorent.com/null
-                 * userId : 1fa48078987d405baeefc6d94e4fc216
+                 * userId : 40a0f4aef97e4f7f8ff2e86220e8bfd2
                  */
 
                 private String dspe;

@@ -56,36 +56,32 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
     //    private LoadingDialog dialog;
 //    private FfmpegController fc;
     private int recorderRotation;
-    private boolean isStop=false;
+    private boolean isStop = false;
     private Context context;
     private long forumId;
     private OrientationEventListener orientationEventListener;
     private boolean flagRecord;
     private int rotationFlag;
-    private int rotationRecord=90;
+    private int rotationRecord = 90;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_video_reply);
-        instance=this;
+        instance = this;
         screenWidth = MyApplication.getInstance().getResources().getDisplayMetrics().widthPixels;
         screenheight = MyApplication.getInstance().getResources().getDisplayMetrics().heightPixels;
         forumId = getIntent().getLongExtra("forumId", 0);
-        context=this;
+        context = this;
         initView();
         initData();
         onAfter();
     }
 
 
-
-
     private void onAfter() {
     }
-
-
 
 
     private void initData() {
@@ -93,7 +89,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
     }
 
     private void initView() {
-        bottomLayout = (RelativeLayout)findViewById(R.id.bottomLayout);
+        bottomLayout = (RelativeLayout) findViewById(R.id.bottomLayout);
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
         mHolder = surfaceView.getHolder();
@@ -108,7 +104,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
                                                      if (action == MotionEvent.ACTION_DOWN) {
                                                          Log.i("TAB", "onTouch:  ------->ACTION_DOWN");
                                                          start();
-                                                         isStop=false;
+                                                         isStop = false;
 //                                                         img_video_shutter.setEnabled(false);
                                                      }
                                                      if (action == MotionEvent.ACTION_MOVE) {
@@ -120,7 +116,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
                                                          //停止录制
                                                          //录制完成
 //                                                         img_video_shutter.setEnabled(true);
-                                                         isStop=true;
+                                                         isStop = true;
                                                          if (mediaRecorder != null) {
                                                              mediaRecorder.stop();
                                                              mediaRecorder.reset();
@@ -130,7 +126,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
                                                          }
                                                          Intent intent = new Intent(ForumVideoReplyActivity.this, PlayVideoActivity.class);
                                                          intent.putExtra(AppConstant.KEY.VIDEO_PATH, file.getPath());
-                                                         intent.putExtra("forumId",forumId);
+                                                         intent.putExtra("forumId", forumId);
                                                          startActivity(intent);
 
                                                      }
@@ -192,8 +188,6 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
         orientationEventListener.enable();
 
 
-
-
     }
 
     protected void start() {
@@ -215,8 +209,9 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
             mCamera.unlock();
             mediaRecorder.setCamera(mCamera);
             //设置视频输出的方向 很多设备在播放的时候需要设个参数 这算是一个文件属性
-//            mediaRecorder.setOrientationHint(recorderRotation);
-            mediaRecorder.setOrientationHint(rotationRecord);
+            mediaRecorder.setOrientationHint(recorderRotation);
+            // TODO 自动判断屏幕方向  此处不需要
+//            mediaRecorder.setOrientationHint(rotationRecord);
             //视频源类型
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -284,7 +279,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
                 @Override
                 public void onInfo(MediaRecorder mr, int what, int extra) {
                     //录制完成
-                    Log.i("mediaRecorder", "onInfo: "+what+","+extra);
+                    Log.i("mediaRecorder", "onInfo: " + what + "," + extra);
                     // 最后通知图库更新
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
 
@@ -294,7 +289,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
             // 准备、开始
             mediaRecorder.prepare();
             mediaRecorder.start();
-            Runnable runnable=new Runnable() {
+            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i < PROGRESS_MAX; i++) {
@@ -313,7 +308,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
                     }
                 }
             };
-            Thread thread=new Thread(runnable);
+            Thread thread = new Thread(runnable);
             thread.start();
 //            new Thread(new Runnable() {
 //                @Override
@@ -414,7 +409,7 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
             setupCamera(camera);
             camera.setPreviewDisplay(holder);
             //获取相机预览角度， 后面录制视频需要用
-//            recorderRotation = CameraUtil.getInstance().getRecorderRotation(mCameraId);
+            recorderRotation = CameraUtil.getInstance().getRecorderRotation(mCameraId);
             CameraUtil.getInstance().setCameraDisplayOrientation(this, mCameraId, camera);
             camera.startPreview();
         } catch (IOException e) {

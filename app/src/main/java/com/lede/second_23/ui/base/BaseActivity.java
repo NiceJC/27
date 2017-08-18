@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.MsgBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.ui.activity.LoginActivity;
+import com.lede.second_23.ui.activity.WelcomeActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
@@ -95,7 +95,7 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
                 SPUtils.remove(this, GlobalConstants.HEAD_IMG);
                 SPUtils.remove(this, GlobalConstants.CERTIFICATION);
                 finish();
-                startActivity(new Intent(this, LoginActivity.class));
+                startActivity(new Intent(this, WelcomeActivity.class));
             }
         }else if(response.responseCode() >= 400 && response.responseCode() < 500){
             if(!TextUtils.isEmpty(response.get())){

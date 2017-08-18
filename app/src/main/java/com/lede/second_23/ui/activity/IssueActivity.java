@@ -116,6 +116,8 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     private String qiniuVieoPatch;
     private String qiniuvideoFirst;
     private long forumId;
+    private boolean isFirstIn=true;
+    private String video_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         context=this;
         img_path=getIntent().getStringExtra("img_path");
         imgOrVideoType=getIntent().getIntExtra("imgOrVideoType",3);
+        video_path = getIntent().getStringExtra("video_path");
         random = new Random();
 //        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
         uploadManager = MyApplication.getUploadManager();
@@ -150,6 +153,20 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
             selectMedia.remove(selectMedia.get(selectMedia.size() - 1));
 
             PictureConfig.getInstance().init(options1).openPhoto((Activity) mContext, resultCallback);
+        }else if(video_path!=null){
+            LocalMedia localMedia=new LocalMedia();
+            File file=new File(video_path);
+            Log.i("path", "onCreate: "+"/storage/emulated/0/27/"+file.getName());
+            localMedia.setPath("/storage/emulated/0/27/"+file.getName());
+            file=null;
+            localMedia.setNum(1);
+            localMedia.setType(2);
+            selectMedia.add(selectMedia.size()-1,localMedia);
+
+            Log.i("onCreate", "onCreate: "+mGson.toJson(localMedia));
+            selectMedia.remove(selectMedia.get(selectMedia.size() - 1));
+
+            PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
         }
 
         //获取服务器队列
@@ -362,6 +379,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
             // 多选回调
+            Log.i("path", "onSelectSuccess: "+mGson.toJson(resultList.get(0)));
             selectMedia.clear();
             selectMedia.addAll(resultList);
             selectMedia.add(null);
@@ -701,7 +719,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("TAB", "onResume: ");
+        Log.i("TAB", "onResume: "+selectMedia.size());
 //        if (selectMedia.size()==0) {
 //            imgOrVideoType=3;
 //            selectMedia.add(null);
@@ -709,7 +727,15 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
 //        }
         if (selectMedia.size() == 1 && selectMedia.get(0) == null) {
             imgOrVideoType = 3;
+        }else if(selectMedia.size()==0){
+            if (!isFirstIn) {
+                selectMedia.add(null);
+                imgOrVideoType = 3;
+                mAdapter.notifyDataSetChanged();
+            }
+            isFirstIn = false;
         }
+
     }
 
     @Override
@@ -771,7 +797,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         UploadTextBean uploadTextBean = mGson.fromJson(json, UploadTextBean.class);
         if (uploadTextBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
         } else {
             if (imgOrVideoType == 0) {
                 uploadImgServce(uploadTextBean.getData().getForumId());
@@ -783,7 +809,6 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         }
 
 
-//        uploadVideoServce(uploadTextBean.getData().getForumId());
     }
 
     public Dialog createLoadingDialog(Context context, String msg) {

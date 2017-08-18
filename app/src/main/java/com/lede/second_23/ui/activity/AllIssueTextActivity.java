@@ -106,6 +106,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     private Dialog loadingDialog2;
     private Intent intent;
     private String video_path;
+    private boolean isFirstIn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,11 +149,11 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 PictureConfig.getInstance().init(options1).openPhoto((Activity) mContext, resultCallback);
             } else {
                 video_path = intent.getStringExtra("video_path");
-                if (video_path!=null) {
-                    Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
-                    intent.putExtra("path",video_path);
-                    startActivityForResult(intent,3333);
-                }else {
+                if (video_path != null) {
+                    Intent intent = new Intent(AllIssueTextActivity.this, TrimmerActivity.class);
+                    intent.putExtra("path", video_path);
+                    startActivityForResult(intent, 3333);
+                } else {
                     PictureConfig.getInstance().init(options).openPhoto((Activity) mContext, resultCallback);
                 }
 
@@ -328,7 +329,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
 
-            if (imgOrVideoType==0) {
+            if (imgOrVideoType == 0) {
                 // 多选回调
                 selectMedia.clear();
                 selectMedia.addAll(resultList);
@@ -352,10 +353,10 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                     Log.i("TAG", "onSelectSuccess: selectMedia != null");
                     mAdapter.notifyDataSetChanged();
                 }
-            }else {
-                Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
-                intent.putExtra("path",resultList.get(0).getPath());
-                startActivityForResult(intent,3333);
+            } else {
+                Intent intent = new Intent(AllIssueTextActivity.this, TrimmerActivity.class);
+                intent.putExtra("path", resultList.get(0).getPath());
+                startActivityForResult(intent, 3333);
             }
 
 //            if (imgOrVideoType==1){
@@ -402,9 +403,9 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 //
 //                mAdapter.notifyDataSetChanged();
 //            }
-            Intent intent=new Intent(AllIssueTextActivity.this,TrimmerActivity.class);
-            intent.putExtra("path",media.getPath());
-            startActivityForResult(intent,3333);
+            Intent intent = new Intent(AllIssueTextActivity.this, TrimmerActivity.class);
+            intent.putExtra("path", media.getPath());
+            startActivityForResult(intent, 3333);
 
         }
     };
@@ -414,12 +415,12 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case 3333:
-                LocalMedia localMedia=new LocalMedia();
-                Log.i("onActivityResult", "onActivityResult: "+data.getStringExtra("path"));
+                LocalMedia localMedia = new LocalMedia();
+                Log.i("onActivityResult", "onActivityResult: " + data.getStringExtra("path"));
                 localMedia.setPath(data.getStringExtra("path"));
                 selectMedia.clear();
-            selectMedia.add(localMedia);
-            selectMedia.add(null);
+                selectMedia.add(localMedia);
+                selectMedia.add(null);
                 mAdapter.notifyDataSetChanged();
                 break;
         }
@@ -465,7 +466,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("TAB", "onResume: ");
+        Log.i("TAB", "onResume: " + selectMedia.size() + "  imgOrVideoType=" + imgOrVideoType);
 //        if (selectMedia.size()==0) {
 //            imgOrVideoType=3;
 //            selectMedia.add(null);
@@ -473,9 +474,16 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 //        }
         if (selectMedia.size() == 1 && selectMedia.get(0) == null) {
             imgOrVideoType = 3;
-        }else if(selectMedia.size()==0){
-            selectMedia.add(null);
+        } else if (selectMedia.size() == 0) {
+            if (!isFirstIn) {
+                selectMedia.add(null);
+                imgOrVideoType = 3;
+                mAdapter.notifyDataSetChanged();
+            }
+            isFirstIn = false;
+
         }
+        Log.i("TAB", "after  onResume: " + selectMedia.size() + "  imgOrVideoType=" + imgOrVideoType);
     }
 
     @Override
@@ -615,9 +623,9 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                             Log.i("qiniu", "Success---->" + key);
                             successList.add(i);
                             if (isCrop) {
-                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"1"));
-                            }else {
-                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,"0"));
+                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null, "1"));
+                            } else {
+                                recordArrayList.add(new AllRecord(imgOrVideoType, i, null, null, key, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null, "0"));
 
                             }
                             if (successList.size() == selectMedia.size() - 1) {
@@ -642,12 +650,12 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/creatFroum", RequestMethod.POST);
         AllForum allForum = null;
         if (imgOrVideoType == 0) {
-            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), (String) SPUtils.get(mContext, GlobalConstants.LATITUDE, ""), (String) SPUtils.get(mContext, GlobalConstants.LONGITUDE, ""), recordArrayList);
 
         } else {
             ArrayList<AllRecord> recordArrayList = new ArrayList<>();
-            recordArrayList.add(new AllRecord(1, 0, qiniuvideoFirst, qiniuVieoPatch, null, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null,null));
-            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), "1321321", "4654231", recordArrayList);
+            recordArrayList.add(new AllRecord(1, 0, qiniuvideoFirst, qiniuVieoPatch, null, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null, null));
+            allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), (String) SPUtils.get(mContext, GlobalConstants.LATITUDE, ""), (String) SPUtils.get(mContext, GlobalConstants.LONGITUDE, ""), recordArrayList);
 
         }
         String str = mGson.toJson(allForum);
@@ -675,7 +683,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         if (foumSuccessBean.getResult() == 10000) {
             Toast.makeText(mContext, "发布成功", Toast.LENGTH_SHORT).show();
             finish();
-            if (loadingDialog2!=null) {
+            if (loadingDialog2 != null) {
                 loadingDialog2.dismiss();
             }
             AllIssueActivity.instance.finish();

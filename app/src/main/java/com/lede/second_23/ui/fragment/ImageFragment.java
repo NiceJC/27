@@ -2,6 +2,7 @@ package com.lede.second_23.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +38,7 @@ public class ImageFragment extends Fragment {
     private FragmentActivity mActivity;
     private Dialog mDialog;
     private Bitmap bitmap;
+    private PopupWindow popupWindow;
 
     public ImageFragment() {
         // Required empty public constructor
@@ -84,7 +85,7 @@ public class ImageFragment extends Fragment {
 //                Toast.makeText(getActivity(), "图片被长按", Toast.LENGTH_SHORT).show();
                 bitmap=null;
                 bitmap=image.getDrawingCache();
-                showDialog();
+                showPopwindow();
 //                image.getDrawingCache()
                 return false;
             }
@@ -110,48 +111,48 @@ public class ImageFragment extends Fragment {
 
 
     /**
-     * 提示保存图片对话框
+     * 提示保存图片底部弹窗
      */
-    protected void showDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setMessage("保存图片到本地？");
-//        builder.setTitle("提示");
-//        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                saveBitmap(bitmap);
-//            }
-//        });
-//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.create().show();
+    private void showPopwindow() {
+        // 利用layoutInflater获得View
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_save_or_report, null);
 
-        mDialog = new Dialog(getActivity(), R.style.my_dialog);
-        LinearLayout root = (LinearLayout) LayoutInflater.from(getActivity()).inflate(
-                R.layout.layout_save_or_report, null);
-        root.findViewById(R.id.btn_save).setOnClickListener(btnlistener);
+        // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
+        view.findViewById(R.id.btn_save).setOnClickListener(btnlistener);
 //        root.findViewById(R.id.btn_report).setOnClickListener(btnlistener);
-        root.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
-        mDialog.setContentView(root);
-        Window dialogWindow = mDialog.getWindow();
-        dialogWindow.setGravity(Gravity.BOTTOM);
-        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        lp.x = 0; // 新位置X坐标
-        lp.y = -20; // 新位置Y坐标
-        lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 宽度
-//      lp.height = WindowManager.LayoutParams.WRAP_CONTENT; // 高度
-//      lp.alpha = 9f; // 透明度
-        root.measure(0, 0);
-        lp.height = root.getMeasuredHeight();
-        lp.alpha = 9f; // 透明度
-        dialogWindow.setAttributes(lp);
-        mDialog.show();
+        view.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
+        popupWindow = new PopupWindow(view,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+        params.alpha = 0.7f;
+
+        getActivity().getWindow().setAttributes(params);
+        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+        popupWindow.setFocusable(true);
+
+
+        // 设置popWindow的显示和消失动画
+        popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
+        // 在底部显示
+//        window.showAtLocation(getActivity().findViewById(R.id.ll_prv_forum_detail_bottom),
+//                Gravity.BOTTOM, 0, 0);
+        popupWindow.showAtLocation(image,
+                Gravity.BOTTOM, 0, 0);
+        //popWindow消失监听方法
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            @Override
+            public void onDismiss() {
+                System.out.println("popWindow消失");
+                WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+                params.alpha = 1.0f;
+
+                getActivity().getWindow().setAttributes(params);
+            }
+        });
+
     }
 
     private View.OnClickListener btnlistener = new View.OnClickListener() {
@@ -160,7 +161,7 @@ public class ImageFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_save: // 保存图片
-                    mDialog.dismiss();
+                    popupWindow.dismiss();
                     saveBitmap(bitmap);
                     break;
                 // 举报
@@ -170,8 +171,8 @@ public class ImageFragment extends Fragment {
 //                    break;
                 // 取消
                 case R.id.btn_cancel:
-                    if (mDialog != null) {
-                        mDialog.dismiss();
+                    if (popupWindow != null) {
+                        popupWindow.dismiss();
                     }
                     break;
             }
@@ -195,7 +196,12 @@ public class ImageFragment extends Fragment {
         if (f.exists()) {
             f.delete();
         }
+        Resources r = this.getContext().getResources();
+        //TODO  水印
+//        Bitmap bitmap= BitmapFactory.decodeResource(r,R.mipmap.shuiying);
+//        Bitmap bitmap1=ImageUtil.createWaterMaskRightBottom(getActivity(),bm,bitmap,10,200);
         try {
+
             FileOutputStream out = new FileOutputStream(f);
             bm.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
@@ -208,6 +214,10 @@ public class ImageFragment extends Fragment {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally {
+            bm.recycle();
+            bitmap.recycle();
+//            bitmap1.recycle();
         }
 
     }

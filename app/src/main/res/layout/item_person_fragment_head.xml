@@ -3,16 +3,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.thinkcool.circletextimageview.CircleTextImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.thinkcool.circletextimageview.CircleTextImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ctiv_personfragment_userimg"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -20,25 +21,26 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/test2"/>
+                android:src="@mipmap/test2" />
+
             <ImageView
                 android:id="@+id/iv_person_fragment_item_sex"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentRight="true"
-                android:paddingRight="2dp"
-                android:paddingLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:scaleType="fitEnd"
-                android:src="@mipmap/boy"/>
+                android:src="@mipmap/boy" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_personfragment_username"
@@ -48,8 +50,8 @@
                     android:layout_margin="10dp"
                     android:layout_marginTop="10dp"
                     android:text="用户昵称"
-                    android:textStyle="bold"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_personfragment_sign"
@@ -70,8 +72,8 @@
                     <LinearLayout
                         android:id="@+id/ll_person_fragment_concerned"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -79,8 +81,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:text="899"
                             android:gravity="center_vertical"
+                            android:text="899"
                             android:textColor="#000000"
                             android:textSize="16sp" />
 
@@ -96,8 +98,8 @@
                     <LinearLayout
                         android:id="@+id/ll_person_fragment_fans"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -105,25 +107,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:text="566"
                             android:gravity="center_vertical"
+                            android:text="566"
                             android:textColor="#000000"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/textView"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:gravity="center_vertical"
                             android:text="粉丝"
                             android:textColor="#999999"
-                            android:textSize="18sp"
-                            android:id="@+id/textView" />
+                            android:textSize="18sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -131,8 +133,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:text="218"
                             android:gravity="center_vertical"
+                            android:text="218"
                             android:textColor="#000000"
                             android:textSize="16sp" />
 
@@ -149,12 +151,13 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
+
                         <ImageView
                             android:id="@+id/iv_personfragment_msg_test"
                             android:layout_width="60dp"
                             android:layout_height="30dp"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginRight="30dp"
                             android:src="@mipmap/comment_off_1" />
                     </RelativeLayout>
@@ -164,28 +167,27 @@
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/tv_personfragment_near"
+        <ImageView
+            android:id="@+id/iv_personfragment_near"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20sp"
             android:padding="10dp"
-            android:text="附近动态"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/tv_personfragment_all"
+            android:gravity="center"
+            android:src="@mipmap/nearby_current"/>
+        <ImageView
+            android:id="@+id/iv_personfragment_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20sp"
             android:padding="10dp"
-            android:text="全国动态"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:src="@mipmap/quanzi"/>
     </LinearLayout>
 
 </LinearLayout>

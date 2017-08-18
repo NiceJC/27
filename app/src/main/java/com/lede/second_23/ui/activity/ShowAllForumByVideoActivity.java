@@ -89,7 +89,8 @@ public class ShowAllForumByVideoActivity extends AppCompatActivity implements On
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(context, ForumDetailActivity.class);
-
+                intent.putExtra("forumId",videoList.get(position).getForumId());
+                startActivity(intent);
             }
 
             @Override
@@ -104,6 +105,7 @@ public class ShowAllForumByVideoActivity extends AppCompatActivity implements On
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
                 videoList.clear();
+                pageNum=1;
                 initData();
                 isOnRefresh=true;
             }

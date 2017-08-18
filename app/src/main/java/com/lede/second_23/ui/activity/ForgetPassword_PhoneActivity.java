@@ -1,8 +1,6 @@
 package com.lede.second_23.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,8 +29,6 @@ import org.json.JSONObject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.R.attr.type;
 
 /**
  * 注册、忘记密码页面 根据intent传来的type判断
@@ -69,16 +65,6 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //设置5.0以上隐藏actionBar
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                View decorView = getWindow().getDecorView();
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
-        }
         setContentView(R.layout.activity_foget_password_phone);
         ButterKnife.bind(this);
 

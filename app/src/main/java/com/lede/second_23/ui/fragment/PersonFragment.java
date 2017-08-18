@@ -30,6 +30,7 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
 import com.lede.second_23.ui.activity.EditInformationActivity;
+import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.MyPhotoActivity;
 import com.lede.second_23.ui.activity.MyVideoActivity;
 import com.lede.second_23.ui.activity.SetActivity;
@@ -457,7 +458,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
                 startActivity(new Intent(context, ConversationListDynamicActivtiy.class));
                 break;
             case R.id.iv_personfragment_back:
-                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
+//                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
+                MainActivity.instance.vp_main_fg.setCurrentItem(1);
                 break;
         }
     }

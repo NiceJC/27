@@ -28,14 +28,17 @@ public class GlobalConstants {
     //网络访问
 //    public static final String URL = "http://101.37.85.56:8000";  //服务器生产环境
 //    public static final String URL = "http://101.37.85.56:8088";  //服务器开发环境
-    public static final String URL = "http://192.168.31.81:8080"; //联调环境
-//    public static final String URL = "http://116.62.164.186";
+//    public static final String URL = "http://192.168.31.81:8080"; //联调环境
+    public static final String URL = "http://116.62.164.186";
     // access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac
     public static final String HEAD_IMG = "HEAD_IMG";
     //用户的融云Token
     public static final String RONGIM_TOKEN="RONGIM_TOKEN";
+
+    //收到评论
+    public static final String GETREPLY="GETREPLY";
 
     public static final String ISCONNECTED_RONGIM="ISCONNECTED_RONGIM";
     //当前所浏览动态的用户的userid
@@ -72,9 +75,11 @@ public class GlobalConstants {
     //webView
     public static final String WEBVIEW = "WEBVIEW";
     //是否首次打开app
-    public static final String ISFRIST = "isFrist";
+    public static final String ISFIRST = "isFirst";
     //更新时的downloadManager id
     public static final String KEY = "key";
+
+    public static final int APPID=1106236230;
 
     public static final String DECLARATION="DECLARATION";
     public static final String USERID="USERID";

@@ -1,14 +1,14 @@
 [
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim-v21/design_appbar_state_list_animator.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim-v21/design_appbar_state_list_animator.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim-v21/design_appbar_state_list_animator.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim-v21/design_bottom_sheet_slide_in.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim-v21/design_bottom_sheet_slide_in.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim-v21/design_bottom_sheet_slide_in.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim-v21/design_bottom_sheet_slide_out.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim-v21/design_bottom_sheet_slide_out.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim-v21/design_bottom_sheet_slide_out.xml"
     }
 ]

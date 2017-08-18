@@ -1,7 +1,7 @@
 [
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_in_bottom.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_slide_in_bottom.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_slide_in_bottom.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/slide_in_from_bottom.xml",
@@ -9,7 +9,7 @@
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_fade_in.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_fade_in.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_fade_in.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/slide_out_to_bottom.xml",
@@ -17,31 +17,31 @@
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_shrink_fade_out_from_bottom.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_shrink_fade_out_from_bottom.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_shrink_fade_out_from_bottom.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_fab_in.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_fab_in.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_fab_in.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_snackbar_in.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_snackbar_in.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_snackbar_in.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_in_top.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_slide_in_top.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_slide_in_top.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_out_bottom.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_slide_out_bottom.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_slide_out_bottom.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_bottom_sheet_slide_in.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_bottom_sheet_slide_in.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_bottom_sheet_slide_in.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_slide_out_top.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_slide_out_top.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_slide_out_top.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/slide_out_to_top.xml",
@@ -49,11 +49,11 @@
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_popup_exit.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_popup_exit.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_popup_exit.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_popup_enter.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_popup_enter.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_popup_enter.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/slide_in_from_top.xml",
@@ -61,22 +61,22 @@
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_fade_out.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_fade_out.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_fade_out.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/abc_grow_fade_in_from_bottom.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/anim/abc_grow_fade_in_from_bottom.xml"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/anim/abc_grow_fade_in_from_bottom.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_fab_out.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_fab_out.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_fab_out.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_snackbar_out.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_snackbar_out.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_snackbar_out.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/anim/design_bottom_sheet_slide_out.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/design/25.0.0/res/anim/design_bottom_sheet_slide_out.xml"
+        "source": "/Users/ld/.android/build-cache/6bdb81f2a49604ffe26814a43236989e9b57acce/output/res/anim/design_bottom_sheet_slide_out.xml"
     }
 ]

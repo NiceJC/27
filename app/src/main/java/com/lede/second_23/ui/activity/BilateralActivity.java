@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.BilateralBean;
 import com.lede.second_23.global.GlobalConstants;
@@ -50,7 +51,7 @@ public class BilateralActivity extends AppCompatActivity {
     private Gson mGson;
 
     @Bind(R.id.rv_bilateral_activity_show)
-    RecyclerView rv_show;
+    PullToRrefreshRecyclerView rv_show;
 
     private CommonAdapter mAdapter;
     private Context mContext;
@@ -65,7 +66,7 @@ public class BilateralActivity extends AppCompatActivity {
         mContext = this;
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
-        rv_show.setLayoutManager(new GridLayoutManager(mContext, 3));
+        rv_show.getRefreshableView().setLayoutManager(new GridLayoutManager(mContext, 3));
         mAdapter = new CommonAdapter<BilateralBean.DataBean.ListBean>(mContext, R.layout.layout_bilateral_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, BilateralBean.DataBean.ListBean listBean, int position) {
@@ -93,7 +94,7 @@ public class BilateralActivity extends AppCompatActivity {
                 return false;
             }
         });
-        rv_show.setAdapter(mAdapter);
+        rv_show.getRefreshableView().setAdapter(mAdapter);
         initData();
     }
 
@@ -130,7 +131,7 @@ public class BilateralActivity extends AppCompatActivity {
         BilateralBean bilateralBean = mGson.fromJson(json, BilateralBean.class);
         if (bilateralBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
         } else {
             dataList.addAll(bilateralBean.getData().getList());
             mAdapter.notifyDataSetChanged();

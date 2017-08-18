@@ -1,5 +1,6 @@
 package com.lede.second_23.utils;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 
 /**
@@ -38,6 +39,17 @@ public class Md5Util {
         long time = System.currentTimeMillis();
         System.out.println(time);
         String s = "abcdefg"+ time;
+    }
+
+    public static String getMD5(String str) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            return (new BigInteger(1, md.digest())).toString(16);
+        } catch (Exception var2) {
+            var2.printStackTrace();
+            return null;
+        }
     }
 
     /**

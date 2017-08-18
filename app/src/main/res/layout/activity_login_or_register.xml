@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lede.second_23.ui.activity.LoginOrRegisterActivity">
+
+    
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:layout_width="164dp"
+        android:layout_height="24.5dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/logo_27_twenty_seven"/>
+    <ImageView
+        android:id="@+id/iv_login_or_register_pic01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/login03"
+        android:layout_centerInParent="true"
+        android:rotation="15"/>
+    <ImageView
+        android:id="@+id/iv_login_or_register_pic02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/login02"
+        android:layout_centerInParent="true"
+        android:rotation="7.5"/>
+    <ImageView
+        android:id="@+id/iv_login_or_register_pic03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/login01"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/tv_login_or_register_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="登录"
+        style="@style/black_36px_text"
+        android:layout_marginLeft="76dp"
+        android:layout_marginBottom="20dp"/>
+    <TextView
+        android:id="@+id/tv_login_or_register_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="注册"
+        style="@style/black_36px_text"
+        android:layout_marginRight="76dp"
+        android:layout_marginBottom="20dp"/>
+</RelativeLayout>

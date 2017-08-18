@@ -3,8 +3,8 @@ package com.lede.second_23.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.MyFragmentPagerAdapter;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ForumReplyVideoPlayActivity extends FragmentActivity {
+public class ForumReplyVideoPlayActivity extends ActionBarActivity {
 
     @Bind(R.id.vp_forum_reply_video_play_activity_show)
     ViewPager vpForumReplyVideoPlayActivityShow;

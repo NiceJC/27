@@ -219,7 +219,7 @@ public class MyPhotoActivity extends AppCompatActivity implements View.OnClickLi
                 DeleteBean deleteBean = mGson.fromJson(response.get(), DeleteBean.class);
                 if (deleteBean.getMsg().equals("用户没有登录")) {
                     Toast.makeText(MyPhotoActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MyPhotoActivity.this,LoginActivity.class));
+                    startActivity(new Intent(MyPhotoActivity.this,WelcomeActivity.class));
                 }else {
                     if (deleteBean.getMsg().equals("删除成功")) {
                         Toast.makeText(MyPhotoActivity.this, "删除成功", Toast.LENGTH_SHORT).show();

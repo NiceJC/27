@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,11 +31,16 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.ImageViewPagerAdapter_2;
+import com.lede.second_23.bean.CommentForForumBean;
+import com.lede.second_23.bean.ForumDeleteBean;
 import com.lede.second_23.bean.ForumDetailCommentBean;
 import com.lede.second_23.bean.ForumDetailHeadBean;
 import com.lede.second_23.bean.ForumVideoReplyBean;
+import com.lede.second_23.bean.MsgBean;
+import com.lede.second_23.bean.ReplyForCommentBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.view.HackyViewPager;
+import com.lede.second_23.utils.PushUserUtil;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
@@ -51,7 +57,10 @@ import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -69,6 +78,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
     private static final int FORUM_LIKE = 5000;
     private static final int SHOW_VIDEO_REPLY = 6000;
     private static final int GET_HEAD_INFO = 7000;
+    private static final int DELETE_FORUM=8000;
 
     @Bind(R.id.prv_forum_detail_show)
     PullToRrefreshRecyclerView prvForumDetailShow;
@@ -76,6 +86,10 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
     EditText etForumDetailComment;
     @Bind(R.id.tv_forum_detail_send)
     TextView tvForumDetailSend;
+    @Bind(R.id.iv_forum_detail_activity_back)
+    ImageView ivForumDetailActivityBack;
+    @Bind(R.id.iv_forum_detail_activity_menu)
+    ImageView ivForumDetailActivityMenu;
     private CommonAdapter detailAdapter;
     private RequestQueue requestQueue;
     private int pageNum = 1;
@@ -95,6 +109,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
     final String[] items1 = {"回复", "删除", "举报"};
     final String[] items2 = {"回复", "举报"};
     final String[] items3 = {"删除"};
+    final String[] items4 = {"举报"};
     private HeaderAndFooterWrapper headerAndFooterWrapper;
     private LayoutInflater layoutInflater;
     private boolean isOnRefreshing = false;
@@ -115,6 +130,10 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
     private ImageView iv_like;
     private String mUserId;
     private ArrayList<ImageView> imgViews;
+    private ArrayList<String> banner;
+    private int deleteType=0; //删除时候的操作类型 0删除评论 1删除微博
+    private TextView tv_videocount;
+    private String commentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +188,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 diyiv_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ConcernActivity_2.class);
+                        Intent intent = new Intent(context, OtherPersonActivity.class);
                         intent.putExtra("userId", listBean.getUserId());
                         startActivity(intent);
                     }
@@ -178,7 +197,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 tv_nickname.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ConcernActivity_2.class);
+                        Intent intent = new Intent(context, OtherPersonActivity.class);
                         intent.putExtra("userId", listBean.getUserId());
                         startActivity(intent);
                     }
@@ -194,6 +213,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 commentId = forumDetailList.get(position - 1).getCommentId();
+                commentUserId = forumDetailList.get(position - 1).getUserId();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setIcon(R.mipmap.add);
                 builder.setTitle("选择操作");
@@ -206,6 +226,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0:
+                                        deleteType=0;
                                         showDeleteDialog();
                                         break;
 
@@ -351,7 +372,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         tv_text = (TextView) view.findViewById(R.id.tv_item_forum_text);
         rl_pic = (RelativeLayout) view.findViewById(R.id.rl_item_forum_pic);
         tv_likeCount = (TextView) view.findViewById(R.id.tv_item_forum_likecount);
-
+        tv_videocount = (TextView) view.findViewById(R.id.tv_item_forum_videocount);
         tv_commentCount = (TextView) view.findViewById(R.id.tv_item_forum_commentcount);
 
         iv_like = (ImageView) view.findViewById(R.id.iv_item_forum_like);
@@ -449,21 +470,34 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteCommentOrReply();
-                Toast.makeText(context, "确认" + which, Toast.LENGTH_SHORT).show();
+                if (deleteType==0) {
+                    deleteCommentOrReply();
+                }else {
+                    deleteForum();
+                }
+
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { //设置取消按钮
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                Toast.makeText(context, "取消" + which, Toast.LENGTH_SHORT).show();
             }
         });
 
         //参数都设置完成了，创建并显示出来
         builder.create().show();
 
+    }
+
+    /**
+     * 删除微博
+     */
+    private void deleteForum() {
+        Request<String> deleteForumRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/allForum/updateForumByType",RequestMethod.POST);
+        deleteForumRequest.add("access_token",(String) SPUtils.get(context,GlobalConstants.TOKEN,""));
+        deleteForumRequest.add("forumId",forumId);
+        requestQueue.add(DELETE_FORUM,deleteForumRequest,this);
     }
 
     /**
@@ -515,7 +549,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         NoHttp.getRequestQueueInstance().add(COMMENT_FOR_REPLY, commentForReplyRequest, this);
     }
 
-    @OnClick({R.id.tv_forum_detail_send})
+    @OnClick({R.id.tv_forum_detail_send,R.id.iv_forum_detail_activity_back,R.id.iv_forum_detail_activity_menu})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_forum_detail_send:
@@ -525,6 +559,46 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                     commentText = etForumDetailComment.getText().toString();
                     commentForForum();
                 }
+                break;
+            case R.id.iv_forum_detail_activity_back:
+                finish();
+                break;
+            case R.id.iv_forum_detail_activity_menu:
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setIcon(R.mipmap.add);
+                builder.setTitle("选择操作");
+                if (forumuserId.equals((String) SPUtils.get(context, GlobalConstants.USERID,""))) {
+                    //    设置一个下拉的列表选择项
+                    builder.setItems(items3, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    deleteType=1;
+                                    showDeleteDialog();
+                                    break;
+
+                            }
+
+                        }
+                    });
+                }else {
+                    builder.setItems(items4, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    Intent intent = new Intent(context, ReportActivity.class);
+                                    intent.putExtra("forumId", forumId);
+                                    startActivity(intent);
+                                    break;
+
+                            }
+
+                        }
+                    });
+                }
+                builder.show();
                 break;
         }
     }
@@ -539,7 +613,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         Random random = new Random();
         long commentId = System.currentTimeMillis() * 100 + random.nextInt(100);
         commentForForumRequest.add("commentId", commentId);
-        NoHttp.getRequestQueueInstance().add(COMMENT_FOR_FORUM, commentForForumRequest, this);
+        requestQueue.add(COMMENT_FOR_FORUM, commentForForumRequest, this);
     }
 
     /**
@@ -567,13 +641,13 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 parseForumDetail(response.get());
                 break;
             case COMMENT_FOR_FORUM:
-
+                parseCommentForForumJson(response.get());
                 break;
             case COMMENT_FOR_REPLY:
-
+                parseReplyForCommentJson(response.get());
                 break;
             case DELETE_COMMENT:
-
+                parseDeleteComment(response.get());
                 break;
             case SHOW_VIDEO_REPLY:
                 parseShowVideo(response.get());
@@ -581,6 +655,80 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
             case GET_HEAD_INFO:
                 parseDetailJson(response.get());
                 break;
+            case DELETE_FORUM:
+                parseForumDeleteJson(response.get());
+                break;
+        }
+    }
+
+    /**
+     * 解析删除评论
+     * @param json
+     */
+    private void parseDeleteComment(String json) {
+        MsgBean msgBean=mGson.fromJson(json,MsgBean.class);
+        if (msgBean.getResult()==10000) {
+            Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            forumDetailList.clear();
+            initData();
+        }else {
+            Toast.makeText(context, msgBean.getMsg(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 解析回复评论微博成功
+     * @param json
+     */
+    private void parseReplyForCommentJson(String json) {
+        ReplyForCommentBean replyForCommentBean=mGson.fromJson(json,ReplyForCommentBean.class);
+        if (replyForCommentBean.getResult()==10000) {
+            Toast.makeText(context, "回复成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            forumDetailList.clear();
+            initData();
+//            PushUserUtil.pushUser(forumuserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+            PushUserUtil.pushUser(commentUserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+        }else {
+            Toast.makeText(context, "回复失败，请检查网络", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 解析评论微博
+     * @param json
+     */
+    private void parseCommentForForumJson(String json) {
+        CommentForForumBean commentForForumBean=mGson.fromJson(json,CommentForForumBean.class);
+        if (commentForForumBean.getResult()==10000) {
+            Toast.makeText(context, "评论成功", Toast.LENGTH_SHORT).show();
+            pageNum=1;
+            forumDetailList.clear();
+            initData();
+            if (!forumuserId.equals((String) SPUtils.get(context,GlobalConstants.USERID,""))) {
+                PushUserUtil.pushUser(forumuserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
+
+            }
+            InputMethodManager imm1 = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            etForumDetailComment.setText("");
+
+            imm1.hideSoftInputFromWindow(etForumDetailComment.getWindowToken(), 0);//从控件所在的窗口中隐藏
+        }else {
+            Toast.makeText(context, "评论失败，请检查网络", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * 解析删除微博json 3335962040859
+     * @param json
+     */
+    private void parseForumDeleteJson(String json) {
+        ForumDeleteBean forumDelteBean=mGson.fromJson(json,ForumDeleteBean.class);
+        if (forumDelteBean.getResult()==10000) {
+            Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -625,8 +773,16 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
      */
     private void parseShowVideo(String json) {
         ForumVideoReplyBean forumVideoReplyBean = mGson.fromJson(json, ForumVideoReplyBean.class);
-        forumVideoReplyList.addAll(forumVideoReplyBean.getData().getSimplePageInfo().getList());
-        forumVideoReplyAdapter.notifyDataSetChanged();
+        if (forumVideoReplyBean.getResult()==10000) {
+            if (forumVideoReplyBean.getData().getSimplePageInfo().getList().size()==0) {
+                Toast.makeText(context, "无视频互动", Toast.LENGTH_SHORT).show();
+            }else {
+                forumVideoReplyList.addAll(getList(forumVideoReplyBean.getData().getSimplePageInfo().getList()));
+                forumVideoReplyAdapter.notifyDataSetChanged();
+            }
+        }else {
+            Toast.makeText(context, "服务器错误", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -646,13 +802,21 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         listBean = forumDetailHeadBean.getData().getAllForum();
         if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
             list = listBean.getAllRecords();
-            list = listBean.getAllRecords();
             imgViews = null;
             imgViews = new ArrayList<>();
-            ArrayList<String> banner = null;
+            banner = null;
             banner = new ArrayList<>();
-            for (int i = 0; i < listBean.getAllRecords().size(); i++) {
-                banner.add(listBean.getAllRecords().get(i).getUrl());
+            ArrayList<ForumDetailHeadBean.DataBean.AllForumBean.AllRecordsBean> records=new ArrayList<>();
+            records.addAll(listBean.getAllRecords());
+            Collections.sort(records, new Comparator<ForumDetailHeadBean.DataBean.AllForumBean.AllRecordsBean>() {
+                @Override
+                public int compare(ForumDetailHeadBean.DataBean.AllForumBean.AllRecordsBean allRecordsBean, ForumDetailHeadBean.DataBean.AllForumBean.AllRecordsBean t1) {
+                    return allRecordsBean.getRecordOrder()>t1.getRecordOrder()?1:-1;
+                }
+            });
+            Log.i("compare", "convert: "+mGson.toJson(records));
+            for (int i = 0; i < records.size(); i++) {
+                banner.add(records.get(i).getUrl());
             }
             if (listBean.getAllRecords().get(0).getDspe().equals("0")) {
                 if (list.size() == 1) {
@@ -815,31 +979,33 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
 //                        Glide.with(context).load(list.get(6).getUrl()).into(iv_9_7);
 //                        Glide.with(context).load(list.get(7).getUrl()).into(iv_9_8);
 //                        Glide.with(context).load(list.get(8).getUrl()).into(iv_9_9);
-                    for (int i = 0; i < imgViews.size(); i++) {
-                        final int finalI = i;
-                        final ArrayList<String> finalBanner = banner;
-                        imgViews.get(i).setOnClickListener(new View.OnClickListener() {
 
-                            @Override
-                            public void onClick(View view) {
+                }
+                for (int i = 0; i < imgViews.size(); i++) {
+                    Glide.with(context).load(banner.get(i)).into(imgViews.get(i));
+                    final int finalI = i;
+                    final ArrayList<String> finalBanner = banner;
+                    imgViews.get(i).setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
 //                                banner=new ArrayList<>();
 //                                for (int i = 0; i < listBean.getAllRecords().size(); i++) {
 //                                    banner.add(listBean.getAllRecords().get(i).getUrl());
 //                                }
-                                Intent intent = new Intent(context, ForumPicActivity.class);
-                                intent.putExtra("banner", finalBanner);
-                                intent.putExtra("position", finalI);
-                                startActivity(intent);
-                            }
-                        });
-                        Glide.with(context).load(banner.get(i)).into(imgViews.get(i));
-                    }
+                            Intent intent = new Intent(context, ForumPicActivity.class);
+                            intent.putExtra("banner", finalBanner);
+                            intent.putExtra("position", finalI);
+                            startActivity(intent);
+                        }
+                    });
+
                 }
             } else {
-                childView=layoutInflater.inflate(R.layout.item_tuceng_pic,rl_pic,true);
-                HackyViewPager hvp_imgs=(HackyViewPager)childView.findViewById(R.id.hvp_item_tuceng_imgs);
-                hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(),banner));
-                final LinearLayout ll_inDicator=(LinearLayout) childView.findViewById(R.id.ll_item_tuceng_indicator);
+                childView = layoutInflater.inflate(R.layout.item_tuceng_pic, rl_pic, true);
+                HackyViewPager hvp_imgs = (HackyViewPager) childView.findViewById(R.id.hvp_item_tuceng_imgs);
+                hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner));
+                final LinearLayout ll_inDicator = (LinearLayout) childView.findViewById(R.id.ll_item_tuceng_indicator);
                 for (int i = 0; i < banner.size(); i++) {
                     ImageView inDicator = (ImageView) LayoutInflater.from(context).inflate(R.layout.layout_indicator, ll_inDicator, false);
                     if (i == 0) {
@@ -885,7 +1051,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
             });
         }
 
-
+        tv_videocount.setText(listBean.getVideoCount()+"");
         tv_commentCount.setText(listBean.getClickCount() + "");
         tv_likeCount.setText(listBean.getLikeCount() + "");
         if (listBean.isLike()) {
@@ -914,7 +1080,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         diy_userimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ConcernActivity_2.class);
+                Intent intent = new Intent(context, OtherPersonActivity.class);
                 intent.putExtra("userId", listBean.getUserId());
                 startActivity(intent);
             }
@@ -923,7 +1089,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         tv_nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ConcernActivity_2.class);
+                Intent intent = new Intent(context, OtherPersonActivity.class);
                 intent.putExtra("userId", listBean.getUserId());
                 startActivity(intent);
             }
@@ -939,6 +1105,25 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
             e.printStackTrace();
         }
         tv_text.setText(listBean.getForumText());
+    }
+
+
+    /**
+     * 去重
+     * @param arr
+     * @return
+     */
+    private ArrayList getList(List arr) {
+        List list = new ArrayList();
+        Iterator it = arr.iterator();
+        while (it.hasNext()) {
+            Object obj = (Object) it.next();
+            if(!list.contains(obj)){                //不包含就添加
+                list.add(obj);
+            }
+        }
+        return (ArrayList) list;
+
     }
 
 }

@@ -354,7 +354,10 @@ public class MyApplication extends Application {
             private void parserJson(String s) {
                 UserInfoBean userInfoBean = mGson.fromJson(s, UserInfoBean.class);
                 UserInfoBean.DataBean.InfoBean infoBean = userInfoBean.getData().getInfo();
-                RongIM.getInstance().refreshUserInfoCache(new UserInfo(infoBean.getUserId(), infoBean.getNickName(), Uri.parse(infoBean.getImgUrl())));
+                if (userInfoBean.getResult()==10000) {
+                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(infoBean.getUserId(), infoBean.getNickName(), Uri.parse(infoBean.getImgUrl())));
+
+                }
             }
         });
         return null;
@@ -373,7 +376,6 @@ public class MyApplication extends Application {
         @Override
         public boolean onReceived(Message message, int left) {
             //开发者根据自己需求自行处理
-            // 收到点笑脸请求 显示通知 ios无法实现  废弃
             if (message.getConversationType() == Conversation.ConversationType.SYSTEM) {
                 showSystemNotification(message.getSenderUserId());
                 Log.i("TAG", "收到新消息:" + message.getSenderUserId());
@@ -407,6 +409,7 @@ public class MyApplication extends Application {
      * @param userid
      */
     public void showSystemNotification(String userid) {
+        SPUtils.put(context,GlobalConstants.GETREPLY,(int)SPUtils.get(context,GlobalConstants.GETREPLY,0)+1);
         //创建大图标的Bitmap
         LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
         //1.从系统服务中获得通知管理器

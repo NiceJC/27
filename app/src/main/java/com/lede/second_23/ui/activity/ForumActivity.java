@@ -49,7 +49,10 @@ import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -62,7 +65,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     private static final int FORUM_CODE = 1000;
     private static final int FORUM_LIKE = 2000;
     private static final int PUSH_USER = 3000;
-    private static final int SHOW_VIDEO_REPLY=4000;
+    private static final int SHOW_VIDEO_REPLY = 4000;
 
     @Bind(R.id.prv_forum_activity_show)
     PullToRrefreshRecyclerView prvForumActivityShow;
@@ -72,19 +75,21 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     RelativeLayout rlForumActivityBottom;
     @Bind(R.id.iv_forum_activity_back)
     ImageView ivForumActivityBack;
+    @Bind(R.id.tv_forum_activity_nonview)
+    TextView tvForumActivityNonview;
 
     private RequestQueue requestQueue;
     private Context context;
     private int pageNum = 1;
     private int pageSize = 20;
-    private int showVideoReplyPageNum=1;
-    private int showVideoReplyPageSize=20;
+    private int showVideoReplyPageNum = 1;
+    private int showVideoReplyPageSize = 20;
     private CommonAdapter headAdapter;
     private CommonAdapter forumAdapter;
     private CommonAdapter forumVideoReplyAdapter;
     private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumList = new ArrayList<>();
     private ArrayList<PushUserBean.DataBean.UserInfosBean> pushUserList = new ArrayList<>();
-    private ArrayList<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean> forumVideoReplyList=new ArrayList<>();
+    private ArrayList<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean> forumVideoReplyList = new ArrayList<>();
     private Gson mGson;
     private boolean isshowBottom = true;
     private ObjectAnimator animator;
@@ -115,7 +120,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     }
 
 
-
     private void initHead() {
         Request<String> headRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/pushUser", RequestMethod.POST);
         headRequest.add("access_token", (String) SPUtils.get(context, GlobalConstants.TOKEN, ""));
@@ -133,14 +137,15 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 TextView tv_time = holder.getView(R.id.tv_item_forum_time);
                 TextView tv_text = holder.getView(R.id.tv_item_forum_text);
                 RelativeLayout rl_pic = holder.getView(R.id.rl_item_forum_pic);
-                ImageView iv_video_reply=holder.getView(R.id.iv_item_forum_video_reply);
+                ImageView iv_video_reply = holder.getView(R.id.iv_item_forum_video_reply);
+                TextView iv_video_count = holder.getView(R.id.tv_item_forum_videocount);
                 iv_video_reply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         forumVideoReplyList.clear();
                         forumVideoReplyList.add(null);
                         showVideoByUserList(listBean.getForumId());
-                        currentForumId=listBean.getForumId();
+                        currentForumId = listBean.getForumId();
                         showPopwindow();
 
                     }
@@ -150,12 +155,21 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
                     list = listBean.getAllRecords();
                     width = rl_pic.getWidth();
-                    imgViews=null;
-                    imgViews=new ArrayList<>();
-                    ArrayList<String> banner=null;
-                    banner=new ArrayList<>();
-                    for (int i = 0; i < listBean.getAllRecords().size(); i++) {
-                        banner.add(listBean.getAllRecords().get(i).getUrl());
+                    imgViews = null;
+                    imgViews = new ArrayList<>();
+                    banner = null;
+                    banner = new ArrayList<>();
+                    ArrayList<AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean> records=new ArrayList<>();
+                    records.addAll(listBean.getAllRecords());
+                    Collections.sort(records, new Comparator<AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean>() {
+                        @Override
+                        public int compare(AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean allRecordsBean, AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean t1) {
+                            return allRecordsBean.getRecordOrder()>t1.getRecordOrder()?1:-1;
+                        }
+                    });
+                    Log.i("compare", "convert: "+mGson.toJson(records));
+                    for (int i = 0; i < records.size(); i++) {
+                        banner.add(records.get(i).getUrl());
                     }
                     if (listBean.getAllRecords().get(0).getDspe().equals("0")) {
                         if (list.size() == 1) {
@@ -163,8 +177,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             ImageView iv_1_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_1_1);
                             imgViews.clear();
                             imgViews.add(iv_1_1);
-
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_1_1);
                         } else if (list.size() == 2) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_2, rl_pic, true);
                             ImageView iv_2_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_2_1);
@@ -172,8 +184,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.clear();
                             imgViews.add(iv_2_1);
                             imgViews.add(iv_2_2);
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_2_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_2_2);
                         } else if (list.size() == 3) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_3, rl_pic, true);
                             ImageView iv_3_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_3_1);
@@ -182,9 +192,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_3_1);
                             imgViews.add(iv_3_2);
                             imgViews.add(iv_3_3);
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_3_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_3_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_3_3);
                         } else if (list.size() == 4) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_4, rl_pic, true);
                             ImageView iv_4_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_4_1);
@@ -195,10 +202,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_4_2);
                             imgViews.add(iv_4_3);
                             imgViews.add(iv_4_4);
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_4_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_4_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_4_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_4_4);
                         } else if (list.size() == 5) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_5, rl_pic, true);
                             ImageView iv_5_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_5_1);
@@ -211,11 +214,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_5_3);
                             imgViews.add(iv_5_4);
                             imgViews.add(iv_5_5);
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_5_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_5_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_5_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_5_4);
-//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_5_5);
                         } else if (list.size() == 6) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_6, rl_pic, true);
                             ImageView iv_6_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_6_1);
@@ -230,13 +228,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_6_4);
                             imgViews.add(iv_6_5);
                             imgViews.add(iv_6_6);
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_6_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_6_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_6_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_6_4);
-//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_6_5);
-//
-//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_6_6);
                         } else if (list.size() == 7) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_7, rl_pic, true);
                             ImageView iv_7_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_7_1);
@@ -253,14 +244,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_7_5);
                             imgViews.add(iv_7_6);
                             imgViews.add(iv_7_7);
-
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_7_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_7_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_7_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_7_4);
-//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_7_5);
-//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_7_6);
-//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_7_7);
                         } else if (list.size() == 8) {
                             view = layoutInflater.inflate(R.layout.item_9gongge_8, rl_pic, true);
                             ImageView iv_8_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_8_1);
@@ -280,15 +263,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_8_6);
                             imgViews.add(iv_8_7);
                             imgViews.add(iv_8_8);
-
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_8_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_8_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_8_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_8_4);
-//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_8_5);
-//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_8_6);
-//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_8_7);
-//                        Glide.with(context).load(list.get(7).getUrl()).into(iv_8_8);
                         } else {
                             view = layoutInflater.inflate(R.layout.item_9gongge_9, rl_pic, true);
                             ImageView iv_9_1 = (ImageView) view.findViewById(R.id.iv_item_9gongge_9_1);
@@ -310,16 +284,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             imgViews.add(iv_9_7);
                             imgViews.add(iv_9_8);
                             imgViews.add(iv_9_9);
-
-//                        Glide.with(context).load(list.get(0).getUrl()).into(iv_9_1);
-//                        Glide.with(context).load(list.get(1).getUrl()).into(iv_9_2);
-//                        Glide.with(context).load(list.get(2).getUrl()).into(iv_9_3);
-//                        Glide.with(context).load(list.get(3).getUrl()).into(iv_9_4);
-//                        Glide.with(context).load(list.get(4).getUrl()).into(iv_9_5);
-//                        Glide.with(context).load(list.get(5).getUrl()).into(iv_9_6);
-//                        Glide.with(context).load(list.get(6).getUrl()).into(iv_9_7);
-//                        Glide.with(context).load(list.get(7).getUrl()).into(iv_9_8);
-//                        Glide.with(context).load(list.get(8).getUrl()).into(iv_9_9);
                         }
 
                         for (int i = 0; i < imgViews.size(); i++) {
@@ -329,11 +293,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
 
                                 @Override
                                 public void onClick(View view) {
-//                                banner=new ArrayList<>();
-//                                for (int i = 0; i < listBean.getAllRecords().size(); i++) {
-//                                    banner.add(listBean.getAllRecords().get(i).getUrl());
-//                                }
-                                    Intent intent=new Intent(context,ForumPicActivity.class);
+                                    Intent intent = new Intent(context, ForumPicActivity.class);
                                     intent.putExtra("banner", finalBanner);
                                     intent.putExtra("position", finalI);
                                     startActivity(intent);
@@ -341,11 +301,12 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             });
                             Glide.with(context).load(banner.get(i)).into(imgViews.get(i));
                         }
-                    }else {
-                        view=layoutInflater.inflate(R.layout.item_tuceng_pic,rl_pic,true);
-                        HackyViewPager hvp_imgs=(HackyViewPager)view.findViewById(R.id.hvp_item_tuceng_imgs);
-                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(),banner));
-                        final LinearLayout ll_inDicator=(LinearLayout) view.findViewById(R.id.ll_item_tuceng_indicator);
+                    } else {
+                        view = layoutInflater.inflate(R.layout.item_tuceng_pic, rl_pic, true);
+                        HackyViewPager hvp_imgs = (HackyViewPager) view.findViewById(R.id.hvp_item_tuceng_imgs);
+                        hvp_imgs.removeAllViews();
+                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner));
+                        final LinearLayout ll_inDicator = (LinearLayout) view.findViewById(R.id.ll_item_tuceng_indicator);
                         for (int i = 0; i < banner.size(); i++) {
                             ImageView inDicator = (ImageView) LayoutInflater.from(context).inflate(R.layout.layout_indicator, ll_inDicator, false);
                             if (i == 0) {
@@ -376,41 +337,25 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                             }
                         });
                     }
-//                    creatShowPic(rl_pic, listBean.getAllRecords());
-
-
-
-
-//                    for (int i = 0; i < percentLinearLayout.getChildCount(); i++) {
-//                        percentLinearLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//
-//                            }
-//                        });
-//                    }
                 } else {
                     view = layoutInflater.inflate(R.layout.item_video, rl_pic, true);
-//                    JCVideoPlayer jc_play = (JCVideoPlayer) view.findViewById(R.id.jc_player_item_video);
-//                    jc_play.setUp(listBean.getAllRecords().get(0).getUrlTwo(),
-//                            listBean.getAllRecords().get(0).getUrlThree(),
-//                            "", false);
-                    ImageView iv_pic=(ImageView)view.findViewById(R.id.iv_item_video_pic);
+                    ImageView iv_pic = (ImageView) view.findViewById(R.id.iv_item_video_pic);
                     Glide.with(context).load(listBean.getAllRecords().get(0).getUrlThree()).into(iv_pic);
                     iv_pic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent=new Intent(context,ForumVideoPlayActivity.class);
-                            intent.putExtra("pic_patch",listBean.getAllRecords().get(0).getUrlThree());
-                            intent.putExtra("video_patch",listBean.getAllRecords().get(0).getUrlTwo());
+                            Intent intent = new Intent(context, ForumVideoPlayActivity.class);
+                            intent.putExtra("pic_patch", listBean.getAllRecords().get(0).getUrlThree());
+                            intent.putExtra("video_patch", listBean.getAllRecords().get(0).getUrlTwo());
                             startActivity(intent);
                         }
                     });
                 }
+                iv_video_count.setText(listBean.getVideoCount() + "");
                 final TextView tv_likeCount = holder.getView(R.id.tv_item_forum_likecount);
-                tv_likeCount.setText(listBean.getLikeCount() +"");
+                tv_likeCount.setText(listBean.getLikeCount() + "");
                 TextView tv_commentCount = holder.getView(R.id.tv_item_forum_commentcount);
-                tv_commentCount.setText(listBean.getClickCount()+"");
+                tv_commentCount.setText(listBean.getClickCount() + "");
                 final ImageView iv_like = holder.getView(R.id.iv_item_forum_like);
                 if (listBean.isLike()) {
                     iv_like.setImageResource(R.mipmap.praised);
@@ -424,7 +369,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
 //                        forumLikePosition=position;
                         int likenum = listBean.getLikeCount();
                         Log.i("likeCount", "onClick: " + listBean.getLikeCount());
-                        //TODO 数量有问题
                         if (listBean.isLike()) {
                             listBean.setLike(false);
                             iv_like.setImageResource(R.mipmap.praise);
@@ -446,8 +390,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 diy_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(context,ConcernActivity_2.class);
-                        intent.putExtra("userId",listBean.getUserId());
+                        Intent intent = new Intent(context, OtherPersonActivity.class);
+                        intent.putExtra("userId", listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -455,16 +399,16 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 tv_nickname.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(context,ConcernActivity_2.class);
-                        intent.putExtra("userId",listBean.getUserId());
+                        Intent intent = new Intent(context, OtherPersonActivity.class);
+                        intent.putExtra("userId", listBean.getUserId());
                         startActivity(intent);
                     }
                 });
-                Date createDate=null;
+                Date createDate = null;
                 //"2017-05-19 17:15:40"
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
-                    createDate=formatter.parse(listBean.getCreatTime());
+                    createDate = formatter.parse(listBean.getCreatTime());
                     tv_time.setText(TimeUtils.getTimeFormatText(createDate));
 
                 } catch (ParseException e) {
@@ -479,15 +423,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 Intent intent = new Intent(context, ForumDetailActivity.class);
                 intent.putExtra("forumId", forumList.get(position - 1).getForumId());
                 intent.putExtra("userId", forumList.get(position - 1).getUserId());
-//                intent.putExtra("userImg",forumList.get(position).getUser().getImgUrl());
-//                intent.putExtra("nickname",forumList.get(position).getUser().getNickName());
-//                intent.putExtra("forumText",forumList.get(position).getForumText());
-//                ArrayList<AllForumBean.DataBean.SimpleBean.ListBean.AllRecordsBean> records=new ArrayList<>();
-//                records.addAll(forumList.get(position).getAllRecords());
                 intent.putExtra("forum", forumList.get(position - 1));
-//                intent.put
-//                intent.putExtra("createTime",forumList.get(position).getCreatTime());
-//                intent.
                 startActivity(intent);
             }
 
@@ -557,13 +493,13 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         addHeadView(forumAdapter);
 
         //底部弹出视频回复的adapter
-        forumVideoReplyAdapter= new CommonAdapter<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean>(context, R.layout.item_pop_video_reply, forumVideoReplyList) {
+        forumVideoReplyAdapter = new CommonAdapter<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean>(context, R.layout.item_pop_video_reply, forumVideoReplyList) {
             @Override
             protected void convert(ViewHolder holder, ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean listBean, int position) {
-                DIYImageView div_usrimg=holder.getView(R.id.diyiv_item_pop_video_reply_item);
-                if (position==0) {
+                DIYImageView div_usrimg = holder.getView(R.id.diyiv_item_pop_video_reply_item);
+                if (position == 0) {
                     Glide.with(context).load(R.mipmap.pai).into(div_usrimg);
-                }else {
+                } else {
                     Glide.with(context).load(listBean.getUserInfo().getImgUrl()).into(div_usrimg);
                 }
             }
@@ -571,15 +507,15 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         forumVideoReplyAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=null;
-                if (position==0) {
-                    intent=new Intent(context,ForumVideoReplyActivity.class);
-                    intent.putExtra("forumId",currentForumId);
+                Intent intent = null;
+                if (position == 0) {
+                    intent = new Intent(context, ForumVideoReplyActivity.class);
+                    intent.putExtra("forumId", currentForumId);
                     startActivity(intent);
-                }else {
-                    intent=new Intent(context,ForumReplyVideoPlayActivity.class);
-                    intent.putExtra("list",forumVideoReplyList);
-                    intent.putExtra("position",position-1);
+                } else {
+                    intent = new Intent(context, ForumReplyVideoPlayActivity.class);
+                    intent.putExtra("list", forumVideoReplyList);
+                    intent.putExtra("position", position - 1);
                     startActivity(intent);
                 }
             }
@@ -594,14 +530,15 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
 
     /**
      * 视频根据forumId查询用户列表
+     *
      * @param forumId
      */
     private void showVideoByUserList(long forumId) {
-        Request<String>  videoReplyRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/VideoReply/showVideoByUserList",RequestMethod.POST);
-        videoReplyRequest.add("forumId",forumId);
-        videoReplyRequest.add("pageNum",showVideoReplyPageNum);
-        videoReplyRequest.add("pageSize",showVideoReplyPageSize);
-        requestQueue.add(SHOW_VIDEO_REPLY,videoReplyRequest,this);
+        Request<String> videoReplyRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/VideoReply/showVideoByUserList", RequestMethod.POST);
+        videoReplyRequest.add("forumId", forumId);
+        videoReplyRequest.add("pageNum", showVideoReplyPageNum);
+        videoReplyRequest.add("pageSize", showVideoReplyPageSize);
+        requestQueue.add(SHOW_VIDEO_REPLY, videoReplyRequest, this);
     }
 
     private void showPopwindow() {
@@ -614,17 +551,12 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         PopupWindow window = new PopupWindow(view,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 500);
-        WindowManager.LayoutParams params=this.getWindow().getAttributes();
-        params.alpha=0.7f;
+        WindowManager.LayoutParams params = this.getWindow().getAttributes();
+        params.alpha = 0.7f;
 
         this.getWindow().setAttributes(params);
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);
-
-
-//        // 实例化一个ColorDrawable颜色为半透明
-//        ColorDrawable dw = new ColorDrawable(0xb0000000);
-//        window.setBackgroundDrawable(dw);
 
 
         // 设置popWindow的显示和消失动画
@@ -632,8 +564,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         // 在底部显示
         window.showAtLocation(ForumActivity.this.findViewById(R.id.prv_forum_activity_show),
                 Gravity.BOTTOM, 0, 0);
-        PullToRrefreshRecyclerView prv_pop_forum_video_reply=(PullToRrefreshRecyclerView)view.findViewById(R.id.prv_pop_forum_video_reply_show);
-        prv_pop_forum_video_reply.getRefreshableView().setLayoutManager(new GridLayoutManager(context,5));
+        PullToRrefreshRecyclerView prv_pop_forum_video_reply = (PullToRrefreshRecyclerView) view.findViewById(R.id.prv_pop_forum_video_reply_show);
+        prv_pop_forum_video_reply.getRefreshableView().setLayoutManager(new GridLayoutManager(context, 5));
         prv_pop_forum_video_reply.getRefreshableView().setAdapter(forumVideoReplyAdapter);
         //popWindow消失监听方法
         window.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -641,8 +573,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
             @Override
             public void onDismiss() {
                 System.out.println("popWindow消失");
-                WindowManager.LayoutParams params=ForumActivity.this.getWindow().getAttributes();
-                params.alpha=1.0f;
+                WindowManager.LayoutParams params = ForumActivity.this.getWindow().getAttributes();
+                params.alpha = 1.0f;
 
                 ForumActivity.this.getWindow().setAttributes(params);
             }
@@ -680,19 +612,19 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                         .load(userInfosBean.getImgUrl())
                         .into(diyiv_userimg);
                 tv_nickname.setText(userInfosBean.getNickName());
-                if (position == 0 || position == 3 || position == 6 || position == 9) {
-                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item1);
-                } else if (position == 1 || position == 4 || position == 7) {
-                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item2);
-                } else {
-                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item3);
-                }
+//                if (position == 0 || position == 3 || position == 6 || position == 9) {
+//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item1);
+//                } else if (position == 1 || position == 4 || position == 7) {
+//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item2);
+//                } else {
+//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item3);
+//                }
             }
         };
         headAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(context, ConcernActivity_2.class);
+                Intent intent = new Intent(context, OtherPersonActivity.class);
                 intent.putExtra("userId", pushUserList.get(position).getUserId());
                 startActivity(intent);
             }
@@ -745,7 +677,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         requestQueue.add(FORUM_CODE, forumRequest, this);
     }
 
-    @OnClick({R.id.iv_forum_activity_send,R.id.iv_forum_activity_back})
+    @OnClick({R.id.iv_forum_activity_send, R.id.iv_forum_activity_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_forum_activity_send:
@@ -787,8 +719,6 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     }
 
 
-
-
     @Override
     public void onFailed(int what, Response<String> response) {
         switch (what) {
@@ -809,12 +739,22 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
 
     /**
      * 解析视频回复
+     *
      * @param json
      */
     private void parseShowVideo(String json) {
-        ForumVideoReplyBean forumVideoReplyBean=mGson.fromJson(json,ForumVideoReplyBean.class);
-        forumVideoReplyList.addAll(forumVideoReplyBean.getData().getSimplePageInfo().getList());
-        forumVideoReplyAdapter.notifyDataSetChanged();
+        ForumVideoReplyBean forumVideoReplyBean = mGson.fromJson(json, ForumVideoReplyBean.class);
+        if (forumVideoReplyBean.getResult()==10000) {
+            if (forumVideoReplyBean.getData().getSimplePageInfo().getList().size()==0) {
+                Toast.makeText(context, "无视频互动", Toast.LENGTH_SHORT).show();
+            }else {
+                forumVideoReplyList.addAll(getList(forumVideoReplyBean.getData().getSimplePageInfo().getList()));
+                forumVideoReplyAdapter.notifyDataSetChanged();
+            }
+        }else {
+            Toast.makeText(context, "服务器错误", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
@@ -835,12 +775,24 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
      */
     private void parseForumJson(String json) {
         allforumBean = mGson.fromJson(json, AllForumBean.class);
-        forumList.addAll(allforumBean.getData().getSimple().getList());
         if (isOnRefreshing) {
             prvForumActivityShow.onRefreshComplete();
             isOnRefreshing = false;
         }
-        headerAndFooterWrapper.notifyDataSetChanged();
+        tvForumActivityNonview.setVisibility(View.GONE);
+        if (allforumBean.getData().getSimple().getList().size()==0) {
+            if (pageNum==1) {
+                Toast.makeText(context, "还没有人发布过圈子，快来做第一人哟", Toast.LENGTH_SHORT).show();
+                tvForumActivityNonview.setVisibility(View.VISIBLE);
+            }else {
+                Toast.makeText(context, "没有更多的圈子了", Toast.LENGTH_SHORT).show();
+
+            }
+        }else {
+            forumList.addAll(allforumBean.getData().getSimple().getList());
+            headerAndFooterWrapper.notifyDataSetChanged();
+        }
+
     }
 
     /**
@@ -849,15 +801,24 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
      * @param json
      */
     private void parseForumLike(String json) {
-//        ForumLikeBean likeBean=mGson.fromJson(json,ForumLikeBean.class);
-//        if (likeBean.getResult()==10000) {
-//            ImageView iv_like=(ImageView)(((LinearLayout)prvForumActivityShow.getChildAt(forumLikePosition)).findViewById(R.id.iv_item_forum_like));
-//
-//            if (likeBean.getData().isCurrent_like()) {
-//                iv_like.setImageResource(R.mipmap.praised);
-//            }else {
-//                iv_like.setImageResource(R.mipmap.praise);
-//            }
-//        }
+
+    }
+
+    /**
+     * 去重
+     * @param arr
+     * @return
+     */
+    private ArrayList getList(List arr) {
+        List list = new ArrayList();
+        Iterator it = arr.iterator();
+        while (it.hasNext()) {
+            Object obj = (Object) it.next();
+            if(!list.contains(obj)){                //不包含就添加
+                list.add(obj);
+            }
+        }
+        return (ArrayList) list;
+
     }
 }

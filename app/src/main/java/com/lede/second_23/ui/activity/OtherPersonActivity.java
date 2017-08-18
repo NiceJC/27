@@ -95,9 +95,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     private IsCollectBean isCollectBean;
     private ImageView iv_set;
     private TextView tv_title;
-    private TextView tv_near;
-    private TextView tv_all;
     private boolean isNear=true;
+    private ImageView iv_near;
+    private ImageView iv_all;
 
 
     @Override
@@ -113,6 +113,7 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         isSelf=userId.equals(SPUtils.get(this,GlobalConstants.USERID,""));
         requestQueue = GlobalConstants.getRequestQueue();
         loadPersonInfoService();
+//        getPersonAllForum();
         isConcern();
     }
 
@@ -271,6 +272,13 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             Glide.with(context)
                     .load(R.mipmap.gril)
                     .into(iv_userSex);
+        }
+        if (isNear) {
+            iv_all.setImageResource(R.mipmap.quanzi);
+            iv_near.setImageResource(R.mipmap.nearby_current);
+        }else {
+            iv_all.setImageResource(R.mipmap.quanzi_current);
+            iv_near.setImageResource(R.mipmap.nearby);
         }
         if (isCollectBean!=null) {
             if (!isSelf) {
@@ -457,21 +465,22 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
 //                                selectMeida.add(localMedia);
 //                            }
 
-                            intent = new Intent(context, MyPhotoActivity.class);
+                            intent = new Intent(context, ConcernActivity_2.class);
                             intent.putExtra("userId", personBean.getData().getUser().getUserId());
-                            intent.putExtra("forumId", (long) dataBean.getForumId());
+//                            intent.putExtra("forumId", (long) dataBean.getForumId());
+                            intent.putExtra("time",dataBean.getCreateTime());
                             intent.putStringArrayListExtra("banner", imgurlList);
                             intent.putExtra("text", dataBean.getText());
-                            intent.putExtra("time",dataBean.getCreateTime().substring(0,10));
+//                            intent.putExtra("time",dataBean.getCreateTime().substring(0,10));
                             context.startActivity(intent);
 //                            PictureConfig.getInstance().externalPicturePreview((Activity) context, "/23秒", 0, selectMeida);
                         }else {
-                            intent = new Intent(context, MyVideoActivity.class);
+                            intent = new Intent(context, ConcernActivity_2.class);
                             intent.putExtra("videourl", dataBean.getForumMedia().getPath());
                             intent.putExtra("picurl", dataBean.getForumMedia().getPic());
                             intent.putExtra("text", dataBean.getText());
                             intent.putExtra("userId", personBean.getData().getUser().getUserId());
-                            intent.putExtra("forumId", (long) dataBean.getForumId());
+//                            intent.putExtra("forumId", (long) dataBean.getForumId());
                             intent.putExtra("time",dataBean.getCreateTime().substring(0,10));
                             context.startActivity(intent);
                         }
@@ -546,10 +555,10 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         View view=layoutInflater.inflate(R.layout.item_person_fragment_head,null);
         iv_userSex = (ImageView) view.findViewById(R.id.iv_person_fragment_item_sex);
         tv_username = (TextView) view.findViewById(R.id.tv_personfragment_username);
-        tv_near = (TextView) view.findViewById(R.id.tv_personfragment_near);
-        tv_near.setOnClickListener(this);
-        tv_all = (TextView) view.findViewById(R.id.tv_personfragment_all);
-        tv_all.setOnClickListener(this);
+        iv_near = (ImageView) view.findViewById(R.id.iv_personfragment_near);
+        iv_near.setOnClickListener(this);
+        iv_all = (ImageView) view.findViewById(R.id.iv_personfragment_all);
+        iv_all.setOnClickListener(this);
         tv_sign = (TextView) view.findViewById(R.id.tv_personfragment_sign);
         ctiv_userimg = (CircleTextImageView) view.findViewById(R.id.ctiv_personfragment_userimg);
         ctiv_userimg.setOnClickListener(this);
@@ -665,10 +674,11 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
             case R.id.iv_personfragment_back:
                 finish();
                 break;
-            case R.id.tv_personfragment_near:
+            case R.id.iv_personfragment_near:
                 if (isNear) {
 
                 }else {
+
                     isNear =true;
                     addHeadView(nearAdapter);
                     reFreshHead();
@@ -677,8 +687,9 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
                     loadPersonInfoService();
                 }
                 break;
-            case R.id.tv_personfragment_all:
+            case R.id.iv_personfragment_all:
                 if (isNear) {
+
                     isNear =false;
                     addHeadView(allForumAdapter);
                     reFreshHead();

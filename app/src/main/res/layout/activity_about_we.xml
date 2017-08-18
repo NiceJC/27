@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/iv_about_activity_back"
-            android:layout_width="25dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/back" />
@@ -34,5 +34,5 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/about"/>
+        android:src="@mipmap/about_we"/>
 </LinearLayout>

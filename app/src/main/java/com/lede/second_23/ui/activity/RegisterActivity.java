@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -71,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
 
 
     @OnClick({R.id.tv_register_activity_register, R.id.bt_register_activity_send
-            ,R.id.iv_register_activity_back})
+            ,R.id.iv_register_activity_back,R.id.tv_register_activity_login})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.bt_register_activity_send:
@@ -116,6 +117,10 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                 submitValidateToServce(phone, validate);
                 break;
             case R.id.iv_register_activity_back:
+                finish();
+                break;
+            case R.id.tv_register_activity_login:
+                startActivity(new Intent(this,LoginActivity.class));
                 finish();
                 break;
         }
@@ -213,6 +218,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                         JSONObject jsonobject = new JSONObject(json);
                         msg = jsonobject.getString("msg");
                         if (msg.equals("注册成功")) {
+                            startActivity(new Intent(this,WelcomeActivity.class));
                             finish();
                         }else{
                             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();

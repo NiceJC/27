@@ -101,5 +101,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="black_36px_text">
+        <item name="android:textColor">#222222</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
 
 </resources>

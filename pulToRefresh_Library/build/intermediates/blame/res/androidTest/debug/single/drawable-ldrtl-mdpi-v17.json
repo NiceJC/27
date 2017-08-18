@@ -1,14 +1,14 @@
 [
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-mdpi-v17/abc_ic_menu_cut_mtrl_alpha.png",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-ldrtl-mdpi-v17/abc_ic_menu_cut_mtrl_alpha.png"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-ldrtl-mdpi-v17/abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-mdpi-v17/abc_ic_menu_copy_mtrl_am_alpha.png",
-        "source": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/res/drawable-ldrtl-mdpi-v17/abc_ic_menu_copy_mtrl_am_alpha.png"
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-ldrtl-mdpi-v17/abc_ic_menu_copy_mtrl_am_alpha.png"
     }
 ]

@@ -29,6 +29,7 @@ import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
 import com.lede.second_23.ui.activity.EditInformationActivity;
 import com.lede.second_23.ui.activity.ForumDetailActivity;
+import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.MyPhotoActivity;
 import com.lede.second_23.ui.activity.MyVideoActivity;
 import com.lede.second_23.ui.activity.SetActivity;
@@ -102,6 +103,8 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private CommonAdapter nearAdapter;
     private CommonAdapter allForumAdapter;
     private Gson gson;
+    private ImageView iv_near;
+    private ImageView iv_all;
 
     @Override
     public void onAttach(Context context) {
@@ -127,7 +130,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
         gson = new Gson();
         requestQueue = GlobalConstants.getRequestQueue();
         loadPersonInfoService();
-
+//        getPersonAllForum();
         return view;
     }
 
@@ -269,6 +272,13 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
             Glide.with(context)
                     .load(R.mipmap.gril)
                     .into(iv_userSex);
+        }
+        if (isNear) {
+            iv_all.setImageResource(R.mipmap.quanzi);
+            iv_near.setImageResource(R.mipmap.nearby_current);
+        }else {
+            iv_all.setImageResource(R.mipmap.quanzi_current);
+            iv_near.setImageResource(R.mipmap.nearby);
         }
         tv_sign.setText(personBean.getData().getUser().getNote());
         Glide.with(context)
@@ -535,10 +545,10 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     private View setHeadView() {
         View view=layoutInflater.inflate(R.layout.item_person_fragment_head,null);
         iv_userSex = (ImageView) view.findViewById(R.id.iv_person_fragment_item_sex);
-        tv_near = (TextView) view.findViewById(R.id.tv_personfragment_near);
-        tv_near.setOnClickListener(this);
-        tv_all = (TextView) view.findViewById(R.id.tv_personfragment_all);
-        tv_all.setOnClickListener(this);
+        iv_near = (ImageView) view.findViewById(R.id.iv_personfragment_near);
+        iv_near.setOnClickListener(this);
+        iv_all = (ImageView) view.findViewById(R.id.iv_personfragment_all);
+        iv_all.setOnClickListener(this);
         tv_username = (TextView) view.findViewById(R.id.tv_personfragment_username);
         tv_sign = (TextView) view.findViewById(R.id.tv_personfragment_sign);
         ctiv_userimg = (CircleTextImageView) view.findViewById(R.id.ctiv_personfragment_userimg);
@@ -628,9 +638,10 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
                 startActivity(new Intent(context, ConversationListDynamicActivtiy.class));
                 break;
             case R.id.iv_personfragment_back:
-                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
+//                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
+                MainActivity.instance.vp_main_fg.setCurrentItem(2);
                 break;
-            case R.id.tv_personfragment_near:
+            case R.id.iv_personfragment_near:
                 if (isNear) {
 
                 }else {
@@ -642,7 +653,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
                     loadPersonInfoService();
                 }
                 break;
-            case R.id.tv_personfragment_all:
+            case R.id.iv_personfragment_all:
                 if (isNear) {
                     isNear = false;
                     addHeadView(allForumAdapter);

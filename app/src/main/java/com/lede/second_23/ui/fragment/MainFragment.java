@@ -38,9 +38,9 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.AllIssueActivity;
 import com.lede.second_23.ui.activity.BilateralActivity;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
-import com.lede.second_23.ui.activity.ForumActivity;
-import com.lede.second_23.ui.activity.LoginActivity;
+import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.ShowAllForumByVideoActivity;
+import com.lede.second_23.ui.activity.WelcomeActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
@@ -58,8 +58,6 @@ import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static com.lede.second_23.R.id.xcriv_main_head_myimg;
 
 
 /**
@@ -101,6 +99,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     private RelativeLayout ll_mainfragment_bottom;
     private ImageView iv_mainFragment_send;
     private ImageView iv_show_video;
+    private ImageView diyiv_myslef;
 
 
     @Override
@@ -192,6 +191,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             userList.clear();
             getLocation();
             SPUtils.put(mContext, GlobalConstants.IS_ISSUE,false);
+        }
+        if ((int) SPUtils.get(mContext, GlobalConstants.GETREPLY,0)>0) {
+
+            Glide.with(mContext).load(R.mipmap.new_myself).into(diyiv_myslef);
+        }else {
+            Glide.with(mContext).load(R.mipmap.myself).into(diyiv_myslef);
         }
     }
 
@@ -300,7 +305,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 
     private View setHeadView() {
         View view=layoutInflater.inflate(R.layout.layout_main_head,rv_mainFragment_show,false);
-        diyiv_main_head_myimg = (DIYImageView) view.findViewById(xcriv_main_head_myimg);
+        diyiv_myslef = (ImageView) view.findViewById(R.id.diyiv_main_head_myself);
+        diyiv_main_head_myimg = (DIYImageView) view.findViewById(R.id.xcriv_main_head_myimg);
         iv_show_video = (ImageView) view.findViewById(R.id.iv_main_head_show_video);
         iv_show_video.setOnClickListener(this);
         Glide.with(mContext)
@@ -443,7 +449,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         FriendBean friendBean=mGson.fromJson(json,FriendBean.class);
         if (friendBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(mContext, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(mContext,LoginActivity.class));
+            startActivity(new Intent(mContext,WelcomeActivity.class));
         }else {
             if (friendBean.getResult()==10000) {
                 for (int i = 0; i < friendBean.getData().size(); i++) {
@@ -574,12 +580,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         switch (view.getId()){
             case R.id.iv_mainFragment_person:
 //                startActivity(new Intent(getActivity(), LoginActivity.class));
-                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(1);
+//                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(1);
+                MainActivity.instance.vp_main_fg.setCurrentItem(2);
                 break;
             case R.id.iv_mainFragment_camera:
 //                ViewPager viewPager=(ViewPager)getActivity().findViewById(R.id.vp_main_fg);
 //                viewPager.setCurrentItem(0);
-                startActivity(new Intent(getActivity(), ForumActivity.class));
+//                startActivity(new Intent(getActivity(), ForumActivity.class));
+                MainActivity.instance.vp_main_fg.setCurrentItem(0);
                 break;
             case R.id.iv_mainfragment_send:
                 Intent intent=new Intent(getActivity(), AllIssueActivity.class);
@@ -680,6 +688,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             }
         });
     }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();

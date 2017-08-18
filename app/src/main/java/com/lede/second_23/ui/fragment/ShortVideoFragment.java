@@ -25,7 +25,9 @@ import android.widget.RelativeLayout;
 
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
+import com.lede.second_23.ui.activity.AllIssueActivity;
 import com.lede.second_23.ui.activity.AllIssueTextActivity;
+import com.lede.second_23.ui.activity.IssueActivity;
 import com.lede.second_23.utils.BitmapUtils;
 import com.lede.second_23.utils.CameraUtil;
 
@@ -123,16 +125,7 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                                                          //录制完成
 //                                                         img_video_shutter.setEnabled(true);
                                                          isStop=true;
-                                                         if (mediaRecorder != null) {
-                                                             mediaRecorder.stop();
-                                                             mediaRecorder.release();
-                                                             mediaRecorder = null;
-                                                             releaseCamera();
-                                                         }
-                                                         Intent intent = new Intent(getActivity(), AllIssueTextActivity.class);
-                                                         intent.putExtra("video_path", file.getPath());
-                                                         intent.putExtra("imgOrVideoType",1);
-                                                         startActivity(intent);
+
                                                      }
 //                                                     switch (motionEvent.getAction()) {
 //                                                         case MotionEvent.ACTION_DOWN:
@@ -273,7 +266,26 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                     for (int i = 0; i < PROGRESS_MAX; i++) {
                         try {
                             Thread.currentThread().sleep(150);
-                            if (isStop) {
+                            if (isStop||i==PROGRESS_MAX-1) {
+                                if (mediaRecorder != null) {
+                                    mediaRecorder.stop();
+                                    mediaRecorder.release();
+                                    mediaRecorder = null;
+                                    releaseCamera();
+                                }
+                                // 最后通知图库更新
+                                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+
+                                Intent intent=null;
+                                if (AllIssueActivity.instance.type==0) {
+                                    intent=new Intent(getActivity(), IssueActivity.class);
+                                }else {
+                                    intent = new Intent(getActivity(), AllIssueTextActivity.class);
+
+                                }
+                                intent.putExtra("video_path", file.getPath());
+                                intent.putExtra("imgOrVideoType",1);
+                                startActivity(intent);
                                 return;
                             }
                             Message message = new Message();

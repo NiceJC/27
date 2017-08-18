@@ -273,6 +273,25 @@ public class ForumVideoReplyBean {
                         this.userId = userId;
                     }
                 }
+
+                @Override
+                public boolean equals(Object obj) {
+                    if (this==obj) {
+                        return true;
+                    }
+                    if (obj==null) {
+                        return false;
+                    }
+                    if (getClass()!=obj.getClass()) {
+                        return false;
+                    }
+                    ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean other=(ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean) obj;
+                    if (!userId.equals(other.getUserId())){
+                        return false;
+                    }
+
+                    return true;
+                }
             }
         }
     }

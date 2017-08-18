@@ -16,18 +16,19 @@
             android:layout_height="75dp"
 
             android:layout_gravity="center_vertical">
-            <com.example.myapplication.views.diyimage.DIYImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:diy_image_Type="circle"
-                android:src="@mipmap/myself"
-                android:layout_centerInParent="true"/>
+
             <com.example.myapplication.views.diyimage.DIYImageView
                 android:id="@+id/xcriv_main_head_myimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 app:diy_image_Type="circle"
+                android:layout_centerInParent="true"/>
+            <ImageView
+                android:id="@+id/diyiv_main_head_myself"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/myself"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
@@ -54,7 +55,7 @@
             android:layout_height="170dp"
             android:src="@mipmap/photo_27"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="2dp"
             android:scaleType="centerCrop"/>
 
         <!--<View-->

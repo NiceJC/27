@@ -124,7 +124,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
                 DeleteBean deleteBean=mGson.fromJson(response.get(),DeleteBean.class);
                 if (deleteBean.getMsg().equals("用户没有登录")) {
                     Toast.makeText(MyVideoActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MyVideoActivity.this,LoginActivity.class));
+                    startActivity(new Intent(MyVideoActivity.this,WelcomeActivity.class));
                 }else {
                     if (deleteBean.getMsg().equals("删除成功")) {
                         Toast.makeText(MyVideoActivity.this, "删除成功", Toast.LENGTH_SHORT).show();

@@ -68,6 +68,8 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     TextView tv_edit_information_activity_hobby;
     @Bind(R.id.circle_iv_editinformation_touxiang)
     DIYImageView circle_iv_editinformation_touxiang;
+    @Bind(R.id.tv_edit_information_activity_school)
+    TextView tvEditInformationActivitySchool;
 
     private String selectedImg;
     private RequestQueue requestQueue;
@@ -109,7 +111,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             , R.id.rl_edit_information_activity_sex, R.id.rl_edit_information_activity_age
             , R.id.tv_edit_information_activity_updata, R.id.rl_edit_information_activity_city
             , R.id.rl_edit_information_activity_job, R.id.circle_iv_editinformation_touxiang
-            , R.id.iv_edit_information_activity_back})
+            , R.id.iv_edit_information_activity_back,R.id.rl_edit_information_activity_school})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -220,6 +222,12 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 break;
             case R.id.iv_edit_information_activity_back:
                 finish();
+                break;
+            case R.id.rl_edit_information_activity_school:
+                intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
+                intent.putExtra("type", 4);
+                intent.putExtra("body", tvEditInformationActivitySchool.getText().toString().trim());
+                startActivityForResult(intent, 4);
                 break;
         }
     }
@@ -349,6 +357,8 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 }
             } else if (requestCode == 2 && resultCode == 2) {
                 tv_edit_information_activity_hobby.setText(data.getStringExtra("body"));
+            }else if (requestCode==4&&resultCode==4){
+                tvEditInformationActivitySchool.setText(data.getStringExtra("body"));
             }
         }
 
@@ -391,6 +401,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             updateUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         }
         updateUserRequest.add("sex", isBoy);
+        updateUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(UPDATE_USER, updateUserRequest, this);
 
     }
@@ -415,6 +426,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         createUserRequest.add("hobby", tv_edit_information_activity_age.getText().toString().trim());
         createUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         createUserRequest.add("sex", isBoy);
+        createUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(CREATE_USER, createUserRequest, this);
 
     }
@@ -459,7 +471,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         UpUserInfoBean upUserInfoBean = mGson.fromJson(json, UpUserInfoBean.class);
         if (upUserInfoBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
             finish();
         } else {
             if (upUserInfoBean.getResult() == 10000) {
@@ -470,7 +482,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 SPUtils.put(mContext, GlobalConstants.IS_EDITINFO, true);
                 if (jumpType == 1) {
 
-                    Intent intent = new Intent(this, TestActivity.class);
+                    Intent intent = new Intent(this, WelcomeActivity.class);
                     startActivity(intent);
                     MyApplication.instance.getRongIMTokenService();
                 }
@@ -520,7 +532,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
         if (userInfoBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
             finish();
         } else {
             tv_edit_information_activity_nickname.setText(userInfoBean.getData().getInfo().getNickName());
@@ -534,12 +546,31 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 tv_edit_information_activity_sex.setText("女");
 //            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_girl);
             }
-            tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
-            tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
-            tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
+            if (userInfoBean.getData().getInfo().getNote()!=null) {
+                tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
+
+            }
+            if (userInfoBean.getData().getInfo().getHobby()!=null) {
+                tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
+
+            }
+            if (userInfoBean.getData().getInfo().getQq()!=null) {
+                tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
+
+            }
 //        tv_edit_information_activity_marry.setText(userInfoBean.getData().getInfo().getHometown());
-            tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
-            tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
+            if (userInfoBean.getData().getInfo().getWechat()!=null) {
+                tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
+
+            }
+            if (userInfoBean.getData().getInfo().getAddress()!=null) {
+                tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
+
+            }
+            if (userInfoBean.getData().getInfo().getHometown()!=null) {
+                tvEditInformationActivitySchool.setText(userInfoBean.getData().getInfo().getHometown());
+
+            }
             Glide.with(this)
                     .load(userInfoBean.getData().getInfo().getImgUrl())
 //                .placeholder(R.mipmap.loading)

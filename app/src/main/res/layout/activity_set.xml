@@ -14,8 +14,8 @@
         android:background="@color/white">
         <ImageView
             android:id="@+id/iv_set_activity_back"
-            android:layout_width="25dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@mipmap/back"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp" />
@@ -50,7 +50,9 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="性别显示"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:drawableLeft="@mipmap/set_sex"
+            android:drawablePadding="10dp"/>
         <ImageView
             android:id="@+id/iv_set_activity_go1"
             android:layout_width="wrap_content"
@@ -87,7 +89,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="年龄"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                />
 
             <TextView
                 android:id="@+id/tv_set_activity_age"
@@ -106,7 +109,7 @@
             app:min="0"
             app:max="41"
             app:reserve="1"
-            app:lineColorSelected="@color/title_darkblue"	/>
+            app:lineColorSelected="#7898fe"	/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -125,6 +128,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="距离"
+                android:drawableLeft="@mipmap/set_position"
+                android:drawablePadding="10dp"
                 android:textSize="20sp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -171,7 +176,9 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="清理缓存"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:drawableLeft="@mipmap/clean"
+            android:drawablePadding="10dp"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,6 +215,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="检查更新"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@mipmap/update"
             android:textSize="20sp"/>
         <ImageView
             android:layout_width="wrap_content"
@@ -231,7 +240,9 @@
             android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:text="清除位置"
+            android:text="位置共享"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@mipmap/set_position"
             android:textSize="20sp"/>
         <ImageView
             android:layout_width="wrap_content"
@@ -277,6 +288,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="关于我们"
+            android:drawableLeft="@mipmap/about"
+            android:drawablePadding="10dp"
             android:textSize="20sp"/>
         <ImageView
             android:layout_width="wrap_content"

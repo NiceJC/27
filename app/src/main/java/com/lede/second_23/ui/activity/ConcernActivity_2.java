@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -123,13 +122,28 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private LatLng mStartPoint;
     private LatLng mEndPoint;
     private int location_type=0;
+    private PopupWindow popupWindow;
+    private Intent intent;
+    private ArrayList<String> banner1;
+    private String text;
+    private String time;
+    private String videourl;
+    private String picurl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_concern_2);
         ButterKnife.bind(this);
-        userId = getIntent().getStringExtra("userId");
+        intent = getIntent();
+        userId = intent.getStringExtra("userId");
+//        intent.putExtra("videourl", dataBean.getForumMedia().getPath());
+//        intent.putExtra("picurl", dataBean.getForumMedia().getPic());
+        videourl = intent.getStringExtra("videourl");
+        picurl = intent.getStringExtra("picurl");
+        time = intent.getStringExtra("time");
+        banner1 = intent.getStringArrayListExtra("banner");
+        text = intent.getStringExtra("text");
 //        userid="84ba77bc08ea4e1d8c03c06f6f6c79e5";
         if (userId.equals((String) SPUtils.get(this, GlobalConstants.USERID, ""))) {
 //            ll_bottom.setVisibility(View.GONE);
@@ -223,7 +237,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_2_report:
-                showDialog();
+                showReportPopwindow();
                 break;
             case R.id.iv_concern_activity_2_declaration:
                 iv_declaration.setVisibility(View.GONE);
@@ -296,32 +310,53 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         requestQueue.add(400, concernRequest, this);
     }
 
-    //TODO 高度需要修改
-    private void showDialog() {
-        mDialog = new Dialog(this, R.style.my_dialog);
-        LinearLayout root = (LinearLayout) LayoutInflater.from(this).inflate(
-                R.layout.layout_save_or_report, null);
-        ((TextView) root.findViewById(R.id.btn_save)).setText("举报");
-        root.findViewById(R.id.btn_save).setOnClickListener(btnlistener);
+    /**
+     * 提示保存图片底部弹窗
+     */
+    private void showReportPopwindow() {
+        // 利用layoutInflater获得View
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_save_or_report, null);
 
+        // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
+
+        ((TextView) view.findViewById(R.id.btn_save)).setText("举报");
+        view.findViewById(R.id.btn_save).setOnClickListener(btnlistener);
 //        root.findViewById(R.id.btn_report).setOnClickListener(btnlistener);
-        root.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
-        mDialog.setContentView(root);
-        Window dialogWindow = mDialog.getWindow();
-        dialogWindow.setGravity(Gravity.BOTTOM);
-        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        lp.x = 0; // 新位置X坐标
-        lp.y = -20; // 新位置Y坐标
-        lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 宽度
-//      lp.height = WindowManager.LayoutParams.WRAP_CONTENT; // 高度
-//      lp.alpha = 9f; // 透明度
-        root.measure(0, 0);
-        lp.height = root.getMeasuredHeight();
-        lp.alpha = 9f; // 透明度
-        dialogWindow.setAttributes(lp);
-        mDialog.show();
+        view.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
+        popupWindow = new PopupWindow(view,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams params = this.getWindow().getAttributes();
+        params.alpha = 0.7f;
+
+        this.getWindow().setAttributes(params);
+        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+        popupWindow.setFocusable(true);
+
+
+        // 设置popWindow的显示和消失动画
+        popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
+        // 在底部显示
+//        window.showAtLocation(getActivity().findViewById(R.id.ll_prv_forum_detail_bottom),
+//                Gravity.BOTTOM, 0, 0);
+        popupWindow.showAtLocation(ll_bottom,
+                Gravity.BOTTOM, 0, 0);
+        //popWindow消失监听方法
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            @Override
+            public void onDismiss() {
+                System.out.println("popWindow消失");
+                WindowManager.LayoutParams params = ConcernActivity_2.this.getWindow().getAttributes();
+                params.alpha = 1.0f;
+
+                ConcernActivity_2.this.getWindow().setAttributes(params);
+            }
+        });
+
     }
+
 
     private View.OnClickListener btnlistener = new View.OnClickListener() {
 
@@ -329,15 +364,16 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_save:
-                    mDialog.dismiss();
+//                    mDialog.dismiss();
 //                    saveBitmap(bitmap);
+                    popupWindow.dismiss();
                     Intent intent = new Intent(ConcernActivity_2.this, ReportActivity.class);
                     startActivity(intent);
                     break;
 
                 case R.id.btn_cancel:
-                    if (mDialog != null) {
-                        mDialog.dismiss();
+                    if (popupWindow != null) {
+                        popupWindow.dismiss();
                     }
                     break;
             }
@@ -413,7 +449,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         ConcernMsgBean concernMsgBean = mGson.fromJson(json, ConcernMsgBean.class);
         if (concernMsgBean.getMsg().equals("用户没有登录")) {
             Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this,WelcomeActivity.class));
         }else {
 
             if (concernMsgBean.getMsg().equals("关注成功")) {
@@ -529,35 +565,36 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
             iv_concern_activity_concern.setClickable(true);
         }
-        if (dataBean.getForumList()!=null) {
-            Date createDate=null;
-            //"2017-05-19 17:15:40"
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (createDate!=null) {
-                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
-            }
-            //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
-            if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
-                hvp_concern_activity_2.setVisibility(View.VISIBLE);
-                jcplay_concerv_activity_2.setVisibility(View.GONE);
-                if (dataBean.getForumList().get(0).getImgs().size() != 1) {
-                    ll_inDicator.setVisibility(View.VISIBLE);
+        if (banner1==null&&videourl==null) {
+            if (dataBean.getForumList()!=null) {
+                Date createDate=null;
+                //"2017-05-19 17:15:40"
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                for (int i = 0; i < dataBean.getForumList().get(0).getImgs().size(); i++) {
-                    banner.add(dataBean.getForumList().get(0).getImgs().get(i).getUrl());
-                    ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
-                    if (i == 0) {
-                        inDicator.setImageResource(R.mipmap.current);
+                if (createDate!=null) {
+                    tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+                }
+                //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
+                if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
+                    hvp_concern_activity_2.setVisibility(View.VISIBLE);
+                    jcplay_concerv_activity_2.setVisibility(View.GONE);
+                    if (dataBean.getForumList().get(0).getImgs().size() != 1) {
+                        ll_inDicator.setVisibility(View.VISIBLE);
                     }
-                    ll_inDicator.addView(inDicator);
-                }
+                    for (int i = 0; i < dataBean.getForumList().get(0).getImgs().size(); i++) {
+                        banner.add(dataBean.getForumList().get(0).getImgs().get(i).getUrl());
+                        ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
+                        if (i == 0) {
+                            inDicator.setImageResource(R.mipmap.current);
+                        }
+                        ll_inDicator.addView(inDicator);
+                    }
 
-                ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
+                    ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
 //                adapter.getItem(i).getChildFragmentManager().getFragments().get(i).getView().setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
@@ -567,48 +604,108 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 //        tv_text.setText(text);
 //        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 
-                hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
-                            if (i == position) {
-                                ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
-                            } else {
-                                ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+                    hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
+                                if (i == position) {
+                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
+                                } else {
+                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onPageSelected(int position) {
+                        @Override
+                        public void onPageSelected(int position) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
 
-                    }
-                });
-                hvp_concern_activity_2.setAdapter(adapter);
+                        }
+                    });
+                    hvp_concern_activity_2.setAdapter(adapter);
 //            Glide.with(this)
 //                    .load(dataBean.getForumList().get(0).getImgs().get(0).getUrl())
 //                    .error(R.mipmap.ic_launcher)
 //                    .into(iv_concern_activity_user_img);
-            } else {
-                hvp_concern_activity_2.setVisibility(View.GONE);
-                jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
-                jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
-                        JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-                Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
+                } else {
+                    hvp_concern_activity_2.setVisibility(View.GONE);
+                    jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
+                    jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
+                            JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+                    Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
 
 //            Glide.with(this)
 //                    .load(dataBean.getForumList().get(0).getForumMedia().getPic())
 //                    .error(R.mipmap.ic_launcher)
 //                    .into(iv_concern_activity_user_img);
+                }
+            }else {
+                Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
             }
+        }else if (banner1!=null){
+            Date createDate=null;
+            //"2017-05-19 17:15:40"
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                createDate=formatter.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (createDate!=null) {
+                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+            }
+            hvp_concern_activity_2.setVisibility(View.VISIBLE);
+            jcplay_concerv_activity_2.setVisibility(View.GONE);
+            if (banner1.size() != 1) {
+                ll_inDicator.setVisibility(View.VISIBLE);
+            }
+            for (int i = 0; i < banner1.size(); i++) {
+                ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
+                if (i == 0) {
+                    inDicator.setImageResource(R.mipmap.current);
+                }
+                ll_inDicator.addView(inDicator);
+            }
+
+            ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner1);
+
+            hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
+                        if (i == position) {
+                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
+                        } else {
+                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+                        }
+                    }
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+            hvp_concern_activity_2.setAdapter(adapter);
+
         }else {
-            Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
+            hvp_concern_activity_2.setVisibility(View.GONE);
+            jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
+            jcplay_concerv_activity_2.setUp(videourl,
+                    JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+            Glide.with(this).load(picurl).into(jcplay_concerv_activity_2.thumbImageView);
+
         }
+
 
         username = dataBean.getInfo().getNickName();
 //        ConcernUserInfoBean.DataBean.InfoBean infoBean=dataBean.getInfo();
@@ -631,8 +728,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
 
         PopupWindow window = new PopupWindow(view,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT);
+                WindowManager.LayoutParams.MATCH_PARENT,100);
 
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);
@@ -659,9 +755,14 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 //                System.out.println("第一个按钮被点击了");
 //            }
 //        });
-        if (concernUserInfoBean.getData().getForumList()!=null) {
-            tv_text.setText(concernUserInfoBean.getData().getForumList().get(0).getText().toString().trim());
+        if (text!=null) {
+            tv_text.setText(text);
+        }else {
+            if (concernUserInfoBean.getData().getForumList()!=null) {
+                tv_text.setText(concernUserInfoBean.getData().getForumList().get(0).getText().toString().trim());
+            }
         }
+
          //popWindow消失监听方法
         window.setOnDismissListener(new PopupWindow.OnDismissListener() {
 

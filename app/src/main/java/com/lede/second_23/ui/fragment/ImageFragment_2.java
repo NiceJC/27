@@ -60,7 +60,7 @@ public class ImageFragment_2 extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_2, container, false);
         image = (PhotoView) view.findViewById(R.id.image);
-        Glide.with(getContext()).load(imageUrl).into(image);
+        Glide.with(getContext()).load(imageUrl).placeholder(R.mipmap.loading).into(image);
 //        image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
 //            @Override
 //            public void onPhotoTap(View view, float x, float y) {
