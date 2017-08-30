@@ -444,8 +444,8 @@ public class ForumVideoReplyActivity extends AppCompatActivity implements Surfac
             if (videoSiezes != null && videoSiezes.size() > 0) {
                 //拿到一个预览宽度最小为720像素的预览值
                 Camera.Size videoSize = CameraUtil.getInstance().getPropVideoSize(videoSiezes, 720);
-                video_width = videoSize.width;
-                video_height = videoSize.height;
+                video_width = 1280;
+                video_height = 720;
 //                video_width = videoSize.width;
 //                video_height = videoSize.height;
                 Log.i("TAG", "video_width===" + video_width);

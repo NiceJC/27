@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.myapplication.views.diyimage.DIYImageView;
@@ -29,8 +28,8 @@ public class AllIssueActivity extends AppCompatActivity {
     ImageButton ibAllIssueActivityChange;
     @Bind(R.id.diyiv_all_issue_activity_show)
     public DIYImageView diyivAllIssueActivityShow;
-    @Bind(R.id.iv_all_issue_activity_pic)
-    ImageView ivAllIssueActivityPic;
+//    @Bind(R.id.iv_all_issue_activity_pic)
+//    ImageView ivAllIssueActivityPic;
     private FragmentManager supportFragmentManager;
     private CameraFragment cameraFragment;
     private boolean isCamera = true;
@@ -53,7 +52,7 @@ public class AllIssueActivity extends AppCompatActivity {
         supportFragmentManager.beginTransaction().replace(R.id.rr_all_issue_activity_show, cameraFragment).commit();
     }
 
-    @OnClick({R.id.ib_all_issue_activity_change, R.id.iv_all_issue_activity_pic})
+    @OnClick({R.id.ib_all_issue_activity_change, R.id.diyiv_all_issue_activity_show})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_all_issue_activity_change:
@@ -67,7 +66,7 @@ public class AllIssueActivity extends AppCompatActivity {
                     ibAllIssueActivityChange.setImageResource(R.mipmap.change_video);
                 }
                 break;
-            case R.id.iv_all_issue_activity_pic:
+            case R.id.diyiv_all_issue_activity_show:
                 if (type==1){
                     Intent intent=new Intent(instance, PicOrVideoChooseActivity.class);
                     startActivity(intent);

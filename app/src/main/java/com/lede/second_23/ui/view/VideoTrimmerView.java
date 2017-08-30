@@ -79,6 +79,8 @@ public class VideoTrimmerView extends FrameLayout {
     private boolean isFromRestore = false;
 
     private final MessageHandler mMessageHandler = new MessageHandler(this);
+    private int videoHeight;
+    private int videoWidth;
 
     public VideoTrimmerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -381,6 +383,8 @@ public class VideoTrimmerView extends FrameLayout {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                videoHeight = mp.getVideoHeight();
+                videoWidth = mp.getVideoWidth();
                 onVideoPrepared(mp);
             }
         });
@@ -416,7 +420,9 @@ public class VideoTrimmerView extends FrameLayout {
             Toast.makeText(mContext, "视频长不足5秒,无法上传", Toast.LENGTH_SHORT).show();
         }else{
             mVideoView.pause();
-            TrimVideoUtil.trimVideo(mContext, mSrc.getPath(), getTrimmedVideoPath(), mStartPosition, mEndPosition, mOnTrimVideoListener);
+                TrimVideoUtil.trimVideo(mContext, mSrc.getPath(), getTrimmedVideoPath(), mStartPosition, mEndPosition,videoHeight,videoWidth, mOnTrimVideoListener);
+
+
         }
     }
 

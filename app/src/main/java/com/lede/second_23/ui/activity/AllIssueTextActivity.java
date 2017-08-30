@@ -483,6 +483,10 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
             isFirstIn = false;
 
         }
+//        else {
+//            selectMedia.add(null);
+//            mAdapter.notifyDataSetChanged();
+//        }
         Log.i("TAB", "after  onResume: " + selectMedia.size() + "  imgOrVideoType=" + imgOrVideoType);
     }
 

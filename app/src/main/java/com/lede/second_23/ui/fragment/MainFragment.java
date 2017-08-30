@@ -32,6 +32,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
+import com.lede.second_23.bean.BannerBean;
 import com.lede.second_23.bean.FriendBean;
 import com.lede.second_23.bean.HomePagerBean;
 import com.lede.second_23.global.GlobalConstants;
@@ -41,9 +42,9 @@ import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.ShowAllForumByVideoActivity;
 import com.lede.second_23.ui.activity.WelcomeActivity;
-import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
+import com.lede.second_23.utils.UiUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -64,7 +65,11 @@ import java.util.Date;
  * Created by ld on 17/2/22.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener, AMapLocationListener {
+public class MainFragment extends Fragment implements View.OnClickListener, AMapLocationListener, OnResponseListener<String> {
+
+    private static final int GET_NEAR_FORUM=1000;
+    private static final int GET_FOLLOWERS=2000;
+    private static final int GET_BANNER=3000;
 
 //    private ViewPager vp_mainFragment_carousel;
     private PullToRrefreshRecyclerView rv_mainFragment_show;
@@ -118,16 +123,25 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 //        }
+        //获取请求队列
+        requestQueue = GlobalConstants.getRequestQueue();
         instance=this;
         Log.i("TAB", "onCreateView: MainFragment");
         getLocation();
+
         animator=new ObjectAnimator();
 //        userList.clear();
-        //获取请求队列
-        requestQueue = GlobalConstants.getRequestQueue();
+
+        getBanner();
         mAdapter= new CommonAdapter<HomePagerBean.DataBean.ForumListBean>(mContext, R.layout.mainfragment_item, userList) {
             @Override
             protected void convert(ViewHolder holder, final HomePagerBean.DataBean.ForumListBean forumListBean, int position) {
+                if (position!=0&&(position-1)%2==1) {
+                    GridLayoutManager.LayoutParams pl= (GridLayoutManager.LayoutParams) holder.getConvertView().getLayoutParams();
+                    pl.setMarginEnd(UiUtils.dip2px(5));
+                    holder.getConvertView().setLayoutParams(pl);
+                }
+
                 DIYImageView diy_iv=holder.getView(R.id.iv_item_test);
                 ImageView iv_photos=holder.getView(R.id.iv_main_fragment_item_photos);
                 ImageView iv_play=holder.getView(R.id.iv_main_fragment_item_play);
@@ -181,6 +195,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         //添加头布局
         addHeadView(mAdapter);
         return view;
+    }
+
+    private void getBanner() {
+        Request<String> getBannerRequest=NoHttp.createStringRequest(GlobalConstants.URL+"/banner/showBanner",RequestMethod.POST);
+        requestQueue.add(GET_BANNER,getBannerRequest,this);
     }
 
     @Override
@@ -374,44 +393,45 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         userRequest.add("lat",myLatitude);
 //        userRequest.add("pageNum",1);
 //        userRequest.add("pageSize",20);
-        requestQueue.add(100, userRequest, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-                Log.i("TAB", "onStart: MainFragment");
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                L.i("responseCode"+response.responseCode());
-                Log.i("TAG", "UserServiceonSucceed: "+response.get());
-                if (response.responseCode()==200) {
-                    if (!isRefreshCompleted) {
-                        rv_mainFragment_show.onRefreshComplete();
-                        isRefreshCompleted=true;
-                    }
-
-                    if (response.get()==null) {
-                        Toast.makeText(mContext, "当前地区没有附近的人发布过动态哦", Toast.LENGTH_SHORT).show();
-                    }else {
-                        parseUserJson(response.get());
-                    }
-                }else {
-                    Toast.makeText(mContext, "网络访问出错", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-                Log.i("TAB", "MainFragmentOnFailed: ");
-            }
-
-            @Override
-            public void onFinish(int what) {
-                Log.i("TAB", "onFinish: MainFragment");
-            }
-        });
+        requestQueue.add(GET_NEAR_FORUM,userRequest,this);
+//        requestQueue.add(100, userRequest, new OnResponseListener<String>() {
+//            @Override
+//            public void onStart(int what) {
+//                Log.i("TAB", "onStart: MainFragment");
+//            }
+//
+//            @Override
+//            public void onSucceed(int what, Response<String> response) {
+//                L.i("responseCode"+response.responseCode());
+//                Log.i("TAG", "UserServiceonSucceed: "+response.get());
+//                if (response.responseCode()==200) {
+//                    if (!isRefreshCompleted) {
+//                        rv_mainFragment_show.onRefreshComplete();
+//                        isRefreshCompleted=true;
+//                    }
+//
+//                    if (response.get()==null) {
+//                        Toast.makeText(mContext, "当前地区没有附近的人发布过动态哦", Toast.LENGTH_SHORT).show();
+//                    }else {
+//                        parseUserJson(response.get());
+//                    }
+//                }else {
+//                    Toast.makeText(mContext, "网络访问出错", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailed(int what, Response<String> response) {
+//                Log.i("TAB", "MainFragmentOnFailed: ");
+//            }
+//
+//            @Override
+//            public void onFinish(int what) {
+//                Log.i("TAB", "onFinish: MainFragment");
+//            }
+//        });
 
         /**
          * 获取收到的招呼
@@ -420,29 +440,30 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         followers.add("access_token",(String) SPUtils.get(mContext,GlobalConstants.TOKEN,""));
         followers.add("pageNum",1);
         followers.add("pageSize",100);
-        requestQueue.add(200, followers, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                L.i("TAB",response.get());
-                parseFriendJson(response.get());
-
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
+        requestQueue.add(GET_FOLLOWERS,followers,this);
+//        requestQueue.add(200, followers, new OnResponseListener<String>() {
+//            @Override
+//            public void onStart(int what) {
+//
+//            }
+//
+//            @Override
+//            public void onSucceed(int what, Response<String> response) {
+//                L.i("TAB",response.get());
+//                parseFriendJson(response.get());
+//
+//            }
+//
+//            @Override
+//            public void onFailed(int what, Response<String> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish(int what) {
+//
+//            }
+//        });
     }
 
     private void parseFriendJson(String json) {
@@ -694,5 +715,60 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     public void onDestroy() {
         super.onDestroy();
         mlocationClient.onDestroy();
+    }
+
+    @Override
+    public void onStart(int what) {
+
+    }
+
+    @Override
+    public void onSucceed(int what, Response<String> response) {
+        Log.i("TAG", "UserServiceonSucceed: "+response.get());
+        switch (what) {
+            case GET_NEAR_FORUM:
+
+                if (response.responseCode()==200) {
+                    if (!isRefreshCompleted) {
+                        rv_mainFragment_show.onRefreshComplete();
+                        isRefreshCompleted=true;
+                    }
+
+                    if (response.get()==null) {
+                        Toast.makeText(mContext, "当前地区没有附近的人发布过动态哦", Toast.LENGTH_SHORT).show();
+                    }else {
+                        parseUserJson(response.get());
+                    }
+                }else {
+                    Toast.makeText(mContext, "网络访问出错", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case GET_FOLLOWERS:
+                parseFriendJson(response.get());
+                break;
+            case GET_BANNER:
+                parseBanner(response.get());
+                break;
+        }
+    }
+
+
+
+    @Override
+    public void onFailed(int what, Response<String> response) {
+
+    }
+
+    @Override
+    public void onFinish(int what) {
+
+    }
+    private void parseBanner(String json) {
+        BannerBean bannerBean=mGson.fromJson(json,BannerBean.class);
+        for (int i = 0; i < bannerBean.getData().getAllBannerList().size(); i++) {
+            if (bannerBean.getData().getAllBannerList().get(i).getSort()==0) {
+                Glide.with(mContext).load(bannerBean.getData().getAllBannerList().get(i).getUrlPic()).into(iv_show_video);
+            }
+        }
     }
 }

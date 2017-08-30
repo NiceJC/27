@@ -5,6 +5,7 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.lede.second_23.ui.activity.RegisterActivity">
 
     <ImageView
@@ -20,7 +21,7 @@
         android:layout_width="164dp"
         android:layout_height="24.5dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:src="@mipmap/logo_27_twenty_seven" />
 
     <android.support.v7.widget.CardView

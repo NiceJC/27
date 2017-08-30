@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context="com.lede.second_23.ui.activity.ForumActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,16 +17,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/back" />
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/back_right" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/iv_forum_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="发现"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:src="@mipmap/forum_discover"
+             />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

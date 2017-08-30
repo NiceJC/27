@@ -21,7 +21,9 @@
         app:diy_round_radius="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
+
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:scaleType="centerCrop" />
     <ImageView
         android:id="@+id/iv_main_fragment_item_photos"

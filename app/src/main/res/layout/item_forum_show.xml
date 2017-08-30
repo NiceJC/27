@@ -24,7 +24,7 @@
             android:layout_marginLeft="10dp"
             android:text=""
             android:gravity="center"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textColor="#333333"/>
         <TextView
             android:id="@+id/tv_item_forum_time"
@@ -111,6 +111,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
-        android:background="#cccccc" />
+        android:background="#eeeeee" />
 </LinearLayout>

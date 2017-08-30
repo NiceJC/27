@@ -203,8 +203,10 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MyPhotoActivity" />
-        <activity android:name=".ui.activity.MyVideoActivity" />
+        <activity android:name=".ui.activity.MyPhotoActivity"
+            android:theme="@style/AppTheme2"/>
+        <activity android:name=".ui.activity.MyVideoActivity"
+            android:theme="@style/AppTheme2"/>
         <activity android:name=".ui.activity.OtherPersonActivity" />
         <activity android:name=".ui.activity.PermissionsActivity" />
         <activity android:name=".ui.activity.WelcomeActivity">
@@ -256,7 +258,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyFullScreenTheme" />
         <activity android:name=".ui.activity.TrimmerActivity" />
-        <activity android:name=".ui.activity.ForumPicActivity" />
+        <activity android:name=".ui.activity.ForumPicActivity"
+            android:theme="@style/AppTheme2"/>
         <activity
             android:name=".ui.activity.LoginOrRegisterActivity"
             android:theme="@style/MyFullScreenTheme"></activity>

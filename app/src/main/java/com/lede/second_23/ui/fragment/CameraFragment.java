@@ -207,6 +207,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                                 CameraUtil.getInstance().turnLightOn(mCamera);
                                 break;
                             case 2:
+                                //关闭 部分机型会出现自动还是常亮的状况 所以这里先关闭在设置为自动
+                                CameraUtil.getInstance().turnLightOff(mCamera);
                                 //自动
                                 CameraUtil.getInstance().turnLightAuto(mCamera);
                                 break;

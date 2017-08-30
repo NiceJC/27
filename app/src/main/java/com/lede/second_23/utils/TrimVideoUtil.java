@@ -35,7 +35,7 @@ public class TrimVideoUtil {
     private static final int thumb_Height = UnitConverter.dpToPx(60);
     private static final long one_frame_time = 1000000;
 
-    public static void trimVideo(Context context, String inputFile, final String outputFile, long startMs, long endMs, final OnTrimVideoListener callback) {
+    public static void trimVideo(Context context, String inputFile, final String outputFile, long startMs, long endMs,int height,int width, final OnTrimVideoListener callback) {
         final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         //TODO 记得把输出路径保存 上传的时候要用
          final String outputName = "trimmedVideo_" + timeStamp + ".mp4";
@@ -50,13 +50,31 @@ public class TrimVideoUtil {
          -vcodec copy 和 -acodec copy 表示所要使用的视频和音频的编码格式，这里指定为copy表示原样拷贝；
          INPUT，输入视频文件；
          OUTPUT，输出视频文件*/
-        String cmd = "-ss " + start + " -t " + duration + " -i " + inputFile + " -vcodec copy -acodec copy " + outputFile + "/" + outputName;
-        String[] command = cmd.split(" ");
+
+
+//        String cmd = "-ss " + start + " -t " + duration + " -i " + inputFile + " -vcodec copy -acodec copy " + outputFile + "/" + outputName;
+//        String[] command = cmd.split(" ");
+        String cmd =null;
+//        if (width<=height) {
+//            cmd = "-ss!" + start + "!-t!" + duration + "!-i!" + inputFile +"!-metadata:s:v!rotate=\"0\""+"!-vf!crop="+width+":"+width+":0:"+(height-width)/2+ "!-vcodec!libx264!-acodec!copy!" + outputFile + "/" + outputName;
+//
+//        }else {
+//            cmd = "-ss!" + start + "!-t!" + duration + "!-i!" + inputFile +"!-metadata:s:v!rotate=\"0\""+"!-vf!crop="+height+":"+height+":"+(width-height)/2+":0"+"!-vcodec!libx264!-acodec!copy!" + outputFile + "/" + outputName;
+//
+//        }
+        cmd = "-ss!" + start + "!-t!" + duration + "!-i!" + inputFile +"!-vcodec!copy!-acodec!copy!" + outputFile + "/" + outputName;
+
+        String[] command = cmd.split("!");
+        for (int i = 0; i < command.length; i++) {
+//            System.out.print(command[i]+" ");
+            Log.i("cmd", "trimVideo: "+command[i]);
+        }
         final String path=outputFile+"/"+outputName;
         try {
             FFmpeg.getInstance(context).execute(command, new ExecuteBinaryResponseHandler() {
                 @Override
                 public void onFailure(String s) {
+                    Log.i("trimmer", "onFailure: "+s);
                 }
 
                 @Override
@@ -67,11 +85,13 @@ public class TrimVideoUtil {
 
                 @Override
                 public void onStart() {
+                    Log.i("trimmer", "onStart: ");
                     callback.onStartTrim();
                 }
 
                 @Override
                 public void onFinish() {
+                    Log.i("trimmer", "onFinish: ");
                 }
             });
         } catch (FFmpegCommandAlreadyRunningException e) {

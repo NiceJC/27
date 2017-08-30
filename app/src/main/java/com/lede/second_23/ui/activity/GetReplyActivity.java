@@ -86,7 +86,12 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
                 ImageView iv_forum_pic=holder.getView(R.id.iv_item_get_reply_forum_pic);
                 tv_nickname.setText(listBean.getUserInfo().getNickName());
                 tv_time.setText(listBean.getCreatTime());
-                tv_text.setText("回复: "+listBean.getNoticeText());
+                if (listBean.getNoticeType()==0) {
+                    tv_text.setText("评论: "+listBean.getNoticeText());
+                }else {
+                    tv_text.setText("回复: "+listBean.getNoticeText());
+                }
+
                 Glide.with(context)
                         .load(listBean.getUserInfo().getImgUrl())
                         .into(diy_userimg);

@@ -4,7 +4,7 @@
     android:id="@+id/activity_my_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="#222222"
 
     tools:context="com.lede.second_23.ui.activity.MyVideoActivity">
     <RelativeLayout
@@ -28,8 +28,8 @@
             android:layout_centerInParent="true"/>
         <ImageView
             android:id="@+id/iv_my_video_menu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             android:layout_alignParentRight="true"

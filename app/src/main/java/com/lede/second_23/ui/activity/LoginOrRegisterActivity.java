@@ -101,7 +101,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 super.onAnimationStart(animation);
                 Message msg=new Message();
                 msg.what=3;
-                mHandler.sendMessageDelayed(msg,2000);
+                mHandler.sendMessageDelayed(msg,1000);
             }
         });
         animatorSet03.addListener(new AnimatorListenerAdapter() {
@@ -127,14 +127,14 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 super.onAnimationStart(animation);
                 Message msg=new Message();
                 msg.what=2;
-                mHandler.sendMessageDelayed(msg,2000);
+                mHandler.sendMessageDelayed(msg,1000);
             }
 
 
         });
-        animatorSet02.setDuration(6000);
-        animatorSet03.setDuration(6000);
-        animatorSet01.setDuration(6000);
+        animatorSet02.setDuration(3000);
+        animatorSet03.setDuration(3000);
+        animatorSet01.setDuration(3000);
         animatorSet01.start();
     }
 

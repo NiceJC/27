@@ -639,7 +639,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
                 break;
             case R.id.iv_personfragment_back:
 //                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
-                MainActivity.instance.vp_main_fg.setCurrentItem(2);
+                MainActivity.instance.vp_main_fg.setCurrentItem(1);
                 break;
             case R.id.iv_personfragment_near:
                 if (isNear) {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lede.second_23.R;
+import com.lede.second_23.bean.MsgBean;
 import com.lede.second_23.bean.ReportBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.L;
@@ -44,6 +45,7 @@ public class ReportActivity extends AppCompatActivity implements OnResponseListe
     private long commentId;
     private int replyId;
     private long videoId;
+    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ReportActivity extends AppCompatActivity implements OnResponseListe
         ButterKnife.bind(this);
         //获取服务器队列
         requestQueue = GlobalConstants.getRequestQueue();
+        mGson =new Gson();
         intent = getIntent();
         forumId = intent.getLongExtra("forumId",0l);
         commentId = intent.getLongExtra("commentId",0);
@@ -128,8 +131,8 @@ public class ReportActivity extends AppCompatActivity implements OnResponseListe
     }
 
     private void parseJson(String json) {
-        Gson mGson=new Gson();
-        ReportBean reportBean=mGson.fromJson(json,ReportBean.class);
+
+        ReportBean reportBean= mGson.fromJson(json,ReportBean.class);
         if (reportBean.getResult()==10000) {
             Toast.makeText(this, "举报成功", Toast.LENGTH_SHORT).show();
             finish();
@@ -151,10 +154,15 @@ public class ReportActivity extends AppCompatActivity implements OnResponseListe
                 parseJson(response.get());
                 break;
             case 2000:
-
+                parseReportJson(response.get());
                 break;
         }
 
+    }
+
+    private void parseReportJson(String json) {
+        MsgBean msg=mGson.fromJson(json,MsgBean.class);
+        Toast.makeText(this,msg.getMsg(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

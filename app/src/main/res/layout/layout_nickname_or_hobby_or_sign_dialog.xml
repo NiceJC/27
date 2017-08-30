@@ -33,7 +33,7 @@
         android:gravity="center"
         android:textSize="20sp"
         android:textColor="#ffffff"
-        android:background="#3b5998"
+        android:background="#7898fe"
         android:layout_alignParentBottom="true"/>
 
 

@@ -96,8 +96,8 @@ public class MainActivity extends FragmentActivity {
 //        fragmentList.add(issueFragment);
         forumFragment = new ForumFragment();
         fragmentList.add(forumFragment);
-        childFragment=new ChildFragment();
-        fragmentList.add(childFragment);
+//        childFragment=new ChildFragment();
+//        fragmentList.add(childFragment);
         mainFragment = new MainFragment();
         personFragment_1 = new PersonFragment_1();
         fragmentList.add(mainFragment);
@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity {
 //        DisplayMetrics dm = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(dm);
 //        widthPixels= dm.widthPixels;
-
+        vp_main_fg.setOffscreenPageLimit(2);
         vp_main_fg.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
         vp_main_fg.setCurrentItem(1,false);
 //        vp_main_fg.setOffscreenPageLimit(0);

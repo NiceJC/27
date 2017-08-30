@@ -15,8 +15,8 @@
 
             <com.thinkcool.circletextimageview.CircleTextImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ctiv_personfragment_userimg"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/iv_person_fragment_item_sex"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
@@ -38,9 +38,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:orientation="vertical"
                 android:layout_alignParentTop="true"
-                android:orientation="vertical">
+                android:layout_alignParentStart="true">
 
                 <TextView
                     android:id="@+id/tv_personfragment_username"
@@ -49,8 +49,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="10dp"
                     android:layout_marginTop="10dp"
+                    android:textColor="#000000"
                     android:text="用户昵称"
-                    android:textSize="30sp"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -83,6 +84,7 @@
                             android:layout_margin="5dp"
                             android:gravity="center_vertical"
                             android:text="899"
+
                             android:textColor="#000000"
                             android:textSize="16sp" />
 
@@ -126,7 +128,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/tv_tie_num"
@@ -170,24 +173,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/iv_personfragment_near"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:padding="5dp"
             android:gravity="center"
             android:src="@mipmap/nearby_current"/>
+
         <ImageView
             android:id="@+id/iv_personfragment_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:padding="5dp"
             android:gravity="center"
-            android:src="@mipmap/quanzi"/>
+
+            android:src="@mipmap/quanzi" />
     </LinearLayout>
 
 </LinearLayout>

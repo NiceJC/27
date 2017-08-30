@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.lede.second_23.ui.activity.LoginOrRegisterActivity">
 
     
     <ImageView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:layout_width="164dp"
         android:layout_height="24.5dp"
         android:layout_centerHorizontal="true"

@@ -8,7 +8,7 @@
     <VideoView
         android:id="@+id/vv_play_video"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="500dp" />
 
 
     <ImageView

@@ -95,6 +95,7 @@ public class GetVideoReplyActivity extends AppCompatActivity implements OnRespon
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent=new Intent(context,ForumDetailActivity.class);
                 intent.putExtra("forumId",getVideoReplyList.get(position).getForumId());
+                intent.putExtra("isOpenReplyVideo",true);
                 startActivity(intent);
             }
 

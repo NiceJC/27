@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.lede.second_23.R;
 import com.lede.second_23.interface_utils.OnTrimVideoListener;
 import com.lede.second_23.ui.view.VideoTrimmerView;
+import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.TrimVideoUtil;
 
 import butterknife.Bind;
@@ -20,6 +22,7 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
     VideoTrimmerView trimmerView;
     private String path;
     private Intent intent;
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +49,16 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
 
     @Override
     public void onStartTrim() {
-
+        loadingDialog = ProgressDialogUtils.createLoadingDialog(this, "正在裁剪，请稍后");
+        loadingDialog.show();
     }
 
     @Override
     public void onFinishTrim(Uri uri) {
+        if (loadingDialog!=null) {
+            loadingDialog.dismiss();
+            loadingDialog=null;
+        }
         Intent intent=new Intent();
         intent.putExtra("path",uri.getPath());
         Log.i("onFinishTrim", "onFinishTrim: "+uri.getPath());
@@ -62,5 +70,16 @@ public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoLis
     public void onCancel() {
         trimmerView.destroy();
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loadingDialog!=null) {
+            loadingDialog.dismiss();
+            loadingDialog=null;
+        }
+        trimmerView.destroy();
+//        finish();
     }
 }

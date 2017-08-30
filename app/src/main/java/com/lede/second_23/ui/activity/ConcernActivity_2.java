@@ -311,7 +311,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     }
 
     /**
-     * 提示保存图片底部弹窗
+     * 提示举报底部弹窗
      */
     private void showReportPopwindow() {
         // 利用layoutInflater获得View
@@ -728,7 +728,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
 
         PopupWindow window = new PopupWindow(view,
-                WindowManager.LayoutParams.MATCH_PARENT,100);
+                WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
 
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);

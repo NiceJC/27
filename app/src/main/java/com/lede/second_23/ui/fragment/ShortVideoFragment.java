@@ -195,12 +195,10 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
             // 设置视频的编码格式
 //            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 
-            if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
-                profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
-            } /*else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
-                profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
-            } */ else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_1080P)) {
+            if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_1080P)) {
                 profile = CamcorderProfile.get(CamcorderProfile.QUALITY_1080P);
+            } else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
+                profile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
             } else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_HIGH)) {
                 profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
             } else if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_LOW)) {
@@ -434,8 +432,10 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
             if (videoSiezes != null && videoSiezes.size() > 0) {
                 //拿到一个预览宽度最小为720像素的预览值
                 Camera.Size videoSize = CameraUtil.getInstance().getPropVideoSize(videoSiezes, 720);
-                video_width = videoSize.width;
-                video_height = videoSize.height;
+//                video_width = videoSize.width;
+//                video_height = videoSize.height;
+                video_width=1280;
+                video_height=720;
 //                video_width = videoSize.width;
 //                video_height = videoSize.height;
                 Log.i("TAG", "video_width===" + video_width);

@@ -67,12 +67,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.R.id.prv_forum_activity_show;
+
 /**
  * Created by ld on 17/8/17.
  */
 
 public class ForumFragment extends Fragment implements OnResponseListener<String> {
-
+    private static final String TAG = "ForumFragment";
     private static final int FORUM_CODE = 1000;
     private static final int FORUM_LIKE = 2000;
     private static final int PUSH_USER = 3000;
@@ -82,12 +84,14 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     ImageView ivForumActivityBack;
     @Bind(R.id.tv_forum_activity_nonview)
     TextView tvForumActivityNonview;
-    @Bind(R.id.prv_forum_activity_show)
+    @Bind(prv_forum_activity_show)
     PullToRrefreshRecyclerView prvForumActivityShow;
     @Bind(R.id.iv_forum_activity_send)
     ImageView ivForumActivitySend;
     @Bind(R.id.rl_forum_activity_bottom)
     RelativeLayout rlForumActivityBottom;
+    @Bind(R.id.iv_forum_title)
+    ImageView ivForumTitle;
     private RequestQueue requestQueue;
     private Context context;
     private int pageNum = 1;
@@ -112,6 +116,10 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     private long currentForumId;
     private ArrayList<ImageView> imgViews;
     private ArrayList<String> banner;
+    private boolean isShowPopwindow = false;
+    private boolean isShow27=false;
+    private LinearLayoutManager linearLayoutManager;
+
 
     @Override
     public void onAttach(Context context) {
@@ -124,6 +132,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_forum, container, false);
         ButterKnife.bind(this, view);
+        linearLayoutManager = new LinearLayoutManager(context);
         return view;
     }
 
@@ -477,6 +486,11 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
+                    ivForumTitle.setImageResource(R.mipmap.forum_discover);
+                }else {
+                    ivForumTitle.setImageResource(R.mipmap.forum_27);
+                }
                 if (dy >= 30) {
                     if (isshowBottom) {
                         return;
@@ -534,7 +548,6 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 return false;
             }
         });
-
     }
 
     /**
@@ -557,6 +570,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
 
         // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
 
+        isShowPopwindow = true;
         PopupWindow window = new PopupWindow(view,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 500);
@@ -581,7 +595,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
 
             @Override
             public void onDismiss() {
-                System.out.println("popWindow消失");
+                isShowPopwindow = false;
                 WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
                 params.alpha = 1.0f;
 
@@ -597,7 +611,8 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         headerAndFooterWrapper = new HeaderAndFooterWrapper(myCommonAdapter);
         //添加头布局View对象
         headerAndFooterWrapper.addHeaderView(setHeadView());
-        prvForumActivityShow.getRefreshableView().setLayoutManager(new LinearLayoutManager(context));
+
+        prvForumActivityShow.getRefreshableView().setLayoutManager(linearLayoutManager);
         prvForumActivityShow.getRefreshableView().setAdapter(headerAndFooterWrapper);
     }
 
@@ -753,14 +768,14 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
      */
     private void parseShowVideo(String json) {
         ForumVideoReplyBean forumVideoReplyBean = mGson.fromJson(json, ForumVideoReplyBean.class);
-        if (forumVideoReplyBean.getResult()==10000) {
-            if (forumVideoReplyBean.getData().getSimplePageInfo().getList().size()==0) {
+        if (forumVideoReplyBean.getResult() == 10000) {
+            if (forumVideoReplyBean.getData().getSimplePageInfo().getList().size() == 0) {
                 Toast.makeText(context, "无视频互动", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 forumVideoReplyList.addAll(getList(forumVideoReplyBean.getData().getSimplePageInfo().getList()));
                 forumVideoReplyAdapter.notifyDataSetChanged();
             }
-        }else {
+        } else {
             Toast.makeText(context, "服务器错误", Toast.LENGTH_SHORT).show();
         }
     }
@@ -788,17 +803,31 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             isOnRefreshing = false;
         }
         tvForumActivityNonview.setVisibility(View.GONE);
-        if (allforumBean.getData().getSimple().getList().size()==0) {
-            if (pageNum==1) {
+        if (allforumBean.getData().getSimple().getList().size() == 0) {
+            if (pageNum == 1) {
                 Toast.makeText(context, "还没有人发布过圈子，快来做第一人哟", Toast.LENGTH_SHORT).show();
                 tvForumActivityNonview.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 Toast.makeText(context, "没有更多的圈子了", Toast.LENGTH_SHORT).show();
 
             }
-        }else {
+        } else {
             forumList.addAll(allforumBean.getData().getSimple().getList());
             headerAndFooterWrapper.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: " + TAG);
+        super.onResume();
+        if (isShowPopwindow) {
+            forumVideoReplyList.clear();
+            forumVideoReplyList.add(null);
+            showVideoByUserList(currentForumId);
+
         }
 
     }
@@ -820,6 +849,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
 
     /**
      * 去重
+     *
      * @param arr
      * @return
      */
@@ -828,7 +858,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         Iterator it = arr.iterator();
         while (it.hasNext()) {
             Object obj = (Object) it.next();
-            if(!list.contains(obj)){                //不包含就添加
+            if (!list.contains(obj)) {                //不包含就添加
                 list.add(obj);
             }
         }

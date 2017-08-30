@@ -1,21 +1,17 @@
 package com.lede.second_23.ui.activity;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.UserInfoBean;
@@ -34,7 +30,6 @@ import com.yolanda.nohttp.tools.NetUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class WelcomeActivity extends AppCompatActivity implements OnResponseListener<String> {
 
@@ -52,49 +47,51 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE
     };
-    @Bind(R.id.iv_welcome_pic01)
-    ImageView ivWelcomePic01;
-    @Bind(R.id.iv_welcome_pic02)
-    ImageView ivWelcomePic02;
-    @Bind(R.id.iv_welcome_pic03)
-    ImageView ivWelcomePic03;
-    @Bind(R.id.tv_welcome_login)
-    TextView tvWelcomeLogin;
-    @Bind(R.id.tv_welcome_register)
-    TextView tvWelcomeRegister;
+//    @Bind(R.id.iv_welcome_pic01)
+//    ImageView ivWelcomePic01;
+//    @Bind(R.id.iv_welcome_pic02)
+//    ImageView ivWelcomePic02;
+//    @Bind(R.id.iv_welcome_pic03)
+//    ImageView ivWelcomePic03;
+//    @Bind(R.id.tv_welcome_login)
+//    TextView tvWelcomeLogin;
+//    @Bind(R.id.tv_welcome_register)
+//    TextView tvWelcomeRegister;
+    @Bind(R.id.iv_logo)
+    ImageView ivLogo;
     private PermissionsChecker mPermissionsChecker; // 权限检测器
     private RequestQueue requestQueue;
     private boolean isNetWork = true;
-    private float curTranslationX;
-    private float curTranslationY;
-    private ObjectAnimator pic01MoveX;
-    private ObjectAnimator pic01MoveY;
-    private ObjectAnimator pic02MoveX;
-    private ObjectAnimator pic02MoveY;
-    private ObjectAnimator pic03MoveX;
-    private ObjectAnimator pic03MoveY;
-    private AnimatorSet animatorSet01;
-    private AnimatorSet animatorSet02;
-    private AnimatorSet animatorSet03;
+//    private float curTranslationX;
+//    private float curTranslationY;
+//    private ObjectAnimator pic01MoveX;
+//    private ObjectAnimator pic01MoveY;
+//    private ObjectAnimator pic02MoveX;
+//    private ObjectAnimator pic02MoveY;
+//    private ObjectAnimator pic03MoveX;
+//    private ObjectAnimator pic03MoveY;
+//    private AnimatorSet animatorSet01;
+//    private AnimatorSet animatorSet02;
+//    private AnimatorSet animatorSet03;
     private boolean isHasInfo = false;
-    public Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    animatorSet01.start();
-                    break;
-                case 2:
-                    animatorSet02.start();
-                    break;
-                case 3:
-                    animatorSet03.start();
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
+//    public Handler mHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case 1:
+//                    animatorSet01.start();
+//                    break;
+//                case 2:
+//                    animatorSet02.start();
+//                    break;
+//                case 3:
+//                    animatorSet03.start();
+//                    break;
+//                default:
+//                    break;
+//            }
+//            super.handleMessage(msg);
+//        }
+//    };
 
     private ObjectAnimator pic01rotation;
     private ObjectAnimator pic02rotation;
@@ -106,97 +103,102 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
         requestQueue = GlobalConstants.getRequestQueue();
+        Glide.with(WelcomeActivity.this)
+                .load(R.mipmap.start)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(new GlideDrawableImageViewTarget(ivLogo, 1));
         mPermissionsChecker = new PermissionsChecker(this);
-        if (SPUtils.contains(this, GlobalConstants.TOKEN)) {
-            loadUserInfo();
-        }
-        if (!SPUtils.contains(this, GlobalConstants.ISFIRST)) {
-            SPUtils.put(this, GlobalConstants.ISFIRST, "ISFRIST");
-            reportFirst();
-        }
-        UiUtils.getMainThreadHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                Glide.with(WelcomeActivity.this)
-//                        .load(R.mipmap.start)
-//                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                        .into(new GlideDrawableImageViewTarget(iv_logo, 1));
-                initAnimation();
-                delayedRun();
-            }
-        }, 600);
         // 缺少权限时, 进入权限配置页面
         if (mPermissionsChecker.lacksPermissions(PERMISSIONS)) {
             startPermissionsActivity();
+        }else {
+            if (SPUtils.contains(this, GlobalConstants.TOKEN)) {
+                loadUserInfo();
+            } else {
+                UiUtils.getMainThreadHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        delayedRun();
+                    }
+                }, 3000);
+            }
+            if (!SPUtils.contains(this, GlobalConstants.ISFIRST)) {
+                SPUtils.put(this, GlobalConstants.ISFIRST, "ISFRIST");
+                reportFirst();
+            }
         }
 
+
+
+
     }
 
-    private void initAnimation() {
-        curTranslationX = ivWelcomePic01.getTranslationX();
-        curTranslationY = ivWelcomePic01.getTranslationY();
-
-        pic01MoveX = ObjectAnimator.ofFloat(ivWelcomePic01, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
-        pic01MoveY = ObjectAnimator.ofFloat(ivWelcomePic01, "translationY", curTranslationY, 2000f, curTranslationY);
-        pic01rotation = ObjectAnimator.ofFloat(ivWelcomePic01, "rotation", 15f, -345f);
-
-        pic02MoveX = ObjectAnimator.ofFloat(ivWelcomePic02, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
-        pic02MoveY = ObjectAnimator.ofFloat(ivWelcomePic02, "translationY", curTranslationY, 2000f, curTranslationY);
-        pic02rotation = ObjectAnimator.ofFloat(ivWelcomePic02, "rotation", 7.5f, -352.5f);
-
-        pic03MoveX = ObjectAnimator.ofFloat(ivWelcomePic03, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
-        pic03MoveY = ObjectAnimator.ofFloat(ivWelcomePic03, "translationY", curTranslationY, 2000f, curTranslationY);
-        pic03rotation = ObjectAnimator.ofFloat(ivWelcomePic03, "rotation", 0f, -360f);
-
-
-        animatorSet01 = new AnimatorSet();
-        animatorSet02 = new AnimatorSet();
-        animatorSet02.play(pic02MoveX).with(pic02MoveY).with(pic02rotation);
-        animatorSet03 = new AnimatorSet();
-        animatorSet03.play(pic01MoveX).with(pic01MoveY).with(pic01rotation);
-        animatorSet01.play(pic03MoveX).with(pic03MoveY).with(pic03rotation);
-        animatorSet02.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                Message msg = new Message();
-                msg.what = 3;
-                mHandler.sendMessageDelayed(msg, 1000);
-            }
-        });
-        animatorSet03.addListener(new AnimatorListenerAdapter() {
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                animatorSet01.start();
-                Message msg = new Message();
-                msg.what = 1;
-                mHandler.sendMessage(msg);
-
-            }
-        });
-        animatorSet01.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                Message msg = new Message();
-                msg.what = 2;
-                mHandler.sendMessageDelayed(msg, 1000);
-            }
-
-
-        });
-        animatorSet02.setDuration(3000);
-        animatorSet03.setDuration(3000);
-        animatorSet01.setDuration(3000);
-        animatorSet01.start();
-    }
+//    private void initAnimation() {
+//        curTranslationX = ivWelcomePic01.getTranslationX();
+//        curTranslationY = ivWelcomePic01.getTranslationY();
+//
+//        pic01MoveX = ObjectAnimator.ofFloat(ivWelcomePic01, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
+//        pic01MoveY = ObjectAnimator.ofFloat(ivWelcomePic01, "translationY", curTranslationY, 2000f, curTranslationY);
+//        pic01rotation = ObjectAnimator.ofFloat(ivWelcomePic01, "rotation", 15f, -345f);
+//
+//        pic02MoveX = ObjectAnimator.ofFloat(ivWelcomePic02, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
+//        pic02MoveY = ObjectAnimator.ofFloat(ivWelcomePic02, "translationY", curTranslationY, 2000f, curTranslationY);
+//        pic02rotation = ObjectAnimator.ofFloat(ivWelcomePic02, "rotation", 7.5f, -352.5f);
+//
+//        pic03MoveX = ObjectAnimator.ofFloat(ivWelcomePic03, "translationX", curTranslationX, -2000f, 2000f, curTranslationX);
+//        pic03MoveY = ObjectAnimator.ofFloat(ivWelcomePic03, "translationY", curTranslationY, 2000f, curTranslationY);
+//        pic03rotation = ObjectAnimator.ofFloat(ivWelcomePic03, "rotation", 0f, -360f);
+//
+//
+//        animatorSet01 = new AnimatorSet();
+//        animatorSet02 = new AnimatorSet();
+//        animatorSet02.play(pic02MoveX).with(pic02MoveY).with(pic02rotation);
+//        animatorSet03 = new AnimatorSet();
+//        animatorSet03.play(pic01MoveX).with(pic01MoveY).with(pic01rotation);
+//        animatorSet01.play(pic03MoveX).with(pic03MoveY).with(pic03rotation);
+//        animatorSet02.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                super.onAnimationStart(animation);
+//                Message msg = new Message();
+//                msg.what = 3;
+//                mHandler.sendMessageDelayed(msg, 1000);
+//            }
+//        });
+//        animatorSet03.addListener(new AnimatorListenerAdapter() {
+//
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                super.onAnimationStart(animation);
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                super.onAnimationEnd(animation);
+//                animatorSet01.start();
+//                Message msg = new Message();
+//                msg.what = 1;
+//                mHandler.sendMessage(msg);
+//
+//            }
+//        });
+//        animatorSet01.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                super.onAnimationStart(animation);
+//                Message msg = new Message();
+//                msg.what = 2;
+//                mHandler.sendMessageDelayed(msg, 1000);
+//            }
+//
+//
+//        });
+//        animatorSet02.setDuration(3000);
+//        animatorSet03.setDuration(3000);
+//        animatorSet01.setDuration(3000);
+//        animatorSet01.start();
+//    }
 
 
     /**
@@ -223,6 +225,22 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         // 拒绝时, 关闭页面, 缺少主要权限, 无法运行
         if (requestCode == REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
             finish();
+        }else {
+            if (SPUtils.contains(this, GlobalConstants.TOKEN)) {
+                loadUserInfo();
+            } else {
+                UiUtils.getMainThreadHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        delayedRun();
+                    }
+                }, 3000);
+            }
+            if (!SPUtils.contains(this, GlobalConstants.ISFIRST)) {
+                SPUtils.put(this, GlobalConstants.ISFIRST, "ISFRIST");
+                reportFirst();
+            }
         }
     }
 
@@ -243,6 +261,8 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
         if (userInfoBean.getMsg().equals("用户没有登录")) {
             isHasInfo = false;
+        } else if (userInfoBean.getMsg().equals("token超时请重新登录")) {
+            SPUtils.put(WelcomeActivity.this, GlobalConstants.TOKENUNUSEFULL, true);
         } else {
             if (userInfoBean.getData().getInfo() == null) {
                 isHasInfo = false;
@@ -250,6 +270,16 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                 isHasInfo = true;
             }
         }
+        UiUtils.getMainThreadHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                Glide.with(WelcomeActivity.this)
+//                        .load(R.mipmap.start)
+//                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                        .into(new GlideDrawableImageViewTarget(ivLogo, 1));
+                delayedRun();
+            }
+        }, 2000);
 
     }
 
@@ -283,36 +313,36 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                         }
 
                     } else {
-                        tvWelcomeLogin.setVisibility(View.VISIBLE);
-                        tvWelcomeRegister.setVisibility(View.VISIBLE);
-//                        intent = new Intent(WelcomeActivity.this, LoginOrRegisterActivity.class);
-//                        startActivity(intent);
+//                        tvWelcomeLogin.setVisibility(View.VISIBLE);
+//                        tvWelcomeRegister.setVisibility(View.VISIBLE);
+                        intent = new Intent(WelcomeActivity.this, LoginOrRegisterActivity.class);
+                        startActivity(intent);
                     }
                 } else {
                     Toast.makeText(WelcomeActivity.this, "无法连接到服务器,请检查网络", Toast.LENGTH_SHORT).show();
 //                    intent = new Intent(WelcomeActivity.this, LoginOrRegisterActivity.class);
 //                    startActivity(intent);
-                    tvWelcomeLogin.setVisibility(View.VISIBLE);
-                    tvWelcomeRegister.setVisibility(View.VISIBLE);
+//                    tvWelcomeLogin.setVisibility(View.VISIBLE);
+//                    tvWelcomeRegister.setVisibility(View.VISIBLE);
                 }
 
             }
         }, 3000);
     }
 
-    @OnClick({R.id.tv_welcome_login,R.id.tv_welcome_register})
-    public void onClick(View view){
-        switch (view.getId()) {
-            case R.id.tv_welcome_login:
-                startActivity(new Intent(this,LoginActivity.class));
-                finish();
-                break;
-            case R.id.tv_welcome_register:
-                startActivity(new Intent(this,RegisterActivity.class));
-                finish();
-                break;
-        }
-    }
+//    @OnClick({R.id.tv_welcome_login, R.id.tv_welcome_register})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.tv_welcome_login:
+//                startActivity(new Intent(this, LoginActivity.class));
+//                finish();
+//                break;
+//            case R.id.tv_welcome_register:
+//                startActivity(new Intent(this, RegisterActivity.class));
+//                finish();
+//                break;
+//        }
+//    }
 
     @Override
     public void onStart(int what) {
@@ -345,17 +375,17 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (animatorSet01 != null) {
-            animatorSet01.cancel();
-        }
-        if (animatorSet02 != null) {
-            animatorSet02.cancel();
-        }
-        if (animatorSet03 != null) {
-            animatorSet03.cancel();
-        }
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
+//        if (animatorSet01 != null) {
+//            animatorSet01.cancel();
+//        }
+//        if (animatorSet02 != null) {
+//            animatorSet02.cancel();
+//        }
+//        if (animatorSet03 != null) {
+//            animatorSet03.cancel();
+//        }
+//        if (mHandler != null) {
+//            mHandler.removeCallbacksAndMessages(null);
+//        }
     }
 }

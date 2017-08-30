@@ -16,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
             android:src="@mipmap/back" />
 
         <TextView
@@ -49,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="@drawable/shap_edit_linearlayout_all">
+            android:background="@drawable/stroke_edit_linearlayout_all">
             <EditText
                 android:id="@+id/et_all_reply_reply"
                 android:layout_width="0dp"
