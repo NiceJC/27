@@ -142,6 +142,16 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 showAgeDialog();
                 break;
             case R.id.tv_edit_information_activity_updata:
+                if (tv_edit_information_activity_nickname.equals("昵称")) {
+                    Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if (tv_edit_information_activity_age.equals("年龄")){
+                    Toast.makeText(mContext, "请选择年龄", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if (tv_edit_information_activity_sex.equals("性别")){
+                    Toast.makeText(mContext, "请选择性别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (jumpType == 1) {
                     if (!TextUtils.isEmpty(tv_edit_information_activity_nickname.getText().toString().trim())) {
                         CreateUserInfo();//创建用户请求

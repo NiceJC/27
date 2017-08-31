@@ -10,8 +10,10 @@ import android.widget.RelativeLayout;
 
 import com.example.myapplication.views.diyimage.DIYImageView;
 import com.lede.second_23.R;
+import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.fragment.CameraFragment;
 import com.lede.second_23.ui.fragment.ShortVideoFragment;
+import com.lede.second_23.utils.SPUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,10 +48,12 @@ public class AllIssueActivity extends AppCompatActivity {
         instance = this;
         intent = getIntent();
         type = intent.getIntExtra("type", 0);
+
         supportFragmentManager = getSupportFragmentManager();
         cameraFragment = new CameraFragment();
         shortVideoFragment = new ShortVideoFragment();
         supportFragmentManager.beginTransaction().replace(R.id.rr_all_issue_activity_show, cameraFragment).commit();
+
     }
 
     @OnClick({R.id.ib_all_issue_activity_change, R.id.diyiv_all_issue_activity_show})
@@ -77,5 +81,13 @@ public class AllIssueActivity extends AppCompatActivity {
                 break;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (((boolean) SPUtils.get(AllIssueActivity.this, GlobalConstants.IS_ISSUE, false))) {
+            finish();
+        }
     }
 }

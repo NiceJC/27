@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.ForumImg;
+import com.lede.second_23.bean.MsgBean;
 import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.bean.UploadTextBean;
 import com.lede.second_23.global.GlobalConstants;
@@ -79,8 +80,8 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
     ImageView iv_send;
     @Bind(R.id.progressBar)
     ProgressBar bar;
-    private static final int GET_QIUNIUTOKEN = 1000;
-    private static final int PIC_UP_SERVICE = 2000;
+    private static final int GET_QIUNIUTOKEN = 4000;
+    private static final int VIDEO_UP_SERVICE = 3000;
 //    sex  agemin 0 agemax 99 juli  userid
 
     String path;//视频录制输出地址
@@ -441,11 +442,11 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
             }
             private void parseQiNiuToken(String json, int index, File file) {
                 QiNiuTokenBean qiNiuTokenBean = mGson.fromJson(json, QiNiuTokenBean.class);
-                if (imgOrVideoType == 0) {
-                    uploadPic(qiNiuTokenBean.getData().getUptoken(), index, file);
-                } else {
+//                if (imgOrVideoType == 0) {
+//                    uploadPic(qiNiuTokenBean.getData().getUptoken(), index, file);
+//                } else {
                     uploadVideo(qiNiuTokenBean.getData().getUptoken(), index, file);
-                }
+//                }
 
             }
             @Override
@@ -603,7 +604,7 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
         uploadRequest.add("mediaName",qiniuVieoPatch);
         uploadRequest.add("forumId",forumId);
         uploadRequest.add("mediaPicturePath",qiniuvideoFirst);
-        requestQueue.add(PIC_UP_SERVICE, uploadRequest, this);
+        requestQueue.add(VIDEO_UP_SERVICE, uploadRequest, this);
     }
 
 //
@@ -762,23 +763,29 @@ public class IssueActivity extends AppCompatActivity implements OnResponseListen
                 if (num == selectMedia.size()) {
                     if (loadingDialog2 != null) {
                         loadingDialog2.dismiss();
-                        Toast.makeText(mContext, "图片上传成功", Toast.LENGTH_SHORT).show();
-
                     }
+                    Toast.makeText(mContext, "图片上传成功", Toast.LENGTH_SHORT).show();
                 }
                 SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
                 finish();
                 break;
-            case UPLOADVIDEO_REQUEST:
-                num++;
-                if (num == selectMedia.size()) {
-                    if (loadingDialog2 != null) {
-                        loadingDialog2.dismiss();
-                        Toast.makeText(mContext, "视频上传成功", Toast.LENGTH_SHORT).show();
-                    }
+            case VIDEO_UP_SERVICE:
+//                num++;
+//                if (num == selectMedia.size()) {
+//                    if (loadingDialog2 != null) {
+//                        loadingDialog2.dismiss();
+//                        Toast.makeText(mContext, "视频上传成功", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+                MsgBean msgBean=mGson.fromJson(response.get(),MsgBean.class);
+                if (msgBean.getMsg().equals("发布附近视频微博成功")) {
+                    Toast.makeText(mContext, "视频上传成功", Toast.LENGTH_SHORT).show();
+                    SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
+                    finish();
+                }else {
+                    Toast.makeText(mContext, "发布失败", Toast.LENGTH_SHORT).show();
                 }
-                SPUtils.put(mContext, GlobalConstants.IS_ISSUE, true);
-                finish();
+
                 break;
         }
     }

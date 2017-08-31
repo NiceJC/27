@@ -137,7 +137,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     @Override
     public void onResume() {
         super.onResume();
-        if (((Boolean) SPUtils.get(context, GlobalConstants.IS_EDITINFO,false))) {
+        if (((Boolean) SPUtils.get(context, GlobalConstants.IS_EDITINFO,false))||((Boolean) SPUtils.get(context, GlobalConstants.ISDELETE_NEAR_FORUM,false))) {
             pageNum=1;
             forumPageNum=1;
 //            dataList.clear();
@@ -157,6 +157,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
             isFresh=true;
             srl_home.setRefreshing(isFresh);
             SPUtils.put(context, GlobalConstants.IS_EDITINFO,false);
+            SPUtils.put(context, GlobalConstants.ISDELETE_NEAR_FORUM,false);
         }
     }
 
@@ -717,6 +718,10 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
         if (personAllForumBean.getResult()==10000) {
             if (personAllForumBean.getData().getSimple().getList().size()==0) {
                 Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
+                isFresh=false;
+
+                srl_home.setRefreshing(isFresh);
+                loadMoreWrapper.notifyDataSetChanged();
             }else {
                 isHasNextPage=personAllForumBean.getData().getSimple().isHasNextPage();
                 personAllForumList.addAll(personAllForumBean.getData().getSimple().getList());

@@ -1,6 +1,8 @@
 package com.lede.second_23.ui.fragment;
 
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
@@ -34,8 +38,6 @@ import com.lede.second_23.utils.CameraUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import static android.R.attr.path;
 
 /**
  * Created by ld on 17/7/20.
@@ -83,6 +85,7 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
         view = inflater.inflate(R.layout.layout_short_video_fragment, container, false);
         screenWidth = MyApplication.getInstance().getResources().getDisplayMetrics().widthPixels;
         screenheight = MyApplication.getInstance().getResources().getDisplayMetrics().heightPixels;
+        Toast.makeText(context, "长按录制小视频", Toast.LENGTH_SHORT).show();
         initView();
         initData();
         onAfter();
@@ -250,8 +253,10 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                     //录制完成
                     Log.i("TAG", "onInfo: "+what+","+extra);
                     // 最后通知图库更新
-                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
-
+//                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+                    Uri localUri = Uri.fromFile(file);
+                    Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+                    getActivity().sendBroadcast(localIntent);
                 }
             });
 
@@ -272,8 +277,10 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                                     releaseCamera();
                                 }
                                 // 最后通知图库更新
-                                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
-
+//                                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+                                Uri localUri = Uri.fromFile(file);
+                                Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
+                                getActivity().sendBroadcast(localIntent);
                                 Intent intent=null;
                                 if (AllIssueActivity.instance.type==0) {
                                     intent=new Intent(getActivity(), IssueActivity.class);
@@ -513,4 +520,33 @@ public class ShortVideoFragment extends Fragment implements SurfaceHolder.Callba
                 break;
         }
     }
+
+    /**
+     * 将视频插入图库
+     * @param url 视频路径地址
+     */
+    public void updateVideo(String url){
+        File file=new File(url);
+        //获取ContentResolve对象，来操作插入视频
+        ContentResolver localContentResolver = getActivity().getContentResolver();
+        //ContentValues：用于储存一些基本类型的键值对
+        ContentValues localContentValues = getVideoContentValues(getActivity(), file, System.currentTimeMillis());
+        //insert语句负责插入一条新的纪录，如果插入成功则会返回这条记录的id，如果插入失败会返回-1。
+        Uri localUri = localContentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,                           localContentValues);
+    }
+
+    //再往数据库中插入数据的时候将，将要插入的值都放到一个ContentValues的实例当中
+    public static ContentValues getVideoContentValues(Context paramContext, File paramFile, long paramLong){
+        ContentValues localContentValues = new ContentValues();
+        localContentValues.put("title", paramFile.getName());
+        localContentValues.put("_display_name", paramFile.getName());
+        localContentValues.put("mime_type", "video/3gp");
+        localContentValues.put("datetaken", Long.valueOf(paramLong));
+        localContentValues.put("date_modified", Long.valueOf(paramLong));
+        localContentValues.put("date_added", Long.valueOf(paramLong));
+        localContentValues.put("_data", paramFile.getAbsolutePath());
+        localContentValues.put("_size", Long.valueOf(paramFile.length()));
+        return localContentValues;
+    }
+
 }

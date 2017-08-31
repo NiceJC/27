@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
@@ -74,13 +73,14 @@ public class ShowAllForumByVideoActivity extends AppCompatActivity implements On
     }
 
     private void initView() {
-        myVideoAdapter = new CommonAdapter<ShowAllForumByVideoBean.DataBean.SimpleBean.ListBean>(context, R.layout.mainfragment_item, videoList) {
+        myVideoAdapter = new CommonAdapter<ShowAllForumByVideoBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show, videoList) {
             @Override
             protected void convert(ViewHolder holder, ShowAllForumByVideoBean.DataBean.SimpleBean.ListBean listBean, int position) {
-                DIYImageView diyiv_show = holder.getView(R.id.iv_item_test);
-                ImageView iv_photos = holder.getView(R.id.iv_main_fragment_item_photos);
-                ImageView iv_play = holder.getView(R.id.iv_main_fragment_item_play);
+                ImageView diyiv_show = holder.getView(R.id.iv_person_fragment_item_show);
+                ImageView iv_photos = holder.getView(R.id.iv_person_fragment_item_photos);
+                ImageView iv_play = holder.getView(R.id.iv_person_fragment_item_play);
                 iv_photos.setVisibility(View.GONE);
+                iv_play.setVisibility(View.GONE);
                 Glide.with(context)
                         .load(listBean.getAllRecords().get(0).getUrlThree()).into(diyiv_show);
             }
@@ -98,7 +98,7 @@ public class ShowAllForumByVideoActivity extends AppCompatActivity implements On
                 return false;
             }
         });
-        prvShowAllForumVideoShow.getRefreshableView().setLayoutManager(new GridLayoutManager(context, 2));
+        prvShowAllForumVideoShow.getRefreshableView().setLayoutManager(new GridLayoutManager(context, 3));
         prvShowAllForumVideoShow.getRefreshableView().setAdapter(myVideoAdapter);
         prvShowAllForumVideoShow.setMode(PullToRefreshBase.Mode.BOTH);
         prvShowAllForumVideoShow.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<RecyclerView>() {

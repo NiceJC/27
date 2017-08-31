@@ -17,6 +17,7 @@ import com.lede.second_23.bean.LoginBean;
 import com.lede.second_23.bean.MsgBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.utils.Md5Util;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
 import com.yolanda.nohttp.NoHttp;
@@ -25,6 +26,7 @@ import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
+import com.yolanda.nohttp.tools.NetUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,9 +36,11 @@ import butterknife.OnClick;
 /**
  * 登陆页面
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int LOGIN_REQUEST = 3000;
+    private static final int REPORTREGISTER=4000;
+
     @Bind(R.id.et_login_activity_phone)
     EditText etLoginPhone;
     @Bind(R.id.et_login_activity_pwd)
@@ -58,10 +62,13 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
-
+        if (getIntent().getBooleanExtra("isRegister",false)) {
+            reportRegister();
+        }
     }
 
     @OnClick({R.id.tv_login_activity_login, R.id.btn_login_register, R.id.btn_login_forget_pwd})
@@ -151,40 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.i("TAGG", "Login2Sezrvce: --------->loginRequest" + loginRequest.url());
         //添加请求到请求队列中
-        requestQueue.add(LOGIN_REQUEST, loginRequest, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int i) {
-                Log.i("TAGG", "onStart: 开始");
-            }
-
-            @Override
-            public void onSucceed(int i, Response<String> response) {
-                tv_login_activity_login.setClickable(true);
-                Log.i("TAGG", "onSucceed: ");
-                if (response.responseCode() == 200) {
-                    String json = response.get();
-                    Log.i("TAGG", "onSucceed: 登录的response:" + response.get());
-                    parseJson(json);
-                } else {
-                    if (!TextUtils.isEmpty(response.get())) {
-                        MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
-                        T.showShort(LoginActivity.this, msgBean.getMsg());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailed(int i, Response<String> response) {
-                T.showShort(LoginActivity.this, "网络访问失败，请检查网络重新登陆");
-                Log.i("TAGG", "onFailed: --------->" + response.responseCode());
-                tv_login_activity_login.setClickable(true);
-            }
-
-            @Override
-            public void onFinish(int i) {
-
-            }
-        });
+        requestQueue.add(LOGIN_REQUEST, loginRequest, this);
     }
 
     //解析登录成功的用户信息
@@ -215,27 +189,7 @@ public class LoginActivity extends AppCompatActivity {
     public void loadUserInfo() {
         Request<String> loadUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/" + SPUtils.get(this, GlobalConstants.USERID, "") + "/detail", RequestMethod.GET);
         loadUserRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        requestQueue.add(LOAD_USER, loadUserRequest, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                parmeUserInfoJson(response.get());
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFinish(int what) {
-
-            }
-        });
+        requestQueue.add(LOAD_USER, loadUserRequest, this);
     }
 
     /**
@@ -258,4 +212,68 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * 上报注册
+     */
+    private void reportRegister() {
+        Request<String> reportRegister = NoHttp.createStringRequest(GlobalConstants.URL + "/verifyGdtData.cgi", RequestMethod.POST);
+        reportRegister.add("muid", Md5Util.getMD5(GlobalConstants.getDeviceToken()));
+        reportRegister.add("conv_type", "MOBILEAPP_REGISTER");
+        reportRegister.add("appid", GlobalConstants.APPID);
+        reportRegister.add("client_ip", NetUtil.getLocalIPAddress());
+        reportRegister.add("app_type", "unionandroid");
+        reportRegister.add("conv_time", System.currentTimeMillis() / 1000);
+        requestQueue.add(REPORTREGISTER, reportRegister , this);
+    }
+
+    @Override
+    public void onStart(int what) {
+
+    }
+
+    @Override
+    public void onSucceed(int what, Response<String> response) {
+        Log.i("LoginActivity", "onSucceed: "+response.get());
+        switch (what) {
+            case REPORTREGISTER:
+
+                break;
+            case LOAD_USER:
+                parmeUserInfoJson(response.get());
+                break;
+            case LOGIN_REQUEST:
+                tv_login_activity_login.setClickable(true);
+                Log.i("TAGG", "onSucceed: ");
+                if (response.responseCode() == 200) {
+                    String json = response.get();
+                    Log.i("TAGG", "onSucceed: 登录的response:" + response.get());
+                    parseJson(json);
+                } else {
+                    if (!TextUtils.isEmpty(response.get())) {
+                        MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
+                        T.showShort(LoginActivity.this, msgBean.getMsg());
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onFailed(int what, Response<String> response) {
+        switch (what) {
+            case LOGIN_REQUEST:
+                T.showShort(LoginActivity.this, "网络访问失败，请检查网络重新登陆");
+                Log.i("TAGG", "onFailed: --------->" + response.responseCode());
+                tv_login_activity_login.setClickable(true);
+                break;
+            default:
+                T.showShort(LoginActivity.this,"网络访问失败，请检查网络");
+                break;
+        }
+    }
+
+    @Override
+    public void onFinish(int what) {
+
+    }
 }

@@ -128,6 +128,7 @@ public class MyVideoActivity extends AppCompatActivity implements View.OnClickLi
                 }else {
                     if (deleteBean.getMsg().equals("删除成功")) {
                         Toast.makeText(MyVideoActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        SPUtils.put(MyVideoActivity.this,GlobalConstants.ISDELETE_NEAR_FORUM,true);
                         finish();
                     }else {
                         Toast.makeText(MyVideoActivity.this, "网络出错,未删除成功", Toast.LENGTH_SHORT).show();

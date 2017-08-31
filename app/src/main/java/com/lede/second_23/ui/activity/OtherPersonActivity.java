@@ -758,6 +758,10 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
         if (personAllForumBean.getResult()==10000) {
             if (personAllForumBean.getData().getSimple().getList().size()==0) {
                 Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
+                isFresh=false;
+
+                srl_home.setRefreshing(isFresh);
+                loadMoreWrapper.notifyDataSetChanged();
             }else {
                 isHasNextPage=personAllForumBean.getData().getSimple().isHasNextPage();
                 personAllForumList.addAll(personAllForumBean.getData().getSimple().getList());

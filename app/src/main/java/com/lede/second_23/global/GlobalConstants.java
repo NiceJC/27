@@ -37,6 +37,9 @@ public class GlobalConstants {
     //用户的融云Token
     public static final String RONGIM_TOKEN="RONGIM_TOKEN";
 
+    //用户是否进行附近动态的删除操作
+    public static final String ISDELETE_NEAR_FORUM="ISDELETE_NEAR_FORUM";
+
     //收到评论
     public static final String GETREPLY="GETREPLY";
 

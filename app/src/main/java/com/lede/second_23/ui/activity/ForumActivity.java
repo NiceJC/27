@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
-import com.lede.second_23.adapter.ImageViewPagerAdapter_2;
+import com.lede.second_23.adapter.MyHackPagerAdapter;
 import com.lede.second_23.bean.AllForumBean;
 import com.lede.second_23.bean.ForumVideoReplyBean;
 import com.lede.second_23.bean.PushUserBean;
@@ -260,7 +260,9 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                         view = layoutInflater.inflate(R.layout.item_tuceng_pic, rl_pic, true);
                         HackyViewPager hvp_imgs = (HackyViewPager) view.findViewById(R.id.hvp_item_tuceng_imgs);
 //                        hvp_imgs.removeAllViews();
-                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner));
+//                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner));
+                        hvp_imgs.setAdapter(new MyHackPagerAdapter(ForumActivity.this,banner));
+                        hvp_imgs.setOffscreenPageLimit(9);
                         final LinearLayout ll_inDicator = (LinearLayout) view.findViewById(R.id.ll_item_tuceng_indicator);
                         for (int i = 0; i < banner.size(); i++) {
                             ImageView inDicator = (ImageView) LayoutInflater.from(context).inflate(R.layout.layout_indicator, ll_inDicator, false);

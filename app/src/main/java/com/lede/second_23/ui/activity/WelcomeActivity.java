@@ -1,7 +1,6 @@
 package com.lede.second_23.ui.activity;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -93,9 +92,6 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
 //        }
 //    };
 
-    private ObjectAnimator pic01rotation;
-    private ObjectAnimator pic02rotation;
-    private ObjectAnimator pic03rotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +99,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
         requestQueue = GlobalConstants.getRequestQueue();
+        Log.i("WelcomeActivity", "onCreate: "+NetUtil.getLocalIPAddress());
         Glide.with(WelcomeActivity.this)
                 .load(R.mipmap.start)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -260,6 +257,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         Gson gson = new Gson();
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
         if (userInfoBean.getMsg().equals("用户没有登录")) {
+            SPUtils.remove(WelcomeActivity.this,GlobalConstants.TOKEN);
             isHasInfo = false;
         } else if (userInfoBean.getMsg().equals("token超时请重新登录")) {
             SPUtils.put(WelcomeActivity.this, GlobalConstants.TOKENUNUSEFULL, true);
@@ -388,4 +386,6 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
 //            mHandler.removeCallbacksAndMessages(null);
 //        }
     }
+
+
 }

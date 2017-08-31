@@ -724,10 +724,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 
     @Override
     public void onSucceed(int what, Response<String> response) {
-        Log.i("TAG", "UserServiceonSucceed: "+response.get());
+
         switch (what) {
             case GET_NEAR_FORUM:
-
+                Log.i("TAG", "GET_NEAR_FORUM: "+response.get());
                 if (response.responseCode()==200) {
                     if (!isRefreshCompleted) {
                         rv_mainFragment_show.onRefreshComplete();

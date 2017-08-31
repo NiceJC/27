@@ -218,7 +218,10 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                         JSONObject jsonobject = new JSONObject(json);
                         msg = jsonobject.getString("msg");
                         if (msg.equals("注册成功")) {
-                            startActivity(new Intent(this,WelcomeActivity.class));
+                            Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(this,LoginActivity.class);
+                            intent.putExtra("isRegister",true);
+                            startActivity(intent);
                             finish();
                         }else{
                             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -244,4 +247,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
     public void onFinish(int what) {
 
     }
+
+
+
 }

@@ -18,6 +18,14 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/back" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="视频"
+            android:textSize="20sp"
+            android:textColor="#222222"/>
+
     </RelativeLayout>
     <com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView
         android:id="@+id/prv_show_all_forum_video_show"

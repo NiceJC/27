@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="295dp"
+        android:layout_height="240dp"
         android:background="#8181ff">
 
         <ImageView
@@ -52,7 +52,7 @@
                 android:layout_width="88dp"
                 android:layout_height="88dp"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/test7"
+                android:src="@mipmap/loading"
                 app:diy_image_Type="circle" />
         </RelativeLayout>
 
