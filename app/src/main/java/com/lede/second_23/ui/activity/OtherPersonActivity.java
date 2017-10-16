@@ -2,6 +2,7 @@ package com.lede.second_23.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -262,6 +263,14 @@ public class OtherPersonActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void reFreshHead() {
+        if (personBean.getData().getUser().getTrueName().equals("1")) {
+            Drawable drawableRight = getResources().getDrawable(
+                    R.mipmap.v3);
+
+            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, drawableRight, null);
+            tv_username.setCompoundDrawablePadding(2);
+        }
         tv_username.setText(personBean.getData().getUser().getNickName());
         tv_sign.setText(personBean.getData().getUser().getNote());
         if (personBean.getData().getUser().getSex().equals("男")) {

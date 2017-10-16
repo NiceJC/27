@@ -32,6 +32,9 @@ import java.util.List;
 
 import static android.R.attr.path;
 
+/**
+ * 录制视频回复页
+ */
 public class ForumVideoReplyActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
     public static ForumVideoReplyActivity instance;
     private RelativeLayout bottomLayout;

@@ -3,6 +3,7 @@ package com.lede.second_23.ui.fragment;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -102,7 +103,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     private CommonAdapter forumAdapter;
     private CommonAdapter forumVideoReplyAdapter;
     private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumList = new ArrayList<>();
-    private ArrayList<PushUserBean.DataBean.UserInfosBean> pushUserList = new ArrayList<>();
+    private ArrayList<PushUserBean.DataBean.UserInfoListBean> pushUserList = new ArrayList<>();
     private ArrayList<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean> forumVideoReplyList = new ArrayList<>();
     private Gson mGson;
     private boolean isshowBottom = true;
@@ -149,7 +150,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     }
 
     private void initHead() {
-        Request<String> headRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/pushUser", RequestMethod.POST);
+        Request<String> headRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/newPushUser", RequestMethod.POST);
         headRequest.add("access_token", (String) SPUtils.get(context, GlobalConstants.TOKEN, ""));
         requestQueue.add(PUSH_USER, headRequest, this);
     }
@@ -162,6 +163,16 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             protected void convert(ViewHolder holder, final AllForumBean.DataBean.SimpleBean.ListBean listBean, final int position) {
                 DIYImageView diy_userimg = holder.getView(R.id.diyiv_item_forum_userimg);
                 TextView tv_nickname = holder.getView(R.id.tv_item_forum_nickname);
+
+                if (listBean.getUser().getTrueName().equals("1")) {
+                    Drawable drawableRight = getResources().getDrawable(
+                            R.mipmap.v5);
+
+                    tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+                            null, drawableRight, null);
+                    tv_nickname.setCompoundDrawablePadding(2);
+                }
+
                 TextView tv_time = holder.getView(R.id.tv_item_forum_time);
                 TextView tv_text = holder.getView(R.id.tv_item_forum_text);
                 RelativeLayout rl_pic = holder.getView(R.id.rl_item_forum_pic);
@@ -625,10 +636,10 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.layout_all_forum_head, null);
         RecyclerView rv_head_show = (RecyclerView) view.findViewById(R.id.rv_all_forum_head_show);
-        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfosBean>(context, R.layout.item_all_forum_head, pushUserList) {
+        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfoListBean>(context, R.layout.item_all_forum_head, pushUserList) {
 
             @Override
-            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfosBean userInfosBean, int position) {
+            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfoListBean userInfosBean, int position) {
                 DIYImageView diyiv_userimg = holder.getView(R.id.diyiv_all_forum_head_userimg);
                 TextView tv_nickname = holder.getView(R.id.tv_all_forum_head_nickname);
                 LinearLayout ll_bg = holder.getView(R.id.ll_all_forum_head_bg);
@@ -787,7 +798,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
      */
     private void parsePushUser(String json) {
         PushUserBean pushUserBean = mGson.fromJson(json, PushUserBean.class);
-        pushUserList.addAll(pushUserBean.getData().getUserInfos());
+        pushUserList.addAll(pushUserBean.getData().getUserInfoList());
         headAdapter.notifyDataSetChanged();
     }
 

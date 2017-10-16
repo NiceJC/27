@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -547,6 +548,14 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         } else {
             tv_edit_information_activity_nickname.setText(userInfoBean.getData().getInfo().getNickName());
             currentNickName = userInfoBean.getData().getInfo().getNickName();
+            if (userInfoBean.getData().getInfo().getTrueName().equals("1")) {
+                Drawable drawableRight = getResources().getDrawable(
+                        R.mipmap.v6);
+
+                tv_edit_information_activity_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+                        null, drawableRight, null);
+                tv_edit_information_activity_nickname.setCompoundDrawablePadding(2);
+            }
             if (userInfoBean.getData().getInfo().getSex().toString().trim().equals("男")) {
                 isBoy = true;
                 tv_edit_information_activity_sex.setText("男");
@@ -564,10 +573,10 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
 
             }
-            if (userInfoBean.getData().getInfo().getQq()!=null) {
-                tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
-
-            }
+//            if (userInfoBean.getData().getInfo().getQq()!=null) {
+//                tv_edit_information_activity_constellation.setText(userInfoBean.getData().getInfo().getQq());
+//
+//            }
 //        tv_edit_information_activity_marry.setText(userInfoBean.getData().getInfo().getHometown());
             if (userInfoBean.getData().getInfo().getWechat()!=null) {
                 tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
@@ -577,7 +586,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
 
             }
-            if (userInfoBean.getData().getInfo().getHometown()!=null) {
+            if (userInfoBean.getData().getInfo()!=null) {
                 tvEditInformationActivitySchool.setText(userInfoBean.getData().getInfo().getHometown());
 
             }

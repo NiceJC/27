@@ -36,7 +36,9 @@ import com.yolanda.nohttp.rest.Response;
 
 import java.util.ArrayList;
 
-
+/**
+ * 个人中心浏览图片
+ */
 
 public class MyPhotoActivity extends AppCompatActivity implements View.OnClickListener {
     private HackyViewPager pager;

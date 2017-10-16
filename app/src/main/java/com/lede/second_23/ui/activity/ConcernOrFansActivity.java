@@ -2,6 +2,7 @@ package com.lede.second_23.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 关注的人OR 粉丝
+ */
 public class ConcernOrFansActivity extends AppCompatActivity implements OnResponseListener<String>, LoadMoreWrapper.OnLoadMoreListener {
 
     private int type;
@@ -121,7 +125,14 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
             protected void convert(ViewHolder holder, final ConcernOrFansBean.DataBean.ListBean listBean, int position) {
                 CircleTextImageView cliv_touxiang=holder.getView(R.id.cliv_concern_or_fans_item_touxiang);
                 TextView tv_nickName=holder.getView(R.id.tv_concern_or_fans_item_nickname);
+                if (listBean.getTrueName().equals("1")) {
+                    Drawable drawableRight = getResources().getDrawable(
+                            R.mipmap.v1_fans);
 
+                    tv_nickName.setCompoundDrawablesWithIntrinsicBounds(null,
+                            null, drawableRight, null);
+                    tv_nickName.setCompoundDrawablePadding(2);
+                }
                 tv_right=holder.getView(R.id.iv_concern_or_fans_item_right);
 //                tv_right.setClickable(true);
 //                if (type==0) {

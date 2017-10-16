@@ -90,7 +90,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
     private CommonAdapter forumAdapter;
     private CommonAdapter forumVideoReplyAdapter;
     private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumList = new ArrayList<>();
-    private ArrayList<PushUserBean.DataBean.UserInfosBean> pushUserList = new ArrayList<>();
+    private ArrayList<PushUserBean.DataBean.UserInfoListBean> pushUserList = new ArrayList<>();
     private ArrayList<ForumVideoReplyBean.DataBean.SimplePageInfoBean.ListBean> forumVideoReplyList = new ArrayList<>();
     private Gson mGson;
     private boolean isshowBottom = true;
@@ -559,10 +559,10 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.layout_all_forum_head, null);
         RecyclerView rv_head_show = (RecyclerView) view.findViewById(R.id.rv_all_forum_head_show);
-        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfosBean>(context, R.layout.item_all_forum_head, pushUserList) {
+        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfoListBean>(context, R.layout.item_all_forum_head, pushUserList) {
 
             @Override
-            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfosBean userInfosBean, int position) {
+            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfoListBean userInfosBean, int position) {
                 DIYImageView diyiv_userimg = holder.getView(R.id.diyiv_all_forum_head_userimg);
                 TextView tv_nickname = holder.getView(R.id.tv_all_forum_head_nickname);
                 LinearLayout ll_bg = holder.getView(R.id.ll_all_forum_head_bg);
@@ -722,7 +722,7 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
      */
     private void parsePushUser(String json) {
         PushUserBean pushUserBean = mGson.fromJson(json, PushUserBean.class);
-        pushUserList.addAll(pushUserBean.getData().getUserInfos());
+        pushUserList.addAll(pushUserBean.getData().getUserInfoList());
         headAdapter.notifyDataSetChanged();
     }
 

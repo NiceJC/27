@@ -9,7 +9,7 @@ import java.util.List;
 public class GetReplyBean {
 
     /**
-     * data : {"simple":{"hasNextPage":false,"list":[{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:08:44","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":92,"noticeText":"回复123","noticeType":2,"replyId":92,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:07:17","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":90,"noticeText":"123456","noticeType":0,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":0,"forumId":1501232407681475146,"forumText":"发布第一次测试","latitude":"1321321","likeCount":1,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123903134411,"creatTime":"2017-07-28 18:54:10","forumId":1501232407681475146,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":24,"noticeText":"回复微博评论。","noticeType":1,"replyId":30,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":4,"forumId":1501232688047399147,"forumText":"发布微博，第二次测试。9张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"9e7a060b521049bb990dedc6055b7886"},"allRecords":[{"recordOrder":7,"url":"http://my-photo.lacoorent.com/150123275346391.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/150123275303054.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":4,"url":"http://my-photo.lacoorent.com/150123275325146.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150123275300172.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":6,"url":"http://my-photo.lacoorent.com/150123275341320.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123275297627.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":8,"url":"http://my-photo.lacoorent.com/15012327535127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/150123275322779.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":5,"url":"http://my-photo.lacoorent.com/150123275327465.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123899876379,"creatTime":"2017-07-28 18:53:14","forumId":1501232688047399147,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":23,"noticeText":"评论微博评论","noticeType":1,"replyId":29,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}}],"nextPage":0,"pageNum":1,"pageSize":20,"total":13}}
+     * data : {"simple":{"hasNextPage":false,"list":[{"allForum":{"clickCount":1,"forumId":1504173616513071187,"forumText":"西湖","latitude":"30.303847","likeCount":1,"longitude":"120.369066","type":0,"userId":"aaad1802f1874e70a226961e2cace340"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/1504173548265001561.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/1504173549218014261.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/1504173548823043684.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/1504173549751085127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":1505227562884034,"creatTime":"2017-09-12 22:46:03","forumId":1504173616513071187,"nUserId":"aaad1802f1874e70a226961e2cace340","noticeId":72,"noticeText":"美","noticeType":0,"toUserId":"ae162a6fbffc4689b34fbc05d2a1ce38","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0"}}],"nextPage":0,"pageNum":1,"pageSize":20,"total":4}}
      * msg : 评论列表
      * result : 10000
      */
@@ -44,7 +44,7 @@ public class GetReplyBean {
 
     public static class DataBean {
         /**
-         * simple : {"hasNextPage":false,"list":[{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:08:44","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":92,"noticeText":"回复123","noticeType":2,"replyId":92,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:07:17","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":90,"noticeText":"123456","noticeType":0,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":0,"forumId":1501232407681475146,"forumText":"发布第一次测试","latitude":"1321321","likeCount":1,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123903134411,"creatTime":"2017-07-28 18:54:10","forumId":1501232407681475146,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":24,"noticeText":"回复微博评论。","noticeType":1,"replyId":30,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":4,"forumId":1501232688047399147,"forumText":"发布微博，第二次测试。9张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"9e7a060b521049bb990dedc6055b7886"},"allRecords":[{"recordOrder":7,"url":"http://my-photo.lacoorent.com/150123275346391.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/150123275303054.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":4,"url":"http://my-photo.lacoorent.com/150123275325146.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150123275300172.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":6,"url":"http://my-photo.lacoorent.com/150123275341320.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123275297627.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":8,"url":"http://my-photo.lacoorent.com/15012327535127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/150123275322779.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":5,"url":"http://my-photo.lacoorent.com/150123275327465.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123899876379,"creatTime":"2017-07-28 18:53:14","forumId":1501232688047399147,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":23,"noticeText":"评论微博评论","noticeType":1,"replyId":29,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}}],"nextPage":0,"pageNum":1,"pageSize":20,"total":13}
+         * simple : {"hasNextPage":false,"list":[{"allForum":{"clickCount":1,"forumId":1504173616513071187,"forumText":"西湖","latitude":"30.303847","likeCount":1,"longitude":"120.369066","type":0,"userId":"aaad1802f1874e70a226961e2cace340"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/1504173548265001561.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/1504173549218014261.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/1504173548823043684.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/1504173549751085127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":1505227562884034,"creatTime":"2017-09-12 22:46:03","forumId":1504173616513071187,"nUserId":"aaad1802f1874e70a226961e2cace340","noticeId":72,"noticeText":"美","noticeType":0,"toUserId":"ae162a6fbffc4689b34fbc05d2a1ce38","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0"}}],"nextPage":0,"pageNum":1,"pageSize":20,"total":4}
          */
 
         private SimpleBean simple;
@@ -60,11 +60,11 @@ public class GetReplyBean {
         public static class SimpleBean {
             /**
              * hasNextPage : false
-             * list : [{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:08:44","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":92,"noticeText":"回复123","noticeType":2,"replyId":92,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150181243649585,"creatTime":"2017-08-04 10:07:17","forumId":1501744695686205589,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":90,"noticeText":"123456","noticeType":0,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":0,"forumId":1501232407681475146,"forumText":"发布第一次测试","latitude":"1321321","likeCount":1,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},"allRecords":[{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123243252187.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/15012324325501.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123903134411,"creatTime":"2017-07-28 18:54:10","forumId":1501232407681475146,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":24,"noticeText":"回复微博评论。","noticeType":1,"replyId":30,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}},{"allForum":{"clickCount":4,"forumId":1501232688047399147,"forumText":"发布微博，第二次测试。9张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"9e7a060b521049bb990dedc6055b7886"},"allRecords":[{"recordOrder":7,"url":"http://my-photo.lacoorent.com/150123275346391.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/150123275303054.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":4,"url":"http://my-photo.lacoorent.com/150123275325146.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150123275300172.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":6,"url":"http://my-photo.lacoorent.com/150123275341320.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/150123275297627.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":8,"url":"http://my-photo.lacoorent.com/15012327535127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/150123275322779.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":5,"url":"http://my-photo.lacoorent.com/150123275327465.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":150123899876379,"creatTime":"2017-07-28 18:53:14","forumId":1501232688047399147,"nUserId":"40a0f4aef97e4f7f8ff2e86220e8bfd2","noticeId":23,"noticeText":"评论微博评论","noticeType":1,"replyId":29,"toUserId":"9e7a060b521049bb990dedc6055b7886","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}}]
+             * list : [{"allForum":{"clickCount":1,"forumId":1504173616513071187,"forumText":"西湖","latitude":"30.303847","likeCount":1,"longitude":"120.369066","type":0,"userId":"aaad1802f1874e70a226961e2cace340"},"allRecords":[{"recordOrder":0,"url":"http://my-photo.lacoorent.com/1504173548265001561.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/1504173549218014261.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/1504173548823043684.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/1504173549751085127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}],"commentId":1505227562884034,"creatTime":"2017-09-12 22:46:03","forumId":1504173616513071187,"nUserId":"aaad1802f1874e70a226961e2cace340","noticeId":72,"noticeText":"美","noticeType":0,"toUserId":"ae162a6fbffc4689b34fbc05d2a1ce38","userInfo":{"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0"}}]
              * nextPage : 0
              * pageNum : 1
              * pageSize : 20
-             * total : 13
+             * total : 4
              */
 
             private boolean hasNextPage;
@@ -124,18 +124,17 @@ public class GetReplyBean {
 
             public static class ListBean {
                 /**
-                 * allForum : {"clickCount":3,"forumId":1501744695686205589,"forumText":"表情1张","latitude":"1321321","likeCount":0,"longitude":"4654231","type":0,"userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"}
-                 * allRecords : [{"recordOrder":0,"url":"http://my-photo.lacoorent.com/150174471097474378.jpeg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}]
-                 * commentId : 150181243649585
-                 * creatTime : 2017-08-04 10:08:44
-                 * forumId : 1501744695686205589
-                 * nUserId : 40a0f4aef97e4f7f8ff2e86220e8bfd2
-                 * noticeId : 92
-                 * noticeText : 回复123
-                 * noticeType : 2
-                 * replyId : 92
-                 * toUserId : 9e7a060b521049bb990dedc6055b7886
-                 * userInfo : {"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag"}
+                 * allForum : {"clickCount":1,"forumId":1504173616513071187,"forumText":"西湖","latitude":"30.303847","likeCount":1,"longitude":"120.369066","type":0,"userId":"aaad1802f1874e70a226961e2cace340"}
+                 * allRecords : [{"recordOrder":0,"url":"http://my-photo.lacoorent.com/1504173548265001561.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":1,"url":"http://my-photo.lacoorent.com/1504173549218014261.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":2,"url":"http://my-photo.lacoorent.com/1504173548823043684.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"},{"recordOrder":3,"url":"http://my-photo.lacoorent.com/1504173549751085127.jpg","urlThree":"http://my-photo.lacoorent.com/null","urlTwo":"http://my-photo.lacoorent.com/null"}]
+                 * commentId : 1505227562884034
+                 * creatTime : 2017-09-12 22:46:03
+                 * forumId : 1504173616513071187
+                 * nUserId : aaad1802f1874e70a226961e2cace340
+                 * noticeId : 72
+                 * noticeText : 美
+                 * noticeType : 0
+                 * toUserId : ae162a6fbffc4689b34fbc05d2a1ce38
+                 * userInfo : {"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0"}
                  */
 
                 private AllForumBean allForum;
@@ -146,7 +145,6 @@ public class GetReplyBean {
                 private int noticeId;
                 private String noticeText;
                 private int noticeType;
-                private int replyId;
                 private String toUserId;
                 private UserInfoBean userInfo;
                 private List<AllRecordsBean> allRecords;
@@ -215,14 +213,6 @@ public class GetReplyBean {
                     this.noticeType = noticeType;
                 }
 
-                public int getReplyId() {
-                    return replyId;
-                }
-
-                public void setReplyId(int replyId) {
-                    this.replyId = replyId;
-                }
-
                 public String getToUserId() {
                     return toUserId;
                 }
@@ -249,14 +239,14 @@ public class GetReplyBean {
 
                 public static class AllForumBean {
                     /**
-                     * clickCount : 3
-                     * forumId : 1501744695686205589
-                     * forumText : 表情1张
-                     * latitude : 1321321
-                     * likeCount : 0
-                     * longitude : 4654231
+                     * clickCount : 1
+                     * forumId : 1504173616513071187
+                     * forumText : 西湖
+                     * latitude : 30.303847
+                     * likeCount : 1
+                     * longitude : 120.369066
                      * type : 0
-                     * userId : 40a0f4aef97e4f7f8ff2e86220e8bfd2
+                     * userId : aaad1802f1874e70a226961e2cace340
                      */
 
                     private int clickCount;
@@ -335,12 +325,14 @@ public class GetReplyBean {
 
                 public static class UserInfoBean {
                     /**
-                     * imgUrl : http://my-photo.lacoorent.com/20170627160236786746479.jpg
-                     * nickName : Ag
+                     * imgUrl : http://my-photo.lacoorent.com/20170903120905063447292.jpg
+                     * nickName : TWENTY-SEVEN
+                     * trueName : 0
                      */
 
                     private String imgUrl;
                     private String nickName;
+                    private String trueName;
 
                     public String getImgUrl() {
                         return imgUrl;
@@ -357,12 +349,20 @@ public class GetReplyBean {
                     public void setNickName(String nickName) {
                         this.nickName = nickName;
                     }
+
+                    public String getTrueName() {
+                        return trueName;
+                    }
+
+                    public void setTrueName(String trueName) {
+                        this.trueName = trueName;
+                    }
                 }
 
                 public static class AllRecordsBean {
                     /**
                      * recordOrder : 0
-                     * url : http://my-photo.lacoorent.com/150174471097474378.jpeg
+                     * url : http://my-photo.lacoorent.com/1504173548265001561.jpg
                      * urlThree : http://my-photo.lacoorent.com/null
                      * urlTwo : http://my-photo.lacoorent.com/null
                      */

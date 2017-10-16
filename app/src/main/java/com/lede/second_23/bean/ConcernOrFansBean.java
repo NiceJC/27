@@ -10,7 +10,7 @@ public class ConcernOrFansBean {
 
 
     /**
-     * data : {"hasNextPage":false,"list":[{"friend":true,"imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg","nickName":"番茄炒蛋","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5"}],"nextPage":0,"pageNum":1,"pageSize":1,"total":1}
+     * data : {"hasNextPage":false,"list":[{"friend":false,"imgUrl":"http://my-photo.lacoorent.com/20170627174315328616589.jpg","nickName":"达先生","trueName":"0","userId":"793922342ae3495b8ae3a8292f5c1e44"},{"friend":false,"imgUrl":"http://my-photo.lacoorent.com/20170627174315328616589.jpg","nickName":"达先生","trueName":"0","userId":"793922342ae3495b8ae3a8292f5c1e44"},{"friend":true,"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0","userId":"ae162a6fbffc4689b34fbc05d2a1ce38"}],"nextPage":0,"pageNum":1,"pageSize":3,"total":3}
      * msg : 请求成功
      * result : 10000
      */
@@ -46,11 +46,11 @@ public class ConcernOrFansBean {
     public static class DataBean {
         /**
          * hasNextPage : false
-         * list : [{"friend":true,"imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg","nickName":"番茄炒蛋","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5"}]
+         * list : [{"friend":false,"imgUrl":"http://my-photo.lacoorent.com/20170627174315328616589.jpg","nickName":"达先生","trueName":"0","userId":"793922342ae3495b8ae3a8292f5c1e44"},{"friend":false,"imgUrl":"http://my-photo.lacoorent.com/20170627174315328616589.jpg","nickName":"达先生","trueName":"0","userId":"793922342ae3495b8ae3a8292f5c1e44"},{"friend":true,"imgUrl":"http://my-photo.lacoorent.com/20170903120905063447292.jpg","nickName":"TWENTY-SEVEN","trueName":"0","userId":"ae162a6fbffc4689b34fbc05d2a1ce38"}]
          * nextPage : 0
          * pageNum : 1
-         * pageSize : 1
-         * total : 1
+         * pageSize : 3
+         * total : 3
          */
 
         private boolean hasNextPage;
@@ -110,15 +110,17 @@ public class ConcernOrFansBean {
 
         public static class ListBean {
             /**
-             * friend : true
-             * imgUrl : http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg
-             * nickName : 番茄炒蛋
-             * userId : 84ba77bc08ea4e1d8c03c06f6f6c79e5
+             * friend : false
+             * imgUrl : http://my-photo.lacoorent.com/20170627174315328616589.jpg
+             * nickName : 达先生
+             * trueName : 0
+             * userId : 793922342ae3495b8ae3a8292f5c1e44
              */
 
             private boolean friend;
             private String imgUrl;
             private String nickName;
+            private String trueName;
             private String userId;
 
             public boolean isFriend() {
@@ -143,6 +145,14 @@ public class ConcernOrFansBean {
 
             public void setNickName(String nickName) {
                 this.nickName = nickName;
+            }
+
+            public String getTrueName() {
+                return trueName;
+            }
+
+            public void setTrueName(String trueName) {
+                this.trueName = trueName;
             }
 
             public String getUserId() {

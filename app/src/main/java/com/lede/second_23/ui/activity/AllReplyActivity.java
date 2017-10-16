@@ -57,6 +57,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 评论详情页
+ */
 public class AllReplyActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int REPLY_REQUEST = 1000;

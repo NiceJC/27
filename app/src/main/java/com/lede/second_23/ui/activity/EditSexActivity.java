@@ -16,6 +16,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 废弃
+ */
 public class EditSexActivity extends AppCompatActivity {
 
     private boolean isBoy=true;

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -137,16 +138,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         ButterKnife.bind(this);
         intent = getIntent();
         userId = intent.getStringExtra("userId");
-//        intent.putExtra("videourl", dataBean.getForumMedia().getPath());
-//        intent.putExtra("picurl", dataBean.getForumMedia().getPic());
         videourl = intent.getStringExtra("videourl");
         picurl = intent.getStringExtra("picurl");
         time = intent.getStringExtra("time");
         banner1 = intent.getStringArrayListExtra("banner");
         text = intent.getStringExtra("text");
-//        userid="84ba77bc08ea4e1d8c03c06f6f6c79e5";
         if (userId.equals((String) SPUtils.get(this, GlobalConstants.USERID, ""))) {
-//            ll_bottom.setVisibility(View.GONE);
             iv_report.setVisibility(View.GONE);
             iv_concern_activity_concern.setVisibility(View.GONE);
             iv_concern_activity_message.setVisibility(View.GONE);
@@ -164,7 +161,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         requestQueue = GlobalConstants.getRequestQueue();
         userLocation();
         userInfoService(userId);
-//        Glide.with(this).fromResource(R.mipmap.test7).transform(new OvalImageView(this))
     }
 
     private void userInfoService(String userId) {
@@ -203,7 +199,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                     RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
                 } else {
                     showHintDialog(1);
-//                    Toast.makeText(this, "互相关联后才能开启聊天哦", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -221,10 +216,8 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
                 } else {
                     showHintDialog(0);
-//                    Toast.makeText(this, "互相关联后才能获取位置哦", Toast.LENGTH_SHORT).show();
                 }
 
-//                intent=new Intent(this,PathActivity.class);
                 break;
             case R.id.iv_concern_activity_2_up:
                 showPopwindow();
@@ -244,10 +237,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 iv_declaration.setClickable(false);
                 SPUtils.put(this, GlobalConstants.DECLARATION,false);
                 break;
-            case R.id.bt_concern_acitivity_2_like:
-//                likeRequest();
-                pushSystemMessage();
-                break;
+//            case R.id.bt_concern_acitivity_2_like:
+//                pushSystemMessage();
+//                break;
         }
     }
 
@@ -364,8 +356,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_save:
-//                    mDialog.dismiss();
-//                    saveBitmap(bitmap);
                     popupWindow.dismiss();
                     Intent intent = new Intent(ConcernActivity_2.this, ReportActivity.class);
                     startActivity(intent);
@@ -391,7 +381,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
      * 关注请求
      */
     private void concernService() {
-//        Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
         Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
         concernRequest.add("id", userId);
         concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
@@ -457,50 +446,9 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 ll_inDicator.removeAllViews();
                 userInfoService(userId);
                 iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
-//                iv_concern_activity_concern.setClickable(false);
-//            // 构造 TextMessage 实例
-//            TextMessage myTextMessage = TextMessage.obtain("我是消息内容");
-//            /* 生成 Message 对象。
-//             * "7127" 为目标 Id。根据不同的 conversationType，可能是用户 Id、讨论组 Id、群组 Id 或聊天室 Id。
-//             * Conversation.ConversationType.PRIVATE 为私聊会话类型，根据需要，也可以传入其它会话类型，如群组，讨论组等。
-//             */
-//            Message myMessage = Message.obtain(userid, Conversation.ConversationType.SYSTEM, myTextMessage);
-//            /**
-//             * <p>发送消息。
-//             * 通过 {@link IRongCallback.ISendMessageCallback}
-//             * 中的方法回调发送的消息状态及消息体。</p>
-//             *
-//             * @param message     将要发送的消息体。
-//             * @param pushContent 当下发 push 消息时，在通知栏里会显示这个字段。
-//             *                    如果发送的是自定义消息，该字段必须填写，否则无法收到 push 消息。
-//             *                    如果发送 sdk 中默认的消息类型，例如 RC:TxtMsg, RC:VcMsg, RC:ImgMsg，则不需要填写，默认已经指定。
-//             * @param pushData    push 附加信息。如果设置该字段，用户在收到 push 消息时，能通过 {@link io.rong.push.notification.PushNotificationMessage#getPushData()} 方法获取。
-//             * @param callback    发送消息的回调，参考 {@link IRongCallback.ISendMessageCallback}。
-//             */
-//            RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
-//                @Override
-//                public void onAttached(Message message) {
-//                    //消息本地数据库存储成功的回调
-//                }
-//
-//                @Override
-//                public void onSuccess(Message message) {
-//                    //消息通过网络发送成功的回调
-//                    Toast.makeText(ConcernActivity_2.this, "点心成功", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void onError(Message message, RongIMClient.ErrorCode errorCode) {
-//                    //消息发送失败的回调
-//                    Toast.makeText(ConcernActivity_2.this, "点心失败", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            RongIM.getInstance().sendMessage(new Message());
             } else {
                 ll_inDicator.removeAllViews();
                 userInfoService(userId);
-//                iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
-//                iv_concern_activity_concern.setClickable(true);
 
                 Toast.makeText(this, "取消关联成功", Toast.LENGTH_SHORT).show();
             }
@@ -531,10 +479,16 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 .load(concernUserInfoBean.getData().getInfo().getImgUrl())
                 .error(R.mipmap.loading)
                 .into(diyiv_userimg);
+        if (concernUserInfoBean.getData().getInfo().getTrueName().equals("1")) {
+            Drawable drawableRight = getResources().getDrawable(
+                    R.mipmap.v2);
+
+            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, drawableRight, null);
+            tv_username.setCompoundDrawablePadding(2);
+        }
         tv_username.setText(concernUserInfoBean.getData().getInfo().getNickName());
 
-
-//        tv_city.setText(concernUserInfoBean.getData().getInfo().getAddress());
         if (concernUserInfoBean.getData().isEnd()) {
             Glide.with(this)
                     .load(R.mipmap.comment_on)
@@ -560,7 +514,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         isFriend = dataBean.isFirend();
         if (isFriend) {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
-//            iv_concern_activity_concern.setClickable(false);
         } else {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
             iv_concern_activity_concern.setClickable(true);
@@ -595,14 +548,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                     }
 
                     ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
-//                adapter.getItem(i).getChildFragmentManager().getFragments().get(i).getView().setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Toast.makeText(ConcernActivity_2.this, "单击", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        tv_text.setText(text);
-//        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 
                     hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                         @Override
@@ -627,10 +572,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                         }
                     });
                     hvp_concern_activity_2.setAdapter(adapter);
-//            Glide.with(this)
-//                    .load(dataBean.getForumList().get(0).getImgs().get(0).getUrl())
-//                    .error(R.mipmap.ic_launcher)
-//                    .into(iv_concern_activity_user_img);
                 } else {
                     hvp_concern_activity_2.setVisibility(View.GONE);
                     jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
@@ -638,10 +579,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                             JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
                     Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
 
-//            Glide.with(this)
-//                    .load(dataBean.getForumList().get(0).getForumMedia().getPic())
-//                    .error(R.mipmap.ic_launcher)
-//                    .into(iv_concern_activity_user_img);
                 }
             }else {
                 Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
@@ -708,16 +645,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
 
         username = dataBean.getInfo().getNickName();
-//        ConcernUserInfoBean.DataBean.InfoBean infoBean=dataBean.getInfo();
-//
-//        if (infoBean.getSex().equals("男")) {
-//            iv_concern_activity_user_sex.setImageResource(R.mipmap.sex_boy);
-//        }else {
-//            iv_concern_activity_user_sex.setImageResource(R.mipmap.sex_girl);
-//        }
-//        tv_concern_activity_username.setText(infoBean.getNickName());
-//        tv_concern_activity_useage.setText(infoBean.getHobby()+" "+infoBean.getQq());
-//        tv_concern_activity_usecity.setText(infoBean.getAddress());
     }
 
     private void showPopwindow() {
@@ -747,14 +674,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
         // 这里检验popWindow里的button是否可以点击
         TextView tv_text = (TextView) view.findViewById(R.id.tv_concern_text);
-//        first.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//
-//                System.out.println("第一个按钮被点击了");
-//            }
-//        });
         if (text!=null) {
             tv_text.setText(text);
         }else {
@@ -768,7 +687,6 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
             @Override
             public void onDismiss() {
-//                System.out.println("popWindow消失");
                 ll_bottom.setVisibility(View.VISIBLE);
                 iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click_up);
             }

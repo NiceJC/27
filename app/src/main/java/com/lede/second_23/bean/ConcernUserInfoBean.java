@@ -9,7 +9,7 @@ import java.util.List;
 public class ConcernUserInfoBean {
 
     /**
-     * data : {"firend":true,"forumList":[{"createTime":"2017-05-19 17:15:40","forumId":180,"forumMedia":{"forumId":180,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null","userId":"9e7a060b521049bb990dedc6055b7886"},"imgs":[{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540476340118.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540499727845.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540514422383.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540598347194.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540636443121.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540664948954.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540714530203.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540745688347.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540807138669.webp","userId":"9e7a060b521049bb990dedc6055b7886"}],"like":false,"text":"表情","userId":"9e7a060b521049bb990dedc6055b7886"}],"end":true,"dynamic":true,"info":{"address":"浙江省 杭州市","followersCount":1,"friendsCount":3,"hobby":"23","hometown":"单身","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg","nickName":"番茄炒蛋","note":"我相信，梦里能到达的地方，总有一天，脚步也能到达","qq":"天秤座","registerTime":"2017-04-19 15:47:31","sex":"男","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5","wechat":"软件开发工程师"}}
+     * data : {"firend":false,"forumList":[{"createTime":"2017-06-27 14:10:48","forumId":339,"forumMedia":{"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"分享","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"end":false,"dynamic":true,"info":{"address":"浙江省 杭州市","followersCount":13,"friendsCount":-7,"hobby":"21","imgUrl":"http://my-photo.lacoorent.com/20170614154446256454050.jpg","nickName":"Axe","note":"halo","qq":"狮子座","registerTime":"2017-06-13 15:29:15","sex":"男","trueName":"0","userId":"a9460f73af0c4cb9b2f9d514b5934563","wechat":"篮球"}}
      * msg : 请求成功
      * result : 10000
      */
@@ -44,11 +44,11 @@ public class ConcernUserInfoBean {
 
     public static class DataBean {
         /**
-         * firend : true
-         * forumList : [{"createTime":"2017-05-19 17:15:40","forumId":180,"forumMedia":{"forumId":180,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null","userId":"9e7a060b521049bb990dedc6055b7886"},"imgs":[{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540476340118.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540499727845.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540514422383.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540598347194.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540636443121.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540664948954.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540714530203.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540745688347.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540807138669.webp","userId":"9e7a060b521049bb990dedc6055b7886"}],"like":false,"text":"表情","userId":"9e7a060b521049bb990dedc6055b7886"}]
-         * end : true
+         * firend : false
+         * forumList : [{"createTime":"2017-06-27 14:10:48","forumId":339,"forumMedia":{"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"分享","userId":"a9460f73af0c4cb9b2f9d514b5934563"}]
+         * end : false
          * dynamic : true
-         * info : {"address":"浙江省 杭州市","followersCount":1,"friendsCount":3,"hobby":"23","hometown":"单身","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg","nickName":"番茄炒蛋","note":"我相信，梦里能到达的地方，总有一天，脚步也能到达","qq":"天秤座","registerTime":"2017-04-19 15:47:31","sex":"男","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5","wechat":"软件开发工程师"}
+         * info : {"address":"浙江省 杭州市","followersCount":13,"friendsCount":-7,"hobby":"21","imgUrl":"http://my-photo.lacoorent.com/20170614154446256454050.jpg","nickName":"Axe","note":"halo","qq":"狮子座","registerTime":"2017-06-13 15:29:15","sex":"男","trueName":"0","userId":"a9460f73af0c4cb9b2f9d514b5934563","wechat":"篮球"}
          */
 
         private boolean firend;
@@ -100,31 +100,31 @@ public class ConcernUserInfoBean {
         public static class InfoBean {
             /**
              * address : 浙江省 杭州市
-             * followersCount : 1
-             * friendsCount : 3
-             * hobby : 23
-             * hometown : 单身
-             * imgUrl : http://7xr1tb.com1.z0.glb.clouddn.com/20170419154730870978056.jpg
-             * nickName : 番茄炒蛋
-             * note : 我相信，梦里能到达的地方，总有一天，脚步也能到达
-             * qq : 天秤座
-             * registerTime : 2017-04-19 15:47:31
+             * followersCount : 13
+             * friendsCount : -7
+             * hobby : 21
+             * imgUrl : http://my-photo.lacoorent.com/20170614154446256454050.jpg
+             * nickName : Axe
+             * note : halo
+             * qq : 狮子座
+             * registerTime : 2017-06-13 15:29:15
              * sex : 男
-             * userId : 84ba77bc08ea4e1d8c03c06f6f6c79e5
-             * wechat : 软件开发工程师
+             * trueName : 0
+             * userId : a9460f73af0c4cb9b2f9d514b5934563
+             * wechat : 篮球
              */
 
             private String address;
             private int followersCount;
             private int friendsCount;
             private String hobby;
-            private String hometown;
             private String imgUrl;
             private String nickName;
             private String note;
             private String qq;
             private String registerTime;
             private String sex;
+            private String trueName;
             private String userId;
             private String wechat;
 
@@ -158,14 +158,6 @@ public class ConcernUserInfoBean {
 
             public void setHobby(String hobby) {
                 this.hobby = hobby;
-            }
-
-            public String getHometown() {
-                return hometown;
-            }
-
-            public void setHometown(String hometown) {
-                this.hometown = hometown;
             }
 
             public String getImgUrl() {
@@ -216,6 +208,14 @@ public class ConcernUserInfoBean {
                 this.sex = sex;
             }
 
+            public String getTrueName() {
+                return trueName;
+            }
+
+            public void setTrueName(String trueName) {
+                this.trueName = trueName;
+            }
+
             public String getUserId() {
                 return userId;
             }
@@ -235,13 +235,13 @@ public class ConcernUserInfoBean {
 
         public static class ForumListBean {
             /**
-             * createTime : 2017-05-19 17:15:40
-             * forumId : 180
-             * forumMedia : {"forumId":180,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null","userId":"9e7a060b521049bb990dedc6055b7886"}
-             * imgs : [{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540476340118.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540499727845.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540514422383.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540598347194.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540636443121.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540664948954.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540714530203.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540745688347.webp","userId":"9e7a060b521049bb990dedc6055b7886"},{"forumId":180,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540807138669.webp","userId":"9e7a060b521049bb990dedc6055b7886"}]
+             * createTime : 2017-06-27 14:10:48
+             * forumId : 339
+             * forumMedia : {"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"}
+             * imgs : [{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}]
              * like : false
-             * text : 表情
-             * userId : 9e7a060b521049bb990dedc6055b7886
+             * text : 分享
+             * userId : a9460f73af0c4cb9b2f9d514b5934563
              */
 
             private String createTime;
@@ -310,10 +310,10 @@ public class ConcernUserInfoBean {
 
             public static class ForumMediaBean {
                 /**
-                 * forumId : 180
-                 * path : http://7xr1tb.com1.z0.glb.clouddn.com/null
-                 * pic : http://7xr1tb.com1.z0.glb.clouddn.com/null
-                 * userId : 9e7a060b521049bb990dedc6055b7886
+                 * forumId : 339
+                 * path : http://my-photo.lacoorent.com/null
+                 * pic : http://my-photo.lacoorent.com/null
+                 * userId : a9460f73af0c4cb9b2f9d514b5934563
                  */
 
                 private int forumId;
@@ -356,9 +356,9 @@ public class ConcernUserInfoBean {
 
             public static class ImgsBean {
                 /**
-                 * forumId : 180
-                 * url : http://7xr1tb.com1.z0.glb.clouddn.com/20170519171540476340118.webp
-                 * userId : 9e7a060b521049bb990dedc6055b7886
+                 * forumId : 339
+                 * url : http://my-photo.lacoorent.com/20170627141048100790220.jpg
+                 * userId : a9460f73af0c4cb9b2f9d514b5934563
                  */
 
                 private int forumId;

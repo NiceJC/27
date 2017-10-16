@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -68,7 +69,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
+/**
+ * 微博详情页
+ */
 public class ForumDetailActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int FOURM_DETAIL = 1000;
@@ -991,6 +994,15 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 startActivity(intent);
             }
         });
+        if (listBean.getUser().getTrueName().equals("1")) {
+            Drawable drawableRight = getResources().getDrawable(
+                    R.mipmap.v5);
+
+            tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, drawableRight, null);
+            tv_nickname.setCompoundDrawablePadding(2);
+        }
+
         tv_nickname.setText(listBean.getUser().getNickName());
         tv_nickname.setOnClickListener(new View.OnClickListener() {
             @Override

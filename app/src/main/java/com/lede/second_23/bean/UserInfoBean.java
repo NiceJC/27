@@ -8,8 +8,9 @@ import java.util.List;
 
 public class UserInfoBean {
 
+
     /**
-     * data : {"work":[],"edu":[],"info":{"address":"浙江省 杭州市","followersCount":0,"friendsCount":0,"hobby":"23","hometown":"感情","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170412150441607474112.jpg","nickName":"昵称","note":"签名123","qq":"双鱼座","registerTime":"2017-04-12 15:04:45","sex":"男","userId":"9e7a060b521049bb990dedc6055b7886","wechat":"UI设计师"}}
+     * data : {"work":[],"edu":[],"info":{"address":"湖北省 襄樊市","followersCount":1,"friendsCount":6,"hobby":"22","hometown":"学校","imgUrl":"http://my-photo.lacoorent.com/20170614190531900164989.jpg","nickName":"啧啧","note":"敢问路在何方，路在脚下","qq":"星座","registerTime":"2017-06-13 14:17:21","sex":"男","trueName":"0","userId":"aaad1802f1874e70a226961e2cace340","wechat":"篮球"}}
      * msg : 请求成功
      * result : 10000
      */
@@ -46,7 +47,7 @@ public class UserInfoBean {
         /**
          * work : []
          * edu : []
-         * info : {"address":"浙江省 杭州市","followersCount":0,"friendsCount":0,"hobby":"23","hometown":"感情","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170412150441607474112.jpg","nickName":"昵称","note":"签名123","qq":"双鱼座","registerTime":"2017-04-12 15:04:45","sex":"男","userId":"9e7a060b521049bb990dedc6055b7886","wechat":"UI设计师"}
+         * info : {"address":"湖北省 襄樊市","followersCount":1,"friendsCount":6,"hobby":"22","hometown":"学校","imgUrl":"http://my-photo.lacoorent.com/20170614190531900164989.jpg","nickName":"啧啧","note":"敢问路在何方，路在脚下","qq":"星座","registerTime":"2017-06-13 14:17:21","sex":"男","trueName":"0","userId":"aaad1802f1874e70a226961e2cace340","wechat":"篮球"}
          */
 
         private InfoBean info;
@@ -79,19 +80,20 @@ public class UserInfoBean {
 
         public static class InfoBean {
             /**
-             * address : 浙江省 杭州市
-             * followersCount : 0
-             * friendsCount : 0
-             * hobby : 23
-             * hometown : 感情
-             * imgUrl : http://7xr1tb.com1.z0.glb.clouddn.com/20170412150441607474112.jpg
-             * nickName : 昵称
-             * note : 签名123
-             * qq : 双鱼座
-             * registerTime : 2017-04-12 15:04:45
+             * address : 湖北省 襄樊市
+             * followersCount : 1
+             * friendsCount : 6
+             * hobby : 22
+             * hometown : 学校
+             * imgUrl : http://my-photo.lacoorent.com/20170614190531900164989.jpg
+             * nickName : 啧啧
+             * note : 敢问路在何方，路在脚下
+             * qq : 星座
+             * registerTime : 2017-06-13 14:17:21
              * sex : 男
-             * userId : 9e7a060b521049bb990dedc6055b7886
-             * wechat : UI设计师
+             * trueName : 0
+             * userId : aaad1802f1874e70a226961e2cace340
+             * wechat : 篮球
              */
 
             private String address;
@@ -105,6 +107,7 @@ public class UserInfoBean {
             private String qq;
             private String registerTime;
             private String sex;
+            private String trueName;
             private String userId;
             private String wechat;
 
@@ -194,6 +197,14 @@ public class UserInfoBean {
 
             public void setSex(String sex) {
                 this.sex = sex;
+            }
+
+            public String getTrueName() {
+                return trueName;
+            }
+
+            public void setTrueName(String trueName) {
+                this.trueName = trueName;
             }
 
             public String getUserId() {

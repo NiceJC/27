@@ -37,6 +37,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 收到的点赞
+ */
 public class GetZanActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int GET_ZAN=1000;

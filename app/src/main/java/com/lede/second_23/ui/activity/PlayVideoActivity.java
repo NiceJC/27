@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +46,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
+/**
+ * 视频回复录制完成后预览
+ *
+ */
 public class PlayVideoActivity extends Activity {
     private static final int GET_QIUNIUTOKEN = 1000;
     private static final int VIDEO_REPLY=2000;
@@ -143,19 +144,14 @@ public class PlayVideoActivity extends Activity {
         // main.xml中的ImageView
 //        ImageView spaceshipImage = (ImageView) v.findViewById(R.id.img);
         TextView tipTextView = (TextView) v.findViewById(R.id.tipTextView);// 提示文字
-        // 加载动画
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
-                context, R.anim.loading_animation);
-//         使用ImageView显示动画
-//        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
         tipTextView.setText(msg);// 设置加载信息
 
         Dialog loadingDialog = new Dialog(context, R.style.loading_dialog);// 创建自定义样式dialog
 
 
         loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.FILL_PARENT));// 设置布局
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
         return loadingDialog;
     }
 

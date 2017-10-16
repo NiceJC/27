@@ -9,13 +9,16 @@ import java.util.List;
 
 public class PushUserBean {
 
+
     /**
-     * data : {"userInfos":[{"imgUrl":"http://my-photo.lacoorent.com/20170718161150916819835.jpg","nickName":"测试账号4","userId":"15541fc2790e496491f40793de09dee1"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"哈喽","userId":"1fa48078987d405baeefc6d94e4fc216"},{"imgUrl":"http://my-photo.lacoorent.com/20170622152734253454155.jpg","nickName":"某宇","userId":"40a0f4aef97e4f7f8ff2e86220e8bfd2"},{"imgUrl":"http://my-photo.lacoorent.com/20170718161150916819835.jpg","nickName":"不爱吃草的坏兔子","userId":"0c264a82887746e4a35b3b2c4006891c"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"测试账号9","userId":"ee59fb2659654db69352fd34f85d642c"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"测试账号5","userId":"5d428075744c4307866f99de2f1cc199"},{"imgUrl":"http://my-photo.lacoorent.com/20170612180233020679146.jpg","nickName":"msong27","userId":"328de4b3f7304bbca5967766c1001d22"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"测试账号2","userId":"5b4e38090d2943ee865c56a60a514131"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"番茄炒蛋ggg","userId":"84ba77bc08ea4e1d8c03c06f6f6c79e5"},{"imgUrl":"http://my-photo.lacoorent.com/20170627160236786746479.jpg","nickName":"Ag","userId":"9e7a060b521049bb990dedc6055b7886"}]}
-     * msg : 推送用户
+     * data : {"userInfoList":[{"address":"浙江省 杭州市","followersCount":2,"friendsCount":1,"hobby":"22","imgUrl":"http://my-photo.lacoorent.com/20170705172341353536142.jpg","nickName":"ozil","note":"：）","registerTime":"2017-06-26 20:39:01","sex":"女","trueName":"0","userId":"b5c0fb6330864dcbb51fa24803e395de","wechat":"钢琴","qq":""},{"address":"浙江省 杭州市","followersCount":4,"friendsCount":1,"hobby":"23","imgUrl":"http://my-photo.lacoorent.com/20170703015205640156848.jpg","nickName":"歪星星对抗全世界","note":"Take me to the space！","registerTime":"2017-07-03 01:52:07","sex":"男","trueName":"0","userId":"31579150f0804695a2f8a060305303c1","wechat":"钢琴"},{"address":"浙江省 台州市","followersCount":1,"friendsCount":0,"hobby":"18","imgUrl":"http://my-photo.lacoorent.com/20170706233637732213792.jpg","nickName":"池糖糖糖糖糖","registerTime":"2017-07-06 23:36:38","sex":"女","trueName":"0","userId":"36eaffb02b644fd9b9860f0592780179","wechat":"dancing"},{"address":"浙江省 杭州市","followersCount":7,"friendsCount":-2,"hobby":"23","imgUrl":"http://my-photo.lacoorent.com/20170908154906500359706.jpg","nickName":"RSTSXX","note":"halo！！！","qq":"","registerTime":"2017-06-13 18:09:24","sex":"男","trueName":"0","userId":"80cb649c9dab48088802a340ce23ee0b","wechat":"音乐"}]}
+     * msg : 请求成功
+     * result : 10000
      */
 
     private DataBean data;
     private String msg;
+    private int result;
 
     public DataBean getData() {
         return data;
@@ -33,27 +36,87 @@ public class PushUserBean {
         this.msg = msg;
     }
 
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
     public static class DataBean {
-        private List<UserInfosBean> userInfos;
+        private List<UserInfoListBean> userInfoList;
 
-        public List<UserInfosBean> getUserInfos() {
-            return userInfos;
+        public List<UserInfoListBean> getUserInfoList() {
+            return userInfoList;
         }
 
-        public void setUserInfos(List<UserInfosBean> userInfos) {
-            this.userInfos = userInfos;
+        public void setUserInfoList(List<UserInfoListBean> userInfoList) {
+            this.userInfoList = userInfoList;
         }
 
-        public static class UserInfosBean {
+        public static class UserInfoListBean {
             /**
-             * imgUrl : http://my-photo.lacoorent.com/20170718161150916819835.jpg
-             * nickName : 测试账号4
-             * userId : 15541fc2790e496491f40793de09dee1
+             * address : 浙江省 杭州市
+             * followersCount : 2
+             * friendsCount : 1
+             * hobby : 22
+             * imgUrl : http://my-photo.lacoorent.com/20170705172341353536142.jpg
+             * nickName : ozil
+             * note : ：）
+             * registerTime : 2017-06-26 20:39:01
+             * sex : 女
+             * trueName : 0
+             * userId : b5c0fb6330864dcbb51fa24803e395de
+             * wechat : 钢琴
+             * qq :
              */
 
+            private String address;
+            private int followersCount;
+            private int friendsCount;
+            private String hobby;
             private String imgUrl;
             private String nickName;
+            private String note;
+            private String registerTime;
+            private String sex;
+            private String trueName;
             private String userId;
+            private String wechat;
+            private String qq;
+
+            public String getAddress() {
+                return address;
+            }
+
+            public void setAddress(String address) {
+                this.address = address;
+            }
+
+            public int getFollowersCount() {
+                return followersCount;
+            }
+
+            public void setFollowersCount(int followersCount) {
+                this.followersCount = followersCount;
+            }
+
+            public int getFriendsCount() {
+                return friendsCount;
+            }
+
+            public void setFriendsCount(int friendsCount) {
+                this.friendsCount = friendsCount;
+            }
+
+            public String getHobby() {
+                return hobby;
+            }
+
+            public void setHobby(String hobby) {
+                this.hobby = hobby;
+            }
 
             public String getImgUrl() {
                 return imgUrl;
@@ -71,12 +134,60 @@ public class PushUserBean {
                 this.nickName = nickName;
             }
 
+            public String getNote() {
+                return note;
+            }
+
+            public void setNote(String note) {
+                this.note = note;
+            }
+
+            public String getRegisterTime() {
+                return registerTime;
+            }
+
+            public void setRegisterTime(String registerTime) {
+                this.registerTime = registerTime;
+            }
+
+            public String getSex() {
+                return sex;
+            }
+
+            public void setSex(String sex) {
+                this.sex = sex;
+            }
+
+            public String getTrueName() {
+                return trueName;
+            }
+
+            public void setTrueName(String trueName) {
+                this.trueName = trueName;
+            }
+
             public String getUserId() {
                 return userId;
             }
 
             public void setUserId(String userId) {
                 this.userId = userId;
+            }
+
+            public String getWechat() {
+                return wechat;
+            }
+
+            public void setWechat(String wechat) {
+                this.wechat = wechat;
+            }
+
+            public String getQq() {
+                return qq;
+            }
+
+            public void setQq(String qq) {
+                this.qq = qq;
             }
         }
     }

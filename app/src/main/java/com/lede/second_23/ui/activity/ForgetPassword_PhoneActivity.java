@@ -31,8 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 注册、忘记密码页面 根据intent传来的type判断
- * type 0: 注册 type 1:忘记密码
+ * 忘记密码页面
  */
 public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResponseListener<String> {
 

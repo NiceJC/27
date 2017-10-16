@@ -2,6 +2,7 @@ package com.lede.second_23.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 收到的评论页
+ */
 public class GetReplyActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int GET_REPLY=1000;
@@ -81,6 +85,14 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
             protected void convert(ViewHolder holder, GetReplyBean.DataBean.SimpleBean.ListBean listBean, int position) {
                 DIYImageView diy_userimg=holder.getView(R.id.diyiv_item_get_reply_userimg);
                 TextView tv_nickname=holder.getView(R.id.tv_item_get_reply_nickname);
+                if (listBean.getUserInfo().getTrueName().equals("1")) {
+                    Drawable drawableRight = getResources().getDrawable(
+                            R.mipmap.v4);
+
+                    tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+                            null, drawableRight, null);
+                    tv_nickname.setCompoundDrawablePadding(2);
+                }
                 TextView tv_time=holder.getView(R.id.tv_item_get_reply_time);
                 TextView tv_text=holder.getView(R.id.tv_item_get_reply_text);
                 ImageView iv_forum_pic=holder.getView(R.id.iv_item_get_reply_forum_pic);

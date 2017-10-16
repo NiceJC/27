@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 视频回复播放页
+ */
 public class ForumReplyVideoPlayActivity extends ActionBarActivity {
 
     @Bind(R.id.vp_forum_reply_video_play_activity_show)

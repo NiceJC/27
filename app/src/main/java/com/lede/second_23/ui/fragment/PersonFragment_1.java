@@ -2,6 +2,7 @@ package com.lede.second_23.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -264,6 +265,14 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
     }
 
     private void reFreshHead() {
+        if (personBean.getData().getUser().getTrueName().equals("1")) {
+            Drawable drawableRight = getResources().getDrawable(
+                    R.mipmap.v5);
+
+            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, drawableRight, null);
+            tv_username.setCompoundDrawablePadding(2);
+        }
         tv_username.setText(personBean.getData().getUser().getNickName());
         if (personBean.getData().getUser().getSex().equals("男")) {
             Glide.with(context)

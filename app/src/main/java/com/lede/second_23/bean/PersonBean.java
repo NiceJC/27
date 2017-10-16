@@ -9,7 +9,7 @@ import java.util.List;
 public class PersonBean {
 
     /**
-     * data : {"simple":{"hasNextPage":false,"list":[{"createTime":"2017-05-03 12:38:35","forumId":134,"forumMedia":{"forumId":134,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.jpg"},"imgs":[{"forumId":134,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行2"},{"createTime":"2017-05-03 12:about_we:33","forumId":131,"forumMedia":{"forumId":131,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.jpg"},"imgs":[{"forumId":131,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行1"},{"createTime":"2017-04-26 10:46:39","forumId":125,"forumMedia":{"forumId":125,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null"},"imgs":[{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426104639811394633.jpg"},{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426111254346137269.jpg"}],"like":false,"text":"乐可快乐出行0123456789asdzxcvbhfgrty"}],"nextPage":0,"pageNum":1,"pageSize":20,"total":4},"user":{"address":"浙江省 杭州市","followersCount":8,"friendsCount":14,"hobby":"21","hometown":"感情","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg","nickName":"axe","note":"qwer123","qq":"狮子座","registerTime":"2017-04-12 15:04:45","sex":"男","userId":"9e7a060b521049bb990dedc6055b7886","wechat":"软件工程师"}}
+     * data : {"simple":{"hasNextPage":true,"list":[{"createTime":"2017-06-27 14:10:48","forumId":339,"forumMedia":{"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"分享","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-26 17:37:03","forumId":338,"forumMedia":{"forumId":338,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":338,"url":"http://my-photo.lacoorent.com/20170626173703270954736.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"好气","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-19 18:32:32","forumId":321,"forumMedia":{"forumId":321,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":321,"url":"http://my-photo.lacoorent.com/20170619183232353563892.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:41:32","forumId":295,"forumMedia":{"forumId":295,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132067565334.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132270719109.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132227986548.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114133849859429.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:26:59","forumId":291,"forumMedia":{"forumId":291,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710052793489.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710342909913.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112711925352531.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112712683582611.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112713134504880.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112714734750292.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112715074111143.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716496218541.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716625888191.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:18:45","forumId":287,"forumMedia":{"forumId":287,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845151919510.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845256672275.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-14 18:47:06","forumId":264,"forumMedia":{"forumId":264,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":264,"url":"http://my-photo.lacoorent.com/20170614184706617148547.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"nextPage":2,"pageNum":1,"pageSize":20,"total":43},"friendsCount":0,"followersCount":3,"user":{"address":"浙江省 杭州市","followersCount":13,"friendsCount":-7,"hobby":"21","imgUrl":"http://my-photo.lacoorent.com/20170614154446256454050.jpg","nickName":"Axe","note":"halo","qq":"狮子座","registerTime":"2017-06-13 15:29:15","sex":"男","trueName":"0","userId":"a9460f73af0c4cb9b2f9d514b5934563","wechat":"篮球"},"totalTwo":10}
      * msg : 请求成功
      * result : 10000
      */
@@ -44,8 +44,11 @@ public class PersonBean {
 
     public static class DataBean {
         /**
-         * simple : {"hasNextPage":false,"list":[{"createTime":"2017-05-03 12:38:35","forumId":134,"forumMedia":{"forumId":134,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.jpg"},"imgs":[{"forumId":134,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行2"},{"createTime":"2017-05-03 12:about_we:33","forumId":131,"forumMedia":{"forumId":131,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.jpg"},"imgs":[{"forumId":131,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行1"},{"createTime":"2017-04-26 10:46:39","forumId":125,"forumMedia":{"forumId":125,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null"},"imgs":[{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426104639811394633.jpg"},{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426111254346137269.jpg"}],"like":false,"text":"乐可快乐出行0123456789asdzxcvbhfgrty"}],"nextPage":0,"pageNum":1,"pageSize":20,"total":4}
-         * user : {"address":"浙江省 杭州市","followersCount":8,"friendsCount":14,"hobby":"21","hometown":"感情","imgUrl":"http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg","nickName":"axe","note":"qwer123","qq":"狮子座","registerTime":"2017-04-12 15:04:45","sex":"男","userId":"9e7a060b521049bb990dedc6055b7886","wechat":"软件工程师"}
+         * simple : {"hasNextPage":true,"list":[{"createTime":"2017-06-27 14:10:48","forumId":339,"forumMedia":{"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"分享","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-26 17:37:03","forumId":338,"forumMedia":{"forumId":338,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":338,"url":"http://my-photo.lacoorent.com/20170626173703270954736.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"好气","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-19 18:32:32","forumId":321,"forumMedia":{"forumId":321,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":321,"url":"http://my-photo.lacoorent.com/20170619183232353563892.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:41:32","forumId":295,"forumMedia":{"forumId":295,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132067565334.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132270719109.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132227986548.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114133849859429.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:26:59","forumId":291,"forumMedia":{"forumId":291,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710052793489.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710342909913.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112711925352531.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112712683582611.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112713134504880.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112714734750292.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112715074111143.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716496218541.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716625888191.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:18:45","forumId":287,"forumMedia":{"forumId":287,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845151919510.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845256672275.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-14 18:47:06","forumId":264,"forumMedia":{"forumId":264,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":264,"url":"http://my-photo.lacoorent.com/20170614184706617148547.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"nextPage":2,"pageNum":1,"pageSize":20,"total":43}
+         * friendsCount : 0
+         * followersCount : 3
+         * user : {"address":"浙江省 杭州市","followersCount":13,"friendsCount":-7,"hobby":"21","imgUrl":"http://my-photo.lacoorent.com/20170614154446256454050.jpg","nickName":"Axe","note":"halo","qq":"狮子座","registerTime":"2017-06-13 15:29:15","sex":"男","trueName":"0","userId":"a9460f73af0c4cb9b2f9d514b5934563","wechat":"篮球"}
+         * totalTwo : 10
          */
 
         private SimpleBean simple;
@@ -96,12 +99,12 @@ public class PersonBean {
 
         public static class SimpleBean {
             /**
-             * hasNextPage : false
-             * list : [{"createTime":"2017-05-03 12:38:35","forumId":134,"forumMedia":{"forumId":134,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.jpg"},"imgs":[{"forumId":134,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行2"},{"createTime":"2017-05-03 12:about_we:33","forumId":131,"forumMedia":{"forumId":131,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503122823707305766.jpg"},"imgs":[{"forumId":131,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}],"like":false,"text":"乐可快乐出行1"},{"createTime":"2017-04-26 10:46:39","forumId":125,"forumMedia":{"forumId":125,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/null","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/null"},"imgs":[{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426104639811394633.jpg"},{"forumId":125,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/20170426111254346137269.jpg"}],"like":false,"text":"乐可快乐出行0123456789asdzxcvbhfgrty"}]
-             * nextPage : 0
+             * hasNextPage : true
+             * list : [{"createTime":"2017-06-27 14:10:48","forumId":339,"forumMedia":{"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"分享","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-26 17:37:03","forumId":338,"forumMedia":{"forumId":338,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":338,"url":"http://my-photo.lacoorent.com/20170626173703270954736.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"好气","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-19 18:32:32","forumId":321,"forumMedia":{"forumId":321,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":321,"url":"http://my-photo.lacoorent.com/20170619183232353563892.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:41:32","forumId":295,"forumMedia":{"forumId":295,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132067565334.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132270719109.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114132227986548.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":295,"url":"http://my-photo.lacoorent.com/20170615114133849859429.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:26:59","forumId":291,"forumMedia":{"forumId":291,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710052793489.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112710342909913.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112711925352531.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112712683582611.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112713134504880.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112714734750292.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112715074111143.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716496218541.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":291,"url":"http://my-photo.lacoorent.com/20170615112716625888191.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-15 11:18:45","forumId":287,"forumMedia":{"forumId":287,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845151919510.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":287,"url":"http://my-photo.lacoorent.com/20170615111845256672275.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"createTime":"2017-06-14 18:47:06","forumId":264,"forumMedia":{"forumId":264,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"},"imgs":[{"forumId":264,"url":"http://my-photo.lacoorent.com/20170614184706617148547.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}],"like":false,"text":"","userId":"a9460f73af0c4cb9b2f9d514b5934563"}]
+             * nextPage : 2
              * pageNum : 1
              * pageSize : 20
-             * total : 4
+             * total : 43
              */
 
             private boolean hasNextPage;
@@ -161,12 +164,13 @@ public class PersonBean {
 
             public static class ListBean {
                 /**
-                 * createTime : 2017-05-03 12:38:35
-                 * forumId : 134
-                 * forumMedia : {"forumId":134,"path":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.mp4","pic":"http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.jpg"}
-                 * imgs : [{"forumId":134,"url":"http://7xr1tb.com1.z0.glb.clouddn.com/null"}]
+                 * createTime : 2017-06-27 14:10:48
+                 * forumId : 339
+                 * forumMedia : {"forumId":339,"path":"http://my-photo.lacoorent.com/null","pic":"http://my-photo.lacoorent.com/null","userId":"a9460f73af0c4cb9b2f9d514b5934563"}
+                 * imgs : [{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048100790220.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"},{"forumId":339,"url":"http://my-photo.lacoorent.com/20170627141048142714168.jpg","userId":"a9460f73af0c4cb9b2f9d514b5934563"}]
                  * like : false
-                 * text : 乐可快乐出行2
+                 * text : 分享
+                 * userId : a9460f73af0c4cb9b2f9d514b5934563
                  */
 
                 private String createTime;
@@ -174,6 +178,7 @@ public class PersonBean {
                 private ForumMediaBean forumMedia;
                 private boolean like;
                 private String text;
+                private String userId;
                 private List<ImgsBean> imgs;
 
                 public String getCreateTime() {
@@ -216,6 +221,14 @@ public class PersonBean {
                     this.text = text;
                 }
 
+                public String getUserId() {
+                    return userId;
+                }
+
+                public void setUserId(String userId) {
+                    this.userId = userId;
+                }
+
                 public List<ImgsBean> getImgs() {
                     return imgs;
                 }
@@ -226,14 +239,16 @@ public class PersonBean {
 
                 public static class ForumMediaBean {
                     /**
-                     * forumId : 134
-                     * path : http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.mp4
-                     * pic : http://7xr1tb.com1.z0.glb.clouddn.com/20170503123840268183357.jpg
+                     * forumId : 339
+                     * path : http://my-photo.lacoorent.com/null
+                     * pic : http://my-photo.lacoorent.com/null
+                     * userId : a9460f73af0c4cb9b2f9d514b5934563
                      */
 
                     private int forumId;
                     private String path;
                     private String pic;
+                    private String userId;
 
                     public int getForumId() {
                         return forumId;
@@ -258,16 +273,26 @@ public class PersonBean {
                     public void setPic(String pic) {
                         this.pic = pic;
                     }
+
+                    public String getUserId() {
+                        return userId;
+                    }
+
+                    public void setUserId(String userId) {
+                        this.userId = userId;
+                    }
                 }
 
                 public static class ImgsBean {
                     /**
-                     * forumId : 134
-                     * url : http://7xr1tb.com1.z0.glb.clouddn.com/null
+                     * forumId : 339
+                     * url : http://my-photo.lacoorent.com/20170627141048100790220.jpg
+                     * userId : a9460f73af0c4cb9b2f9d514b5934563
                      */
 
                     private int forumId;
                     private String url;
+                    private String userId;
 
                     public int getForumId() {
                         return forumId;
@@ -284,6 +309,14 @@ public class PersonBean {
                     public void setUrl(String url) {
                         this.url = url;
                     }
+
+                    public String getUserId() {
+                        return userId;
+                    }
+
+                    public void setUserId(String userId) {
+                        this.userId = userId;
+                    }
                 }
             }
         }
@@ -291,31 +324,31 @@ public class PersonBean {
         public static class UserBean {
             /**
              * address : 浙江省 杭州市
-             * followersCount : 8
-             * friendsCount : 14
+             * followersCount : 13
+             * friendsCount : -7
              * hobby : 21
-             * hometown : 感情
-             * imgUrl : http://7xr1tb.com1.z0.glb.clouddn.com/20170413181819026917745.jpg
-             * nickName : axe
-             * note : qwer123
+             * imgUrl : http://my-photo.lacoorent.com/20170614154446256454050.jpg
+             * nickName : Axe
+             * note : halo
              * qq : 狮子座
-             * registerTime : 2017-04-12 15:04:45
+             * registerTime : 2017-06-13 15:29:15
              * sex : 男
-             * userId : 9e7a060b521049bb990dedc6055b7886
-             * wechat : 软件工程师
+             * trueName : 0
+             * userId : a9460f73af0c4cb9b2f9d514b5934563
+             * wechat : 篮球
              */
 
             private String address;
             private int followersCount;
             private int friendsCount;
             private String hobby;
-            private String hometown;
             private String imgUrl;
             private String nickName;
             private String note;
             private String qq;
             private String registerTime;
             private String sex;
+            private String trueName;
             private String userId;
             private String wechat;
 
@@ -349,14 +382,6 @@ public class PersonBean {
 
             public void setHobby(String hobby) {
                 this.hobby = hobby;
-            }
-
-            public String getHometown() {
-                return hometown;
-            }
-
-            public void setHometown(String hometown) {
-                this.hometown = hometown;
             }
 
             public String getImgUrl() {
@@ -405,6 +430,14 @@ public class PersonBean {
 
             public void setSex(String sex) {
                 this.sex = sex;
+            }
+
+            public String getTrueName() {
+                return trueName;
+            }
+
+            public void setTrueName(String trueName) {
+                this.trueName = trueName;
             }
 
             public String getUserId() {

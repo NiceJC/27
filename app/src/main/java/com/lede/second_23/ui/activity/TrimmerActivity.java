@@ -16,6 +16,9 @@ import com.lede.second_23.utils.TrimVideoUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 视频裁剪
+ */
 public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoListener {
 
     @Bind(R.id.trimmer_view)

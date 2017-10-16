@@ -35,6 +35,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 位置共享页
+ */
 public class PathActivity extends AppCompatActivity implements RouteSearch.OnRouteSearchListener {
     @Bind(R.id.map)
     MapView mapView;
@@ -113,14 +116,6 @@ public class PathActivity extends AppCompatActivity implements RouteSearch.OnRou
      * 开始搜索路径规划方案
      */
     public void searchRouteResult(int routeType, int mode) {
-//        if (mStartPoint == null) {
-//            ToastUtil.show(mContext, "定位中，稍后再试...");
-//            return;
-//        }
-//        if (mEndPoint == null) {
-//            ToastUtil.show(mContext, "终点未设置");
-//        }
-//        showProgressDialog();
         final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
                 mStartPoint, mEndPoint);
         if (routeType == ROUTE_TYPE_WALK) {// 步行路径规划
