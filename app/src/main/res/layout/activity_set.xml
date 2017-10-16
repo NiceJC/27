@@ -43,6 +43,7 @@
         android:layout_height="50dp"
         android:background="#ffffff">
         <TextView
+            android:textColor="@color/text_color_333333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -61,11 +62,13 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"/>
         <TextView
+
             android:id="@+id/tv_set_activity_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="#989898"
+            android:textColor="@color/text_color_333333"
+
             android:text="性别"
             android:layout_toLeftOf="@id/iv_set_activity_go1"
             android:layout_marginRight="22dp"
@@ -89,9 +92,13 @@
                 android:layout_marginLeft="10dp"
                 android:text="年龄"
                 android:textSize="20sp"
+                android:textColor="@color/text_color_333333"
+
                 />
 
             <TextView
+                android:textColor="@color/text_color_333333"
+
                 android:id="@+id/tv_set_activity_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,6 +128,8 @@
             android:layout_height="50dp"
             >
             <TextView
+                android:textColor="@color/text_color_333333"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -138,12 +147,16 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center">
                 <TextView
+                    android:textColor="@color/text_color_333333"
+
                     android:id="@+id/tv_set_activity_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:text="10" />
                 <TextView
+                    android:textColor="@color/text_color_333333"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="km"
@@ -169,6 +182,8 @@
         android:background="#ffffff"
         android:layout_marginTop="1dp">
         <TextView
+            android:textColor="@color/text_color_333333"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -208,6 +223,8 @@
         android:background="#ffffff"
         android:layout_marginTop="1dp">
         <TextView
+            android:textColor="@color/text_color_333333"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -234,6 +251,8 @@
         android:background="#ffffff"
         android:layout_marginTop="1dp">
         <TextView
+            android:textColor="@color/text_color_333333"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -281,6 +300,8 @@
         android:background="#ffffff"
         android:layout_marginTop="1dp">
         <TextView
+            android:textColor="@color/text_color_333333"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

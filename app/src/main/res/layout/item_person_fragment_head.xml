@@ -50,7 +50,7 @@
                     android:layout_margin="10dp"
                     android:layout_marginTop="10dp"
                     android:textColor="#000000"
-                    android:text="用户昵称"
+
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
@@ -59,10 +59,11 @@
                     android:layout_width="250dp"
                     android:layout_height="100dp"
                     android:paddingLeft="10dp"
+                    android:textSize="16sp"
                     android:paddingRight="10dp"
                     android:paddingTop="15dp"
-                    android:text="我相信,梦里能到达的地方,总有一天,脚步也能到达"
-                    android:textColor="#535353" />
+
+                    android:textColor="#000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -83,7 +84,7 @@
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
                             android:gravity="center_vertical"
-                            android:text="899"
+                            android:text="0"
 
                             android:textColor="#000000"
                             android:textSize="16sp" />
@@ -110,7 +111,7 @@
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
                             android:gravity="center_vertical"
-                            android:text="566"
+                            android:text="0"
                             android:textColor="#000000"
                             android:textSize="16sp" />
 

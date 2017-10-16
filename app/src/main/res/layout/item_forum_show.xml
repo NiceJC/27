@@ -45,16 +45,19 @@
         android:gravity="center">
 
     </RelativeLayout>
+
     <TextView
+        android:textColor="@color/text_color_333333"
         android:id="@+id/tv_item_forum_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="45dp"
-        android:textSize="20sp"
-        android:paddingRight="45dp"
-        android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text=""/>
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="hahhaha"
+        android:textSize="20sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

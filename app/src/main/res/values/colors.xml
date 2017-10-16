@@ -11,6 +11,13 @@
     <color name="bottomNavi">#212025</color>
     <color name="item_black">#22ffffff</color>
 
+
+    <!-- text Color  -->
+    <color name="text_color_333333">#333333</color>
+    <color name="text_color_000000">#000000</color>
+
+
+
     <!-- Theme Colors -->
     <color name="theme_white_primary">#FFFFFF</color>
     <color name="theme_white_dark">#FFFFFF</color>

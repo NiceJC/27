@@ -32,6 +32,7 @@ public class GlobalConstants {
     public static final String URL = "http://api.ledeseven.com";
 
 
+
     public static final String HOME="http://localhost:8080/homes/nearHome";
     // access_token
     public static final String TOKEN = "ACCESS_TOKEN";
