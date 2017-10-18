@@ -73,6 +73,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 
 //    private ViewPager vp_mainFragment_carousel;
     private PullToRrefreshRecyclerView rv_mainFragment_show;
+
+
     private AMapLocationClient mlocationClient;
     private double myLatitude;//纬度
     private double myLongitude;//经度
@@ -123,6 +125,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 //        }
+
+
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
         instance=this;
@@ -218,7 +222,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
             Glide.with(mContext).load(R.mipmap.myself).into(diyiv_myslef);
         }
     }
-
 
 
     private void addHeadView(CommonAdapter myCommonAdapter) {
@@ -380,7 +383,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //        final String userId, String sex, String radius, String ageMin, String ageMax, String lon, String lat
         userRequest.add("userId", (String) SPUtils.get(mContext,GlobalConstants.USERID,""));
 //        userRequest.add("userId", "ee59fb2659654db69352fd34f85d642c");
-        userRequest.add("sex",(String)SPUtils.get(mContext,GlobalConstants.SET_SEX,"全部人"));
+        userRequest.add("sex",(String)SPUtils.get(mContext,GlobalConstants.SET_SEX,"All"));
         userRequest.add("radius",((int)SPUtils.get(mContext,GlobalConstants.SET_DISTANCE,9))*1000+"");
 //        Log.i("TAB", "userService: "+(float)SPUtils.get(mContext,GlobalConstants.SET_MINAGE,0.0f));
         userRequest.add("ageMin",(int)(float)SPUtils.get(mContext,GlobalConstants.SET_MINAGE,0.0f)+"");
@@ -668,7 +671,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                 df.format(date);//定位时间
                 Log.i("TAB", "onLocationChanged: 纬度:"+myLatitude+",经度:"+myLongitude+","+aMapLocation.getAccuracy()+"地址"+aMapLocation.getAddress());
                 mlocationClient.stopLocation();
-                upLocation();
+                upLoadLocation();
                 userService();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -681,7 +684,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         }
     }
 
-    private void upLocation() {
+    private void upLoadLocation() {
         //构造上传位置信息
         UploadInfo loadInfo = new UploadInfo();
         //设置上传位置的坐标系支持AMap坐标数据与GPS数据

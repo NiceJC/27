@@ -434,7 +434,14 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         createUserRequest.add("qq", tv_edit_information_activity_constellation.getText().toString().trim());
         createUserRequest.add("note", tv_edit_information_activity_sign.getText().toString().trim() + "");
 //        createUserRequest.add("hometown",tv_edit_information_activity_marry.getText().toString().trim());
-        createUserRequest.add("hobby", tv_edit_information_activity_age.getText().toString().trim());
+
+        String age;
+        if(tv_edit_information_activity_age.getText()==null||tv_edit_information_activity_age.getText().equals("")){
+            age="18";
+        }else{
+            age=tv_edit_information_activity_age.getText().toString().trim();
+        }
+        createUserRequest.add("hobby",age);
         createUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         createUserRequest.add("sex", isBoy);
         createUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());

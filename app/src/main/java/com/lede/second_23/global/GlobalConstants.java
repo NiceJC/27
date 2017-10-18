@@ -33,7 +33,7 @@ public class GlobalConstants {
 
 
 
-    public static final String HOME="http://localhost:8080/homes/nearHome";
+
     // access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac

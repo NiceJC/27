@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.MyFragmentPagerAdapter;
-import com.lede.second_23.ui.fragment.ChildFragment;
 import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment;
 import com.lede.second_23.ui.fragment.PersonFragment_1;
@@ -30,7 +29,7 @@ public class MainActivity extends FragmentActivity {
     private int widthPixels;
     private boolean isScrolling=false;
     private boolean isRight=false;
-    private ChildFragment childFragment;
+//    private ChildFragment childFragment;
 //    private OldCameraFragment cameraFragment;
 //    private IssueFragment issueFragment;
     // 用来计算返回键的点击间隔时间

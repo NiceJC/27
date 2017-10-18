@@ -41,7 +41,9 @@
             android:id="@+id/rv_main_head_allsmile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"></android.support.v7.widget.RecyclerView>
+            android:layout_gravity="center_vertical">
+
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
     <TextView
         android:layout_width="65dp"

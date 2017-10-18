@@ -48,22 +48,6 @@
 
     </com.lede.second_23.ui.view.HackyViewPager>
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:gravity="right"-->
-        <!--android:background="#000000">-->
-        <!--<TextView-->
-            <!--android:id="@+id/tv_my_photo_time"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:text="123"-->
-            <!--android:textColor="#ffffff"-->
-            <!--android:textSize="20sp"-->
-            <!--android:layout_marginRight="10dp"/>-->
-
-    <!--</LinearLayout>-->
 
     <RelativeLayout
         android:id="@+id/ll_my_photo_bottom"
@@ -90,4 +74,165 @@
             android:textSize="20sp"
             android:layout_marginRight="10dp"/>
     </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/ll_concern_activity_2_body"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="#ffffff">-->
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="44dp"-->
+            <!--android:background="#ffffff">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_my_photo_back"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@mipmap/back" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_concern_activity_2_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:text="我的动态"-->
+                <!--android:textColor="#000000"-->
+                <!--android:textSize="20sp" />-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_my_photo_menu"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@mipmap/menu2"/>-->
+
+        <!--</RelativeLayout>-->
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#eeeeee"/>-->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_concern_activity_2_info"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp">-->
+            <!--<com.example.myapplication.views.diyimage.DIYImageView-->
+                <!--android:id="@+id/diyiv_conern_activity_2_userimg"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_width="44dp"-->
+                <!--android:layout_height="44dp"-->
+                <!--app:diy_image_Type="circle"-->
+                <!--android:layout_gravity="center_vertical"/>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:gravity="center_vertical">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_concern_activity_2_username"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textColor="#333333"/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_concern_activity_2_time"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:textColor="#333333"/>-->
+            <!--</LinearLayout>-->
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/bt_concern_acitivity_2_like"-->
+                    <!--android:text="点赞"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:visibility="gone"/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_concern_activity_2_distance"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textColor="#666666"/>-->
+            <!--</RelativeLayout>-->
+
+        <!--</LinearLayout>-->
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#eeeeee"/>-->
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1">-->
+
+            <!--&lt;!&ndash;<android.support.v4.view.ViewPager&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/vp_concern_activity_2"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="460dp"></android.support.v4.view.ViewPager>&ndash;&gt;-->
+            <!--<com.lede.second_23.ui.view.HackyViewPager-->
+                <!--android:id="@+id/hvp_concern_activity_2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="460dp">-->
+
+            <!--</com.lede.second_23.ui.view.HackyViewPager>-->
+
+            <!--<fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard-->
+                <!--android:id="@+id/jcplay_concerv_activity_2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:visibility="gone" />-->
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_concern_activity_2_up"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:src="@mipmap/btn_click_up"-->
+                <!--android:layout_marginBottom="40dp"/>-->
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_concern_activity_person"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginBottom="100dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:src="@mipmap/lxr"-->
+                <!--android:visibility="gone"/>-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/ll_concern_activity_2_indicator"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_marginBottom="4dp">-->
+            <!--</LinearLayout>-->
 </RelativeLayout>

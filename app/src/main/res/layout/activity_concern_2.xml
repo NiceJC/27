@@ -116,17 +116,21 @@
             <!--android:id="@+id/vp_concern_activity_2"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="460dp"></android.support.v4.view.ViewPager>-->
-            <com.lede.second_23.ui.view.HackyViewPager
-                android:id="@+id/hvp_concern_activity_2"
-                android:layout_width="match_parent"
-                android:layout_height="460dp"></com.lede.second_23.ui.view.HackyViewPager>
 
             <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
                 android:id="@+id/jcplay_concerv_activity_2"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_centerVertical="true"
-                android:visibility="gone" />
+                android:visibility="gone" >
+
+                <com.lede.second_23.ui.view.HackyViewPager
+                    android:id="@+id/hvp_concern_activity_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="460dp">
+
+                </com.lede.second_23.ui.view.HackyViewPager>
+            </fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard>
             <ImageView
                 android:id="@+id/iv_concern_activity_2_up"
                 android:layout_width="wrap_content"
