@@ -33,6 +33,7 @@ public class GlobalConstants {
 
 
 
+    public static final String MAIN_FRAGMENT_CURRENT_PAGE="MAIN_FRAGMENT_CURRENT_PAGE";
 
     // access_token
     public static final String TOKEN = "ACCESS_TOKEN";

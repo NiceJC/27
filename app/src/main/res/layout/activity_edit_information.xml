@@ -139,7 +139,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:background="#dddddd" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -199,7 +199,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
-                android:background="#cccccc" />
+                android:background="#dddddd" />
 
         </RelativeLayout>
 
@@ -251,7 +251,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="#cccccc" />
+                android:background="#dddddd" />
 
 
             <!--<ImageView-->
@@ -344,7 +344,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
-                android:background="#cccccc" />
+                android:background="#dddddd" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -393,7 +393,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
-                android:background="#cccccc" />
+                android:background="#dddddd" />
         </RelativeLayout>
     </LinearLayout>
     <!--<RelativeLayout-->
