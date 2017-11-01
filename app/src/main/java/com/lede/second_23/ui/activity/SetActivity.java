@@ -263,7 +263,7 @@ public class SetActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        final String items[] = {"全部人", "男", "女"};
+        final String items[] = {"All", "男", "女"};
         //dialog参数设置
         AlertDialog.Builder builder = new AlertDialog.Builder(this);  //先得到构造器
         builder.setTitle("选择性别"); //设置标题

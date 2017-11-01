@@ -549,7 +549,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         final int num = random.nextInt(100001);
 
 
-        if (index == 0) {
+        if (index == 0) { //pic
             String key = (System.currentTimeMillis() * 100000 + num) + ".jpg";
             uploadManager.put(file, key, uptoken,
                     new UpCompletionHandler() {
@@ -573,7 +573,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                             Log.i("七牛", "VideoFirst_progress: " + key + ": " + percent);
                         }
                     }, null));
-        } else {
+        } else { //video
             String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
             uploadManager.put(file, key, uptoken,
                     new UpCompletionHandler() {

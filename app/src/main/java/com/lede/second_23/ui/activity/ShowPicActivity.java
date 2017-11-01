@@ -19,6 +19,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
+
+//拍照所得照片展示页面
 public class ShowPicActivity extends Activity {
 
     @Bind(R.id.img)

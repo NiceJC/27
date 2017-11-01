@@ -139,9 +139,9 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
 //                    tv_right.setImageResource(R.mipmap.concern_right);
 //                }else {
                     if (listBean.isFriend()) {
-                        tv_right.setImageResource(R.mipmap.concern_right);
+                        tv_right.setSelected(true);
                     }else {
-                        tv_right.setImageResource(R.mipmap.attention);
+                        tv_right.setSelected(false);
 
 //                    }
 

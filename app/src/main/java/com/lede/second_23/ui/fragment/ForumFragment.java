@@ -43,6 +43,7 @@ import com.lede.second_23.ui.activity.ForumVideoPlayActivity;
 import com.lede.second_23.ui.activity.ForumVideoReplyActivity;
 import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.OtherPersonActivity;
+import com.lede.second_23.ui.activity.SearchingActivity;
 import com.lede.second_23.ui.view.HackyViewPager;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.TimeUtils;
@@ -93,6 +94,9 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
     RelativeLayout rlForumActivityBottom;
     @Bind(R.id.iv_forum_title)
     ImageView ivForumTitle;
+    @Bind(R.id.iv_forum_activity_search)
+    ImageView search;
+
     private RequestQueue requestQueue;
     private Context context;
     private int pageNum = 1;
@@ -712,7 +716,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         requestQueue.add(FORUM_CODE, forumRequest, this);
     }
 
-    @OnClick({R.id.iv_forum_activity_send, R.id.iv_forum_activity_back})
+    @OnClick({R.id.iv_forum_activity_send, R.id.iv_forum_activity_back,R.id.iv_forum_activity_search})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_forum_activity_send:
@@ -723,6 +727,12 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             case R.id.iv_forum_activity_back:
                 MainActivity.instance.vp_main_fg.setCurrentItem(1);
 //                finish();
+                break;
+            case R.id.iv_forum_activity_search:
+                Intent intent1=new Intent(context, SearchingActivity.class);
+                startActivity(intent1);
+                break;
+            default:
                 break;
         }
     }

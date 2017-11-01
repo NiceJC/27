@@ -2,12 +2,10 @@ package com.lede.second_23.ui.base;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.lede.second_23.R;
@@ -17,6 +15,7 @@ import com.lede.second_23.ui.activity.WelcomeActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.StatusBarUtil;
 import com.lede.second_23.utils.T;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Response;
@@ -35,18 +34,9 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
 
-        //设置5.0以上隐藏actionBar
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            //设置状态栏的颜色
-            getWindow().setStatusBarColor(getResources().getColor(R.color.titleBlack));
-        }
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.hide();
+
+        StatusBarUtil.StatusBarLightMode(this);
 
         mGson = new Gson();
     }
@@ -62,7 +52,7 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GlobalConstants.getRequestQueue().cancelAll();
+
     }
 
     @Override

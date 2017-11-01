@@ -132,12 +132,12 @@
         "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/notification_bg_normal.9.png",
-        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-mdpi-v4/notification_bg_normal.9.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
         "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/notification_bg_normal.9.png",
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-mdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",

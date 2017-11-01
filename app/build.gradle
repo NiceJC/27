@@ -89,6 +89,7 @@ dependencies {
     compile 'com.auth0:java-jwt:2.2.1'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1' //图片变形
     compile 'liji.library.dev:citypickerview:1.0.0'
     compile 'com.github.thinkcool:circletextimageview:1.0.20151218'
     compile 'com.zhy:percent-support-extends:1.1.1'

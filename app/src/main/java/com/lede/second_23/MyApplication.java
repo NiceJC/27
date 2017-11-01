@@ -65,6 +65,7 @@ public class MyApplication extends Application {
     private Bitmap LargeBitmap;
     private Notification myNotification;
 
+
     private static UploadManager uploadManager;
     private static Configuration config;
 
@@ -87,6 +88,8 @@ public class MyApplication extends Application {
 
         //Application对象
         instance = this;
+
+
 
         //创建默认的ImageLoader配置参数
         ImageLoaderConfiguration configuration = ImageLoaderConfiguration
@@ -170,6 +173,11 @@ public class MyApplication extends Application {
 
     }
 
+
+
+
+
+
     public static void initImageLoader(Context context) {
         int memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 10);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
@@ -232,6 +240,9 @@ public class MyApplication extends Application {
         });
 
     }
+
+
+
 
     private void parseRongIMTokenJson(String json) {
         Gson mGson = new Gson();

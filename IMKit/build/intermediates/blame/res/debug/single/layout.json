@@ -56,12 +56,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_item_public_service_multi_rich_content_message.xml"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_item_public_service_list.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_item_public_service_list.xml"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_ext_input_edit_text.xml",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_ext_input_edit_text.xml"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_item_public_service_list.xml",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_item_public_service_list.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_ext_menu_container.xml",
@@ -116,12 +116,12 @@
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_camera.xml"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_refresh_list_view.xml",
-        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_refresh_list_view.xml"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_ext_voice_input.xml",
         "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_ext_voice_input.xml"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_refresh_list_view.xml",
+        "source": "/Users/ld/AndroidProject/Second_23/IMKit/src/main/res/layout/rc_refresh_list_view.xml"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/IMKit/build/intermediates/res/merged/debug/layout/rc_fr_public_service_search.xml",

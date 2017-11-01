@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="#f1f1f1"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="com.lede.second_23.ui.activity.EditInformationActivity">
 
     <RelativeLayout

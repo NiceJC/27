@@ -94,6 +94,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
     private ImageView iv_userSex;
     private ImageView iv_back;
 
+    private LinearLayout postMyPhoto;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -259,6 +260,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
     }
 
     private void initView() {
+        postMyPhoto= (LinearLayout) view.findViewById(R.id.post_my_photo);
         iv_back = (ImageView) view.findViewById(R.id.iv_personfragment_back);
         iv_back.setOnClickListener(this);
         iv_set = (ImageView) view.findViewById(R.id.iv_personfragment_set);
@@ -460,6 +462,12 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
             case R.id.iv_personfragment_back:
 //                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
                 MainActivity.instance.vp_main_fg.setCurrentItem(1);
+                break;
+
+            case R.id.post_my_photo:
+
+                break;
+            default:
                 break;
         }
     }

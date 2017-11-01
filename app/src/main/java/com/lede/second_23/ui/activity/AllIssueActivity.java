@@ -30,7 +30,7 @@ public class AllIssueActivity extends AppCompatActivity {
     ImageButton ibAllIssueActivityChange;
     @Bind(R.id.diyiv_all_issue_activity_show)
     public DIYImageView diyivAllIssueActivityShow;
-//    @Bind(R.id.iv_all_issue_activity_pic)
+    //    @Bind(R.id.iv_all_issue_activity_pic)
 //    ImageView ivAllIssueActivityPic;
     private FragmentManager supportFragmentManager;
     private CameraFragment cameraFragment;

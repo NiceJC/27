@@ -30,7 +30,7 @@ public class GlobalConstants {
 //    public static final String URL = "http://101.37.85.56:8088";  //服务器开发环境
 //    public static final String URL = "http://192.168.31.81:8080"; //联调环境
     public static final String URL = "http://api.ledeseven.com";
-
+//
 
 
     public static final String MAIN_FRAGMENT_CURRENT_PAGE="MAIN_FRAGMENT_CURRENT_PAGE";

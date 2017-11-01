@@ -14,7 +14,9 @@
     <com.lede.second_23.utils.MyViewPager
         android:id="@+id/vp_main_fg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.lede.second_23.utils.MyViewPager>
+        android:layout_height="match_parent">
+
+    </com.lede.second_23.utils.MyViewPager>
     <!--<android.support.v4.view.ViewPager-->
         <!--&gt;-->
     <!--</android.support.v4.view.ViewPager>-->

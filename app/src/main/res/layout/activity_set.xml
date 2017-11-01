@@ -228,12 +228,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="检查更新"
             android:drawablePadding="10dp"
             android:drawableLeft="@mipmap/update"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="11dp" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

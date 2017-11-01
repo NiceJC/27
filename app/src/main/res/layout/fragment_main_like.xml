@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ProgressBar
-        android:id="@+id/pull_to_refresh_progress"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        style="?android:progressBarStyleInverse"
-        android:indeterminateDrawable="@drawable/progressbar_bar_loading"
-        android:visibility="visible" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-<com.scwang.smartrefresh.layout.SmartRefreshLayout
-    android:id="@+id/refresh_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
-    <com.lede.second_23.ui.view.RefreshHeader_27
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </com.lede.second_23.ui.view.RefreshHeader_27>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <ProgressBar
+
+                android:id="@+id/pull_to_refresh_progress"
+                style="?android:progressBarStyleInverse"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/progressbar_bar_loading"
+                android:visibility="visible" />
+        </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:overScrollMode="never"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never">
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
-</com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

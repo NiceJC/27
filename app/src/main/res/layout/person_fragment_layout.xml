@@ -42,7 +42,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_person_fragment_home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_personfragment_show"
@@ -53,6 +54,24 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/post_my_photo"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:gravity="center"
+            android:text="上传我的照片"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+
+    </LinearLayout>
     <!--<android.support.v7.widget.RecyclerView-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent">-->

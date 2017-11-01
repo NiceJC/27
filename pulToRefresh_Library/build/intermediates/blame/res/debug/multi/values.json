@@ -5276,11 +5276,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 8,
+                        "startLine": 11,
                         "startColumn": 4,
-                        "startOffset": 390,
+                        "startOffset": 542,
                         "endColumn": 101,
-                        "endOffset": 487
+                        "endOffset": 639
                     }
                 }
             },
@@ -5295,11 +5295,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 10,
+                        "startLine": 13,
                         "startColumn": 4,
-                        "startOffset": 600,
+                        "startOffset": 752,
                         "endColumn": 113,
-                        "endOffset": 709
+                        "endOffset": 861
                     }
                 }
             },
@@ -5314,11 +5314,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 9,
+                        "startLine": 12,
                         "startColumn": 4,
-                        "startOffset": 492,
+                        "startOffset": 644,
                         "endColumn": 107,
-                        "endOffset": 595
+                        "endOffset": 747
                     }
                 }
             },
@@ -5333,11 +5333,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 3,
+                        "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 56,
+                        "startOffset": 208,
                         "endColumn": 71,
-                        "endOffset": 123
+                        "endOffset": 275
                     }
                 }
             },
@@ -5352,11 +5352,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 5,
+                        "startLine": 8,
                         "startColumn": 4,
-                        "startOffset": 206,
+                        "startOffset": 358,
                         "endColumn": 69,
-                        "endOffset": 271
+                        "endOffset": 423
                     }
                 }
             },
@@ -5371,11 +5371,11 @@
                 "from": {
                     "file": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/src/main/res/values/pull_refresh_strings.xml",
                     "position": {
-                        "startLine": 4,
+                        "startLine": 7,
                         "startColumn": 4,
-                        "startOffset": 128,
+                        "startOffset": 280,
                         "endColumn": 77,
-                        "endOffset": 201
+                        "endOffset": 353
                     }
                 }
             },

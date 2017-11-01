@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.UpUserInfoBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class EditInformationActivity extends AppCompatActivity implements OnResponseListener<String> {
+public class EditInformationActivity extends BaseActivity implements OnResponseListener<String> {
 
 
     @Bind(R.id.rl_edit_information_activity_sex)
