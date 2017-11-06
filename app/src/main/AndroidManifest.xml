@@ -141,11 +141,12 @@
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:theme="@style/MyFullScreenTheme" />
-        <activity android:name=".ui.activity.ConcernActivity" />
+
+        <activity android:name=".ui.activity.ZoomImageActivity"/>
         <activity android:name=".ui.activity.ConcernActivity_2" />
         <activity android:name=".ui.activity.CheckOthersInfoActivity" />
         <activity android:name=".ui.activity.ConcernOrFansActivity"
-            android:launchMode="singleInstance"/>
+            />
         <activity
             android:name=".ui.activity.ConversationListActivity"
             android:screenOrientation="portrait"
@@ -261,6 +262,8 @@
         <activity android:name=".ui.activity.TrimmerActivity" />
         <activity android:name=".ui.activity.ForumPicActivity"
             android:theme="@style/AppTheme2"/>
+        <activity android:name=".ui.activity.UserInfoActivty"/>
+        <activity android:name=".ui.activity.UserInfoCardActivity"/>
         <activity
             android:name=".ui.activity.LoginOrRegisterActivity"
             android:theme="@style/MyFullScreenTheme"></activity>

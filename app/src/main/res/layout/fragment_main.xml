@@ -37,18 +37,19 @@
         </RelativeLayout>
 
 
-        <ImageView
-            android:src="@mipmap/flow"
-            android:layout_marginBottom="5dp"
+
+        <View
+            android:layout_marginBottom="2dp"
+            android:background="#000000"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_width="40dp"
-            android:layout_height="5dp" />
+            android:layout_height="2dp"/>
 
 
         <View
             android:layout_alignParentBottom="true"
-            android:background="#cccccc"
+            android:background="#dddddd"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
     </RelativeLayout>
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="猜你喜欢"
+                android:text="推荐"
                 android:textColor="@color/text_color_000000" />
             <View
                 android:id="@+id/main_fragment_indicator_like_line"
@@ -151,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="打过招呼"
+                android:text="向我打招呼"
                 android:textColor="@color/text_color_000000" />
             <View
                 android:id="@+id/main_fragment_indicator_hi_line"

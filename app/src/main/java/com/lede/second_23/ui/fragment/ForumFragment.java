@@ -42,8 +42,8 @@ import com.lede.second_23.ui.activity.ForumReplyVideoPlayActivity;
 import com.lede.second_23.ui.activity.ForumVideoPlayActivity;
 import com.lede.second_23.ui.activity.ForumVideoReplyActivity;
 import com.lede.second_23.ui.activity.MainActivity;
-import com.lede.second_23.ui.activity.OtherPersonActivity;
 import com.lede.second_23.ui.activity.SearchingActivity;
+import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.ui.view.HackyViewPager;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.TimeUtils;
@@ -70,6 +70,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.lede.second_23.R.id.prv_forum_activity_show;
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/8/17.
@@ -423,8 +424,8 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 diy_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -432,8 +433,8 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 tv_nickname.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -663,8 +664,8 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         headAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("userId", pushUserList.get(position).getUserId());
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, pushUserList.get(position).getUserId());
                 startActivity(intent);
             }
 

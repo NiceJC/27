@@ -47,19 +47,19 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
         }
         switch (type) {
             case 0:
-                et_text.setMaxLines(8);
+
                 et_text.setHint("请输入昵称");
                 break;
             case 1:
-                et_text.setMaxLines(30);
+                et_text.setMaxLines(2);
                 et_text.setHint("请输入个性签名");
                 break;
             case 2:
-                et_text.setMaxLines(10);
+
                 et_text.setHint("请输入爱好");
                 break;
             case 4:
-                et_text.setMaxLines(10);
+
                 et_text.setHint("请输入学校");
                 break;
         }
@@ -76,21 +76,38 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
 
                 body=et_text.getText().toString().toString();
                 Intent intent=new Intent();
-                if (type==0) {
-                    String regex = "\\s+";
-                    String str1 = body.replaceAll(regex, "");
-                    if (TextUtils.isEmpty(str1)) {
-                        Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    //TODO
-//                    else if (!Validator.isNickName(str1)){
-//                        Toast.makeText(this, "昵称不允许出现特殊字符哦", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-                    intent.putExtra("body",str1);
-                }else {
-                    intent.putExtra("body",body);
+
+
+                switch (type){
+
+                    case 0:
+                        String regex = "\\s+";
+                        String str1 = body.replaceAll(regex, "");
+                        if (TextUtils.isEmpty(str1)) {
+                            Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(str1.length()>8){
+                            Toast.makeText(this, "昵称不能多于8个字符", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        intent.putExtra("body",str1);
+                        break;
+                    case 1:
+                        if(body.length()>30){
+                            Toast.makeText(this, "签名不能多于30个字符", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        intent.putExtra("body",body);
+                        break;
+                    case 2:
+                        intent.putExtra("body",body);
+                        break;
+                    case 4:
+                        intent.putExtra("body",body);
+                        break;
+                    default:
+                        break;
                 }
                 setResult(type,intent);
                 finish();

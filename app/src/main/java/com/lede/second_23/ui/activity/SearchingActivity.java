@@ -1,6 +1,7 @@
 package com.lede.second_23.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,6 +41,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/10/18.
@@ -165,6 +168,21 @@ public class SearchingActivity extends BaseActivity {
                         saveWordsToSP(userBean.getNickName());
                     }
                 });
+
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(SearchingActivity.this,UserInfoActivty.class);
+                        intent.putExtra(USERID,userBean.getUserId());
+                        startActivity(intent);
+
+
+
+                    }
+                });
+
+
+
             }
         };
 

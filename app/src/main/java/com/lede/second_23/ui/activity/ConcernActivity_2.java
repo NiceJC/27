@@ -3,11 +3,7 @@ package com.lede.second_23.ui.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,18 +18,15 @@ import android.widget.Toast;
 import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.model.LatLng;
 import com.bumptech.glide.Glide;
-import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
-import com.lede.second_23.adapter.ImageViewPagerAdapter_2;
 import com.lede.second_23.bean.ConcernMsgBean;
-import com.lede.second_23.bean.ConcernUserInfoBean;
 import com.lede.second_23.bean.LocationBean;
+import com.lede.second_23.bean.UserRelationBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.ui.view.HackyViewPager;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
-import com.lede.second_23.utils.TimeUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.OnResponseListener;
@@ -41,31 +34,30 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * 动态点击页
  */
-public class ConcernActivity_2 extends AppCompatActivity implements OnResponseListener<String> {
+public class ConcernActivity_2 extends BaseActivity implements OnResponseListener<String> {
 
 
     @Bind(R.id.iv_concern_activity_back)
     ImageView iv_concern_activity_back;
-    //    @Bind(R.id.iv_concern_activity_user_img)
+//    @Bind(R.id.iv_concern_activity_user_img)
 //    ImageView iv_concern_activity_user_img;
 //    @Bind(R.id.iv_concern_activity_user_sex)
 //    ImageView iv_concern_activity_user_sex;
@@ -75,30 +67,30 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     ImageView iv_concern_activity_message;
     @Bind(R.id.iv_concern_activity_location)
     ImageView iv_concern_activity_location;
-    @Bind(R.id.iv_concern_activity_person)
-    ImageView iv_concern_activity_person;
-    //    @Bind(R.id.tv_concern_activity_username)
+//    @Bind(R.id.iv_concern_activity_person)
+//    ImageView iv_concern_activity_person;
+//        @Bind(R.id.tv_concern_activity_username)
 //    TextView tv_concern_activity_username;
 //    @Bind(R.id.tv_concern_activity_useage)
 //    TextView tv_concern_activity_useage;
 //    @Bind(R.id.tv_concern_activity_usecity)
 //    TextView tv_concern_activity_usecity;
-    @Bind(R.id.hvp_concern_activity_2)
-    HackyViewPager hvp_concern_activity_2;
-    @Bind(R.id.jcplay_concerv_activity_2)
-    JCVideoPlayerStandard jcplay_concerv_activity_2;
-    @Bind(R.id.iv_concern_activity_2_up)
-    ImageView iv_concern_activity_2_up;
+//    @Bind(R.id.hvp_concern_activity_2)
+//    HackyViewPager hvp_concern_activity_2;
+//    @Bind(R.id.jcplay_concerv_activity_2)
+//    JCVideoPlayerStandard jcplay_concerv_activity_2;
+//    @Bind(R.id.iv_concern_activity_2_up)
+//    ImageView iv_concern_activity_2_up;
     @Bind(R.id.diyiv_conern_activity_2_userimg)
-    DIYImageView diyiv_userimg;
+    ImageView diyiv_userimg;
     @Bind(R.id.tv_concern_activity_2_username)
     TextView tv_username;
     @Bind(R.id.tv_concern_activity_2_distance)
     TextView tv_distance;
     @Bind(R.id.ll_concern_activity_2_bottom)
     LinearLayout ll_bottom;
-    @Bind(R.id.ll_concern_activity_2_indicator)
-    LinearLayout ll_inDicator;
+//    @Bind(R.id.ll_concern_activity_2_indicator)
+//    LinearLayout ll_inDicator;
     @Bind(R.id.iv_concern_activity_2_report)
     ImageView iv_report;
     @Bind(R.id.tv_concern_activity_2_time)
@@ -107,6 +99,11 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     TextView tv_title;
     @Bind(R.id.iv_concern_activity_2_declaration)
     ImageView iv_declaration;
+
+    @Bind(R.id.photo)
+    ImageView photo;
+    @Bind(R.id.video_play)
+    ImageView videoPlay;
 
     private boolean isFriend = false;
 
@@ -119,17 +116,20 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
     private ArrayList<String> banner = new ArrayList<>();
     private String username;
     private Dialog mDialog;
-    private ConcernUserInfoBean concernUserInfoBean;
+//    private ConcernUserInfoBean concernUserInfoBean;
     private LatLng mStartPoint;
     private LatLng mEndPoint;
     private int location_type=0;
     private PopupWindow popupWindow;
     private Intent intent;
-    private ArrayList<String> banner1;
-    private String text;
-    private String time;
-    private String videourl;
-    private String picurl;
+//    private ArrayList<String> banner1;
+//    private String text;
+//    private String time;
+//    private String videourl;
+//    private String picurl;
+    private UserRelationBean userRelationBean;
+    private String imageUrl=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,13 +137,13 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         setContentView(R.layout.activity_concern_2);
         ButterKnife.bind(this);
         intent = getIntent();
-        userId = intent.getStringExtra("userId");
-        videourl = intent.getStringExtra("videourl");
-        picurl = intent.getStringExtra("picurl");
-        time = intent.getStringExtra("time");
-        banner1 = intent.getStringArrayListExtra("banner");
-        text = intent.getStringExtra("text");
-        if (userId.equals((String) SPUtils.get(this, GlobalConstants.USERID, ""))) {
+        userId = intent.getStringExtra(USERID);
+//        videourl = intent.getStringExtra("videourl");
+//        picurl = intent.getStringExtra("picurl");
+//        time = intent.getStringExtra("time");
+//        banner1 = intent.getStringArrayListExtra("banner");
+//        text = intent.getStringExtra("text");
+        if (userId.equals((String) SPUtils.get(this, USERID, ""))) {
             iv_report.setVisibility(View.GONE);
             iv_concern_activity_concern.setVisibility(View.GONE);
             iv_concern_activity_message.setVisibility(View.GONE);
@@ -159,28 +159,48 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
+
+
         userLocation();
         userInfoService(userId);
     }
 
     private void userInfoService(String userId) {
-        Request<String> userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/relationship", RequestMethod.POST);
-        userInfoRequest.add("user_id", (String) SPUtils.get(this, GlobalConstants.USERID, ""));
+        Request<String> userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/newRelationship", RequestMethod.POST);
+        userInfoRequest.add("user_id", (String) SPUtils.get(this, USERID, ""));
         userInfoRequest.add("to_user_id", userId);
         requestQueue.add(100, userInfoRequest, this);
     }
 
-    @OnClick({R.id.iv_concern_activity_person, R.id.iv_concern_activity_concern
+    @OnClick({
+            R.id.photo,
+            R.id.diyiv_conern_activity_2_userimg,
+            R.id.iv_concern_activity_concern
             , R.id.iv_concern_activity_back, R.id.iv_concern_activity_message
-            , R.id.iv_concern_activity_location, R.id.iv_concern_activity_2_up
+            , R.id.iv_concern_activity_location
+//            , R.id.iv_concern_activity_2_up
             , R.id.ll_concern_activity_2_info, R.id.iv_concern_activity_2_report
             ,R.id.iv_concern_activity_2_declaration,R.id.bt_concern_acitivity_2_like})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
-            case R.id.iv_concern_activity_person:
-                intent = new Intent(this, CheckOthersInfoActivity.class);
-                intent.putExtra("userid", userId);
+
+            case R.id.photo:
+                if(imageUrl!=null){
+                    ArrayList<String> list=new ArrayList<>();
+
+                    list.add(imageUrl);
+                    intent=new Intent(this,ForumPicActivity.class);
+                    intent.putExtra("position",0);
+                    intent.putStringArrayListExtra("banner",list);
+                    startActivity(intent);
+                }
+
+                break;
+
+            case R.id.ll_concern_activity_2_info:
+                intent = new Intent(this, UserInfoActivty.class);
+                intent.putExtra(USERID, userId);
                 startActivity(intent);
                 break;
             case R.id.iv_concern_activity_concern:
@@ -189,13 +209,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 }else {
                     destroyService();
                 }
-
                 break;
             case R.id.iv_concern_activity_back:
                 finish();
                 break;
             case R.id.iv_concern_activity_message:
-                if (concernUserInfoBean.getData().isEnd()) {
+                if (userRelationBean.getData().isEnd()) {
                     RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
                 } else {
                     showHintDialog(1);
@@ -203,7 +222,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
                 break;
             case R.id.iv_concern_activity_location:
-                if (concernUserInfoBean.getData().isEnd()) {
+                if (userRelationBean.getData().isEnd()) {
                     if (location_type==0) {
                         intent = new Intent(this, PathActivity.class);
                         intent.putExtra("lat", lat);
@@ -219,16 +238,12 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
                 }
 
                 break;
-            case R.id.iv_concern_activity_2_up:
-                showPopwindow();
-                iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click);
-                ll_bottom.setVisibility(View.INVISIBLE);
-                break;
-            case R.id.ll_concern_activity_2_info:
-                intent = new Intent(this, OtherPersonActivity.class);
-                intent.putExtra("userId", userId);
-                startActivity(intent);
-                break;
+//            case R.id.iv_concern_activity_2_up:
+//                showPopwindow();
+//                iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click);
+//                ll_bottom.setVisibility(View.INVISIBLE);
+//                break;
+
             case R.id.iv_concern_activity_2_report:
                 showReportPopwindow();
                 break;
@@ -284,17 +299,32 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 //            RongIM.getInstance().sendMessage(new Message());
     }
 
+//
+//    /**
+//     * 点赞
+//     */
+//    private void likeRequest() {
+//        Request<String> likeRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/"+concernUserInfoBean.getData().getForumList().get(0).getForumId()+"/like", RequestMethod.POST);
+////        concernRequest.add("id", userid);
+//        likeRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
+//        requestQueue.add(500,likeRequest,this);
+//    }
+    private void userLocation() {
+        Request<String> userLocationRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/userDistance", RequestMethod.POST);
+        userLocationRequest.add("userId", userId);
+        requestQueue.add(300, userLocationRequest, this);
 
-    /**
-     * 点赞
-     */
-    private void likeRequest() {
-        Request<String> likeRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/forums/"+concernUserInfoBean.getData().getForumList().get(0).getForumId()+"/like", RequestMethod.POST);
-//        concernRequest.add("id", userid);
-        likeRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        requestQueue.add(500,likeRequest,this);
     }
 
+    /**
+     * 关注请求
+     */
+    private void concernService() {
+        Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
+        concernRequest.add("id", userId);
+        concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
+        requestQueue.add(200, concernRequest, this);
+    }
     private void destroyService() {
         Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/destroy", RequestMethod.POST);
         concernRequest.add("id", userId);
@@ -370,22 +400,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         }
     };
 
-    private void userLocation() {
-        Request<String> userLocationRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/userDistance", RequestMethod.POST);
-        userLocationRequest.add("userId", userId);
-        requestQueue.add(300, userLocationRequest, this);
 
-    }
-
-    /**
-     * 关注请求
-     */
-    private void concernService() {
-        Request<String> concernRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/create", RequestMethod.POST);
-        concernRequest.add("id", userId);
-        concernRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        requestQueue.add(200, concernRequest, this);
-    }
 
     @Override
     public void onStart(int what) {
@@ -397,7 +412,7 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
         L.i(response.get());
         switch (what) {
             case 100: //获取是否关注以及选中用户的信息
-                parserConcernUserInfo(response.get());
+                parserUserInfo(response.get());
                 break;
             case 200:
                 parserConcernMsg(response.get());
@@ -443,11 +458,11 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
             if (concernMsgBean.getMsg().equals("关注成功")) {
                 Toast.makeText(this, "关联成功", Toast.LENGTH_SHORT).show();
-                ll_inDicator.removeAllViews();
+//                ll_inDicator.removeAllViews();
                 userInfoService(userId);
                 iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
             } else {
-                ll_inDicator.removeAllViews();
+//                ll_inDicator.removeAllViews();
                 userInfoService(userId);
 
                 Toast.makeText(this, "取消关联成功", Toast.LENGTH_SHORT).show();
@@ -459,6 +474,13 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     @Override
     public void onFailed(int what, Response<String> response) {
+        switch (what){
+            case 100:
+                String s=response.get();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -466,233 +488,297 @@ public class ConcernActivity_2 extends AppCompatActivity implements OnResponseLi
 
     }
 
-    private void parserConcernUserInfo(String json) {
-        concernUserInfoBean = mGson.fromJson(json, ConcernUserInfoBean.class);
-        SPUtils.put(this, GlobalConstants.CURRENT_USERID, userId);
-        if (concernUserInfoBean.getData().getForumList() != null) {
-            SPUtils.put(this, GlobalConstants.CURRENT_FORUMID, concernUserInfoBean.getData().getForumList().get(0).getForumId() + "");
+    private void parserUserInfo(String s){
 
+        userRelationBean=mGson.fromJson(s, UserRelationBean.class);
+        UserRelationBean.DataBean.UserInfo userInfo=userRelationBean.getData().getInfo();
+        if(userRelationBean.getData().getUserPhotoList()==null){
+            videoPlay.setVisibility(View.GONE);
+            imageUrl=userInfo.getImgUrl();
+        }else{
+          UserRelationBean.DataBean.UserPhotoListBean userPhotoListBean= userRelationBean.getData().getUserPhotoList().get(0);
+            if (userPhotoListBean.getUrlVideo().equals("http://my-photo.lacoorent.com/null")) {
+                videoPlay.setVisibility(View.GONE);
+                imageUrl=userPhotoListBean.getUrlImg();
+            } else {
+                videoPlay.setVisibility(View.VISIBLE);
+                imageUrl=userPhotoListBean.getUrlFirst();
+            }
         }
-        SPUtils.put(this, GlobalConstants.CURRENT_USERIMG, concernUserInfoBean.getData().getInfo().getImgUrl() + "");
 
-        Glide.with(this)
-                .load(concernUserInfoBean.getData().getInfo().getImgUrl())
-                .error(R.mipmap.loading)
+        Glide.with(this).load(imageUrl).into(photo);
+        username=userInfo.getNickName();
+        tv_username.setText(username);
+        Glide.with(this).load(userInfo.getImgUrl()).bitmapTransform(new CropCircleTransformation(this))
                 .into(diyiv_userimg);
-        if (concernUserInfoBean.getData().getInfo().getTrueName().equals("1")) {
-            Drawable drawableRight = getResources().getDrawable(
-                    R.mipmap.v2);
 
-            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
-                    null, drawableRight, null);
-            tv_username.setCompoundDrawablePadding(2);
-        }
-        tv_username.setText(concernUserInfoBean.getData().getInfo().getNickName());
-
-        if (concernUserInfoBean.getData().isEnd()) {
+        /**
+         * isFriend 表示自己点过笑脸了  中间的笑脸是亮的
+         * isEnd 表示双方都互相点过了 两侧的定位和聊天是亮的 可以聊天了
+         */
+        if (userRelationBean.getData().isEnd()) {
             Glide.with(this)
                     .load(R.mipmap.comment_on)
-                    .error(R.mipmap.loading)
                     .into(iv_concern_activity_message);
             iv_concern_activity_message.setClickable(true);
             Glide.with(this)
                     .load(R.mipmap.position_on)
-                    .error(R.mipmap.loading)
                     .into(iv_concern_activity_location);
             iv_concern_activity_location.setClickable(true);
         } else {
             Glide.with(this)
                     .load(R.mipmap.comment_off)
-                    .error(R.mipmap.loading)
                     .into(iv_concern_activity_message);
             Glide.with(this)
                     .load(R.mipmap.position_off)
-                    .error(R.mipmap.loading)
                     .into(iv_concern_activity_location);
         }
-        ConcernUserInfoBean.DataBean dataBean = concernUserInfoBean.getData();
-        isFriend = dataBean.isFirend();
+
+        isFriend = userRelationBean.getData().isFirend();
         if (isFriend) {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
         } else {
             iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
             iv_concern_activity_concern.setClickable(true);
         }
-        if (banner1==null&&videourl==null) {
-            if (dataBean.getForumList()!=null) {
-                Date createDate=null;
-                //"2017-05-19 17:15:40"
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if (createDate!=null) {
-                    tv_time.setText(TimeUtils.getTimeFormatText(createDate));
-                }
-                //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
-                if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
-                    hvp_concern_activity_2.setVisibility(View.VISIBLE);
-                    jcplay_concerv_activity_2.setVisibility(View.GONE);
-                    if (dataBean.getForumList().get(0).getImgs().size() != 1) {
-                        ll_inDicator.setVisibility(View.VISIBLE);
-                    }
-                    for (int i = 0; i < dataBean.getForumList().get(0).getImgs().size(); i++) {
-                        banner.add(dataBean.getForumList().get(0).getImgs().get(i).getUrl());
-                        ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
-                        if (i == 0) {
-                            inDicator.setImageResource(R.mipmap.current);
-                        }
-                        ll_inDicator.addView(inDicator);
-                    }
-
-                    ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
-
-                    hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                        @Override
-                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                            for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
-                                if (i == position) {
-                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
-                                } else {
-                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onPageSelected(int position) {
-
-                        }
-
-                        @Override
-                        public void onPageScrollStateChanged(int state) {
-
-                        }
-                    });
-                    hvp_concern_activity_2.setAdapter(adapter);
-                } else {
-                    hvp_concern_activity_2.setVisibility(View.GONE);
-                    jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
-                    jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
-                            JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-                    Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
-
-                }
-            }else {
-                Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
-            }
-        }else if (banner1!=null){
-            Date createDate=null;
-            //"2017-05-19 17:15:40"
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                createDate=formatter.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (createDate!=null) {
-                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
-            }
-            hvp_concern_activity_2.setVisibility(View.VISIBLE);
-            jcplay_concerv_activity_2.setVisibility(View.GONE);
-            if (banner1.size() != 1) {
-                ll_inDicator.setVisibility(View.VISIBLE);
-            }
-            for (int i = 0; i < banner1.size(); i++) {
-                ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
-                if (i == 0) {
-                    inDicator.setImageResource(R.mipmap.current);
-                }
-                ll_inDicator.addView(inDicator);
-            }
-
-            ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner1);
-
-            hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
-                        if (i == position) {
-                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
-                        } else {
-                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
-                        }
-                    }
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-            hvp_concern_activity_2.setAdapter(adapter);
-
-        }else {
-            hvp_concern_activity_2.setVisibility(View.GONE);
-            jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
-            jcplay_concerv_activity_2.setUp(videourl,
-                    JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-            Glide.with(this).load(picurl).into(jcplay_concerv_activity_2.thumbImageView);
-
-        }
 
 
-        username = dataBean.getInfo().getNickName();
-    }
-
-    private void showPopwindow() {
-        // 利用layoutInflater获得View
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.layout_concern_text, null);
-
-        // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
-
-        PopupWindow window = new PopupWindow(view,
-                WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-
-        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
-        window.setFocusable(true);
-
-        // 实例化一个ColorDrawable颜色为半透明
-//        ColorDrawable dw = new ColorDrawable(0xb0000000);
-        ColorDrawable dw = new ColorDrawable(0xffffffff);
-        window.setBackgroundDrawable(dw);
 
 
-        // 设置popWindow的显示和消失动画
-        window.setAnimationStyle(R.style.mypopwindow_anim_style);
-        // 在底部显示
-        window.showAtLocation(this.findViewById(R.id.activity_concern_2),
-                Gravity.BOTTOM, 0, 0);
 
-        // 这里检验popWindow里的button是否可以点击
-        TextView tv_text = (TextView) view.findViewById(R.id.tv_concern_text);
-        if (text!=null) {
-            tv_text.setText(text);
-        }else {
-            if (concernUserInfoBean.getData().getForumList()!=null) {
-                tv_text.setText(concernUserInfoBean.getData().getForumList().get(0).getText().toString().trim());
-            }
-        }
 
-         //popWindow消失监听方法
-        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                ll_bottom.setVisibility(View.VISIBLE);
-                iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click_up);
-            }
-        });
 
     }
+
+
+
+//    private void parserConcernUserInfo(String json) {
+//        concernUserInfoBean = mGson.fromJson(json, ConcernUserInfoBean.class);
+//        SPUtils.put(this, GlobalConstants.CURRENT_USERID, userId);
+//        if (concernUserInfoBean.getData().getForumList() != null) {
+//            SPUtils.put(this, GlobalConstants.CURRENT_FORUMID, concernUserInfoBean.getData().getForumList().get(0).getForumId() + "");
+//
+//        }
+//        SPUtils.put(this, GlobalConstants.CURRENT_USERIMG, concernUserInfoBean.getData().getInfo().getImgUrl() + "");
+//
+//        Glide.with(this)
+//                .load(concernUserInfoBean.getData().getInfo().getImgUrl())
+//                .error(R.mipmap.loading)
+//                .into(diyiv_userimg);
+//        if (concernUserInfoBean.getData().getInfo().getTrueName().equals("1")) {
+//            Drawable drawableRight = getResources().getDrawable(
+//                    R.mipmap.v2);
+//
+//            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
+//                    null, drawableRight, null);
+//            tv_username.setCompoundDrawablePadding(2);
+//        }
+//        tv_username.setText(concernUserInfoBean.getData().getInfo().getNickName());
+//
+//        if (concernUserInfoBean.getData().isEnd()) {
+//            Glide.with(this)
+//                    .load(R.mipmap.comment_on)
+//                    .error(R.mipmap.loading)
+//                    .into(iv_concern_activity_message);
+//            iv_concern_activity_message.setClickable(true);
+//            Glide.with(this)
+//                    .load(R.mipmap.position_on)
+//                    .error(R.mipmap.loading)
+//                    .into(iv_concern_activity_location);
+//            iv_concern_activity_location.setClickable(true);
+//        } else {
+//            Glide.with(this)
+//                    .load(R.mipmap.comment_off)
+//                    .error(R.mipmap.loading)
+//                    .into(iv_concern_activity_message);
+//            Glide.with(this)
+//                    .load(R.mipmap.position_off)
+//                    .error(R.mipmap.loading)
+//                    .into(iv_concern_activity_location);
+//        }
+//        ConcernUserInfoBean.DataBean dataBean = concernUserInfoBean.getData();
+//        isFriend = dataBean.isFirend();
+//        if (isFriend) {
+//            iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
+//        } else {
+//            iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
+//            iv_concern_activity_concern.setClickable(true);
+//        }
+////        if (banner1==null&&videourl==null) {
+////            if (dataBean.getForumList()!=null) {
+////                Date createDate=null;
+////                //"2017-05-19 17:15:40"
+////                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+////                try {
+////                    createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
+////                } catch (ParseException e) {
+////                    e.printStackTrace();
+////                }
+////                if (createDate!=null) {
+////                    tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+////                }
+////                //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
+////                if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
+////                    hvp_concern_activity_2.setVisibility(View.VISIBLE);
+////                    jcplay_concerv_activity_2.setVisibility(View.GONE);
+////                    if (dataBean.getForumList().get(0).getImgs().size() != 1) {
+////                        ll_inDicator.setVisibility(View.VISIBLE);
+////                    }
+////                    for (int i = 0; i < dataBean.getForumList().get(0).getImgs().size(); i++) {
+////                        banner.add(dataBean.getForumList().get(0).getImgs().get(i).getUrl());
+////                        ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
+////                        if (i == 0) {
+////                            inDicator.setImageResource(R.mipmap.current);
+////                        }
+////                        ll_inDicator.addView(inDicator);
+////                    }
+////
+////                    ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
+////
+////                    hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+////                        @Override
+////                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+////                            for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
+////                                if (i == position) {
+////                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
+////                                } else {
+////                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+////                                }
+////                            }
+////                        }
+////
+////                        @Override
+////                        public void onPageSelected(int position) {
+////
+////                        }
+////
+////                        @Override
+////                        public void onPageScrollStateChanged(int state) {
+////
+////                        }
+////                    });
+////                    hvp_concern_activity_2.setAdapter(adapter);
+////                } else {
+////                    hvp_concern_activity_2.setVisibility(View.GONE);
+////                    jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
+////                    jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
+////                            JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+////                    Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
+////
+////                }
+////            }else {
+////                Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
+////            }
+////        }else if (banner1!=null){
+////            Date createDate=null;
+////            //"2017-05-19 17:15:40"
+////            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+////            try {
+////                createDate=formatter.parse(time);
+////            } catch (ParseException e) {
+////                e.printStackTrace();
+////            }
+////            if (createDate!=null) {
+////                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
+////            }
+////            hvp_concern_activity_2.setVisibility(View.VISIBLE);
+////            jcplay_concerv_activity_2.setVisibility(View.GONE);
+////            if (banner1.size() != 1) {
+////                ll_inDicator.setVisibility(View.VISIBLE);
+////            }
+////            for (int i = 0; i < banner1.size(); i++) {
+////                ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
+////                if (i == 0) {
+////                    inDicator.setImageResource(R.mipmap.current);
+////                }
+////                ll_inDicator.addView(inDicator);
+////            }
+////
+////            ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner1);
+////
+////            hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+////                @Override
+////                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+////                    for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
+////                        if (i == position) {
+////                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
+////                        } else {
+////                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
+////                        }
+////                    }
+////                }
+////
+////                @Override
+////                public void onPageSelected(int position) {
+////
+////                }
+////
+////                @Override
+////                public void onPageScrollStateChanged(int state) {
+////
+////                }
+////            });
+////            hvp_concern_activity_2.setAdapter(adapter);
+////
+////        }else {
+////            hvp_concern_activity_2.setVisibility(View.GONE);
+////            jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
+////            jcplay_concerv_activity_2.setUp(videourl,
+////                    JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+////            Glide.with(this).load(picurl).into(jcplay_concerv_activity_2.thumbImageView);
+////
+////        }
+//
+//
+//        username = dataBean.getInfo().getNickName();
+//    }
+
+//    private void showPopwindow() {
+//        // 利用layoutInflater获得View
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View view = inflater.inflate(R.layout.layout_concern_text, null);
+//
+//        // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
+//
+//        PopupWindow window = new PopupWindow(view,
+//                WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+//        window.setFocusable(true);
+//
+//        // 实例化一个ColorDrawable颜色为半透明
+////        ColorDrawable dw = new ColorDrawable(0xb0000000);
+//        ColorDrawable dw = new ColorDrawable(0xffffffff);
+//        window.setBackgroundDrawable(dw);
+//
+//
+//        // 设置popWindow的显示和消失动画
+//        window.setAnimationStyle(R.style.mypopwindow_anim_style);
+//        // 在底部显示
+//        window.showAtLocation(this.findViewById(R.id.activity_concern_2),
+//                Gravity.BOTTOM, 0, 0);
+//
+//        // 这里检验popWindow里的button是否可以点击
+//        TextView tv_text = (TextView) view.findViewById(R.id.tv_concern_text);
+//        if (text!=null) {
+//            tv_text.setText(text);
+//        }else {
+//            if (concernUserInfoBean.getData().getForumList()!=null) {
+//                tv_text.setText(concernUserInfoBean.getData().getForumList().get(0).getText().toString().trim());
+//            }
+//        }
+//
+//         //popWindow消失监听方法
+//        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//
+//            @Override
+//            public void onDismiss() {
+//                ll_bottom.setVisibility(View.VISIBLE);
+////                iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click_up);
+//            }
+//        });
+//
+//    }
 
     public void showHintDialog(int type){
         LayoutInflater inflater = getLayoutInflater();

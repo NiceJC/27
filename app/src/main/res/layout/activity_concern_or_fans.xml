@@ -4,6 +4,7 @@
     android:id="@+id/activity_concern_or_fans"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.lede.second_23.ui.activity.ConcernOrFansActivity">
     <LinearLayout
         android:layout_width="match_parent"

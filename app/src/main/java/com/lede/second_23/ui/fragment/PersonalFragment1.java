@@ -23,8 +23,8 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
+import com.lede.second_23.bean.PersonalAlbumBean;
 import com.lede.second_23.bean.QiNiuTokenBean;
-import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.RefreshAndLoadMoreListener;
@@ -67,8 +67,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-import static com.lede.second_23.R.id.tv_converned_num;
-import static com.lede.second_23.R.id.tv_fans_num;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -99,9 +97,9 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     TextView userSign;
     @Bind(R.id.ctiv_personfragment_userimg)
     ImageView userImg;
-    @Bind(tv_converned_num)
+    @Bind(R.id.tv_converned_num)
     TextView followingsNum;
-    @Bind(tv_fans_num)
+    @Bind(R.id.tv_fans_num)
     TextView fansNum;
     @Bind(R.id.ll_person_fragment_concerned)
     LinearLayout followingClick;
@@ -204,7 +202,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
 
     private String userId;
-    private UserInfoBean.DataBean.InfoBean userInfo;
+    private PersonalAlbumBean.DataBean.UserInfo userInfo;
     private int currentPage = 0;//当前页 初始默认为0
 
     private PersonalFragmentAlbum personalFragmentAlbum;
@@ -279,10 +277,12 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
             public void onPageSelected(int position) {
 
                 if (position == 0) {
+                    currentPage=0;
                     dongtaiClick.setSelected(true);
                     albumClick.setSelected(false);
                 }
                 if (position == 1) {
+                    currentPage=1;
                     dongtaiClick.setSelected(false);
                     albumClick.setSelected(true);
                 }
@@ -371,7 +371,11 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
             }
         };
         userId = (String) SPUtils.get(getContext(), USERID, "");
-        userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/" + userId + "/heDetail", RequestMethod.POST);
+        userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/showUserPhotoHome", RequestMethod.POST);
+        userInfoRequest.add("userId", userId);
+        userInfoRequest.add("pageNum", 1);
+        userInfoRequest.add("pageSize", 1);
+
         RequestServer.getInstance().request(REQUEST_USER_INFO, userInfoRequest, simpleResponseListener);
 
 
@@ -379,8 +383,9 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
 
     private void parseUserInfo(String s) {
-        UserInfoBean userInfoBean = mGson.fromJson(s, UserInfoBean.class);
-        userInfo = userInfoBean.getData().getInfo();
+        PersonalAlbumBean personalAlbumBean = mGson.fromJson(s, PersonalAlbumBean.class);
+
+        userInfo = personalAlbumBean.getData().getUserInfo().get(0);
         setUserInfo();
     }
 

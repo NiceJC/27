@@ -87,6 +87,9 @@ public class GlobalConstants {
     //更新时的downloadManager id
     public static final String KEY = "key";
 
+    public static final String IMAGE_URLS="imageURL";
+    public static final String POSITION="position";
+
     public static final int APPID=1106236230;
 
     public static final String DECLARATION="DECLARATION";

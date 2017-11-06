@@ -59,6 +59,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 
 public class ForumActivity extends AppCompatActivity implements OnResponseListener<String> {
 
@@ -347,8 +349,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 diy_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -356,8 +358,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
                 tv_nickname.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -582,8 +584,8 @@ public class ForumActivity extends AppCompatActivity implements OnResponseListen
         headAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("userId", pushUserList.get(position).getUserId());
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, pushUserList.get(position).getUserId());
                 startActivity(intent);
             }
 

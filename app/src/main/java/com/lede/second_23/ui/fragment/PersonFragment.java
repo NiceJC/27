@@ -328,6 +328,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
 //                            PictureConfig.getInstance().externalPicturePreview((Activity) context, "/23秒", 0, selectMeida);
                         }
                     });
+
                     showView_play.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

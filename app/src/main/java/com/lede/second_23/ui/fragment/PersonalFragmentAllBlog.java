@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  *
  * 个人中心下的 动态页面
@@ -56,7 +58,7 @@ public class PersonalFragmentAllBlog extends Fragment {
     private int pageSize = 10;
     private boolean isHasNextPage = false;
 
-    PersonalFragment1 personalFragment;
+
     private ArrayList<PersonAllForumBean.DataBean.SimpleBean.ListBean> mDataList=new ArrayList<>();
 
     private boolean isRefresh=true; //刷新种类 刷新还是加载更多
@@ -64,12 +66,19 @@ public class PersonalFragmentAllBlog extends Fragment {
     private Request<String> getAllForumRequest=null;
 
 
+    private String userId;
     private RequestManager requestManager;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview_only, container, false);
 
+        String userID=getActivity().getIntent().getStringExtra(USERID);
+        if(userID!=null&&!userID.equals("")){
+            userId=userID;
+        }else {
+            userId=(String) SPUtils.get(getContext(), USERID, "");
+        }
 
 
         ButterKnife.bind(this, view);
@@ -84,7 +93,7 @@ public class PersonalFragmentAllBlog extends Fragment {
 
 
     private void initView() {
-        personalFragment=(PersonalFragment1)getParentFragment();
+
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
 
@@ -160,7 +169,7 @@ public class PersonalFragmentAllBlog extends Fragment {
             doRequest(currentPage+1);
         }else{
             Toast.makeText(getContext(), "无更多内容", Toast.LENGTH_SHORT).show();
-            personalFragment.isOver();
+
         }
     }
 
@@ -173,7 +182,7 @@ public class PersonalFragmentAllBlog extends Fragment {
                 switch (what) {
                     case REQUEST_ALL_FORUM:
                         parsePersonAllForum(response.get());
-                        personalFragment.isOver();
+
                         break;
                     default:
                         break;
@@ -183,7 +192,7 @@ public class PersonalFragmentAllBlog extends Fragment {
             public void onFailed(int what, Response response) {
                 switch (what) {
                     case REQUEST_ALL_FORUM:
-                        personalFragment.isOver();
+
                         break;
                     default:
                         break;
@@ -193,7 +202,7 @@ public class PersonalFragmentAllBlog extends Fragment {
         };
 
         getAllForumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/showForumByHome", RequestMethod.POST);
-        getAllForumRequest.add("userId", (String) SPUtils.get(getContext(), GlobalConstants.USERID, ""));
+        getAllForumRequest.add("userId", userId);
         getAllForumRequest.add("pageNum", pageNum);
         getAllForumRequest.add("pageSize", pageSize);
         RequestServer.getInstance().request(REQUEST_ALL_FORUM, getAllForumRequest, simpleResponseListener);

@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.NearbyUsersBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -45,6 +47,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/10/19.
@@ -171,7 +175,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         };
 
         Request<String> nearbyUsersRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/photoNearHome", RequestMethod.POST);
-//
+
 //        String token=(String) SPUtils.get(getActivity(), GlobalConstants.TOKEN, "");
 //        String userId=(String) SPUtils.get(getActivity(), GlobalConstants.USERID, "");
 //        String sex=(String) SPUtils.get(getActivity(), GlobalConstants.SET_SEX, "All");
@@ -186,7 +190,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
         nearbyUsersRequest.add("access_token", (String) SPUtils.get(getActivity(), GlobalConstants.TOKEN, ""));
 //        final String userId, String sex, String radius, String ageMin, String ageMax, String lon, String lat
-        nearbyUsersRequest.add("userId", (String) SPUtils.get(getActivity(), GlobalConstants.USERID, ""));
+        nearbyUsersRequest.add("userId", (String) SPUtils.get(getActivity(), USERID, ""));
 //        userRequest.add("userId", "ee59fb2659654db69352fd34f85d642c");
         nearbyUsersRequest.add("sex", (String) SPUtils.get(getActivity(), GlobalConstants.SET_SEX, "All"));
         nearbyUsersRequest.add("radius", ((int) SPUtils.get(getActivity(), GlobalConstants.SET_DISTANCE, 10)) * 1000 + "");
@@ -282,7 +286,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         @Override
         public void convert(ViewHolder holder, Object o, int position) {
 
-            NearbyUsersBean.DataBean.UserPhotoListBean userPhotoListBean = (NearbyUsersBean.DataBean.UserPhotoListBean) o;
+            final NearbyUsersBean.DataBean.UserPhotoListBean userPhotoListBean = (NearbyUsersBean.DataBean.UserPhotoListBean) o;
             ImageView imageView = holder.getView(R.id.iv_item_test);
             ImageView videoTag = holder.getView(R.id.iv_main_fragment_item_play);
 
@@ -299,6 +303,16 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
                         .bitmapTransform(transformation)
                         .into(imageView);
             }
+            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                    intent.putExtra(USERID,userPhotoListBean.getUserId());
+
+                    getActivity().startActivity(intent);
+                }
+            });
+
         }
 
     }
@@ -317,7 +331,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         @Override
         public void convert(ViewHolder holder, Object o, int position) {
 
-            NearbyUsersBean.DataBean.UserInfoListBean userInfoListBean = (NearbyUsersBean.DataBean.UserInfoListBean) o;
+            final NearbyUsersBean.DataBean.UserInfoListBean userInfoListBean = (NearbyUsersBean.DataBean.UserInfoListBean) o;
             ImageView imageView = holder.getView(R.id.iv_item_test);
             ImageView videoTag = holder.getView(R.id.iv_main_fragment_item_play);
 
@@ -326,6 +340,17 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
                     .load(userInfoListBean.getImgUrl())
                     .bitmapTransform(transformation)
                     .into(imageView);
+
+
+            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                    intent.putExtra(USERID,userInfoListBean.getUserId());
+
+                    getActivity().startActivity(intent);
+                }
+            });
         }
 
 

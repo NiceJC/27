@@ -1,6 +1,7 @@
 package com.lede.second_23.ui.fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.lede.second_23.R;
+import com.lede.second_23.ui.activity.BilateralActivity;
 import com.lede.second_23.ui.activity.MainActivity;
 
 import java.util.ArrayList;
@@ -82,7 +84,11 @@ public class MainFragment1 extends Fragment {
 
 
 
-    @OnClick({R.id.main_fragment_toLeft, R.id.main_fragment_toRight, R.id.main_fragment_indicator_like_click, R.id.main_fragment_indicator_nearby_click, R.id.main_fragment_indicator_hi_click})
+    @OnClick({R.id.main_fragment_toLeft, R.id.main_fragment_toRight, R.id.main_fragment_indicator_like_click,
+            R.id.main_fragment_indicator_nearby_click, R.id.main_fragment_indicator_hi_click,
+            R.id.main_fragment_indicator_message_click
+
+    })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_toLeft:
@@ -116,7 +122,8 @@ public class MainFragment1 extends Fragment {
                     currentPage=2;
                 }
                 break;
-            case R.id.main_fragment_indicator_message_click:
+            case R.id.main_fragment_indicator_message_click://3
+                startActivity(new Intent(getActivity(), BilateralActivity.class));
 
                 break;
 

@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff"
+    android:fitsSystemWindows="true"
     tools:context="com.lede.second_23.ui.activity.SetActivity">
     <RelativeLayout
         android:layout_width="match_parent"

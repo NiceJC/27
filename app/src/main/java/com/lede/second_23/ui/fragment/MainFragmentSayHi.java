@@ -19,6 +19,7 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.FriendBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.ui.activity.WelcomeActivity;
 import com.lede.second_23.utils.SPUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -38,6 +39,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/10/19.
@@ -86,7 +89,7 @@ public class MainFragmentSayHi extends Fragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         mAdapter = new CommonAdapter<FriendBean.DataBean>(getActivity(), R.layout.fragment_youlike_item, mSayHiUserList) {
             @Override
-            protected void convert(ViewHolder holder, FriendBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, final FriendBean.DataBean dataBean, int position) {
 
                 ImageView userIcon=holder.getView(R.id.user_icon);
                 TextView user_nickName=holder.getView(R.id.user_nickName);
@@ -95,6 +98,20 @@ public class MainFragmentSayHi extends Fragment {
                         .load(dataBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(userIcon);
+
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                        intent.putExtra(USERID,dataBean.getUserId());
+                        Toast.makeText(mContext, "已有人向你打招呼了\n" +
+                                "点击笑脸可以互动了", Toast.LENGTH_LONG).show();
+                        getActivity().startActivity(intent);
+                    }
+                });
+
+
+
             }
         };
 
@@ -152,7 +169,7 @@ public class MainFragmentSayHi extends Fragment {
                 }
             }
         };
-        Request<String> sayHiUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/" + (String) SPUtils.get(getContext(), GlobalConstants.USERID, "") + "/followers", RequestMethod.POST);
+        Request<String> sayHiUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/friendships/" + (String) SPUtils.get(getContext(), USERID, "") + "/followers", RequestMethod.POST);
         sayHiUserRequest.add("access_token", (String) SPUtils.get(getContext(), GlobalConstants.TOKEN, ""));
         sayHiUserRequest.add("pageNum", 1);
         sayHiUserRequest.add("pageSize", 100);

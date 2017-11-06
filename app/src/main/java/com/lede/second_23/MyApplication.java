@@ -21,7 +21,7 @@ import com.lede.second_23.bean.RongIMBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.GetReplyActivity;
-import com.lede.second_23.ui.activity.OtherPersonActivity;
+import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LRULimitedMemoryCache;
@@ -46,6 +46,7 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
 import static io.rong.imkit.utils.SystemUtils.getCurProcessName;
 
 /**
@@ -109,8 +110,8 @@ public class MyApplication extends Application {
         RongIM.setConversationBehaviorListener(new RongIM.ConversationBehaviorListener() {
             @Override
             public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-                Intent intent = new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("id", userInfo.getUserId());
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, userInfo.getUserId());
                 startActivity(intent);
 
                 return true;
@@ -208,7 +209,7 @@ public class MyApplication extends Application {
 //        return rongIMTokenService;
         Request<String> getRongIMTokenRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/rongyun", RequestMethod.POST);
         getRongIMTokenRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        getRongIMTokenRequest.add("userId", (String) SPUtils.get(this, GlobalConstants.USERID, ""));
+        getRongIMTokenRequest.add("userId", (String) SPUtils.get(this, USERID, ""));
         requestQueue.add(100, getRongIMTokenRequest, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

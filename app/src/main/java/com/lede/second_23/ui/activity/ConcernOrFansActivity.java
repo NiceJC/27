@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.ConcernOrFansBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.thinkcool.circletextimageview.CircleTextImageView;
@@ -38,10 +38,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  * 关注的人OR 粉丝
  */
-public class ConcernOrFansActivity extends AppCompatActivity implements OnResponseListener<String>, LoadMoreWrapper.OnLoadMoreListener {
+public class ConcernOrFansActivity extends BaseActivity implements OnResponseListener<String>, LoadMoreWrapper.OnLoadMoreListener {
 
     private int type;
     @Bind(R.id.tv_concern_or_fans_activity_title)
@@ -87,6 +89,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
         }
 
         initRecyvlerView();
+
     }
 
     @OnClick({R.id.iv_concern_or_fans_activity_back})
@@ -102,7 +105,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
         Request<String> fansRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/"+id+"/toCollect", RequestMethod.POST);
 //        concernedRequest.add("id", (String) SPUtils.get(this,GlobalConstants.USERID,""));
 //        fansRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
-        fansRequest.add("toUserId", (String) SPUtils.get(this,GlobalConstants.USERID,""));
+        fansRequest.add("toUserId", (String) SPUtils.get(this, USERID,""));
         fansRequest.add("pageNum",pageNum);
         fansRequest.add("pageSize",20);
         requestQueue.add(200,fansRequest,this);
@@ -112,14 +115,13 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
         Request<String> concernedRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/"+id+"/userCollect", RequestMethod.POST);
 //        concernedRequest.add("id", (String) SPUtils.get(this,GlobalConstants.USERID,""));
 //        concernedRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
-        concernedRequest.add("toUserId", (String) SPUtils.get(this,GlobalConstants.USERID,""));
+        concernedRequest.add("toUserId", (String) SPUtils.get(this, USERID,""));
         concernedRequest.add("pageNum",pageNum);
         concernedRequest.add("pageSize",20);
         requestQueue.add(100,concernedRequest,this);
     }
 
     private void initRecyvlerView() {
-
         mAdapter= new CommonAdapter<ConcernOrFansBean.DataBean.ListBean>(this, R.layout.concern_or_fans_item, mList) {
             @Override
             protected void convert(ViewHolder holder, final ConcernOrFansBean.DataBean.ListBean listBean, int position) {
@@ -146,7 +148,7 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
 //                    }
 
                 }
-                if (listBean.getUserId().equals(SPUtils.get(ConcernOrFansActivity.this, GlobalConstants.USERID,""))) {
+                if (listBean.getUserId().equals(SPUtils.get(ConcernOrFansActivity.this, USERID,""))) {
                     tv_right.setVisibility(View.GONE);
                 }
 
@@ -181,8 +183,8 @@ public class ConcernOrFansActivity extends AppCompatActivity implements OnRespon
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(context,OtherPersonActivity.class);
-                intent.putExtra("userId",mList.get(position).getUserId());
+                Intent intent=new Intent(context,UserInfoActivty.class);
+                intent.putExtra(USERID,mList.get(position).getUserId());
                 context.startActivity(intent);
             }
 

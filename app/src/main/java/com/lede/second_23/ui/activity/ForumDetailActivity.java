@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +39,7 @@ import com.lede.second_23.bean.ForumVideoReplyBean;
 import com.lede.second_23.bean.MsgBean;
 import com.lede.second_23.bean.ReplyForCommentBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.ui.view.HackyViewPager;
 import com.lede.second_23.utils.PushUserUtil;
 import com.lede.second_23.utils.SPUtils;
@@ -69,10 +69,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  * 微博详情页
  */
-public class ForumDetailActivity extends AppCompatActivity implements OnResponseListener<String> {
+public class ForumDetailActivity extends BaseActivity implements OnResponseListener<String> {
 
     private static final int FOURM_DETAIL = 1000;
     private static final int COMMENT_FOR_FORUM = 2000;
@@ -151,7 +153,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         isOpenReplyVideo = intent.getBooleanExtra("isOpenReplyVideo", false);
 //        forumuserId = intent.getStringExtra("userId");
 //        listBean = (AllForumBean.DataBean.SimpleBean.ListBean) intent.getSerializableExtra("forum");
-        mUserId = (String) SPUtils.get(context, GlobalConstants.USERID, "");
+        mUserId = (String) SPUtils.get(context, USERID, "");
         mGson = new Gson();
 
         requestQueue = GlobalConstants.getRequestQueue();
@@ -194,8 +196,8 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 diyiv_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -203,8 +205,8 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 tv_nickname.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, OtherPersonActivity.class);
-                        intent.putExtra("userId", listBean.getUserId());
+                        Intent intent = new Intent(context, UserInfoActivty.class);
+                        intent.putExtra(USERID, listBean.getUserId());
                         startActivity(intent);
                     }
                 });
@@ -573,7 +575,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setIcon(R.mipmap.add);
                 builder.setTitle("选择操作");
-                if (forumuserId.equals((String) SPUtils.get(context, GlobalConstants.USERID,""))) {
+                if (forumuserId.equals((String) SPUtils.get(context, USERID,""))) {
                     //    设置一个下拉的列表选择项
                     builder.setItems(items3, new DialogInterface.OnClickListener() {
                         @Override
@@ -712,7 +714,7 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
             pageNum=1;
             forumDetailList.clear();
             initData();
-            if (!forumuserId.equals((String) SPUtils.get(context,GlobalConstants.USERID,""))) {
+            if (!forumuserId.equals((String) SPUtils.get(context, USERID,""))) {
                 PushUserUtil.pushUser(forumuserId,(String)SPUtils.get(context,GlobalConstants.TOKEN,""));
 
             }
@@ -989,8 +991,8 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         diy_userimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("userId", listBean.getUserId());
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, listBean.getUserId());
                 startActivity(intent);
             }
         });
@@ -1007,8 +1009,8 @@ public class ForumDetailActivity extends AppCompatActivity implements OnResponse
         tv_nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, OtherPersonActivity.class);
-                intent.putExtra("userId", listBean.getUserId());
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, listBean.getUserId());
                 startActivity(intent);
             }
         });

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -17,6 +16,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.LocationBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.glide.GlideCatchUtil;
@@ -34,7 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SetActivity extends AppCompatActivity {
+public class SetActivity extends BaseActivity {
 
     @Bind(R.id.tv_set_activity_age)
     TextView tv_age;
@@ -109,7 +109,7 @@ public class SetActivity extends AppCompatActivity {
         if (SPUtils.contains(mContext, GlobalConstants.SET_SEX)) {
             tv_sex.setText((String) SPUtils.get(mContext, GlobalConstants.SET_SEX, ""));
         } else {
-            tv_sex.setText("全部人");
+            tv_sex.setText("All");
         }
         if (SPUtils.contains(mContext, GlobalConstants.SET_MINAGE)) {
             rsb_age.setValue((float) SPUtils.get(mContext, GlobalConstants.SET_MINAGE, 0.0f), (float) SPUtils.get(mContext, GlobalConstants.SET_MAXAGE, 41.0f));

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="#ffffff"
     tools:context="com.lede.second_23.ui.activity.ForumDetailActivity">
     <RelativeLayout
@@ -43,20 +44,28 @@
 
     </com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView>
     <LinearLayout
+
         android:id="@+id/ll_prv_forum_detail_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#f1f1f1"
         android:gravity="center">
         <LinearLayout
+
+            android:padding="3dp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="@drawable/stroke_edit_linearlayout_all">
+            android:background="@drawable/white_bg">
             <EditText
                 android:id="@+id/et_forum_detail_comment"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:textSize="16sp"
                 android:layout_height="wrap_content"
                 android:hint="输入评论"
                 android:background="@null"
@@ -64,13 +73,15 @@
         </LinearLayout>
 
         <TextView
+
+            android:background="@drawable/white_bg"
             android:id="@+id/tv_forum_detail_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="评论"
-            android:padding="2dp"
+            android:text="发送"
+            android:padding="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textSize="18sp"/>
+
+            android:textSize="16sp"/>
     </LinearLayout>
 </LinearLayout>

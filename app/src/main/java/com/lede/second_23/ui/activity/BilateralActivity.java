@@ -3,7 +3,6 @@ package com.lede.second_23.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.handmark.pulltorefresh.library.PullToRrefreshRecyclerView;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.BilateralBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.yolanda.nohttp.NoHttp;
@@ -36,10 +36,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  * 互相打过招呼的人相当于好友列表
  */
-public class BilateralActivity extends AppCompatActivity {
+public class BilateralActivity extends BaseActivity {
 
     @Bind(R.id.iv_bilateral_activity_reply)
     ImageView ivBilateralActivityReply;
@@ -85,7 +87,7 @@ public class BilateralActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(mContext, ConcernActivity_2.class);
-                intent.putExtra("userId", dataList.get(position).getUserId());
+                intent.putExtra(USERID, dataList.get(position).getUserId());
                 mContext.startActivity(intent);
             }
 

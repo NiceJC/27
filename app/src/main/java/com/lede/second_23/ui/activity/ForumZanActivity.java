@@ -35,6 +35,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 public class ForumZanActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     @Bind(R.id.iv_forum_zan_activity_back)
@@ -78,8 +80,8 @@ public class ForumZanActivity extends AppCompatActivity implements OnResponseLis
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(ForumZanActivity.this,OtherPersonActivity.class);
-                intent.putExtra("userId",userInfoBeanArrayList.get(position).getUserId());
+                Intent intent=new Intent(ForumZanActivity.this,UserInfoActivty.class);
+                intent.putExtra(USERID,userInfoBeanArrayList.get(position).getUserId());
                 startActivity(intent);
             }
 

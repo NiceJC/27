@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.lede.second_23.R;
 import com.lede.second_23.bean.PushUserBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.UiUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -36,6 +38,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/10/19.
@@ -82,17 +86,12 @@ public class MainFragmentYouLike extends Fragment  {
 
          mAdapter=new CommonAdapter<PushUserBean.DataBean.UserInfoListBean>(getActivity(),R.layout.fragment_youlike_item,pushUserList) {
             @Override
-            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfoListBean userInfoListBean, int position) {
+            protected void convert(ViewHolder holder, final PushUserBean.DataBean.UserInfoListBean userInfoListBean, int position) {
 
                 if(position==1){
                     LinearLayout linearLayout= (LinearLayout) holder.getConvertView();
-
-
-                    linearLayout.setPadding(0, UiUtils.dip2px(100),0,0);
-
+                    linearLayout.setPadding(0, UiUtils.dip2px(80),0,0);
                 }
-
-
                 ImageView userIcon=holder.getView(R.id.user_icon);
                 TextView user_nickName=holder.getView(R.id.user_nickName);
                 user_nickName.setText(userInfoListBean.getNickName());
@@ -100,6 +99,20 @@ public class MainFragmentYouLike extends Fragment  {
                         .load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(userIcon);
+
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(getActivity(), UserInfoActivty.class);
+                        intent.putExtra(USERID,userInfoListBean.getUserId());
+                        startActivity(intent);
+
+                    }
+                });
+
+
+
+
             }
 
 

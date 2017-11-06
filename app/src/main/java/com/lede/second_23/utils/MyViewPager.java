@@ -140,6 +140,63 @@ public class MyViewPager extends ViewPager {
         changeViewCallback = callback;
     }
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+
+//        float DownX=0f;
+//        float DownY=0f;
+//        float moveX=0f;
+//        float moveY=0f;
+//        long currentMS=0;
+//
+//        switch (event.getAction()) {
+//
+//            case MotionEvent.ACTION_DOWN:
+//                DownX = event.getX();//float DownX
+//                DownY = event.getY();//float DownY
+//                moveX = 0;
+//                moveY = 0;
+//                currentMS = System.currentTimeMillis();//long currentMS     获取系统时间
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                moveX += Math.abs(event.getX() - DownX);//X轴距离
+//                moveY += Math.abs(event.getY() - DownY);//y轴距离
+//                DownX = event.getX();
+//                DownY = event.getY();
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                long moveTime = System.currentTimeMillis() - currentMS;//移动时间
+//                //判断是否继续传递信号
+////                if(moveTime>200&&(moveX>20||moveY>20)){
+////                    if(moveX>20||moveX<-20){
+////                        return true;
+////                    }
+////
+////
+//////                    return true; //不再执行后面的事件，在这句前可写要执行的触摸相关代码。点击事件是发生在触摸弹起后
+////                }
+//
+//                if(moveX>20||moveY>20){
+//                    return  true;
+//                }
+//
+//                break;
+//        }
+//
+
+
+
+        return super.onInterceptTouchEvent(event);
+    }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         getParent().requestDisallowInterceptTouchEvent(true);

@@ -57,6 +57,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  * 评论详情页
  */
@@ -117,7 +119,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
         commentId = intent.getLongExtra("commentId", 0);
         forumId = intent.getLongExtra("forumId", 0);
         listBean = (ForumDetailCommentBean.DataBean.SimpleBean.ListBean) intent.getSerializableExtra("commentInfo");
-        currentUserId = (String) SPUtils.get(context, GlobalConstants.USERID, "");
+        currentUserId = (String) SPUtils.get(context, USERID, "");
         mGson = new Gson();
         initView();
         initData();
@@ -164,8 +166,8 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, OtherPersonActivity.class);
-                            intent.putExtra("userId",listBean.getUserId());
+                            Intent intent=new Intent(context, UserInfoActivty.class);
+                            intent.putExtra(USERID,listBean.getUserId());
                             startActivity(intent);
                         }
                         @Override
@@ -184,8 +186,8 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, OtherPersonActivity.class);
-                            intent.putExtra("userId",listBean.getUserId());
+                            Intent intent=new Intent(context, UserInfoActivty.class);
+                            intent.putExtra(USERID,listBean.getUserId());
                             startActivity(intent);
                         }
                         @Override
@@ -197,8 +199,8 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
                     sbs.setSpan(new NoLineCllikcSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent intent=new Intent(context, OtherPersonActivity.class);
-                            intent.putExtra("userId",listBean.getToUserId());
+                            Intent intent=new Intent(context, UserInfoActivty.class);
+                            intent.putExtra(USERID,listBean.getToUserId());
                             startActivity(intent);
                         }
                         @Override

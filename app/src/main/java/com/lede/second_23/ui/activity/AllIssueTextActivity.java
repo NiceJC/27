@@ -120,7 +120,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
         uploadManager = MyApplication.getUploadManager();
         random = new Random();
         intent = getIntent();
-        forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
+
         imgOrVideoType = intent.getIntExtra("imgOrVideoType", 0);
         img_path = intent.getStringExtra("img_path");
         isCrop = intent.getBooleanExtra("isCrop", true);
@@ -439,6 +439,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 } else {
                     loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
                     loadingDialog2.show();
+                    forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
                     if (imgOrVideoType == 0) {
                         for (int i = 0; i < selectMedia.size() - 1; i++) {
                             if (isCrop) {
@@ -514,6 +515,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
             @Override
             public void onSucceed(int what, Response<String> response) {
                 parseQiNiuToken(response.get(), i, file);
+
             }
 
             @Override
@@ -547,7 +549,6 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
      */
     private void uploadVideo(String uptoken, int index, File file) {
         final int num = random.nextInt(100001);
-
 
         if (index == 0) { //pic
             String key = (System.currentTimeMillis() * 100000 + num) + ".jpg";
@@ -586,7 +587,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                                 isVideoOK = info.isOK();
                                 qiniuVieoPatch = key;
                                 if (isVideoOK && isVideoFirstOK) {
-                                    uploadService();
+                                    uploadService(forumId);
                                 } else {
                                     Log.i("qiniu", "complete: 视频第一帧图片或者视频上传中出错");
                                 }
@@ -614,7 +615,6 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
      * @param file
      */
     private void uploadPic(String token, final int i, File file) {
-
         final int num = random.nextInt(100001);
         String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(file.getName());
         uploadManager.put(file, key, token,
@@ -633,7 +633,7 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
 
                             }
                             if (successList.size() == selectMedia.size() - 1) {
-                                uploadService();
+                                uploadService(forumId);
                                 successList.clear();
                             }
                         } else {
@@ -650,7 +650,8 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                 }, null));
     }
 
-    private void uploadService() {
+    private void uploadService(long forumID) {
+
         Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/creatFroum", RequestMethod.POST);
         AllForum allForum = null;
         if (imgOrVideoType == 0) {
