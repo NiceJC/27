@@ -38,5 +38,5 @@
         android:layout_marginStart="27dp"
         android:layout_marginBottom="43dp"
         app:diy_image_Type="circle"
-        android:src="@mipmap/choose_local"/>
+        android:src="@mipmap/photo_circle"/>
 </RelativeLayout>

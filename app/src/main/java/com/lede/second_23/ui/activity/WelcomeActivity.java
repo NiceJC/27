@@ -101,8 +101,8 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
         requestQueue = GlobalConstants.getRequestQueue();
         Log.i("WelcomeActivity", "onCreate: "+NetUtil.getLocalIPAddress());
         Glide.with(WelcomeActivity.this)
-                .load(R.mipmap.start)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .load(R.mipmap.newstart)
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(new GlideDrawableImageViewTarget(ivLogo, 1));
         mPermissionsChecker = new PermissionsChecker(this);
         // 缺少权限时, 进入权限配置页面

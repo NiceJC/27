@@ -114,7 +114,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         //图片加圆角  注：不能在xml直接使用 centerCrop
         transformation = new MultiTransformation(
                 new CenterCrop(getContext()),
-                new RoundedCornersTransformation(getContext(), 20, 0, RoundedCornersTransformation.CornerType.ALL)
+                new RoundedCornersTransformation(getContext(), 10, 0, RoundedCornersTransformation.CornerType.ALL)
 
 
 

@@ -41,6 +41,24 @@ public class PersonalAlbumBean {
         private SimpleBean simple;
 
         private List<UserInfo> userInfo;
+        private int friendsCount;
+        private int followersCount;
+
+        public int getFriendsCount() {
+            return friendsCount;
+        }
+
+        public void setFriendsCount(int friendsCount) {
+            this.friendsCount = friendsCount;
+        }
+
+        public int getFollowersCount() {
+            return followersCount;
+        }
+
+        public void setFollowersCount(int followersCount) {
+            this.followersCount = followersCount;
+        }
 
         public SimpleBean getSimple() {
             return simple;

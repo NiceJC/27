@@ -1,16 +1,20 @@
 package com.lede.second_23.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,14 +52,15 @@ public class PersonalFragmentAllBlog extends Fragment {
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
-
+    @Bind(R.id.when_no_data)
+    ImageView whenNoData;
     private Gson mGson;
     private CommonAdapter mAdapter;
     private SimpleResponseListener<String> simpleResponseListener;
 
     private static final int REQUEST_ALL_FORUM = 111;
     private int currentPage = 1;
-    private int pageSize = 10;
+    private int pageSize = 100;
     private boolean isHasNextPage = false;
 
 
@@ -66,12 +71,20 @@ public class PersonalFragmentAllBlog extends Fragment {
     private Request<String> getAllForumRequest=null;
 
 
+    private int width;
+    private int picWidth;
     private String userId;
     private RequestManager requestManager;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recyclerview_only, container, false);
+        View view = inflater.inflate(R.layout.persona_all_forum, container, false);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        width = dm.widthPixels;
+        picWidth=width/3;
+
 
         String userID=getActivity().getIntent().getStringExtra(USERID);
         if(userID!=null&&!userID.equals("")){
@@ -98,10 +111,15 @@ public class PersonalFragmentAllBlog extends Fragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
 
 
+//        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(getContext()));
         mAdapter = new CommonAdapter<PersonAllForumBean.DataBean.SimpleBean.ListBean>(getActivity(), R.layout.item_person_fragment_show, mDataList) {
 
             @Override
             protected void convert(ViewHolder holder, PersonAllForumBean.DataBean.SimpleBean.ListBean listBean, int position) {
+
+                holder.getConvertView().setLayoutParams(new LinearLayout.LayoutParams(picWidth,picWidth));
+
+
                 ImageView showView_photos = (ImageView) holder.getView(R.id.iv_person_fragment_item_photos);
                 ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
                 ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
@@ -124,8 +142,8 @@ public class PersonalFragmentAllBlog extends Fragment {
             }
         };
 
-        mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
@@ -174,6 +192,12 @@ public class PersonalFragmentAllBlog extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        doRequest(1);
+    }
+
     private void doRequest(int pageNum) {
 
         simpleResponseListener = new SimpleResponseListener<String>() {
@@ -221,7 +245,16 @@ public class PersonalFragmentAllBlog extends Fragment {
             if (personAllForumBean.getData().getSimple().getList().size() == 0) {
                 Toast.makeText(getContext(), "无更多内容", Toast.LENGTH_SHORT).show();
 
+                if(isRefresh){
+                    mDataList.clear();
+                    mAdapter.notifyDataSetChanged();
+                    whenNoData.setVisibility(View.VISIBLE);
+                }else{
+                    whenNoData.setVisibility(View.GONE);
+                }
             } else {
+                whenNoData.setVisibility(View.GONE);
+
                 isHasNextPage = personAllForumBean.getData().getSimple().isHasNextPage();
                 if(isRefresh){
                     currentPage=1;

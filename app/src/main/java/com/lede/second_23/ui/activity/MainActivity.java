@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -60,6 +62,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     private double myLatitude;//纬度
     private double myLongitude;//经度
 
+    private ImageView declaration;
     private NearbySearch mNearbySearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +77,8 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#3b5998"));
         UpdateHelper.getInstance().autoUpdate("com.lede.second_23", false, 5000);
         UpdateHelper.getInstance().setDebugMode(true);
-//        StatusBarCompat.setStatusBarColor(this, Color.parseColor("#77cbd8"), lightStatusBar);
-//        Window window = getWindow();
-//        ViewGroup decorViewGroup = (ViewGroup) window.getDecorView();
-//        View statusBarView = new View(window.getContext());
-//        int statusBarHeight = getStatusBarHeight(window.getContext());
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, statusBarHeight);
-//        params.gravity = Gravity.TOP;
-//        statusBarView.setLayoutParams(params);
-//        statusBarView.setBackgroundColor(Color.parseColor("#77cbd8"));
-//        decorViewGroup.addView(statusBarView);
 
-                initView();
+        initView();
     }
 
     @Override
@@ -100,6 +93,24 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
     private void initView() {
         vp_main_fg = (MyViewPager) findViewById(R.id.vp_main_fg);
+        declaration= (ImageView) findViewById(R.id.declaration_main);
+        if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATIONMAIN,true))) {
+            declaration.setVisibility(View.VISIBLE);
+        }else {
+            declaration.setVisibility(View.GONE);
+            declaration.setClickable(false);
+        }
+
+        declaration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                declaration.setVisibility(View.GONE);
+                declaration.setClickable(false);
+                SPUtils.put(MainActivity.this, GlobalConstants.DECLARATIONMAIN,false);
+            }
+        });
+
+
         initFragmentViewPager();
     }
 

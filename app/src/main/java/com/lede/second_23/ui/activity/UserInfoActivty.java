@@ -145,7 +145,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
     private Gson mGson;
     private SimpleResponseListener<String> simpleResponseListener;
-    private static final int REQUEST_USER_INFO = 5515;
+    private static final int REQUEST_USER_INFO = 51515;
     private static final int REQUEST_USER_RELATION=534341;
     private static final int REQUEST_CANCAL=23223;
     private static final int REQUEST_Concern=23255;
@@ -161,7 +161,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> fragmentList;
-
+    private PersonalAlbumBean.DataBean dataBean;
     private Request<String> userInfoRequest = null;
     private Request<String> userRelationRequest=null;
 
@@ -366,6 +366,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
     private void parseUserInfo(String s) {
         PersonalAlbumBean personalAlbumBean = mGson.fromJson(s, PersonalAlbumBean.class);
         userInfo = personalAlbumBean.getData().getUserInfo().get(0);
+        dataBean=personalAlbumBean.getData();
         setUserInfo();
     }
     public void parseIfConcerned(String s){
@@ -390,8 +391,8 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
                 .load(userInfo.getImgUrl())
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(userImg);
-        followingsNum.setText(userInfo.getFriendsCount() + "");
-        fansNum.setText(userInfo.getFollowersCount() + "");
+        followingsNum.setText(dataBean.getFriendsCount() + "");
+        fansNum.setText(dataBean.getFollowersCount() + "");
 //        PersonalAlbumBean.DataBean.UserInfo
     }
 

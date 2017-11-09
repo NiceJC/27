@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -9,6 +9,14 @@
     tools:context="com.lede.second_23.ui.activity.MainActivity">
 
 
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/declaration_main"
+        android:src="@mipmap/manual85"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
     <com.lede.second_23.utils.MyViewPager
@@ -23,4 +31,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

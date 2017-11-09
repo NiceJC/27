@@ -28,7 +28,7 @@ public class GlobalConstants {
     //网络访问
 //    public static final String URL = "http://101.37.85.56:8000";  //服务器生产环境
 //    public static final String URL = "http://101.37.85.56:8088";  //服务器开发环境
-//    public static final String URL = "http://192.168.31.81:8080"; //联调环境
+//    public static final String URL = "http://192.168.31.134:8080"; //联调环境
     public static final String URL = "http://api.ledeseven.com";
 //
 
@@ -93,6 +93,8 @@ public class GlobalConstants {
     public static final int APPID=1106236230;
 
     public static final String DECLARATION="DECLARATION";
+    public static final String DECLARATIONMAIN="DECLARATIONMAIN";
+
     public static final String USERID="USERID";
 
     //七牛云控件域名

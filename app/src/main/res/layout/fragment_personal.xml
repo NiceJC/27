@@ -46,8 +46,8 @@
             <ProgressBar
                 android:id="@+id/pull_to_refresh_progress"
                 style="?android:progressBarStyleInverse"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:indeterminateDrawable="@drawable/progressbar_bar_loading"
                 android:visibility="visible" />
@@ -250,8 +250,13 @@
 
                     android:src="@drawable/selector_personal_album" />
             </LinearLayout>
+            <View
+                android:background="#eeeeee"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
             <android.support.v4.view.ViewPager
+
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -269,26 +274,5 @@
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
-    <LinearLayout
-
-
-        android:layout_margin="2dp"
-        android:background="@drawable/post_buttom_bg"
-        android:orientation="vertical"
-        android:id="@+id/post_my_photo"
-        android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <ImageView
-            android:src="@mipmap/upload"
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="上传我的照片" />
-
-
-    </LinearLayout>
 
 </LinearLayout>

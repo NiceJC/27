@@ -95,7 +95,7 @@ public class UserInfoCardActivity extends AppCompatActivity {
             edit.setVisibility(View.VISIBLE);
         }
 
-        doRequest();
+//        doRequest();
     }
 
 
@@ -157,4 +157,9 @@ public class UserInfoCardActivity extends AppCompatActivity {
         userSchool.setText(userInfo.getHometown());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doRequest();
+    }
 }

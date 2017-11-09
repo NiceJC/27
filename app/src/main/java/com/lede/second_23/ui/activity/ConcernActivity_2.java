@@ -4,14 +4,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.IMAGE_URLS;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -93,8 +97,9 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 //    LinearLayout ll_inDicator;
     @Bind(R.id.iv_concern_activity_2_report)
     ImageView iv_report;
-    @Bind(R.id.tv_concern_activity_2_time)
-    TextView tv_time;
+
+    @Bind(R.id.ll_concern_activity_2_info)
+    LinearLayout userInfoLayout;
     @Bind(R.id.tv_concern_activity_2_title)
     TextView tv_title;
     @Bind(R.id.iv_concern_activity_2_declaration)
@@ -131,6 +136,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
     private String imageUrl=null;
 
 
+    private String intentURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +144,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         ButterKnife.bind(this);
         intent = getIntent();
         userId = intent.getStringExtra(USERID);
+        intentURL=intent.getStringExtra(IMAGE_URLS);
 //        videourl = intent.getStringExtra("videourl");
 //        picurl = intent.getStringExtra("picurl");
 //        time = intent.getStringExtra("time");
@@ -145,10 +152,14 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 //        text = intent.getStringExtra("text");
         if (userId.equals((String) SPUtils.get(this, USERID, ""))) {
             iv_report.setVisibility(View.GONE);
-            iv_concern_activity_concern.setVisibility(View.GONE);
+
+            diyiv_userimg.setVisibility(View.GONE);
+            tv_username.setVisibility(View.GONE);
+            tv_distance.setVisibility(View.GONE);
+            iv_concern_activity_concern.setVisibility(View.INVISIBLE);
             iv_concern_activity_message.setVisibility(View.GONE);
             iv_concern_activity_location.setVisibility(View.GONE);
-            tv_title.setText("自己的动态");
+            tv_title.setText("我的照片");
         }
         if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATION,true))) {
             iv_declaration.setVisibility(View.VISIBLE);
@@ -160,6 +171,11 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
 
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        photo.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,width));
 
         userLocation();
         userInfoService(userId);
@@ -439,6 +455,9 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 
     private void parserLocation(String json) {
         LocationBean locationBean = mGson.fromJson(json, LocationBean.class);
+        if(locationBean.getData().getUserAmap()==null){
+            return;
+        }
         locationBean.getData().getUserAmap().getLat();
         location_type=Integer.parseInt(locationBean.getData().getUserAmap().getType());
         lat = locationBean.getData().getUserAmap().getLat();
@@ -446,7 +465,22 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         mStartPoint = new LatLng(Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LATITUDE, "")), Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LONGITUDE, "")));
         mEndPoint = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
         distance = AMapUtils.calculateLineDistance(mStartPoint, mEndPoint);
-        tv_distance.setText((int) distance + "米");
+
+
+        if(distance>1000){
+            distance=distance/1000;
+            tv_distance.setText((int) distance + "km");
+
+        }else{
+            tv_distance.setText((int) distance + "m");
+
+        }
+
+
+
+
+
+
     }
 
     private void parserConcernMsg(String json) {
@@ -505,6 +539,9 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
                 imageUrl=userPhotoListBean.getUrlFirst();
             }
         }
+        if(intentURL!=null&&!intentURL.equals("")){
+            imageUrl=intentURL;
+        }
 
         Glide.with(this).load(imageUrl).into(photo);
         username=userInfo.getNickName();
@@ -542,243 +579,9 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
             iv_concern_activity_concern.setClickable(true);
         }
 
-
-
-
-
-
-
     }
 
 
-
-//    private void parserConcernUserInfo(String json) {
-//        concernUserInfoBean = mGson.fromJson(json, ConcernUserInfoBean.class);
-//        SPUtils.put(this, GlobalConstants.CURRENT_USERID, userId);
-//        if (concernUserInfoBean.getData().getForumList() != null) {
-//            SPUtils.put(this, GlobalConstants.CURRENT_FORUMID, concernUserInfoBean.getData().getForumList().get(0).getForumId() + "");
-//
-//        }
-//        SPUtils.put(this, GlobalConstants.CURRENT_USERIMG, concernUserInfoBean.getData().getInfo().getImgUrl() + "");
-//
-//        Glide.with(this)
-//                .load(concernUserInfoBean.getData().getInfo().getImgUrl())
-//                .error(R.mipmap.loading)
-//                .into(diyiv_userimg);
-//        if (concernUserInfoBean.getData().getInfo().getTrueName().equals("1")) {
-//            Drawable drawableRight = getResources().getDrawable(
-//                    R.mipmap.v2);
-//
-//            tv_username.setCompoundDrawablesWithIntrinsicBounds(null,
-//                    null, drawableRight, null);
-//            tv_username.setCompoundDrawablePadding(2);
-//        }
-//        tv_username.setText(concernUserInfoBean.getData().getInfo().getNickName());
-//
-//        if (concernUserInfoBean.getData().isEnd()) {
-//            Glide.with(this)
-//                    .load(R.mipmap.comment_on)
-//                    .error(R.mipmap.loading)
-//                    .into(iv_concern_activity_message);
-//            iv_concern_activity_message.setClickable(true);
-//            Glide.with(this)
-//                    .load(R.mipmap.position_on)
-//                    .error(R.mipmap.loading)
-//                    .into(iv_concern_activity_location);
-//            iv_concern_activity_location.setClickable(true);
-//        } else {
-//            Glide.with(this)
-//                    .load(R.mipmap.comment_off)
-//                    .error(R.mipmap.loading)
-//                    .into(iv_concern_activity_message);
-//            Glide.with(this)
-//                    .load(R.mipmap.position_off)
-//                    .error(R.mipmap.loading)
-//                    .into(iv_concern_activity_location);
-//        }
-//        ConcernUserInfoBean.DataBean dataBean = concernUserInfoBean.getData();
-//        isFriend = dataBean.isFirend();
-//        if (isFriend) {
-//            iv_concern_activity_concern.setImageResource(R.mipmap.smile_on);
-//        } else {
-//            iv_concern_activity_concern.setImageResource(R.mipmap.smile_off);
-//            iv_concern_activity_concern.setClickable(true);
-//        }
-////        if (banner1==null&&videourl==null) {
-////            if (dataBean.getForumList()!=null) {
-////                Date createDate=null;
-////                //"2017-05-19 17:15:40"
-////                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-////                try {
-////                    createDate=formatter.parse(concernUserInfoBean.getData().getForumList().get(0).getCreateTime());
-////                } catch (ParseException e) {
-////                    e.printStackTrace();
-////                }
-////                if (createDate!=null) {
-////                    tv_time.setText(TimeUtils.getTimeFormatText(createDate));
-////                }
-////                //"http://7xr1tb.com1.z0.glb.clouddn.com/null"
-////                if (dataBean.getForumList().get(0).getForumMedia().getPath().equals("http://my-photo.lacoorent.com/null")) {
-////                    hvp_concern_activity_2.setVisibility(View.VISIBLE);
-////                    jcplay_concerv_activity_2.setVisibility(View.GONE);
-////                    if (dataBean.getForumList().get(0).getImgs().size() != 1) {
-////                        ll_inDicator.setVisibility(View.VISIBLE);
-////                    }
-////                    for (int i = 0; i < dataBean.getForumList().get(0).getImgs().size(); i++) {
-////                        banner.add(dataBean.getForumList().get(0).getImgs().get(i).getUrl());
-////                        ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
-////                        if (i == 0) {
-////                            inDicator.setImageResource(R.mipmap.current);
-////                        }
-////                        ll_inDicator.addView(inDicator);
-////                    }
-////
-////                    ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner);
-////
-////                    hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-////                        @Override
-////                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-////                            for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
-////                                if (i == position) {
-////                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
-////                                } else {
-////                                    ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
-////                                }
-////                            }
-////                        }
-////
-////                        @Override
-////                        public void onPageSelected(int position) {
-////
-////                        }
-////
-////                        @Override
-////                        public void onPageScrollStateChanged(int state) {
-////
-////                        }
-////                    });
-////                    hvp_concern_activity_2.setAdapter(adapter);
-////                } else {
-////                    hvp_concern_activity_2.setVisibility(View.GONE);
-////                    jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
-////                    jcplay_concerv_activity_2.setUp(dataBean.getForumList().get(0).getForumMedia().getPath(),
-////                            JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-////                    Glide.with(this).load(dataBean.getForumList().get(0).getForumMedia().getPic()).into(jcplay_concerv_activity_2.thumbImageView);
-////
-////                }
-////            }else {
-////                Toast.makeText(this, "用户还没发表过内容", Toast.LENGTH_SHORT).show();
-////            }
-////        }else if (banner1!=null){
-////            Date createDate=null;
-////            //"2017-05-19 17:15:40"
-////            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-////            try {
-////                createDate=formatter.parse(time);
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
-////            if (createDate!=null) {
-////                tv_time.setText(TimeUtils.getTimeFormatText(createDate));
-////            }
-////            hvp_concern_activity_2.setVisibility(View.VISIBLE);
-////            jcplay_concerv_activity_2.setVisibility(View.GONE);
-////            if (banner1.size() != 1) {
-////                ll_inDicator.setVisibility(View.VISIBLE);
-////            }
-////            for (int i = 0; i < banner1.size(); i++) {
-////                ImageView inDicator = (ImageView) LayoutInflater.from(this).inflate(R.layout.layout_indicator, ll_inDicator, false);
-////                if (i == 0) {
-////                    inDicator.setImageResource(R.mipmap.current);
-////                }
-////                ll_inDicator.addView(inDicator);
-////            }
-////
-////            ImageViewPagerAdapter_2 adapter = new ImageViewPagerAdapter_2(getSupportFragmentManager(), banner1);
-////
-////            hvp_concern_activity_2.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-////                @Override
-////                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-////                    for (int i = 0; i < ll_inDicator.getChildCount(); i++) {
-////                        if (i == position) {
-////                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.current);
-////                        } else {
-////                            ((ImageView) ll_inDicator.getChildAt(i)).setImageResource(R.mipmap.unckecked);
-////                        }
-////                    }
-////                }
-////
-////                @Override
-////                public void onPageSelected(int position) {
-////
-////                }
-////
-////                @Override
-////                public void onPageScrollStateChanged(int state) {
-////
-////                }
-////            });
-////            hvp_concern_activity_2.setAdapter(adapter);
-////
-////        }else {
-////            hvp_concern_activity_2.setVisibility(View.GONE);
-////            jcplay_concerv_activity_2.setVisibility(View.VISIBLE);
-////            jcplay_concerv_activity_2.setUp(videourl,
-////                    JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-////            Glide.with(this).load(picurl).into(jcplay_concerv_activity_2.thumbImageView);
-////
-////        }
-//
-//
-//        username = dataBean.getInfo().getNickName();
-//    }
-
-//    private void showPopwindow() {
-//        // 利用layoutInflater获得View
-//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.layout_concern_text, null);
-//
-//        // 下面是两种方法得到宽度和高度 getWindow().getDecorView().getWidth()
-//
-//        PopupWindow window = new PopupWindow(view,
-//                WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-//
-//        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
-//        window.setFocusable(true);
-//
-//        // 实例化一个ColorDrawable颜色为半透明
-////        ColorDrawable dw = new ColorDrawable(0xb0000000);
-//        ColorDrawable dw = new ColorDrawable(0xffffffff);
-//        window.setBackgroundDrawable(dw);
-//
-//
-//        // 设置popWindow的显示和消失动画
-//        window.setAnimationStyle(R.style.mypopwindow_anim_style);
-//        // 在底部显示
-//        window.showAtLocation(this.findViewById(R.id.activity_concern_2),
-//                Gravity.BOTTOM, 0, 0);
-//
-//        // 这里检验popWindow里的button是否可以点击
-//        TextView tv_text = (TextView) view.findViewById(R.id.tv_concern_text);
-//        if (text!=null) {
-//            tv_text.setText(text);
-//        }else {
-//            if (concernUserInfoBean.getData().getForumList()!=null) {
-//                tv_text.setText(concernUserInfoBean.getData().getForumList().get(0).getText().toString().trim());
-//            }
-//        }
-//
-//         //popWindow消失监听方法
-//        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss() {
-//                ll_bottom.setVisibility(View.VISIBLE);
-////                iv_concern_activity_2_up.setImageResource(R.mipmap.btn_click_up);
-//            }
-//        });
-//
-//    }
 
     public void showHintDialog(int type){
         LayoutInflater inflater = getLayoutInflater();

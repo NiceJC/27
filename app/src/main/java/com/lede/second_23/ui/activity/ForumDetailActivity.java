@@ -192,6 +192,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
                         startActivity(intent);
                     }
                 });
+
                 Glide.with(context).load(listBean.getUserInfo().getImgUrl()).into(diyiv_userimg);
                 diyiv_userimg.setOnClickListener(new View.OnClickListener() {
                     @Override

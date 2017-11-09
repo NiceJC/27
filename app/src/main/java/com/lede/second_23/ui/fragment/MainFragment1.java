@@ -184,13 +184,30 @@ public class MainFragment1 extends Fragment {
                 return fragmentList.size();
             }
         };
-        iconList.add(likeIcon);
-        iconList.add(nearbyIcon);
-        iconList.add(hiIcon);
 
-        lineList.add(likeIcon);
-        lineList.add(nearbyLine);
-        lineList.add(hiLine);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                resetOthers(currentPage);
+                setSelected(position);
+                currentPage=position;
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
 
     }
 

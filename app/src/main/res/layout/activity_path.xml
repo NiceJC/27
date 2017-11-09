@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="路线"
+            android:text="距离"
             android:textColor="@color/black"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
@@ -34,7 +34,9 @@
         <com.amap.api.maps2d.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.amap.api.maps2d.MapView>
+            android:layout_height="match_parent">
+
+        </com.amap.api.maps2d.MapView>
         <TextView
             android:id="@+id/tv_path_activity_distance"
             android:layout_width="wrap_content"

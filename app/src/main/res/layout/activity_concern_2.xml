@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="附近的动态"
+                android:text="附近动态"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -70,15 +70,9 @@
                     android:id="@+id/tv_concern_activity_2_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="#333333"/>
-                <TextView
-                    android:id="@+id/tv_concern_activity_2_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textSize="14sp"
-                    android:textColor="#333333"/>
+
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -96,129 +90,43 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
                     android:layout_marginBottom="10dp"
                     android:textSize="16sp"
                     android:textColor="#666666"/>
             </RelativeLayout>
 
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eeeeee"/>
 
         <RelativeLayout
-            android:layout_weight="1"
+
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/photo"
-                android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop" />
+
             <ImageView
 
-                android:visibility="gone"
+
                 android:id="@+id/video_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/play"/>
+                android:src="@mipmap/play"
+                android:visibility="gone" />
         </RelativeLayout>
 
 
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:background="@drawable/shape_linearlayout"-->
-        <!--android:orientation="vertical">-->
-        <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1">-->
 
-
-        <!--<com.lede.second_23.utils.OvalImageView-->
-        <!--android:id="@+id/iv_concern_activity_user_img"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:paddingLeft="1dp"-->
-        <!--android:paddingRight="1dp"-->
-        <!--android:paddingTop="1dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentStart="true" />-->
-        <!--<ImageView-->
-        <!--android:id="@+id/iv_concern_activity_person"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@mipmap/person"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:layout_marginBottom="12dp"-->
-        <!--/>-->
-
-        <!--</RelativeLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:orientation="horizontal">-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:gravity="center_vertical">-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_vertical">-->
-        <!--<TextView-->
-        <!--android:id="@+id/tv_concern_activity_username"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:text=""-->
-        <!--android:textSize="16sp"/>-->
-        <!--<ImageView-->
-        <!--android:id="@+id/iv_concern_activity_user_sex"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:layout_marginLeft="6dp"/>-->
-        <!--</LinearLayout>-->
-        <!--<TextView-->
-        <!--android:id="@+id/tv_concern_activity_useage"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""-->
-        <!--android:textColor="#969696"-->
-        <!--android:textSize="16sp"/>-->
-        <!--<TextView-->
-        <!--android:id="@+id/tv_concern_activity_usecity"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""-->
-        <!--android:textColor="#969696"-->
-        <!--android:textSize="16sp"/>-->
-        <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
         <LinearLayout
             android:id="@+id/ll_concern_activity_2_bottom"
+
             android:layout_width="match_parent"
             android:layout_height="88dp"
             android:layout_marginBottom="20dp"
