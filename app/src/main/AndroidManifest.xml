@@ -62,7 +62,9 @@
         tools:replace="android:icon, android:theme">
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask"
+            />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

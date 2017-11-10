@@ -800,7 +800,15 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseDetailJson(String json) {
+
+
+
         forumDetailHeadBean = mGson.fromJson(json, ForumDetailHeadBean.class);
+        if(forumDetailHeadBean.getResult()==9998){
+            Toast.makeText(ForumDetailActivity.this,"数据出错",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         forumuserId = forumDetailHeadBean.getData().getAllForum().getUserId();
         setHeadInfo();
     }

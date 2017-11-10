@@ -10,13 +10,6 @@
 
 
 
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/declaration_main"
-        android:src="@mipmap/manual85"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 
     <com.lede.second_23.utils.MyViewPager
@@ -31,4 +24,11 @@
 
 
 
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/declaration_main"
+        android:src="@mipmap/manual85"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

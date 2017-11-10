@@ -43,7 +43,6 @@ import com.qiniu.android.storage.UploadOptions;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
@@ -60,13 +59,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
- * 修改用户信息（仅修改）
+ * 注册成功后登录时 创建用户信息
+ * 保证用户上传新的头像  新的相册  以及创建基本的用户信息
+ * Created by ld on 17/11/10.
  */
 
-public class EditInformationActivity extends AppCompatActivity implements OnResponseListener<String> {
-
+public class EditRegisterInfoActivity extends AppCompatActivity {
 
     @Bind(R.id.rl_edit_information_activity_sex)
     RelativeLayout rl_edit_information_activity_sex;
@@ -118,27 +117,16 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private UploadManager uploadManager;
 
     private Gson mGson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_information);
+        setContentView(R.layout.activity_create_infor);
         StatusBarUtil.transparencyBar(this);
         ButterKnife.bind(this);
-        mGson=new Gson();
+        mGson = new Gson();
         mContext = this;
-        requestQueue = GlobalConstants.getRequestQueue();
         uploadManager = MyApplication.getUploadManager();
-
-        Intent intent = getIntent();
-        jumpType = intent.getIntExtra("jumpType", 2);
-
-
-        if (jumpType != 1) { //1表示首次注册  需要填写个人信息
-            loadUserInfo();
-            uploadPic.setVisibility(View.GONE);
-        }else{
-            uploadPic.setVisibility(View.VISIBLE);
-        }
 
     }
 
@@ -153,7 +141,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             , R.id.rl_edit_information_activity_sex, R.id.rl_edit_information_activity_age
             , R.id.tv_edit_information_activity_updata, R.id.rl_edit_information_activity_city
             , R.id.rl_edit_information_activity_job, R.id.circle_iv_editinformation_touxiang
-            , R.id.iv_edit_information_activity_back,R.id.rl_edit_information_activity_school})
+            , R.id.iv_edit_information_activity_back, R.id.rl_edit_information_activity_school})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -179,51 +167,28 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 intent.putExtra("sex", isBoy);
                 startActivityForResult(intent, 3);
                 break;
-//            case R.id.rl_edit_information_activity_sign:
-//                intent = new Intent(this, EditActivity.class);
-//                intent.putExtra("type", 2);
-//                intent.putExtra("body",tv_edit_information_activity_sign.getText().toString().trim());
-//                startActivityForResult(intent, 2);
-//                break;
             case R.id.rl_edit_information_activity_age:
                 showAgeDialog();
                 break;
             case R.id.tv_edit_information_activity_updata:
-                if (tv_edit_information_activity_nickname.getText().toString().equals("")||tv_edit_information_activity_nickname.getText().toString().equals("昵称")) {
+                if (tv_edit_information_activity_nickname.getText().toString().trim().equals("") || tv_edit_information_activity_nickname.getText().toString().equals("昵称")) {
                     Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (tv_edit_information_activity_age.getText().toString().equals("年龄")){
+                } else if (tv_edit_information_activity_age.getText().toString().trim().equals("")||tv_edit_information_activity_age.getText().toString().trim().equals("年龄")) {
                     Toast.makeText(mContext, "请选择年龄", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (tv_edit_information_activity_sex.getText().toString().equals("性别")){
+                } else if (tv_edit_information_activity_sex.getText().toString().trim().equals("")||tv_edit_information_activity_sex.getText().toString().trim().equals("性别")) {
                     Toast.makeText(mContext, "请选择性别", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                if (jumpType == 1) {
+                } else if (selectMedia.size() == 0) {
+                    Toast.makeText(mContext, "请至少上传一张图片", Toast.LENGTH_SHORT).show();
 
-                    if(selectMedia.size()!=0){
-                        CreateUserInfo();//创建用户请求
-
-                        getQiniuToken();
-                    }else{
-                        Toast.makeText(mContext, "请至少上传一张图片", Toast.LENGTH_SHORT).show();
-                    }
                 } else {
-                    if (selectedImg != null) {
-                        updateUserImg();
-                        updateUserInfo();
-                    } else {
-                        updateUserInfo();
-                    }
+                    CreateUserInfo();//创建用户请求
+
+                    getQiniuToken();
                 }
-//
                 break;
-//            case R.id.rl_edit_information_activity_userpic:
-////                selectorPhoto();
-//                break;
-//            case R.id.rl_edit_information_activity_marry:
-//
-//                break;
             case R.id.rl_edit_information_activity_city:
                 showCityDialog();
                 break;
@@ -276,7 +241,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
      * 城市选择Dialog
      */
     private void showCityDialog() {
-        CityPicker cityPicker = new CityPicker.Builder(EditInformationActivity.this)
+        CityPicker cityPicker = new CityPicker.Builder(EditRegisterInfoActivity.this)
                 .textSize(20)
                 .title("地址选择")
                 .backgroundPop(0xa0000000)
@@ -371,7 +336,6 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         super.onActivityResult(requestCode, resultCode, data);
 
 
-
         if (data != null) {
             if (requestCode == 0 && resultCode == 0) {
                 if (data.getStringExtra("body") != null) {
@@ -399,7 +363,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 }
             } else if (requestCode == 2 && resultCode == 2) {
                 tv_edit_information_activity_hobby.setText(data.getStringExtra("body"));
-            }else if (requestCode==4&&resultCode==4){
+            } else if (requestCode == 4 && resultCode == 4) {
                 tvEditInformationActivitySchool.setText(data.getStringExtra("body"));
             }
         }
@@ -443,7 +407,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             updateUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         }
         updateUserRequest.add("sex", isBoy);
-        updateUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
+        updateUserRequest.add("hometown", tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(UPDATE_USER, updateUserRequest, this);
 
     }
@@ -467,15 +431,15 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
 //        createUserRequest.add("hometown",tv_edit_information_activity_marry.getText().toString().trim());
 
         String age;
-        if(tv_edit_information_activity_age.getText()==null||tv_edit_information_activity_age.getText().equals("")){
-            age="18";
-        }else{
-            age=tv_edit_information_activity_age.getText().toString().trim();
+        if (tv_edit_information_activity_age.getText() == null || tv_edit_information_activity_age.getText().equals("")) {
+            age = "18";
+        } else {
+            age = tv_edit_information_activity_age.getText().toString().trim();
         }
-        createUserRequest.add("hobby",age);
+        createUserRequest.add("hobby", age);
         createUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         createUserRequest.add("sex", isBoy);
-        createUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
+        createUserRequest.add("hometown", tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(CREATE_USER, createUserRequest, this);
 
     }
@@ -484,7 +448,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     public void onStart(int what) {
         switch (what) {
             case CREATE_USER:
-                dialog = ProgressDialogUtils.createLoadingDialog(EditInformationActivity.this, "正在创建用户信息请稍后");
+                dialog = ProgressDialogUtils.createLoadingDialog(EditRegisterInfoActivity.this, "正在创建用户信息请稍后");
                 dialog.show();
                 break;
         }
@@ -516,7 +480,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 parseQiNiuToken(response.get());
                 break;
             case UPLOADREQUEST:
-                Toast.makeText(mContext,"图片已上传",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "图片已上传", Toast.LENGTH_SHORT).show();
                 break;
 
 
@@ -611,11 +575,11 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 tv_edit_information_activity_sex.setText("女");
 //            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_girl);
             }
-            if (userInfoBean.getData().getInfo().getNote()!=null) {
+            if (userInfoBean.getData().getInfo().getNote() != null) {
                 tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
 
             }
-            if (userInfoBean.getData().getInfo().getHobby()!=null) {
+            if (userInfoBean.getData().getInfo().getHobby() != null) {
                 tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
 
             }
@@ -624,15 +588,15 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
 //
 //            }
 //        tv_edit_information_activity_marry.setText(userInfoBean.getData().getInfo().getHometown());
-            if (userInfoBean.getData().getInfo().getWechat()!=null) {
+            if (userInfoBean.getData().getInfo().getWechat() != null) {
                 tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
 
             }
-            if (userInfoBean.getData().getInfo().getAddress()!=null) {
+            if (userInfoBean.getData().getInfo().getAddress() != null) {
                 tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
 
             }
-            if (userInfoBean.getData().getInfo()!=null) {
+            if (userInfoBean.getData().getInfo() != null) {
                 tvEditInformationActivitySchool.setText(userInfoBean.getData().getInfo().getHometown());
 
             }
@@ -664,7 +628,6 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     };
 
 
-
     //先进行媒体选择的配置
     private void initFunctionOptions() {
         optionsPic = new FunctionOptions.Builder()
@@ -693,6 +656,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 .setClickVideo(false)// 点击声音
                 .create();
     }
+
     private PictureConfig.OnSelectResultCallback resultCallback2 = new PictureConfig.OnSelectResultCallback() {
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
@@ -700,10 +664,10 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
 
             selectMedia.clear();
             selectMedia.addAll(resultList);
-            if(selectMedia.size()==1){
+            if (selectMedia.size() == 1) {
                 Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).into(uploadImage1);
 
-            }else if(selectMedia.size()>1){
+            } else if (selectMedia.size() > 1) {
                 Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).into(uploadImage1);
                 Glide.with(mContext).load(selectMedia.get(1).getCompressPath()).into(uploadImage2);
             }
@@ -715,16 +679,12 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             //单选回调  不走
         }
     };
+
     private void chooseImg() {
         initFunctionOptions();
         PictureConfig.getInstance().init(optionsPic).openPhoto(EditInformationActivity.this, resultCallback2);
 
-        }
-
-
-
-
-
+    }
 
 
     /**
@@ -733,22 +693,20 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private void getQiniuToken() {
 
 
-
-
         Request<String> getQiniuRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/getToken", RequestMethod.GET);
 
         requestQueue.add(GET_QIUNIUTOKEN, getQiniuRequest, this);
-
 
 
     }
 
     private void parseQiNiuToken(String json) {
         QiNiuTokenBean qiNiuTokenBean = mGson.fromJson(json, QiNiuTokenBean.class);
-          uploadPics(qiNiuTokenBean.getData().getUptoken(), selectMedia);
+        uploadPics(qiNiuTokenBean.getData().getUptoken(), selectMedia);
 
 
     }
+
     /**
      * 上传图片文件
      */
@@ -756,9 +714,9 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
 
         final int num = new Random().nextInt(100001);
         final long imgID = System.currentTimeMillis() * 100000 + num;
-        for (LocalMedia pic:localMediaList
+        for (LocalMedia pic : localMediaList
                 ) {
-            File img=new File(pic.getPath());
+            File img = new File(pic.getPath());
             String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(img.getName());
             uploadManager.put(img, key, token,
                     new UpCompletionHandler() {
@@ -767,7 +725,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                             //res包含hash、key等信息，具体字段取决于上传策略的设置
                             if (info.isOK()) {
                                 Log.i("qiniu", "Success---->" + key);
-                                uploadService(imgID,key,null);
+                                uploadService(imgID, key, null);
                             } else {
                                 Log.i("qiniu", "Fail----->" + key);
                                 //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
@@ -786,12 +744,10 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private void uploadService(long imgID, String imgKey, String videoKey) {
         Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/creatUserPhoto", RequestMethod.POST);
         uploadRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        uploadRequest.add("photoId",imgID);
+        uploadRequest.add("photoId", imgID);
 
 
-
-
-        uploadRequest.add("photoImg",imgKey);
+        uploadRequest.add("photoImg", imgKey);
 
         requestQueue.add(UPLOADREQUEST, uploadRequest, this);
     }

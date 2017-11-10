@@ -91,6 +91,9 @@ public class MainFragmentYouLike extends Fragment  {
                 if(position==1){
                     LinearLayout linearLayout= (LinearLayout) holder.getConvertView();
                     linearLayout.setPadding(0, UiUtils.dip2px(80),0,0);
+                }else{ //复用第二个的padding会导致滑动时错乱，将其他的padding定为0即可
+                    LinearLayout linearLayout= (LinearLayout) holder.getConvertView();
+                    linearLayout.setPadding(0,0,0,0);
                 }
                 ImageView userIcon=holder.getView(R.id.user_icon);
                 TextView user_nickName=holder.getView(R.id.user_nickName);
