@@ -29,6 +29,7 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
+import com.lede.second_23.service.UploadService;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
@@ -253,28 +254,27 @@ public class PersonalFragmentAlbum extends Fragment {
                 upLoadAlbum();
             }
         });
-
     }
 
     public void upLoadAlbum(){
-        final OnUploadFinish onUploadFinish=new OnUploadFinish() {
-            @Override
-            public void success() {
-                SnackBarUtil.getInstance(mRecyclerView,getActivity(),R.string.upload_success).show();
-                toRefresh();
-            }
-            @Override
-            public void failed() {
-                SnackBarUtil.getInstance(mRecyclerView,getActivity(),R.string.upload_failed).show();
-
-            }
-        };
-
-        final PickService pickService =new PickService(getActivity());
-        pickService.pick(new PictureConfig.OnSelectResultCallback() {
+        PickService pickService = new PickService(getActivity());
+        pickService.pickPhoto(new PictureConfig.OnSelectResultCallback() {
             @Override
             public void onSelectSuccess(List<LocalMedia> list) {
-                pickService.upload(list,onUploadFinish);
+                OnUploadFinish onUploadFinish = new OnUploadFinish() {
+                    @Override
+                    public void success() {
+                        SnackBarUtil.getInstance(mRecyclerView,getActivity(),R.string.upload_success).show();
+                        toRefresh();
+                    }
+                    @Override
+                    public void failed() {
+                        SnackBarUtil.getInstance(mRecyclerView,getActivity(),R.string.upload_failed).show();
+
+                    }
+                };
+                UploadService uploadService = new UploadService(getActivity());
+                uploadService.upload(list, onUploadFinish);
             }
             @Override
             public void onSelectSuccess(LocalMedia localMedia) {

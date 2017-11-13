@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
@@ -302,8 +301,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                             finish();
 
                         } else {
-                            intent = new Intent(WelcomeActivity.this, EditInformationActivity.class);
-                            intent.putExtra("jumpType", 1);
+                            intent = new Intent(WelcomeActivity.this, EditRegisterInfoActivity.class);
                             Toast.makeText(WelcomeActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             finish();

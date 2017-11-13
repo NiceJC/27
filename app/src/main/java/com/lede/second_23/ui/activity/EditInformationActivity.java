@@ -88,14 +88,6 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     DIYImageView circle_iv_editinformation_touxiang;
     @Bind(R.id.tv_edit_information_activity_school)
     TextView tvEditInformationActivitySchool;
-    @Bind(R.id.upload_pic)
-    LinearLayout uploadPic;
-    @Bind(R.id.upload_button)
-    ImageView uploadButton;
-    @Bind(R.id.upload_image1)
-    ImageView uploadImage1;
-    @Bind(R.id.upload_image2)
-    ImageView uploadImage2;
 
 
     private String selectedImg;
@@ -118,27 +110,19 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     private UploadManager uploadManager;
 
     private Gson mGson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
         StatusBarUtil.transparencyBar(this);
         ButterKnife.bind(this);
-        mGson=new Gson();
+        mGson = new Gson();
         mContext = this;
         requestQueue = GlobalConstants.getRequestQueue();
         uploadManager = MyApplication.getUploadManager();
+        loadUserInfo();
 
-        Intent intent = getIntent();
-        jumpType = intent.getIntExtra("jumpType", 2);
-
-
-        if (jumpType != 1) { //1表示首次注册  需要填写个人信息
-            loadUserInfo();
-            uploadPic.setVisibility(View.GONE);
-        }else{
-            uploadPic.setVisibility(View.VISIBLE);
-        }
 
     }
 
@@ -153,7 +137,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             , R.id.rl_edit_information_activity_sex, R.id.rl_edit_information_activity_age
             , R.id.tv_edit_information_activity_updata, R.id.rl_edit_information_activity_city
             , R.id.rl_edit_information_activity_job, R.id.circle_iv_editinformation_touxiang
-            , R.id.iv_edit_information_activity_back,R.id.rl_edit_information_activity_school})
+            , R.id.iv_edit_information_activity_back, R.id.rl_edit_information_activity_school})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -189,41 +173,27 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 showAgeDialog();
                 break;
             case R.id.tv_edit_information_activity_updata:
-                if (tv_edit_information_activity_nickname.getText().toString().equals("")||tv_edit_information_activity_nickname.getText().toString().equals("昵称")) {
+                if (tv_edit_information_activity_nickname.getText().toString().equals("") || tv_edit_information_activity_nickname.getText().toString().equals("昵称")) {
                     Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (tv_edit_information_activity_age.getText().toString().equals("年龄")){
+                } else if (tv_edit_information_activity_age.getText().toString().equals("年龄")) {
                     Toast.makeText(mContext, "请选择年龄", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (tv_edit_information_activity_sex.getText().toString().equals("性别")){
+                } else if (tv_edit_information_activity_sex.getText().toString().equals("性别")) {
                     Toast.makeText(mContext, "请选择性别", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (jumpType == 1) {
 
-                    if(selectMedia.size()!=0){
-                        CreateUserInfo();//创建用户请求
-
-                        getQiniuToken();
-                    }else{
-                        Toast.makeText(mContext, "请至少上传一张图片", Toast.LENGTH_SHORT).show();
-                    }
+                if (selectedImg != null) {
+                    updateUserImg();
+                    updateUserInfo();
                 } else {
-                    if (selectedImg != null) {
-                        updateUserImg();
-                        updateUserInfo();
-                    } else {
-                        updateUserInfo();
-                    }
+                    updateUserInfo();
                 }
+
 //
                 break;
-//            case R.id.rl_edit_information_activity_userpic:
-////                selectorPhoto();
-//                break;
-//            case R.id.rl_edit_information_activity_marry:
-//
-//                break;
+
             case R.id.rl_edit_information_activity_city:
                 showCityDialog();
                 break;
@@ -371,7 +341,6 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         super.onActivityResult(requestCode, resultCode, data);
 
 
-
         if (data != null) {
             if (requestCode == 0 && resultCode == 0) {
                 if (data.getStringExtra("body") != null) {
@@ -399,7 +368,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 }
             } else if (requestCode == 2 && resultCode == 2) {
                 tv_edit_information_activity_hobby.setText(data.getStringExtra("body"));
-            }else if (requestCode==4&&resultCode==4){
+            } else if (requestCode == 4 && resultCode == 4) {
                 tvEditInformationActivitySchool.setText(data.getStringExtra("body"));
             }
         }
@@ -443,42 +412,11 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             updateUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
         }
         updateUserRequest.add("sex", isBoy);
-        updateUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
+        updateUserRequest.add("hometown", tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(UPDATE_USER, updateUserRequest, this);
 
     }
 
-    /**
-     * 创建用户信息请求
-     */
-    public void CreateUserInfo() {
-        Request<String> createUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/create", RequestMethod.POST);
-
-        createUserRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        if (selectedImg == null) {
-            Toast.makeText(mContext, "请选择头像", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        createUserRequest.add("pic", new File(selectedImg));
-        createUserRequest.add("wechat", tv_edit_information_activity_hobby.getText().toString().trim());
-        createUserRequest.add("address", tv_edit_information_activity_city.getText().toString().trim());
-        createUserRequest.add("qq", tv_edit_information_activity_constellation.getText().toString().trim());
-        createUserRequest.add("note", tv_edit_information_activity_sign.getText().toString().trim() + "");
-//        createUserRequest.add("hometown",tv_edit_information_activity_marry.getText().toString().trim());
-
-        String age;
-        if(tv_edit_information_activity_age.getText()==null||tv_edit_information_activity_age.getText().equals("")){
-            age="18";
-        }else{
-            age=tv_edit_information_activity_age.getText().toString().trim();
-        }
-        createUserRequest.add("hobby",age);
-        createUserRequest.add("nickName", tv_edit_information_activity_nickname.getText().toString().trim());
-        createUserRequest.add("sex", isBoy);
-        createUserRequest.add("hometown",tvEditInformationActivitySchool.getText().toString().trim());
-        requestQueue.add(CREATE_USER, createUserRequest, this);
-
-    }
 
     @Override
     public void onStart(int what) {
@@ -493,11 +431,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     @Override
     public void onSucceed(int what, Response<String> response) {
         switch (what) {
-            case CREATE_USER:
-                Log.i("TAG", "onSucceed: " + response.get());
-                L.i("CREATE_USER_onSucceed:" + response.get());
-                parseUpdate_UserInfo(response.get());
-                break;
+
             case LOAD_USER:
                 Log.i("TAG", "onSucceed: " + response.get());
                 L.i("LOAD_USER_onSucceed:" + response.get());
@@ -511,12 +445,6 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
             case UPIMG_USER:
                 Log.i("TAG", "UPIMG_USERonSucceed: " + response.get());
                 L.i("UPIMG_USER_onSucceed:" + response.get());
-                break;
-            case GET_QIUNIUTOKEN:
-                parseQiNiuToken(response.get());
-                break;
-            case UPLOADREQUEST:
-                Toast.makeText(mContext,"图片已上传",Toast.LENGTH_SHORT).show();
                 break;
 
 
@@ -611,11 +539,11 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
                 tv_edit_information_activity_sex.setText("女");
 //            iv_edit_information_activity_sex.setImageResource(R.mipmap.sex_girl);
             }
-            if (userInfoBean.getData().getInfo().getNote()!=null) {
+            if (userInfoBean.getData().getInfo().getNote() != null) {
                 tv_edit_information_activity_sign.setText(userInfoBean.getData().getInfo().getNote());
 
             }
-            if (userInfoBean.getData().getInfo().getHobby()!=null) {
+            if (userInfoBean.getData().getInfo().getHobby() != null) {
                 tv_edit_information_activity_age.setText(userInfoBean.getData().getInfo().getHobby());
 
             }
@@ -624,15 +552,15 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
 //
 //            }
 //        tv_edit_information_activity_marry.setText(userInfoBean.getData().getInfo().getHometown());
-            if (userInfoBean.getData().getInfo().getWechat()!=null) {
+            if (userInfoBean.getData().getInfo().getWechat() != null) {
                 tv_edit_information_activity_hobby.setText(userInfoBean.getData().getInfo().getWechat());
 
             }
-            if (userInfoBean.getData().getInfo().getAddress()!=null) {
+            if (userInfoBean.getData().getInfo().getAddress() != null) {
                 tv_edit_information_activity_city.setText(userInfoBean.getData().getInfo().getAddress());
 
             }
-            if (userInfoBean.getData().getInfo()!=null) {
+            if (userInfoBean.getData().getInfo() != null) {
                 tvEditInformationActivitySchool.setText(userInfoBean.getData().getInfo().getHometown());
 
             }
@@ -664,135 +592,4 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     };
 
 
-
-    //先进行媒体选择的配置
-    private void initFunctionOptions() {
-        optionsPic = new FunctionOptions.Builder()
-                .setType(FunctionConfig.TYPE_IMAGE) // 图片or视频 FunctionConfig.TYPE_IMAGE  TYPE_VIDEO
-                .setCropMode(FunctionConfig.CROP_MODEL_1_1) // 裁剪模式 默认、1:1、3:4、3:2、16:9
-                .setCompress(true) //是否压缩
-                .setEnablePixelCompress(true) //是否启用像素压缩
-                .setEnableQualityCompress(true) //是否启质量压缩
-                .setMaxSelectNum(9) // 可选择图片的数量
-                .setMinSelectNum(1)// 图片或视频最低选择数量，默认代表无限制
-                .setSelectMode(FunctionConfig.MODE_MULTIPLE) // 单选 or 多选 FunctionConfig.MODE_SINGLE FunctionConfig.MODE_MULTIPLE
-                .setVideoS(0)// 查询多少秒内的视频 单位:秒
-                .setShowCamera(true) //是否显示拍照选项 这里自动根据type 启动拍照或录视频
-                .setEnablePreview(true) // 是否打开预览选项
-                .setEnableCrop(false) // 是否打开剪切选项
-                .setCircularCut(false)// 是否采用圆形裁剪
-                .setPreviewVideo(true) // 是否预览视频(播放) mode or 多选有效
-                .setGif(false)// 是否显示gif图片，默认不显示
-                .setCropW(720) // cropW-->裁剪宽度 值不能小于100  如果值大于图片原始宽高 将返回原图大小
-                .setCropH(1280) // cropH-->裁剪高度 值不能小于100 如果值大于图片原始宽高 将返回原图大小
-                .setCheckNumMode(true) //QQ选择风格
-//                        .setCompressQuality() // 图片裁剪质量,默认无损
-                .setImageSpanCount(3) // 每行个数
-                .setImmersive(false)// 是否改变状态栏字体颜色(黑色)
-                .setNumComplete(false) // 0/9 完成  样式
-                .setClickVideo(false)// 点击声音
-                .create();
-    }
-    private PictureConfig.OnSelectResultCallback resultCallback2 = new PictureConfig.OnSelectResultCallback() {
-        @Override
-        public void onSelectSuccess(List<LocalMedia> resultList) {
-            // 多选回调
-
-            selectMedia.clear();
-            selectMedia.addAll(resultList);
-            if(selectMedia.size()==1){
-                Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).into(uploadImage1);
-
-            }else if(selectMedia.size()>1){
-                Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).into(uploadImage1);
-                Glide.with(mContext).load(selectMedia.get(1).getCompressPath()).into(uploadImage2);
-            }
-
-        }
-
-        @Override
-        public void onSelectSuccess(LocalMedia media) {
-            //单选回调  不走
-        }
-    };
-    private void chooseImg() {
-        initFunctionOptions();
-        PictureConfig.getInstance().init(optionsPic).openPhoto(EditInformationActivity.this, resultCallback2);
-
-        }
-
-
-
-
-
-
-
-    /**
-     * 获取七牛上传token
-     */
-    private void getQiniuToken() {
-
-
-
-
-        Request<String> getQiniuRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/getToken", RequestMethod.GET);
-
-        requestQueue.add(GET_QIUNIUTOKEN, getQiniuRequest, this);
-
-
-
-    }
-
-    private void parseQiNiuToken(String json) {
-        QiNiuTokenBean qiNiuTokenBean = mGson.fromJson(json, QiNiuTokenBean.class);
-          uploadPics(qiNiuTokenBean.getData().getUptoken(), selectMedia);
-
-
-    }
-    /**
-     * 上传图片文件
-     */
-    private void uploadPics(String token, List<LocalMedia> localMediaList) {
-
-        final int num = new Random().nextInt(100001);
-        final long imgID = System.currentTimeMillis() * 100000 + num;
-        for (LocalMedia pic:localMediaList
-                ) {
-            File img=new File(pic.getPath());
-            String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(img.getName());
-            uploadManager.put(img, key, token,
-                    new UpCompletionHandler() {
-                        @Override
-                        public void complete(String key, ResponseInfo info, JSONObject res) {
-                            //res包含hash、key等信息，具体字段取决于上传策略的设置
-                            if (info.isOK()) {
-                                Log.i("qiniu", "Success---->" + key);
-                                uploadService(imgID,key,null);
-                            } else {
-                                Log.i("qiniu", "Fail----->" + key);
-                                //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
-                            }
-                            Log.i("qiniu", "name--->" + key + ",\r\n " + info + ",\r\n " + res);
-                        }
-                    }, new UploadOptions(null, null, false, new UpProgressHandler() {
-                        @Override
-                        public void progress(String key, double percent) {
-                            Log.i("七牛", "progress: " + key + ": " + percent);
-                        }
-                    }, null));
-        }
-    }
-
-    private void uploadService(long imgID, String imgKey, String videoKey) {
-        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/creatUserPhoto", RequestMethod.POST);
-        uploadRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        uploadRequest.add("photoId",imgID);
-
-
-
-
-        uploadRequest.add("photoImg",imgKey);
-
-        requestQueue.add(UPLOADREQUEST, uploadRequest, this);
-    }
 }

@@ -31,6 +31,7 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
+import com.lede.second_23.service.UploadService;
 import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment1;
 import com.lede.second_23.ui.fragment.PersonalFragment1;
@@ -85,7 +86,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     private SimpleResponseListener<String> simpleResponseListener;
 
     private static final int REQUEST_IF_HAVEPHOTO = 66423;
-    private CheckPhotoBean checkPhotoBean=null;
+    private CheckPhotoBean checkPhotoBean = null;
     private Gson mGson;
 
     @Override
@@ -95,7 +96,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
         StatusBarUtil.StatusBarLightMode(this);
 
-        mGson=new Gson();
+        mGson = new Gson();
         instance = this;
         getLocation();
         Log.i("TAC", "onCreate: ");
@@ -229,15 +230,15 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
 
     private void parseIfPhotoExist(String s) {
-        checkPhotoBean =mGson.fromJson(s,CheckPhotoBean.class);
-        boolean hasPhoto=checkPhotoBean.getData().isExist();
-        if(!hasPhoto){
+        checkPhotoBean = mGson.fromJson(s, CheckPhotoBean.class);
+        boolean hasPhoto = checkPhotoBean.getData().isExist();
+        if (!hasPhoto) {
             showPhotoDialog();
         }
     }
 
-    private void showPhotoDialog(){
-        DialogPlus dialogPlus=DialogPlus.newDialog(this)
+    private void showPhotoDialog() {
+        DialogPlus dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.check_photo_dialog))
                 .setContentBackgroundResource(R.drawable.shape_linearlayout_all)
                 .setCancelable(true)
@@ -246,7 +247,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
 
-                        switch (view.getId()){
+                        switch (view.getId()) {
                             case R.id.toUpload:
                                 upLoadAlbum();
                                 dialog.dismiss();
@@ -262,26 +263,26 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     }
 
 
-
-    public void upLoadAlbum(){
-        final OnUploadFinish onUploadFinish=new OnUploadFinish() {
-            @Override
-            public void success() {
-                SnackBarUtil.getInstance(vp_main_fg,MainActivity.this,R.string.upload_success).show();
-            }
-            @Override
-            public void failed() {
-                SnackBarUtil.getInstance(vp_main_fg,MainActivity.this,R.string.upload_failed).show();
-
-            }
-        };
-        final PickService pickService =new PickService(this);
-        pickService.pick(new PictureConfig.OnSelectResultCallback() {
+    public void upLoadAlbum() {
+        PickService pickService = new PickService(this);
+        pickService.pickPhoto(new PictureConfig.OnSelectResultCallback() {
             @Override
             public void onSelectSuccess(List<LocalMedia> list) {
+                OnUploadFinish onUploadFinish = new OnUploadFinish() {
+                    @Override
+                    public void success() {
+                        SnackBarUtil.getInstance(vp_main_fg, MainActivity.this, R.string.upload_success).show();
+                    }
+                    @Override
+                    public void failed() {
+                        SnackBarUtil.getInstance(vp_main_fg, MainActivity.this, R.string.upload_failed).show();
 
-                pickService.upload(list,onUploadFinish);
+                    }
+                };
+                UploadService uploadService = new UploadService(MainActivity.this);
+                uploadService.upload(list, onUploadFinish);
             }
+
             @Override
             public void onSelectSuccess(LocalMedia localMedia) {
             }
