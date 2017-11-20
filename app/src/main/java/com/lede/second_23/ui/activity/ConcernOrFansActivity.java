@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -20,6 +19,9 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.thinkcool.circletextimageview.CircleTextImageView;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -30,7 +32,6 @@ import com.yolanda.nohttp.rest.Response;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
-import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import java.util.ArrayList;
 
@@ -43,17 +44,17 @@ import static com.lede.second_23.global.GlobalConstants.USERID;
 /**
  * 关注的人OR 粉丝
  */
-public class ConcernOrFansActivity extends BaseActivity implements OnResponseListener<String>, LoadMoreWrapper.OnLoadMoreListener {
+public class ConcernOrFansActivity extends BaseActivity implements OnResponseListener<String>{
 
-    private int type;
     @Bind(R.id.tv_concern_or_fans_activity_title)
     TextView tv_title;
-    @Bind(R.id.rv_concern_or_fans_activity_show)
+    @Bind(R.id.recyclerView)
     RecyclerView rv_show;
-    @Bind(R.id.tv_conver_or_fans_activity_ifnone)
-    TextView tv_ifNone;
-    @Bind(R.id.srl_concern_or_fans_activity_refresh)
-    SwipeRefreshLayout srl_refresh;
+
+    @Bind(R.id.refresh_layout)
+    RefreshLayout refreshLayout;
+
+
     private CommonAdapter mAdapter;
     private Gson mGson;
     private RequestQueue requestQueue;
@@ -61,12 +62,20 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
     private Context context=this;
     private ImageView tv_right;
     private String id;
-    private int pageNum=1;
-    private LayoutInflater layoutInflater;
-    private LoadMoreWrapper<Object> loadMoreWrapper;
-    private View inflate;
+    private int currentPage=1;
+    private static final int PAGE_SIZE=20;
+
+    private int type;
+    private static final int TYPE_CONCERN=0;
+    private static final int TYPE_FANS=1;
+
+
+    private int clickPosition;
+    private boolean clickIsFriend=true;
+
     private boolean isHasNextPage=true;
     private boolean isRefresh=true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,19 +85,20 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
-        layoutInflater = LayoutInflater.from(context);
+
         Intent intent=getIntent();
         type=intent.getIntExtra("type",0);
         id = intent.getStringExtra("id");
-        if (type==0) {
+        if (type==TYPE_CONCERN) {
             tv_title.setText("已关注");
-            concernedService();
+
         }else {
             tv_title.setText("粉丝");
-            fansService();
-        }
 
+        }
         initRecyvlerView();
+        initEvent();
+        toRefresh();
 
     }
 
@@ -101,30 +111,77 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
         }
     }
 
-    private void fansService() {
+
+
+
+    private void toRefresh(){
+        isRefresh=true;
+        doRequest(1);
+    }
+    private void toLoadMore(){
+        isRefresh=false;
+        if(isHasNextPage){
+            doRequest(currentPage+1);
+        }else{
+            refreshLayout.finishLoadmore();
+        }
+
+    }
+
+    private void doRequest(int pageNum){
+        if(type==TYPE_CONCERN){
+            concernedService(pageNum);
+        }else{
+            fansService(pageNum);
+        }
+    }
+
+    private void fansService(int pageNum) {
         Request<String> fansRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/"+id+"/toCollect", RequestMethod.POST);
-//        concernedRequest.add("id", (String) SPUtils.get(this,GlobalConstants.USERID,""));
-//        fansRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
         fansRequest.add("toUserId", (String) SPUtils.get(this, USERID,""));
         fansRequest.add("pageNum",pageNum);
-        fansRequest.add("pageSize",20);
+        fansRequest.add("pageSize",PAGE_SIZE);
         requestQueue.add(200,fansRequest,this);
     }
 
-    private void concernedService() {
+    private void concernedService(int pageNum) {
         Request<String> concernedRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/"+id+"/userCollect", RequestMethod.POST);
 //        concernedRequest.add("id", (String) SPUtils.get(this,GlobalConstants.USERID,""));
 //        concernedRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
         concernedRequest.add("toUserId", (String) SPUtils.get(this, USERID,""));
         concernedRequest.add("pageNum",pageNum);
-        concernedRequest.add("pageSize",20);
+        concernedRequest.add("pageSize",PAGE_SIZE);
         requestQueue.add(100,concernedRequest,this);
     }
 
+
+    private void initEvent(){
+
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                toRefresh();
+
+
+            }
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                toLoadMore();
+            }
+        });
+
+
+
+    }
+
     private void initRecyvlerView() {
+
         mAdapter= new CommonAdapter<ConcernOrFansBean.DataBean.ListBean>(this, R.layout.concern_or_fans_item, mList) {
             @Override
-            protected void convert(ViewHolder holder, final ConcernOrFansBean.DataBean.ListBean listBean, int position) {
+            protected void convert(ViewHolder holder, final ConcernOrFansBean.DataBean.ListBean listBean, final int position) {
                 CircleTextImageView cliv_touxiang=holder.getView(R.id.cliv_concern_or_fans_item_touxiang);
                 TextView tv_nickName=holder.getView(R.id.tv_concern_or_fans_item_nickname);
                 if (listBean.getTrueName().equals("1")) {
@@ -136,41 +193,36 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
                     tv_nickName.setCompoundDrawablePadding(2);
                 }
                 tv_right=holder.getView(R.id.iv_concern_or_fans_item_right);
-//                tv_right.setClickable(true);
-//                if (type==0) {
-//                    tv_right.setImageResource(R.mipmap.concern_right);
-//                }else {
+
                     if (listBean.isFriend()) {
                         tv_right.setSelected(true);
                     }else {
                         tv_right.setSelected(false);
 
-//                    }
 
                 }
                 if (listBean.getUserId().equals(SPUtils.get(ConcernOrFansActivity.this, USERID,""))) {
                     tv_right.setVisibility(View.GONE);
+                }else{
+                    tv_right.setVisibility(View.VISIBLE);
                 }
 
                 tv_right.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        if (tv_right.getDrawable().getCurrent().getConstantState()==getResources().getDrawable(R.mipmap.concern_right).getConstantState()) {
-//                            cancelCollect(listBean.getUserId());
-//                        }else {
-//                            createCollect(listBean.getUserId());
-//                        }
-//                        tv_right.setClickable(false);
+
+                        clickPosition=position;
+                        clickIsFriend=listBean.isFriend();
                         if (listBean.isFriend()) {
                             cancelCollect(listBean.getUserId());
+
                         }else {
                             createCollect(listBean.getUserId());
                         }
+                        tv_right.setClickable(false);
                     }
                 });
-//                if (!id.equals(SPUtils.get(context, GlobalConstants.USERID,""))) {
-//                    tv_right.setClickable(false);
-//                }
+
                 tv_nickName.setText(listBean.getNickName());
                 Glide.with(context)
                         .load(listBean.getImgUrl())
@@ -193,35 +245,10 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
                 return false;
             }
         });
-        srl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                pageNum=1;
-                mList.clear();
-                if (type==0) {
-                    concernedService();
-                }else {
-                    fansService();
-                }
-                isRefresh=true;
-                srl_refresh.setRefreshing(isRefresh);
-            }
-        });
+        rv_show.setAdapter(mAdapter);
 
-//        rv_show.setAdapter(mAdapter);
-        setLoadMore();
     }
 
-    //设置recyclerView上拉加载更多
-    private void setLoadMore() {
-        //定义请求页数
-        pageNum = 1;
-        loadMoreWrapper = new LoadMoreWrapper<>(mAdapter);
-        inflate=layoutInflater.inflate(R.layout.item_loading,null);
-        loadMoreWrapper.setLoadMoreView(inflate);
-        loadMoreWrapper.setOnLoadMoreListener(this);
-        rv_show.setAdapter(loadMoreWrapper);
-    }
 
     /**
      * 关注用户
@@ -255,32 +282,26 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
         switch (what) {
             case 100:
                 parseConcernOrFansJson(response.get());
+                refreshLayout.finishLoadmore();
+                refreshLayout.finishRefresh();
                 break;
             case 200:
                 parseConcernOrFansJson(response.get());
+                refreshLayout.finishLoadmore();
+                refreshLayout.finishRefresh();
                 break;
             case 300:
-                mList.clear();
-                pageNum=1;
-                if (type==0) {
-//                    tv_title.setText("已关注");
-                    concernedService();
-                }else {
-//                    tv_title.setText("粉丝");
-                    fansService();
-                }
+
+
+                mList.get(clickPosition).setFriend(true);
+                mAdapter.notifyDataSetChanged();
+
+
                 break;
             case 400:
-                mList.clear();
-                pageNum=1;
-                if (type==0) {
-//                    tv_title.setText("已关注");
+                mList.get(clickPosition).setFriend(false);
+                mAdapter.notifyDataSetChanged();
 
-                    concernedService();
-                }else {
-//                    tv_title.setText("粉丝");
-                    fansService();
-                }
                 break;
         }
     }
@@ -289,7 +310,9 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
 
     @Override
     public void onFailed(int what, Response<String> response) {
-
+        Toast.makeText(getApplicationContext(),"请求数据出错",Toast.LENGTH_SHORT).show();
+        refreshLayout.finishLoadmore();
+        refreshLayout.finishRefresh();
     }
 
     @Override
@@ -299,30 +322,21 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
 
     private void parseConcernOrFansJson(String json) {
         ConcernOrFansBean concernOrFansBean=mGson.fromJson(json,ConcernOrFansBean.class);
-        isHasNextPage=concernOrFansBean.getData().isHasNextPage();
-        mList.addAll(concernOrFansBean.getData().getList());
-        if (mList.size()==0) {
-//            Toast.makeText(context, "无内容", Toast.LENGTH_SHORT).show();
-            inflate.setVisibility(View.GONE);
-//            tv_ifNone.setVisibility(View.VISIBLE);
-        }
-        isRefresh=false;
-        srl_refresh.setRefreshing(isRefresh);
-        loadMoreWrapper.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        if (!isHasNextPage) {
-            inflate.setVisibility(View.GONE);
-//            Toast.makeText(context, "无更多内容", Toast.LENGTH_SHORT).show();
-        }else {
-            pageNum++;
-            if (type==0) {
-                concernedService();
-            }else {
-                fansService();
+        if(isRefresh){
+            mList.clear();
+            currentPage=1;
+            isHasNextPage=true;
+        }else{
+            if(concernOrFansBean.getData().getList().size()==0){
+               isHasNextPage=false;
+            }else{
+                currentPage++;
             }
         }
+        mList.addAll(concernOrFansBean.getData().getList());
+        mAdapter.notifyDataSetChanged();
+
     }
+
+
 }

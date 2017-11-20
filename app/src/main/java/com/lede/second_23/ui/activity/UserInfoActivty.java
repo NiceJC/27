@@ -22,6 +22,7 @@ import com.lede.second_23.interface_utils.RefreshAndLoadMoreListener;
 import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.ui.fragment.PersonalFragmentAlbum;
 import com.lede.second_23.ui.fragment.PersonalFragmentAllBlog;
+import com.lede.second_23.ui.fragment.PersonalFragmentMe;
 import com.lede.second_23.utils.SPUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -54,7 +55,8 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
     @Bind(R.id.iv_personfragment_back)
     ImageView back;
-
+    @Bind(R.id.personfragment_me)
+    ImageView meClick;
     @Bind(R.id.personfragment_dongtai)
     ImageView dongtaiClick;
     @Bind(R.id.personfragment_album)
@@ -84,7 +86,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
     RefreshLayout mRefreshLayout;
 
     @OnClick({R.id.ll_person_fragment_fans, R.id.ll_person_fragment_concerned, R.id.iv_personfragment_concern,
-            R.id.personfragment_dongtai, R.id.personfragment_album, R.id.iv_personfragment_back,
+            R.id.personfragment_me,R.id.personfragment_dongtai, R.id.personfragment_album, R.id.iv_personfragment_back,
             R.id.ctiv_personfragment_userimg
     })
     public void onClick(View view) {
@@ -122,20 +124,32 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
                 }
 
                 break;
-            case R.id.personfragment_dongtai:
+            case R.id.personfragment_me:
                 if (currentPage != 0) {
                     viewPager.setCurrentItem(0, true);
-                    dongtaiClick.setSelected(true);
+                    meClick.setSelected(true);
+                    dongtaiClick.setSelected(false);
                     albumClick.setSelected(false);
                     currentPage = 0;
                 }
                 break;
-            case R.id.personfragment_album:
+
+            case R.id.personfragment_dongtai:
                 if (currentPage != 1) {
                     viewPager.setCurrentItem(1, true);
+                    meClick.setSelected(false);
+                    dongtaiClick.setSelected(true);
+                    albumClick.setSelected(false);
+                    currentPage = 1;
+                }
+                break;
+            case R.id.personfragment_album:
+                if (currentPage != 2) {
+                    viewPager.setCurrentItem(2, true);
+                    meClick.setSelected(false);
                     albumClick.setSelected(true);
                     dongtaiClick.setSelected(false);
-                    currentPage = 1;
+                    currentPage = 2;
                 }
                 break;
             default:
@@ -158,7 +172,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
     private PersonalFragmentAlbum personalFragmentAlbum;
     private PersonalFragmentAllBlog personalFragmentAllBlog;
-
+    private PersonalFragmentMe personalFragmentMe;
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> fragmentList;
     private PersonalAlbumBean.DataBean dataBean;
@@ -180,11 +194,16 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
         initEvent();
         doRequest();
         mRefreshLayout.isRefreshing();
+        mRefreshLayout.setEnableLoadmore(false);
     }
 
 
     private void initView() {
         fragmentList = new ArrayList<>();
+        if (personalFragmentMe == null) {
+            personalFragmentMe = new PersonalFragmentMe();
+        }
+        fragmentList.add(personalFragmentMe);
 
         if (personalFragmentAllBlog == null) {
             personalFragmentAllBlog = new PersonalFragmentAllBlog();
@@ -218,11 +237,20 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
                 if (position == 0) {
                     currentPage=0;
+                    meClick.setSelected(true);
+                    dongtaiClick.setSelected(false);
+                    albumClick.setSelected(false);
+                }
+
+                if (position == 1) {
+                    currentPage=1;
+                    meClick.setSelected(false);
                     dongtaiClick.setSelected(true);
                     albumClick.setSelected(false);
                 }
-                if (position == 1) {
-                    currentPage=1;
+                if (position == 2) {
+                    currentPage=2;
+                    meClick.setSelected(false);
                     dongtaiClick.setSelected(false);
                     albumClick.setSelected(true);
                 }
@@ -236,7 +264,7 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
 
         currentPage = 0;
         viewPager.setCurrentItem(currentPage, false);
-        dongtaiClick.setSelected(true);
+        meClick.setSelected(true);
     }
 
 
@@ -255,6 +283,9 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
                 }
                 if (personalFragmentAlbum.isResumed()) {
                     personalFragmentAlbum.toRefresh();
+                }
+                if(personalFragmentMe.isResumed()){
+                    personalFragmentMe.doRequest();
                 }
 
 

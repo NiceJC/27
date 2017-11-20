@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -1005,14 +1004,14 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
                 startActivity(intent);
             }
         });
-        if (listBean.getUser().getTrueName().equals("1")) {
-            Drawable drawableRight = getResources().getDrawable(
-                    R.mipmap.v5);
-
-            tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
-                    null, drawableRight, null);
-            tv_nickname.setCompoundDrawablePadding(2);
-        }
+//        if (listBean.getUser().getTrueName().equals("1")) {
+//            Drawable drawableRight = getResources().getDrawable(
+//                    R.mipmap.v5);
+//
+//            tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+//                    null, drawableRight, null);
+//            tv_nickname.setCompoundDrawablePadding(2);
+//        }
 
         tv_nickname.setText(listBean.getUser().getNickName());
         tv_nickname.setOnClickListener(new View.OnClickListener() {

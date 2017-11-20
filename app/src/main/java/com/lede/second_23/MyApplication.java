@@ -30,6 +30,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UploadManager;
+import com.umeng.analytics.MobclickAgent;
 import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 import com.yolanda.nohttp.Logger;
 import com.yolanda.nohttp.NoHttp;
@@ -77,6 +78,7 @@ public class MyApplication extends Application {
         initImageLoader(this);
         initFFmpegBinary(this);
 //        RongIM.init(this);
+        MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType. E_UM_NORMAL);
 
         //获取全局Context对象
         context = getApplicationContext();

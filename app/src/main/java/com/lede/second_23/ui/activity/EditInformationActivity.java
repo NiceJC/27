@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +20,9 @@ import com.example.myapplication.views.diyimage.DIYImageView;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
-import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.bean.UpUserInfoBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.utils.FileUtils;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
@@ -35,11 +31,7 @@ import com.lljjcoder.citypickerview.widget.CityPicker;
 import com.luck.picture.lib.model.FunctionConfig;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
-import com.qiniu.android.storage.UploadOptions;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -48,13 +40,10 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.yolanda.nohttp.rest.Response;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -132,8 +121,8 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
      *
      * @param view
      */
-    @OnClick({R.id.upload_button
-            , R.id.tv_edit_information_activity_nickname, R.id.tv_edit_information_activity_sign
+    @OnClick({
+             R.id.tv_edit_information_activity_nickname, R.id.tv_edit_information_activity_sign
             , R.id.rl_edit_information_activity_sex, R.id.rl_edit_information_activity_age
             , R.id.tv_edit_information_activity_updata, R.id.rl_edit_information_activity_city
             , R.id.rl_edit_information_activity_job, R.id.circle_iv_editinformation_touxiang
@@ -141,11 +130,7 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
-            case R.id.upload_button:
 
-                chooseImg();
-
-                break;
             case R.id.tv_edit_information_activity_nickname:
                 intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
                 intent.putExtra("type", 0);

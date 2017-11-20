@@ -82,7 +82,7 @@
                     android:layout_below="@id/rl_editinformation_touxiang"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="昵称"
+                    android:text="请输入用户名"
                     android:textColor="#ffffff"
                     android:textSize="18sp" />
 
@@ -97,7 +97,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="22dp"
                     android:gravity="center"
-                    android:text="签名"
+                    android:text="请输入签名"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -137,7 +137,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/tv_edit_information_activity_sex_title"
-                        android:text="性别"
+                        android:text=""
                         android:textColor="#3333ff"
                         android:textSize="18sp" />
 
@@ -187,7 +187,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/tv_edit_information_activity_age_title"
-                        android:text="年龄"
+                        android:text=""
                         android:textColor="#3333ff"
                         android:textSize="18sp" />
 
@@ -207,7 +207,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/tv_edit_information_activity_age"
-                        android:text="星座"
+                        android:text=""
                         android:textColor="#3333ff"
                         android:textSize="18sp" />
 
@@ -246,12 +246,13 @@
                         android:id="@+id/tv_edit_information_activity_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
-                        android:layout_toRightOf="@id/tv_edit_information_activity_city_title"
-                        android:text="杭州"
+                        android:text=""
                         android:textColor="#3333ff"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/tv_edit_information_activity_city_title"
+                        android:layout_marginStart="19dp" />
 
                     <ImageView
                         android:id="@+id/iv_editinformation_go6"
@@ -311,7 +312,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/tv_edit_information_activity_hobby_title"
-                        android:text="爱好"
+                        android:text=""
                         android:textColor="#3333ff"
                         android:textSize="18sp" />
 
@@ -361,7 +362,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/tv_edit_information_activity_school_title"
-                        android:text="学校"
+                        android:text=""
                         android:textColor="#3333ff"
                         android:textSize="18sp" />
 

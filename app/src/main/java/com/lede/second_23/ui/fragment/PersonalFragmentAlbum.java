@@ -1,5 +1,7 @@
 package com.lede.second_23.ui.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +41,10 @@ import com.luck.picture.lib.model.PictureConfig;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.qiniu.android.storage.UploadManager;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -73,6 +79,8 @@ public class PersonalFragmentAlbum extends Fragment {
     LinearLayout postMyPhoto;
     @Bind(R.id.when_no_data)
      ImageView whenNoData;
+    @Bind(R.id.refresh_layout)
+    SmartRefreshLayout mRefreshLaout;
 
     private Gson mGson;
     private CommonAdapter mAdapter;
@@ -81,7 +89,7 @@ public class PersonalFragmentAlbum extends Fragment {
     private static final int REQUEST_MY_ALBUM = 26336;
     private static final int DELETE_MY_ALBUM = 12211;
     private int currentPage = 1;
-    private int pageSize = 100;
+    private int pageSize = 15;
     private boolean isHasNextPage = false;
     private static final int GET_QIUNIUTOKEN = 2323;
     private static final int UPLOADREQUEST = 24444;
@@ -114,7 +122,10 @@ public class PersonalFragmentAlbum extends Fragment {
 
     PersonalFragment1 personalFragment1=null;
     UserInfoActivty userInfoActivty=null;
+    private boolean isshowBottom=true;
 
+    private int deletePosition;
+    private Animator animator;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -150,13 +161,82 @@ public class PersonalFragmentAlbum extends Fragment {
         initView();
         initEvent();
         toRefresh();
+        mRefreshLaout.setEnableRefresh(false);
         return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        bottom_init();
+    }
+
+    private void bottom_show(int i) {
+        animator = null;
+        if (i == 0) {
+            animator = ObjectAnimator.ofFloat(postMyPhoto, "translationY", 0, postMyPhoto.getHeight());
+            animator.setDuration(500);
+            animator.start();
+        } else {
+            animator = ObjectAnimator.ofFloat(postMyPhoto, "translationY", postMyPhoto.getHeight(), 0);
+            animator.setDuration(500);
+            animator.start();
+        }
+    }
+    private void bottom_init(){
+
+        WindowManager windowManager= (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        int ScreenHeight=windowManager.getDefaultDisplay().getHeight();
+
+        int[] location = new int[2] ;
+        int viewHeiht=postMyPhoto.getHeight();
+        postMyPhoto.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
+        int Viewlocation=location [1];
+        Animator animator=ObjectAnimator.ofFloat(postMyPhoto,"translationY",0,ScreenHeight-Viewlocation-viewHeiht);
+        animator.setDuration(0);
+        animator.start();
+
+    }
+
+
+
 
 
     private void initView() {
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy >= 30) {
+                    if (isshowBottom) {
+                        return;
+                    } else {
+                        isshowBottom = true;
+                        bottom_show(0);
+
+
+                    }
+
+                } else if (dy <= -30) {
+                    if (isshowBottom) {
+                        isshowBottom = false;
+                        bottom_show(1);
+
+
+                    } else {
+                        return;
+                    }
+                }
+
+            }
+        });
 
 
         transformation = new MultiTransformation(
@@ -219,6 +299,7 @@ public class PersonalFragmentAlbum extends Fragment {
                                 case R.id.confirm:
 
                                     deletePhoto( Integer.parseInt(mDataList.get(position).getId()));
+                                    deletePosition=position;
                                     dialog.dismiss();
                                     break;
                                 case R.id.cancel:
@@ -254,6 +335,24 @@ public class PersonalFragmentAlbum extends Fragment {
                 upLoadAlbum();
             }
         });
+
+
+        mRefreshLaout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+
+                toRefresh();
+            }
+        });
+        mRefreshLaout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+
+                toLoadMore();
+
+            }
+        });
+
     }
 
     public void upLoadAlbum(){
@@ -301,6 +400,8 @@ public class PersonalFragmentAlbum extends Fragment {
         if (isHasNextPage) {
             isRefresh = false;
             doRequest(currentPage + 1);
+        }else{
+            mRefreshLaout.finishLoadmore();
         }
     }
 
@@ -323,17 +424,15 @@ public class PersonalFragmentAlbum extends Fragment {
             public void onSucceed(int what, Response<String> response) {
                 switch (what) {
                     case REQUEST_MY_ALBUM:
-                        if(isMyPhoto){
-                            personalFragment1.isOver();
-                        }else{
-                            userInfoActivty.isOver();
-                        }
+
+                        mRefreshLaout.finishRefresh();
+                        mRefreshLaout.finishLoadmore();
 
                         parsePersonAlbum(response.get());
                         break;
                     case DELETE_MY_ALBUM:
                         Toast.makeText(getContext(),"图片已删除",Toast.LENGTH_SHORT).show();
-                        doRequest(1);
+                        toRefresh();
                         break;
                     default:
                         break;
@@ -344,6 +443,9 @@ public class PersonalFragmentAlbum extends Fragment {
             public void onFailed(int what, Response response) {
                 switch (what) {
                     case REQUEST_MY_ALBUM:
+                        mRefreshLaout.finishRefresh();
+                        mRefreshLaout.finishLoadmore();
+
                         break;
                     default:
                         break;
@@ -370,7 +472,6 @@ public class PersonalFragmentAlbum extends Fragment {
         PersonalAlbumBean personalAlbumBean = mGson.fromJson(json, PersonalAlbumBean.class);
         if (personalAlbumBean.getResult() == 10000) {
             if (personalAlbumBean.getData().getSimple().getList().size() == 0) {
-                Toast.makeText(getContext(), "无更多内容", Toast.LENGTH_SHORT).show();
                 if(isRefresh){
                     mDataList.clear();
                     mAdapter.notifyDataSetChanged();
@@ -389,8 +490,8 @@ public class PersonalFragmentAlbum extends Fragment {
                 } else {
                     currentPage++;
                 }
-                mDataList.addAll(personalAlbumBean.getData().getSimple().getList());
 
+                mDataList.addAll(personalAlbumBean.getData().getSimple().getList());
                 userphotoURLS.clear();
                 for (PersonalAlbumBean.DataBean.SimpleBean.UserPhotoBean userPhotoBean : mDataList
                         ) {

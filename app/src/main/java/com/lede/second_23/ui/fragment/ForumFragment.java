@@ -3,7 +3,6 @@ package com.lede.second_23.ui.fragment;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -168,15 +167,15 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             protected void convert(ViewHolder holder, final AllForumBean.DataBean.SimpleBean.ListBean listBean, final int position) {
                 DIYImageView diy_userimg = holder.getView(R.id.diyiv_item_forum_userimg);
                 TextView tv_nickname = holder.getView(R.id.tv_item_forum_nickname);
-
-                if (listBean.getUser().getTrueName().equals("1")) {
-                    Drawable drawableRight = getResources().getDrawable(
-                            R.mipmap.v5);
-
-                    tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
-                            null, drawableRight, null);
-                    tv_nickname.setCompoundDrawablePadding(2);
-                }
+//
+//                if (listBean.getUser().getTrueName().equals("1")) {
+//                    Drawable drawableRight = getResources().getDrawable(
+//                            R.mipmap.v5);
+//
+//                    tv_nickname.setCompoundDrawablesWithIntrinsicBounds(null,
+//                            null, drawableRight, null);
+//                    tv_nickname.setCompoundDrawablePadding(2);
+//                }
 
                 TextView tv_time = holder.getView(R.id.tv_item_forum_time);
                 TextView tv_text = holder.getView(R.id.tv_item_forum_text);

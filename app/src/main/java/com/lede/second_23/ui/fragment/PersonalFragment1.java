@@ -57,6 +57,8 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     @Bind(R.id.iv_personfragment_set)
     ImageView toSet;
 
+    @Bind(R.id.personfragment_me)
+    ImageView meClick;
     @Bind(R.id.personfragment_dongtai)
     ImageView dongtaiClick;
     @Bind(R.id.personfragment_album)
@@ -86,7 +88,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     RefreshLayout mRefreshLayout;
 
     @OnClick({R.id.ll_person_fragment_fans, R.id.ll_person_fragment_concerned, R.id.iv_personfragment_msg, R.id.iv_personfragment_set,
-             R.id.personfragment_dongtai, R.id.personfragment_album, R.id.iv_personfragment_back,
+             R.id.personfragment_me,R.id.personfragment_dongtai, R.id.personfragment_album, R.id.iv_personfragment_back,
             R.id.ctiv_personfragment_userimg, R.id.tv_personfragment_username, R.id.tv_personfragment_sign
     })
     public void onClick(View view) {
@@ -126,20 +128,32 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
                 startActivity(new Intent(context, ConversationListDynamicActivtiy.class));
 
                 break;
-            case R.id.personfragment_dongtai:
+            case R.id.personfragment_me:
                 if (currentPage != 0) {
                     viewPager.setCurrentItem(0, true);
-                    dongtaiClick.setSelected(true);
+                    meClick.setSelected(true);
+                    dongtaiClick.setSelected(false);
                     albumClick.setSelected(false);
                     currentPage = 0;
                 }
                 break;
-            case R.id.personfragment_album:
+
+            case R.id.personfragment_dongtai:
                 if (currentPage != 1) {
                     viewPager.setCurrentItem(1, true);
+                    meClick.setSelected(false);
+                    dongtaiClick.setSelected(true);
+                    albumClick.setSelected(false);
+                    currentPage = 1;
+                }
+                break;
+            case R.id.personfragment_album:
+                if (currentPage != 2) {
+                    viewPager.setCurrentItem(2, true);
+                    meClick.setSelected(false);
                     albumClick.setSelected(true);
                     dongtaiClick.setSelected(false);
-                    currentPage = 1;
+                    currentPage = 2;
                 }
                 break;
 
@@ -152,7 +166,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     private SimpleResponseListener<String> simpleResponseListener;
     private static final int REQUEST_USER_INFO = 555;
 
-
+    public static PersonalFragment1 instance = null;
 
     private String userId;
     private PersonalAlbumBean.DataBean.UserInfo userInfo;
@@ -162,6 +176,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     private PersonalFragmentAlbum personalFragmentAlbum;
     private PersonalFragmentAllBlog personalFragmentAllBlog;
 
+    private PersonalFragmentMe personalFragmentMe;
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> fragmentList;
 
@@ -178,6 +193,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
         ButterKnife.bind(this, view);
 
+        instance=this;
         mGson = new Gson();
         context = getActivity();
 
@@ -187,13 +203,17 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
         mRefreshLayout.setEnableLoadmore(false);
 
-
         return view;
     }
 
 
     private void initView() {
         fragmentList = new ArrayList<>();
+
+        if (personalFragmentMe == null) {
+            personalFragmentMe = new PersonalFragmentMe();
+        }
+        fragmentList.add(personalFragmentMe);
 
         if (personalFragmentAllBlog == null) {
             personalFragmentAllBlog = new PersonalFragmentAllBlog();
@@ -204,6 +224,11 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
             personalFragmentAlbum = new PersonalFragmentAlbum();
         }
         fragmentList.add(personalFragmentAlbum);
+
+
+
+
+
         mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -224,14 +249,22 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
             @Override
             public void onPageSelected(int position) {
-
                 if (position == 0) {
                     currentPage=0;
+                    meClick.setSelected(true);
+                    dongtaiClick.setSelected(false);
+                    albumClick.setSelected(false);
+                }
+
+                if (position == 1) {
+                    currentPage=1;
+                    meClick.setSelected(false);
                     dongtaiClick.setSelected(true);
                     albumClick.setSelected(false);
                 }
-                if (position == 1) {
-                    currentPage=1;
+                if (position == 2) {
+                    currentPage=2;
+                    meClick.setSelected(false);
                     dongtaiClick.setSelected(false);
                     albumClick.setSelected(true);
                 }
@@ -245,7 +278,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
         currentPage = 0;
         viewPager.setCurrentItem(currentPage, false);
-        dongtaiClick.setSelected(true);
+        meClick.setSelected(true);
     }
 
 
@@ -264,6 +297,9 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
                 }
                 if (personalFragmentAlbum.isResumed()) {
                     personalFragmentAlbum.toRefresh();
+                }
+                if(personalFragmentMe.isResumed()){
+                    personalFragmentMe.doRequest();
                 }
 
 

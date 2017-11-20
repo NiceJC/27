@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="com.lede.second_23.ui.activity.AllIssueTextActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee"/>
+
     <LinearLayout
         android:id="@+id/ll_all_issue_text_activity_text_area"
         android:layout_width="match_parent"
@@ -43,13 +45,14 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="20dp">
+
         <EditText
             android:id="@+id/et_all_issue_text_activity_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@null"
             android:hint="分享你的故事"
-            android:textColorHint="#aaaaaa"
-            android:background="@null"/>
+            android:textColorHint="#aaaaaa" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

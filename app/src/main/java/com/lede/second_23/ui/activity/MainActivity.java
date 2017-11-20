@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -44,6 +45,7 @@ import com.luck.picture.lib.model.PictureConfig;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -62,6 +64,7 @@ import java.util.List;
 public class MainActivity extends FragmentActivity implements AMapLocationListener {
 
     public MyViewPager vp_main_fg;
+    private RelativeLayout relativeLayout;
     private ArrayList<Fragment> fragmentList;
     public static MainActivity instance = null;
     private int widthPixels;
@@ -110,14 +113,17 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("TAC", "onResume: ");
-//        if ((int) SPUtils.get(instance, GlobalConstants.GETREPLY,0)>0) {
-//            Toast.makeText(instance, "收到评论", Toast.LENGTH_SHORT).show();
-//        }
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onResume(this);
     }
 
     private void initView() {
+        relativeLayout= (RelativeLayout) findViewById(R.id.activity_main);
         vp_main_fg = (MyViewPager) findViewById(R.id.vp_main_fg);
         declaration = (ImageView) findViewById(R.id.declaration_main);
         if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATIONMAIN, true))) {
@@ -136,7 +142,6 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
                 SPUtils.put(MainActivity.this, GlobalConstants.DECLARATIONMAIN, false);
             }
         });
-
 
         initFragmentViewPager();
     }
@@ -413,5 +418,11 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         });
     }
 
+
+    public void showSnackBar(String text){
+
+        SnackBarUtil.getInstance(relativeLayout,text).show();
+
+    }
 
 }

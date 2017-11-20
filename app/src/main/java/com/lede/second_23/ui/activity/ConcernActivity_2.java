@@ -160,13 +160,15 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
             iv_concern_activity_message.setVisibility(View.GONE);
             iv_concern_activity_location.setVisibility(View.GONE);
             tv_title.setText("我的照片");
+        }else{
+            if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATION,true))) {
+                iv_declaration.setVisibility(View.VISIBLE);
+            }else {
+                iv_declaration.setVisibility(View.GONE);
+                iv_declaration.setClickable(false);
+            }
         }
-        if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATION,true))) {
-            iv_declaration.setVisibility(View.VISIBLE);
-        }else {
-            iv_declaration.setVisibility(View.GONE);
-            iv_declaration.setClickable(false);
-        }
+
         mGson = new Gson();
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
@@ -385,7 +387,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 
             @Override
             public void onDismiss() {
-                System.out.println("popWindow消失");
+
                 WindowManager.LayoutParams params = ConcernActivity_2.this.getWindow().getAttributes();
                 params.alpha = 1.0f;
 

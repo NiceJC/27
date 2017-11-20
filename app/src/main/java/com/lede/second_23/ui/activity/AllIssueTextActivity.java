@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +26,7 @@ import com.lede.second_23.bean.AllRecord;
 import com.lede.second_23.bean.ForumSuccessBean;
 import com.lede.second_23.bean.QiNiuTokenBean;
 import com.lede.second_23.global.GlobalConstants;
+import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.FileUtils;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.VideoUtils;
@@ -60,9 +60,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lede.second_23.utils.ProgressDialogUtils.createLoadingDialog;
-
-public class AllIssueTextActivity extends AppCompatActivity implements OnResponseListener<String> {
+public class AllIssueTextActivity extends BaseActivity implements OnResponseListener<String> {
 
     @Bind(R.id.iv_all_issue_text_activity_back)
     ImageView ivAllIssueTextActivityBack;
@@ -437,8 +435,14 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
                     break;
                 } else {
-                    loadingDialog2 = createLoadingDialog(mContext, "正在上传请稍等...");
-                    loadingDialog2.show();
+                    Intent intent2=new Intent(AllIssueTextActivity.this,MainActivity.class);
+                    startActivity(intent2);
+                    if(MainActivity.instance!=null){
+                        MainActivity.instance.showSnackBar("正在上传 请稍候");
+                        MainActivity.instance.vp_main_fg.setCurrentItem(0);
+
+                    }
+
                     forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
                     if (imgOrVideoType == 0) {
                         for (int i = 0; i < selectMedia.size() - 1; i++) {
@@ -686,14 +690,16 @@ public class AllIssueTextActivity extends AppCompatActivity implements OnRespons
     private void parseForum(String json) {
         ForumSuccessBean foumSuccessBean = mGson.fromJson(json, ForumSuccessBean.class);
         if (foumSuccessBean.getResult() == 10000) {
-            Toast.makeText(mContext, "发布成功", Toast.LENGTH_SHORT).show();
-            finish();
-            if (loadingDialog2 != null) {
-                loadingDialog2.dismiss();
+            if(MainActivity.instance!=null){
+                MainActivity.instance.showSnackBar("发布成功");
             }
+
+
             AllIssueActivity.instance.finish();
         } else {
-            Toast.makeText(mContext, "发布失败", Toast.LENGTH_SHORT).show();
+            if(MainActivity.instance!=null) {
+                MainActivity.instance.showSnackBar("发布失败");
+            }
         }
     }
 

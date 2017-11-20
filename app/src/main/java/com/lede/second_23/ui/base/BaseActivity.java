@@ -17,6 +17,7 @@ import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.StatusBarUtil;
 import com.lede.second_23.utils.T;
+import com.umeng.analytics.MobclickAgent;
 import com.yolanda.nohttp.rest.OnResponseListener;
 import com.yolanda.nohttp.rest.Response;
 
@@ -63,11 +64,15 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onResume(this);
+
     }
 
     @Override
@@ -126,4 +131,8 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
         super.finish();
         overridePendingTransition(R.anim.activity_left_in, R.anim.activity_right_out);
     }
+
+
+
+
 }

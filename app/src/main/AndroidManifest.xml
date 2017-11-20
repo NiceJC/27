@@ -214,7 +214,9 @@
             android:theme="@style/AppTheme2"/>
         <activity android:name=".ui.activity.OtherPersonActivity" />
         <activity android:name=".ui.activity.PermissionsActivity" />
-        <activity android:name=".ui.activity.WelcomeActivity">
+        <activity android:name=".ui.activity.WelcomeActivity"
+            android:theme="@style/MyFullScreenTheme"
+            >
 
             <!-- TODO main -->
             <intent-filter>
@@ -239,10 +241,12 @@
             android:name=".ui.activity.AllIssueActivity"
             android:theme="@style/MyFullScreenTheme" />
         <activity android:name=".ui.activity.ShowPicActivity" />
-        <activity android:name=".ui.activity.ForumActivity" />
+
         <activity android:name=".ui.activity.ForumDetailActivity" />
         <activity android:name=".ui.activity.AllReplyActivity" />
-        <activity android:name=".ui.activity.AllIssueTextActivity" />
+        <activity android:name=".ui.activity.AllIssueTextActivity"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".ui.activity.ShowAllForumByVideoActivity" />
         <activity
             android:name=".ui.activity.PicOrVideoChooseActivity"
@@ -275,6 +279,16 @@
         <activity android:name=".ui.activity.ForumZanActivity">
 
         </activity>
+
+        <activity android:name=".ui.activity.EditRegisterInfoActivity" />
+        <activity android:name=".ui.activity.SameCityActivity"/>
+
+
+
+        <!-- 友盟统计-->
+        <meta-data android:value="5a0a7a0aa40fa33d6e00016a" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
+
     </application>
 
 </manifest>

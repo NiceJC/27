@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -33,6 +34,8 @@ import com.lede.second_23.utils.StatusBarUtil;
 import com.lljjcoder.citypickerview.widget.CityPicker;
 import com.luck.picture.lib.model.FunctionOptions;
 import com.luck.picture.lib.model.PictureConfig;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnClickListener;
 import com.qiniu.android.storage.UploadManager;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yolanda.nohttp.NoHttp;
@@ -50,6 +53,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -119,7 +123,7 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_information);
+        setContentView(R.layout.activity_create_infor);
         StatusBarUtil.transparencyBar(this);
         ButterKnife.bind(this);
         mGson = new Gson();
@@ -130,7 +134,11 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                 new CenterCrop(this),
                 new RoundedCornersTransformation(this, 10, 0, RoundedCornersTransformation.CornerType.ALL)
         );
-
+        showCompleteDialog();
+        Glide.with(mContext)
+                .load(R.mipmap.head_defaut)
+                .bitmapTransform(new CropCircleTransformation(EditRegisterInfoActivity.this))
+                .into(circle_iv_editinformation_touxiang);
     }
 
 
@@ -154,13 +162,13 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
             case R.id.tv_edit_information_activity_nickname:
                 intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
                 intent.putExtra("type", 0);
-                intent.putExtra("body", tv_edit_information_activity_nickname.getText().toString().trim());
+                intent.putExtra("body", "");
                 startActivityForResult(intent, 0);
                 break;
             case R.id.tv_edit_information_activity_sign:
                 intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
                 intent.putExtra("type", 1);
-                intent.putExtra("body", tv_edit_information_activity_sign.getText().toString().trim());
+                intent.putExtra("body", "");
                 startActivityForResult(intent, 1);
                 break;
             case R.id.rl_edit_information_activity_sex:
@@ -176,6 +184,15 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                 if (tv_edit_information_activity_nickname.getText().toString().trim().equals("") || tv_edit_information_activity_nickname.getText().toString().trim().equals("昵称")) {
                     Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
                     return;
+                } else if (tv_edit_information_activity_sign.getText().toString().trim().equals("") || tv_edit_information_activity_sign.getText().toString().trim().equals("签名")) {
+                    Toast.makeText(mContext, "请输入签名", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (tv_edit_information_activity_city.getText().toString().trim().equals("") || tv_edit_information_activity_city.getText().toString().trim().equals("城市")) {
+                    Toast.makeText(mContext, "请输入城市", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (tv_edit_information_activity_hobby.getText().toString().trim().equals("") || tv_edit_information_activity_hobby.getText().toString().trim().equals("爱好")) {
+                    Toast.makeText(mContext, "请输入爱好", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (tv_edit_information_activity_age.getText().toString().trim().equals("") || tv_edit_information_activity_age.getText().toString().trim().equals("年龄")) {
                     Toast.makeText(mContext, "请选择年龄", Toast.LENGTH_SHORT).show();
                     return;
@@ -190,7 +207,6 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                     return;
                 }
                 CreateUserInfo();//创建用户请求
-//
                 break;
 
             case R.id.rl_edit_information_activity_city:
@@ -199,7 +215,7 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
             case R.id.rl_edit_information_activity_job:
                 intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
                 intent.putExtra("type", 2);
-                intent.putExtra("body", tv_edit_information_activity_hobby.getText().toString().trim());
+                intent.putExtra("body", "");
                 startActivityForResult(intent, 2);
                 break;
             case R.id.circle_iv_editinformation_touxiang:
@@ -212,12 +228,38 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
             case R.id.rl_edit_information_activity_school:
                 intent = new Intent(this, NicknameOrHobbyOrSignActivity.class);
                 intent.putExtra("type", 4);
-                intent.putExtra("body", tvEditInformationActivitySchool.getText().toString().trim());
+                intent.putExtra("body", "");
                 startActivityForResult(intent, 4);
                 break;
         }
     }
 
+
+    //给用户一个完善信息的提示
+    private void showCompleteDialog() {
+        DialogPlus dialogPlus = DialogPlus.newDialog(this)
+                .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.complete_info_dialog))
+                .setContentBackgroundResource(R.drawable.shape_linearlayout_all)
+                .setCancelable(true)
+                .setGravity(Gravity.CENTER)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+
+                        switch (view.getId()) {
+                            case R.id.toComplete:
+
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .setExpanded(false).create();
+        dialogPlus.show();
+
+    }
 
     /**
      * 城市选择Dialog
@@ -389,7 +431,9 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
         switch (what) {
             case CREATE_USER:
                 dialog = ProgressDialogUtils.createLoadingDialog(EditRegisterInfoActivity.this, "正在创建用户信息请稍后");
+                dialog.setCancelable(false);
                 dialog.show();
+
                 break;
         }
     }
@@ -401,7 +445,7 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-;
+                ;
                 parseUpdate_UserInfo(response.get());
                 break;
 
@@ -472,10 +516,10 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                 };
                 if (list != null && list.size() != 0) {
                     if (list.size() == 1) {
-                        Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).bitmapTransform(transformation).into(uploadImage1);
+                        Glide.with(mContext).load(list.get(0).getCompressPath()).bitmapTransform(transformation).into(uploadImage1);
                     } else {
-                        Glide.with(mContext).load(selectMedia.get(0).getCompressPath()).bitmapTransform(transformation).into(uploadImage1);
-                        Glide.with(mContext).load(selectMedia.get(1).getCompressPath()).bitmapTransform(transformation).into(uploadImage2);
+                        Glide.with(mContext).load(list.get(0).getCompressPath()).bitmapTransform(transformation).into(uploadImage1);
+                        Glide.with(mContext).load(list.get(1).getCompressPath()).bitmapTransform(transformation).into(uploadImage2);
 
                     }
                     UploadService uploadService = new UploadService(EditRegisterInfoActivity.this);
@@ -506,6 +550,7 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
             selectedImg = media.getCutPath();
             Glide.with(mContext)
                     .load(selectedImg)
+                    .bitmapTransform(new CropCircleTransformation(EditRegisterInfoActivity.this))
                     .into(circle_iv_editinformation_touxiang);
             isPrortraitOK = true;
         }

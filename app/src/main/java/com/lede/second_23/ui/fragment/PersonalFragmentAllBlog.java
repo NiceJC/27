@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -26,6 +25,10 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.ui.activity.ForumDetailActivity;
 import com.lede.second_23.utils.SPUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
@@ -54,13 +57,15 @@ public class PersonalFragmentAllBlog extends Fragment {
     RecyclerView mRecyclerView;
     @Bind(R.id.when_no_data)
     ImageView whenNoData;
+    @Bind(R.id.refresh_layout)
+    SmartRefreshLayout refreshLayout;
     private Gson mGson;
     private CommonAdapter mAdapter;
     private SimpleResponseListener<String> simpleResponseListener;
 
     private static final int REQUEST_ALL_FORUM = 111;
     private int currentPage = 1;
-    private int pageSize = 100;
+    private int pageSize = 15;
     private boolean isHasNextPage = false;
 
 
@@ -101,6 +106,9 @@ public class PersonalFragmentAllBlog extends Fragment {
         initView();
         initEvent();
         toRefresh();
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadmore(true);
+        refreshLayout.setEnableNestedScroll(true);
         return view;
     }
 
@@ -165,6 +173,18 @@ public class PersonalFragmentAllBlog extends Fragment {
 
     public void initEvent() {
 
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                toRefresh();
+            }
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                toLoadMore();
+            }
+        });
     }
 
     public void toRefresh() {
@@ -186,17 +206,14 @@ public class PersonalFragmentAllBlog extends Fragment {
             isRefresh=false;
             doRequest(currentPage+1);
         }else{
-            Toast.makeText(getContext(), "无更多内容", Toast.LENGTH_SHORT).show();
+
+            refreshLayout.finishLoadmore();
 
         }
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        doRequest(1);
-    }
+
 
     private void doRequest(int pageNum) {
 
@@ -206,6 +223,9 @@ public class PersonalFragmentAllBlog extends Fragment {
                 switch (what) {
                     case REQUEST_ALL_FORUM:
                         parsePersonAllForum(response.get());
+
+                        refreshLayout.finishRefresh();
+                        refreshLayout.finishLoadmore();
 
                         break;
                     default:
@@ -217,6 +237,8 @@ public class PersonalFragmentAllBlog extends Fragment {
                 switch (what) {
                     case REQUEST_ALL_FORUM:
 
+                        refreshLayout.finishRefresh();
+                        refreshLayout.finishLoadmore();
                         break;
                     default:
                         break;
@@ -243,7 +265,7 @@ public class PersonalFragmentAllBlog extends Fragment {
         PersonAllForumBean personAllForumBean = mGson.fromJson(json, PersonAllForumBean.class);
         if (personAllForumBean.getResult() == 10000) {
             if (personAllForumBean.getData().getSimple().getList().size() == 0) {
-                Toast.makeText(getContext(), "无更多内容", Toast.LENGTH_SHORT).show();
+
 
                 if(isRefresh){
                     mDataList.clear();
@@ -256,6 +278,7 @@ public class PersonalFragmentAllBlog extends Fragment {
                 whenNoData.setVisibility(View.GONE);
 
                 isHasNextPage = personAllForumBean.getData().getSimple().isHasNextPage();
+
                 if(isRefresh){
                     currentPage=1;
                     mDataList.clear();
@@ -263,6 +286,7 @@ public class PersonalFragmentAllBlog extends Fragment {
                     currentPage++;
                 }
                 mDataList.addAll(personAllForumBean.getData().getSimple().getList());
+
 
                 mAdapter.notifyDataSetChanged();
             }

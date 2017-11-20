@@ -3,17 +3,18 @@
     android:layout_width="320dp"
     android:layout_height="150dp"
     android:layout_gravity="center">
-    <ImageView
-        android:id="@+id/iv_nhs_dialog_finish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@mipmap/close"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="110dp">
+        <ImageView
+            android:id="@+id/iv_nhs_dialog_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/close"/>
         <EditText
             android:layout_margin="5dp"
             android:id="@+id/et_nhs_dialog_text"
@@ -24,6 +25,7 @@
             android:background="@null"
             android:textColorHint="#cccccc"
             android:textSize="18sp"/>
+
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_nhs_dialog_ok"
