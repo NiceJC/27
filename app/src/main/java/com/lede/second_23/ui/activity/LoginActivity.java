@@ -201,11 +201,12 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
 
         if (userInfoBean.getData().getInfo() == null) {
             SPUtils.put(this, GlobalConstants.HEAD_IMG, "");
+
             Intent intent = new Intent(this, EditRegisterInfoActivity.class);
             startActivity(intent);
         } else {
             MyApplication.instance.getRongIMTokenService();
-            SPUtils.put(this,GlobalConstants.NAME,userInfoBean.getData().getInfo().getNickName());
+            SPUtils.put(this,GlobalConstants.USERNAME,userInfoBean.getData().getInfo().getNickName());
             startActivity(new Intent(this, WelcomeActivity.class));
         }
         finish();

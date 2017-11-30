@@ -30,9 +30,11 @@ import com.lede.second_23.adapter.MyFragmentPagerAdapter;
 import com.lede.second_23.bean.CheckPhotoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
 import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.VIPService;
 import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment1;
 import com.lede.second_23.ui.fragment.PersonalFragment1;
@@ -108,6 +110,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         UpdateHelper.getInstance().setDebugMode(true);
         initView();
         requestPhoto();
+        checkVIP();
     }
 
     @Override
@@ -190,6 +193,26 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
             }
         });
+    }
+
+
+
+
+    private void checkVIP(){
+
+        VIPService vipService=new VIPService(MainActivity.this);
+        vipService.checkVIP(new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
+
+
     }
 
 

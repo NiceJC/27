@@ -47,7 +47,7 @@ android {
     productFlavors{
         //在这里添加渠道号
 
-        wandoujia{}
+        yingyongbao{}
 
     }
     productFlavors.all{

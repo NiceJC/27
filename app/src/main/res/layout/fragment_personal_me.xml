@@ -150,6 +150,36 @@
         </RelativeLayout>
 
 
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/vip_message"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/vip_message_click"
+                android:src="@mipmap/vipmessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="center"
+                android:text="会员特权，即刻聊天"
+                android:textSize="15sp"
+                android:textColor="#7566ff"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+
+
     </LinearLayout>
 
 

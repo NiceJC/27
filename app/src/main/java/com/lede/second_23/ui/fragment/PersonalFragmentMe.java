@@ -29,9 +29,14 @@ import com.yolanda.nohttp.rest.SimpleResponseListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
+import static io.rong.imlib.statistics.UserData.username;
 
 /**
  * Created by ld on 17/11/16.
@@ -53,6 +58,9 @@ public class PersonalFragmentMe extends Fragment {
     @Bind(R.id.location_click)
     LinearLayout locationClick;
 
+    @Bind(R.id.vip_message)
+    LinearLayout vipMessage;
+
     private Request<String> userInfoRequest = null;
     private final static int REQUEST_USER_INFO=23451;
     private Gson mGson;
@@ -72,19 +80,28 @@ public class PersonalFragmentMe extends Fragment {
 
         mGson = new Gson();
         String userID=getActivity().getIntent().getStringExtra(USERID);
-        if(userID!=null&&!userID.equals("")){
+        String VIPStatus=(String) SPUtils.get(getContext(), VIPSTATUS, "");
+        if(userID!=null&&!userID.equals("")){//他人主页
             userId=userID;
-        }else {
+            //当前展示的不是自己的主页，并且自己是会员  ，显示会员聊天按钮
+            if(!userId.equals((String) SPUtils.get(getContext(), USERID, ""))&&VIPStatus.equals(NOTOVERDUE)){
+                vipMessage.setVisibility(View.VISIBLE);
+            }else{
+                vipMessage.setVisibility(View.GONE);
+            }
+
+        }else { //自己主页
             userId=(String) SPUtils.get(getContext(), USERID, "");
+            vipMessage.setVisibility(View.GONE);
+
         }
         doRequest();
         return view;
     }
-    @OnClick({R.id.location_click})
+    @OnClick({R.id.location_click,R.id.vip_message_click})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.location_click:
-
                 if(address!=null&&!address.trim().equals("")){
                     Intent intent=new Intent(getActivity(), SameCityActivity.class);
                     intent.putExtra(ADDRESS,address);
@@ -92,6 +109,10 @@ public class PersonalFragmentMe extends Fragment {
                 }else{
                     Toast.makeText(getActivity(),"暂无位置信息",Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.vip_message_click:
+
+                RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.PRIVATE, userId, username);
 
                 break;
 

@@ -201,7 +201,7 @@ public class SameCityActivity extends BaseActivity {
                 switch (what){
                     case REQUEST_PUSHED_USER:
 
-                        parsePushUser(response.get());
+                        parseNearUser(response.get());
                         mRefreshLayout.finishLoadmore();
                         mRefreshLayout.finishRefresh();
 
@@ -247,7 +247,7 @@ public class SameCityActivity extends BaseActivity {
      *
      * @param json
      */
-    private void parsePushUser(String json) {
+    private void parseNearUser(String json) {
 
         SameCityUserBean sameCityUserBean = mGson.fromJson(json, SameCityUserBean.class);
         if(isRefresh){

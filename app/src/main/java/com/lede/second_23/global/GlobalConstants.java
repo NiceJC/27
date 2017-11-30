@@ -56,7 +56,7 @@ public class GlobalConstants {
     //当前所浏览动态的用户的头像url
     public static final String CURRENT_USERIMG = "CURRENT_USERIMG";
     //用户昵称
-    public static final String NAME = "NAME";
+    public static final String USERNAME = "NAME";
     //是否身份认证
     public static final String CERTIFICATION = "CERTIFICATION";
     //设置中筛选条件性别
@@ -95,6 +95,16 @@ public class GlobalConstants {
 
     public static final String DECLARATION="DECLARATION";
     public static final String DECLARATIONMAIN="DECLARATIONMAIN";
+    public static final String TIME="TIME";
+    public static final String TOTAL="TOTAL";
+
+    public static final String VIPSTATUS="VIPSTATUS";
+
+    public static final String VIPPUSHSEX="VIPPUSHSEX";
+
+
+
+
 
     public static final String USERID="USERID";
 

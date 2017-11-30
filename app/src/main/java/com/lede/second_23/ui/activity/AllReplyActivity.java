@@ -152,7 +152,7 @@ public class AllReplyActivity extends AppCompatActivity implements OnResponseLis
         commentForReplyRequest.add("forunId", forumId);
         commentForReplyRequest.add("commentId", commentId);
         commentForReplyRequest.add("replyText", replyText);
-        commentForReplyRequest.add("userName", (String) SPUtils.get(context, GlobalConstants.NAME, ""));
+        commentForReplyRequest.add("userName", (String) SPUtils.get(context, GlobalConstants.USERNAME, ""));
         NoHttp.getRequestQueueInstance().add(COMMENT_FOR_REPLY, commentForReplyRequest, this);
     }
 

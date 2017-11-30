@@ -23,22 +23,18 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
-import com.lede.second_23.bean.NearbyUsersBean;
+import com.lede.second_23.bean.NearbyPhotoBean;
+import com.lede.second_23.bean.SameCityUserBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.service.NearByUserService;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.rest.SimpleResponseListener;
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
-import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
+import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
@@ -46,8 +42,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.ADDRESS;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -63,13 +61,40 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.women_img_1)
+    ImageView womenImg1;
+    @Bind(R.id.women_img_2)
+    ImageView womenImg2;
+    @Bind(R.id.women_img_3)
+    ImageView womenImg3;
+
+    @Bind(R.id.women_name_1)
+    ImageView womenName1;
+    @Bind(R.id.women_name_2)
+    ImageView womenName2;
+    @Bind(R.id.women_name_3)
+    ImageView womenName3;
+
+    @Bind(R.id.all_img_1)
+    ImageView allImg1;
+    @Bind(R.id.all_img_2)
+    ImageView allImg2;
+    @Bind(R.id.all_img_3)
+    ImageView allImg3;
+
+    @Bind(R.id.all_name_1)
+    ImageView allName1;
+    @Bind(R.id.all_name_2)
+    ImageView allName2;
+    @Bind(R.id.all_name_3)
+    ImageView allName3;
+
+
+
+
     private Gson mGson;
 
-    private MultiItemTypeAdapter mAdapter;
-    private SimpleResponseListener<String> simpleResponseListener;
-
-    private static final int REQUEST_NEARBY_USER = 777;
-
+    private CommonAdapter mAdapter;
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
@@ -80,7 +105,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
     public MultiTransformation transformation;
     private RequestManager mRequestManager;
-    private ArrayList<Object> nearbyUserList = new ArrayList<>();
+    private ArrayList<NearbyPhotoBean.DataBean.UserPhotoBean> nearbyUserPhotoList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -100,26 +125,63 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     }
 
 
+    @OnClick({  R.id.women_img_more,R.id.all_img_more })
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.women_img_more:
+                break;
+            case R.id.all_img_more:
+                break;
+            default:
+                break;
+
+
+
+        }
+
+    }
+
+
+
     private void initView() {
-
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-
-        mAdapter = new MultiItemTypeAdapter<>(getActivity(), nearbyUserList);
-        mAdapter.addItemViewDelegate(new UserInfoDelegate());
-        mAdapter.addItemViewDelegate(new UserPhotoDelegate());
-        mRecyclerView.setAdapter(mAdapter);
-
-
         //图片加圆角  注：不能在xml直接使用 centerCrop
         transformation = new MultiTransformation(
                 new CenterCrop(getContext()),
                 new RoundedCornersTransformation(getContext(), 10, 0, RoundedCornersTransformation.CornerType.ALL)
 
 
-
         );
-//.bitmapTransform(new CenterCrop(mContext),new RoundedCornersTransformation(mContext, radius, 0))
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mAdapter = new CommonAdapter<NearbyPhotoBean.DataBean.UserPhotoBean>(getActivity(), R.layout.fragment_nearby_item, nearbyUserPhotoList) {
+
+            @Override
+            protected void convert(ViewHolder holder, final NearbyPhotoBean.DataBean.UserPhotoBean userPhotoBean, int position) {
+
+                ImageView imageView = holder.getView(R.id.iv_item_test);
+
+                mRequestManager
+                        .load(userPhotoBean.getUrlImg())
+                        .bitmapTransform(transformation)
+                        .into(imageView);
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                        intent.putExtra(USERID, userPhotoBean.getUserId());
+
+                        getActivity().startActivity(intent);
+                    }
+                });
+
+
+            }
+        };
+
+
+        mRecyclerView.setAdapter(mAdapter);
+
+
+
     }
 
 
@@ -136,75 +198,56 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore(500);
+                refreshlayout.finishLoadmore(200);
             }
         });
     }
 
 
     private void doRequest() {
-
-        simpleResponseListener = new SimpleResponseListener<String>() {
+        NearByUserService nearByUserService= new NearByUserService(getActivity());
+        nearByUserService.requestNearbyPhoto((String) (SPUtils.get(getActivity(), ADDRESS, "")), myLatitude, myLongitude, new MyCallBack() {
             @Override
-            public void onSucceed(int what, Response<String> response) {
-                switch (what) {
-                    case REQUEST_NEARBY_USER:
-                        mRefreshLayout.finishRefresh();
-                        parsePushUser(response.get());
-                        break;
-                    default:
-                        break;
-
-                }
+            public void onSuccess(Object o) {
+                List<NearbyPhotoBean.DataBean.UserPhotoBean> list= (List<NearbyPhotoBean.DataBean.UserPhotoBean>) o;
+                nearbyUserPhotoList.clear();
+                nearbyUserPhotoList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+                mRefreshLayout.finishRefresh();
 
             }
 
             @Override
-            public void onFailed(int what, Response response) {
-                switch (what) {
-                    case REQUEST_NEARBY_USER:
+            public void onFail(String mistakeInfo) {
+                mRefreshLayout.finishRefresh();
 
-
-                        mRefreshLayout.finishRefresh();
-                        break;
-                    default:
-                        break;
-
-                }
             }
-        };
-
-        Request<String> nearbyUsersRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/photoNearHome", RequestMethod.POST);
-
-//        String token=(String) SPUtils.get(getActivity(), GlobalConstants.TOKEN, "");
-//        String userId=(String) SPUtils.get(getActivity(), GlobalConstants.USERID, "");
-//        String sex=(String) SPUtils.get(getActivity(), GlobalConstants.SET_SEX, "All");
-//        String r=((int) SPUtils.get(getActivity(), GlobalConstants.SET_DISTANCE, 10)) * 1000 + "";
-//        String agemin=(int) (float) SPUtils.get(getActivity(), GlobalConstants.SET_MINAGE, 0.0f) + "";
-//        String intageMax=(int) (float) SPUtils.get(getActivity(), GlobalConstants.SET_MAXAGE, 99.0f) + "";
-//        double lon=myLongitude;
-//        double lat=myLatitude;
+        });
 
 
 
-
-        nearbyUsersRequest.add("access_token", (String) SPUtils.get(getActivity(), GlobalConstants.TOKEN, ""));
-//        final String userId, String sex, String radius, String ageMin, String ageMax, String lon, String lat
-        nearbyUsersRequest.add("userId", (String) SPUtils.get(getActivity(), USERID, ""));
-//        userRequest.add("userId", "ee59fb2659654db69352fd34f85d642c");
-        nearbyUsersRequest.add("sex", (String) SPUtils.get(getActivity(), GlobalConstants.SET_SEX, "All"));
-        nearbyUsersRequest.add("radius", ((int) SPUtils.get(getActivity(), GlobalConstants.SET_DISTANCE, 10)) * 1000 + "");
-//        Log.i("TAB", "userService: "+(float)SPUtils.get(mContext,GlobalConstants.SET_MINAGE,0.0f));
-
-        nearbyUsersRequest.set("ageMin", (int) (float) SPUtils.get(getActivity(), GlobalConstants.SET_MINAGE, 0.0f) + "");
-
-        nearbyUsersRequest.add("ageMax", (int) (float) SPUtils.get(getActivity(), GlobalConstants.SET_MAXAGE, 99.0f) + "");
-        nearbyUsersRequest.add("lon", myLongitude+"");
-        nearbyUsersRequest.add("lat", myLatitude+"");
-
-        RequestServer.getInstance().request(REQUEST_NEARBY_USER, nearbyUsersRequest, simpleResponseListener);
 
     }
+
+    public void setGirl(List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list){
+        if(list.size()>0){
+
+        }
+        if(list.size()>1){
+
+        }
+        if(list.size()>2){
+
+        }
+
+    }
+
+    public void setAll(List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list){
+
+
+
+    }
+
 
 
     //定位
@@ -223,25 +266,6 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
-    }
-
-
-    /**
-     * 解析推送用户
-     *
-     * @param json
-     */
-    private void parsePushUser(String json) {
-
-        NearbyUsersBean nearbyUsersBean = mGson.fromJson(json, NearbyUsersBean.class);
-        List<NearbyUsersBean.DataBean.UserInfoListBean> userInfoList = nearbyUsersBean.getData().getUserInfoList();
-        List<NearbyUsersBean.DataBean.UserPhotoListBean> userPhotoList = nearbyUsersBean.getData().getUserPhotoList();
-
-        nearbyUserList.clear();
-        nearbyUserList.addAll(userPhotoList);
-        nearbyUserList.addAll(userInfoList);
-        mAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -272,89 +296,6 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     }
 
 
-    public class UserPhotoDelegate implements ItemViewDelegate<Object> {
-        @Override
-        public int getItemViewLayoutId() {
-            return R.layout.fragment_nearby_item;
-        }
-
-        @Override
-        public boolean isForViewType(Object item, int position) {
-            return item instanceof NearbyUsersBean.DataBean.UserPhotoListBean;
-        }
-
-        @Override
-        public void convert(ViewHolder holder, Object o, int position) {
-
-            final NearbyUsersBean.DataBean.UserPhotoListBean userPhotoListBean = (NearbyUsersBean.DataBean.UserPhotoListBean) o;
-            ImageView imageView = holder.getView(R.id.iv_item_test);
-            ImageView videoTag = holder.getView(R.id.iv_main_fragment_item_play);
-
-            if (userPhotoListBean.getUrlVideo().equals("http://my-photo.lacoorent.com/null")) {
-                videoTag.setVisibility(View.GONE);
-                mRequestManager
-                        .load(userPhotoListBean.getUrlImg())
-
-                        .bitmapTransform(transformation)
-                        .into(imageView);
-            } else {
-                videoTag.setVisibility(View.VISIBLE);
-                mRequestManager.load(userPhotoListBean.getUrlFirst())
-                        .bitmapTransform(transformation)
-                        .into(imageView);
-            }
-            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
-                    intent.putExtra(USERID,userPhotoListBean.getUserId());
-
-                    getActivity().startActivity(intent);
-                }
-            });
-
-        }
-
-    }
-
-    public class UserInfoDelegate implements ItemViewDelegate<Object> {
-        @Override
-        public int getItemViewLayoutId() {
-            return R.layout.fragment_nearby_item;
-        }
-
-        @Override
-        public boolean isForViewType(Object item, int position) {
-            return item instanceof NearbyUsersBean.DataBean.UserInfoListBean;
-        }
-
-        @Override
-        public void convert(ViewHolder holder, Object o, int position) {
-
-            final NearbyUsersBean.DataBean.UserInfoListBean userInfoListBean = (NearbyUsersBean.DataBean.UserInfoListBean) o;
-            ImageView imageView = holder.getView(R.id.iv_item_test);
-            ImageView videoTag = holder.getView(R.id.iv_main_fragment_item_play);
-
-            videoTag.setVisibility(View.GONE);
-            mRequestManager
-                    .load(userInfoListBean.getImgUrl())
-                    .bitmapTransform(transformation)
-                    .into(imageView);
-
-
-            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
-                    intent.putExtra(USERID,userInfoListBean.getUserId());
-
-                    getActivity().startActivity(intent);
-                }
-            });
-        }
-
-
-    }
 
 
 }

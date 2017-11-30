@@ -553,7 +553,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         commentForReplyRequest.add("forunId", forumId);
         commentForReplyRequest.add("commentId", commentId);
         commentForReplyRequest.add("replyText", replyForUserText);
-        commentForReplyRequest.add("userName", (String) SPUtils.get(context, GlobalConstants.NAME, ""));
+        commentForReplyRequest.add("userName", (String) SPUtils.get(context, GlobalConstants.USERNAME, ""));
         NoHttp.getRequestQueueInstance().add(COMMENT_FOR_REPLY, commentForReplyRequest, this);
     }
 

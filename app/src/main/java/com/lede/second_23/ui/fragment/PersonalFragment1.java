@@ -45,6 +45,8 @@ import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
 /**
  * Created by ld on 17/10/26.
@@ -70,6 +72,8 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
     ImageView boyOrGirl;
     @Bind(R.id.tv_personfragment_username)
     TextView userName;
+    @Bind(R.id.vip_logo)
+    ImageView vipLogo;
     @Bind(R.id.tv_personfragment_sign)
     TextView userSign;
     @Bind(R.id.ctiv_personfragment_userimg)
@@ -196,6 +200,12 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
         instance=this;
         mGson = new Gson();
         context = getActivity();
+        String vipStatus= (String) SPUtils.get(context,VIPSTATUS,"");
+        if(vipStatus.equals(NOTOVERDUE)){
+            vipLogo.setVisibility(View.VISIBLE);
+        }else{
+            vipLogo.setVisibility(View.GONE);
+        }
 
         initView();
         initEvent();
@@ -208,6 +218,9 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
 
     private void initView() {
+
+
+
         fragmentList = new ArrayList<>();
 
         if (personalFragmentMe == null) {
