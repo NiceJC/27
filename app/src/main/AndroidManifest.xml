@@ -288,6 +288,8 @@
         <activity android:name=".ui.activity.VIPSettingActivity"/>
         <activity android:name=".ui.activity.VIPIntroduceActivity"/>
 
+        <activity android:name=".ui.activity.MateActivity"/>
+
 
 
         <!--支付宝 -->

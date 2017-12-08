@@ -28,8 +28,8 @@ public class GlobalConstants {
     //网络访问
 
 //    public static final String URL = "http://101.37.85.56:8088";  //测试
-//    public static final String URL = "http://192.168.31.134:8080"; //联调环境
-    public static final String URL = "http://api.ledeseven.com";
+    public static final String URL = "http://192.168.31.134:8080"; //联调环境
+//    public static final String URL = "http://api.ledeseven.com";
 //
 
 
@@ -90,9 +90,14 @@ public class GlobalConstants {
     public static final String IMAGE_URLS="imageURL";
     public static final String POSITION="position";
     public static final String ADDRESS="address";
+    public static final String ISGIRL="ISGIRL";
+
+
     public static final int APPID=1106236230;
 
 
+
+    public static final String VIRIFYMARRY="VIRIFYMARRY";
     public static final String DECLARATION="DECLARATION";
     public static final String DECLARATIONMAIN="DECLARATIONMAIN";
     public static final String TIME="TIME";

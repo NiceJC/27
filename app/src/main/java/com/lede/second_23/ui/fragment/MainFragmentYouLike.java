@@ -9,37 +9,44 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.SameCityUserBean;
-import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.service.MatingService;
+import com.lede.second_23.service.PushUserService;
+import com.lede.second_23.ui.activity.MateActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.UiUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
 import com.yolanda.nohttp.rest.SimpleResponseListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.VIPPUSHSEX;
+import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.ALL;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOPEN;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
 /**
  * Created by ld on 17/10/19.
@@ -52,6 +59,8 @@ public class MainFragmentYouLike extends Fragment {
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @Bind(R.id.mate)
+    Button mate;
 
     private Gson mGson;
 
@@ -66,7 +75,8 @@ public class MainFragmentYouLike extends Fragment {
     private boolean isRefresh = true;
 
     private boolean isHasNextPage = true;
-
+    private int choosenSex ;
+    private String VIPStatus;
 
     private ArrayList<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> pushUserList = new ArrayList<>();
 
@@ -79,6 +89,9 @@ public class MainFragmentYouLike extends Fragment {
         ButterKnife.bind(this, view);
 
         mGson = new Gson();
+
+
+
         initView();
         initEvent();
         toRefresh();
@@ -136,6 +149,36 @@ public class MainFragmentYouLike extends Fragment {
     public void initEvent() {
 
 
+        mate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MatingService matingService=new MatingService(getActivity());
+                matingService.requestVerify(new MyCallBack() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        mate.setEnabled(true);
+
+                        int times= (int) o;
+                        Intent intent=new Intent(getActivity(), MateActivity.class);
+
+                        intent.putExtra("times",times);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFail(String mistakeInfo) {
+                        mate.setEnabled(true);
+
+                        Toast.makeText(getActivity(),mistakeInfo,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                mate.setEnabled(false);
+
+
+            }
+        });
+
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -176,75 +219,43 @@ public class MainFragmentYouLike extends Fragment {
     }
 
     private void doRequest(int page) {
-
-        simpleResponseListener = new SimpleResponseListener<String>() {
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                switch (what) {
-                    case REQUEST_PUSHED_USER:
-
-
-                        parsePushUser(response.get());
-                        mRefreshLayout.finishLoadmore();
-                        mRefreshLayout.finishRefresh();
-
-                        break;
-                    default:
-                        break;
-
-                }
-
-            }
-
-            @Override
-            public void onFailed(int what, Response response) {
-                switch (what) {
-                    case REQUEST_PUSHED_USER:
-
-                        mRefreshLayout.finishRefresh();
-                        mRefreshLayout.finishLoadmore();
-
-                        break;
-                    default:
-                        break;
-
-                }
-            }
-        };
-
-        pushUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/newPushByUser", RequestMethod.POST);
-        pushUserRequest.add("access_token", (String) SPUtils.get(getActivity(), GlobalConstants.TOKEN, ""));
-
-
-        pushUserRequest.add("pageNum", page);
-        pushUserRequest.add("pageSize", PAGE_SIZE);
-
-        RequestServer.getInstance().request(REQUEST_PUSHED_USER, pushUserRequest, simpleResponseListener);
-
-
-    }
-
-
-    /**
-     * 解析推送用户
-     *
-     * @param json
-     */
-    private void parsePushUser(String json) {
-        SameCityUserBean sameCityUserBean = mGson.fromJson(json, SameCityUserBean.class);
-        if (isRefresh) {
-            pushUserList.clear();
-            currentPage = 1;
-            isHasNextPage = true;
-        } else {
-            if (sameCityUserBean.getData().getUserInfoList().getList().size() == 0) {
-                isHasNextPage = false;
-            } else {
-                currentPage++;
-            }
+        VIPStatus = (String) SPUtils.get(getActivity(), VIPSTATUS, NOTOPEN);
+        choosenSex = (int) SPUtils.get(getActivity(), VIPPUSHSEX,ALL);
+        if(!VIPStatus.equals(NOTOVERDUE)){
+            //只要用户不是会员  推荐的就是所有性别用户
+            choosenSex=ALL;
         }
-        pushUserList.addAll(sameCityUserBean.getData().getUserInfoList().getList());
-        mAdapter.notifyDataSetChanged();
+
+        PushUserService pushUserService=new PushUserService(getActivity());
+        pushUserService.requestPushUser(choosenSex, page, PAGE_SIZE, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
+                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
+                if (isRefresh) {
+                    pushUserList.clear();
+                    currentPage = 1;
+                    isHasNextPage = true;
+                } else {
+                    if (list.size() == 0) {
+                        isHasNextPage = false;
+                    } else {
+                        currentPage++;
+                    }
+                }
+
+                pushUserList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
+            }
+        });
+
     }
 
 

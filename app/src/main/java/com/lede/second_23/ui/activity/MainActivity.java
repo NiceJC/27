@@ -111,6 +111,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         initView();
         requestPhoto();
         checkVIP();
+
     }
 
     @Override
@@ -211,10 +212,25 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
             }
         });
-
-
     }
 
+//    private void verifyMarry(){
+//        MatingService matingService=new MatingService(this);
+//        matingService.requestVerify(new MyCallBack() {
+//            @Override
+//            public void onSuccess(Object o) {
+//
+//            }
+//
+//            @Override
+//            public void onFail(String mistakeInfo) {
+//
+//            }
+//        });
+
+
+
+//    }
 
     /**
      * 检测图片墙是否有照片

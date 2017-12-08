@@ -12,6 +12,7 @@ import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.StatusBarUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +47,9 @@ public class ConversationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+        StatusBarUtil.StatusBarLightMode(this);
+
+
         ButterKnife.bind(this);
 //        RongIM.getInstance().refreshUserInfoCache();
         Intent intent=getIntent();

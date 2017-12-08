@@ -115,16 +115,16 @@
                                 android:orientation="vertical">
 
                                 <LinearLayout
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content">
                                     <TextView
+
                                         android:id="@+id/tv_personfragment_username"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_centerHorizontal="true"
                                         android:layout_margin="10dp"
-                                        android:layout_marginTop="10dp"
                                         android:textColor="#000000"
 
                                         android:textSize="26sp"

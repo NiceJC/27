@@ -13,6 +13,7 @@ import com.lede.second_23.R;
 import com.lede.second_23.adapter.ConversationListAdapterEx;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.StatusBarUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +40,9 @@ public class ConversationListDynamicActivtiy extends AppCompatActivity {
             MyApplication.instance.getRongIMTokenService();
         }
         setContentView(R.layout.activity_conversation_list_dynamic_activtiy);
+
+        StatusBarUtil.StatusBarLightMode(this);
+
         ConversationListFragment fragment = new ConversationListFragment();
         fragment.setAdapter(new ConversationListAdapterEx(RongContext.getInstance()));
         Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -66,97 +66,30 @@
 
 
                             <ImageView
+                                android:layout_marginLeft="22dp"
                                 android:layout_marginTop="15dp"
                                 android:src="@mipmap/near_girl"
-                                android:layout_gravity="center"
-                                android:layout_width="match_parent"
+                                android:layout_gravity="left"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
                             <LinearLayout
 
                                 android:layout_marginTop="15dp"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="85dp"
                                 android:orientation="horizontal">
 
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/recyclerView_girl"
+                                    android:layout_weight="3"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent">
+
+                                </android.support.v7.widget.RecyclerView>
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/women_img_1"
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:layout_marginTop="10dp"
-                                        android:textSize="12sp"
-                                        android:id="@+id/women_name_1"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/women_img_2"
-
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:id="@+id/women_name_2"
-
-                                        android:textSize="12sp"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/women_img_3"
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:id="@+id/women_name_3"
-                                        android:textSize="12sp"
-
-                                        android:layout_marginTop="10dp"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:orientation="vertical">
@@ -181,116 +114,46 @@
                                 </LinearLayout>
                             </LinearLayout>
                             <ImageView
+                                android:layout_marginLeft="22dp"
                                 android:layout_marginTop="17dp"
                                 android:src="@mipmap/near_all"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
                             <LinearLayout
 
                                 android:layout_marginTop="15dp"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="85dp"
                                 android:orientation="horizontal">
 
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/recyclerView_all"
+                                    android:layout_weight="3"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent">
+
+                                </android.support.v7.widget.RecyclerView>
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
                                     <ImageView
-                                        android:id="@+id/all_img_1"
 
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:id="@+id/all_name_1"
-
-                                        android:textSize="12sp"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/all_img_2"
-
-
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:id="@+id/all_name_2"
-
-
-                                        android:textSize="12sp"
-                                        android:layout_marginTop="10dp"                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/all_img_3"
-
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@mipmap/head_defaut" />
-
-                                    <TextView
-                                        android:id="@+id/all_name_3"
-
-
-                                        android:textSize="12sp"
-                                        android:layout_marginTop="10dp"                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="暂无" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <ImageView
                                         android:id="@+id/all_img_more"
-
                                         android:layout_width="60dp"
                                         android:layout_height="60dp"
                                         android:src="@mipmap/near_more" />
 
                                     <TextView
 
-
                                         android:textSize="12sp"
-                                        android:layout_marginTop="10dp"                                        android:layout_width="match_parent"
+
+                                        android:layout_marginTop="10dp"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:text="更多" />
@@ -302,8 +165,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginTop="18dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="15dp"
                                 android:background="#dddddd" />
 
                         </LinearLayout>
@@ -325,4 +188,8 @@
 
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</LinearLayout>
+
+
+
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -29,6 +30,8 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.NearByUserService;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
+import com.lede.second_23.ui.activity.SameCityActivity;
+import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.T;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -43,9 +46,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
+import static com.lede.second_23.global.GlobalConstants.ISGIRL;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -61,40 +66,20 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.women_img_1)
-    ImageView womenImg1;
-    @Bind(R.id.women_img_2)
-    ImageView womenImg2;
-    @Bind(R.id.women_img_3)
-    ImageView womenImg3;
 
-    @Bind(R.id.women_name_1)
-    ImageView womenName1;
-    @Bind(R.id.women_name_2)
-    ImageView womenName2;
-    @Bind(R.id.women_name_3)
-    ImageView womenName3;
-
-    @Bind(R.id.all_img_1)
-    ImageView allImg1;
-    @Bind(R.id.all_img_2)
-    ImageView allImg2;
-    @Bind(R.id.all_img_3)
-    ImageView allImg3;
-
-    @Bind(R.id.all_name_1)
-    ImageView allName1;
-    @Bind(R.id.all_name_2)
-    ImageView allName2;
-    @Bind(R.id.all_name_3)
-    ImageView allName3;
-
+    @Bind(R.id.recyclerView_girl)
+    RecyclerView girlRecyclerView;
+    @Bind(R.id.recyclerView_all)
+    RecyclerView allRecyclerView;
 
 
 
     private Gson mGson;
 
     private CommonAdapter mAdapter;
+    private CommonAdapter girlAdapter;
+    private CommonAdapter allAdapter;
+
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
@@ -107,6 +92,11 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     private RequestManager mRequestManager;
     private ArrayList<NearbyPhotoBean.DataBean.UserPhotoBean> nearbyUserPhotoList = new ArrayList<>();
 
+    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList=new ArrayList<>();
+    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> allList=new ArrayList<>();
+
+    String address;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -117,6 +107,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
         mRequestManager = Glide.with(getContext());
         mGson = new Gson();
+        address= (String) SPUtils.get(getActivity(), ADDRESS, "");
         initView();
         initEvent();
         getLocation();
@@ -129,8 +120,16 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     public void onClick(View view){
         switch (view.getId()){
             case R.id.women_img_more:
+                Intent intent=new Intent(getActivity(), SameCityActivity.class);
+                intent.putExtra(ADDRESS,address);
+                intent.putExtra(ISGIRL,true);
+                startActivity(intent);
                 break;
             case R.id.all_img_more:
+                Intent intent2=new Intent(getActivity(), SameCityActivity.class);
+                intent2.putExtra(ADDRESS,address);
+                intent2.putExtra(ISGIRL,false);
+                startActivity(intent2);
                 break;
             default:
                 break;
@@ -151,14 +150,14 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
 
         );
+
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mAdapter = new CommonAdapter<NearbyPhotoBean.DataBean.UserPhotoBean>(getActivity(), R.layout.fragment_nearby_item, nearbyUserPhotoList) {
-
             @Override
             protected void convert(ViewHolder holder, final NearbyPhotoBean.DataBean.UserPhotoBean userPhotoBean, int position) {
 
                 ImageView imageView = holder.getView(R.id.iv_item_test);
-
                 mRequestManager
                         .load(userPhotoBean.getUrlImg())
                         .bitmapTransform(transformation)
@@ -168,7 +167,6 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
                         intent.putExtra(USERID, userPhotoBean.getUserId());
-
                         getActivity().startActivity(intent);
                     }
                 });
@@ -176,17 +174,61 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
             }
         };
-
-
         mRecyclerView.setAdapter(mAdapter);
 
+
+        girlRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        girlAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, girlList) {
+            @Override
+            protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
+               ImageView imageView=holder.getView(R.id.user_icon);
+                TextView textView=holder.getView(R.id.user_nickName);
+                mRequestManager.load(userInfoListBean.getImgUrl())
+                        .bitmapTransform(new CropCircleTransformation(getContext()))
+                        .into(imageView);
+                textView.setText(userInfoListBean.getNickName());
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), UserInfoActivty.class);
+                        intent.putExtra(USERID, userInfoListBean.getUserId());
+                        startActivity(intent);
+                    }
+                });
+
+            }
+        };
+        girlRecyclerView.setAdapter(girlAdapter);
+
+
+        allRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        allAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, allList) {
+            @Override
+            protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
+                ImageView imageView=holder.getView(R.id.user_icon);
+                TextView textView=holder.getView(R.id.user_nickName);
+                mRequestManager.load(userInfoListBean.getImgUrl())
+                        .bitmapTransform(new CropCircleTransformation(getContext()))
+                        .into(imageView);
+                textView.setText(userInfoListBean.getNickName());
+                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), UserInfoActivty.class);
+                        intent.putExtra(USERID, userInfoListBean.getUserId());
+                        startActivity(intent);
+                    }
+                });
+
+            }
+        };
+        allRecyclerView.setAdapter(allAdapter);
 
 
     }
 
 
     public void initEvent() {
-
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -205,8 +247,9 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
 
     private void doRequest() {
+
         NearByUserService nearByUserService= new NearByUserService(getActivity());
-        nearByUserService.requestNearbyPhoto((String) (SPUtils.get(getActivity(), ADDRESS, "")), myLatitude, myLongitude, new MyCallBack() {
+        nearByUserService.requestNearbyPhoto(address, myLatitude, myLongitude, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 List<NearbyPhotoBean.DataBean.UserPhotoBean> list= (List<NearbyPhotoBean.DataBean.UserPhotoBean>) o;
@@ -225,28 +268,46 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         });
 
 
+        nearByUserService.requestCityGirl(address, 1, 3, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
+
+                girlList.clear();
+                girlList.addAll(list);
+                girlAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
+
+        nearByUserService.requestCityAll(address, 1,3, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
+
+
+                allList.clear();
+                allList.addAll(list);
+                allAdapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
 
 
     }
 
-    public void setGirl(List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list){
-        if(list.size()>0){
 
-        }
-        if(list.size()>1){
-
-        }
-        if(list.size()>2){
-
-        }
-
-    }
-
-    public void setAll(List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list){
-
-
-
-    }
 
 
 

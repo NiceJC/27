@@ -33,10 +33,10 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
+import static com.lede.second_23.global.GlobalConstants.ISGIRL;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
 import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
-import static io.rong.imlib.statistics.UserData.username;
 
 /**
  * Created by ld on 17/11/16.
@@ -66,6 +66,7 @@ public class PersonalFragmentMe extends Fragment {
     private Gson mGson;
     private SimpleResponseListener<String> simpleResponseListener;
     private String userId;
+    private String userName;
     private RequestManager requestManager;
     private UserInfoBean.DataBean.InfoBean userInfo;
     private String address;
@@ -105,6 +106,7 @@ public class PersonalFragmentMe extends Fragment {
                 if(address!=null&&!address.trim().equals("")){
                     Intent intent=new Intent(getActivity(), SameCityActivity.class);
                     intent.putExtra(ADDRESS,address);
+                    intent.putExtra(ISGIRL,false);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getActivity(),"暂无位置信息",Toast.LENGTH_SHORT).show();
@@ -112,7 +114,7 @@ public class PersonalFragmentMe extends Fragment {
                 break;
             case R.id.vip_message_click:
 
-                RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.PRIVATE, userId, username);
+                RongIM.getInstance().startConversation(getActivity(), Conversation.ConversationType.PRIVATE, userId, userName);
 
                 break;
 
@@ -160,6 +162,7 @@ public class PersonalFragmentMe extends Fragment {
 
     public void setUserInfo() {
 
+        userName=userInfo.getNickName();
         address=userInfo.getAddress();
         userLocation.setText(userInfo.getAddress());
         userAge.setText(userInfo.getHobby());

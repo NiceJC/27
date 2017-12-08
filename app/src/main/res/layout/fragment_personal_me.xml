@@ -151,11 +151,9 @@
 
 
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+
         <LinearLayout
+            android:layout_marginTop="40dp"
             android:visibility="gone"
             android:id="@+id/vip_message"
             android:orientation="vertical"

@@ -205,15 +205,6 @@ public class PayActivity extends BaseActivity {
     };
 
 
-
-    //将支付结果上报服务器
-    public void vipvifyInfo(){
-
-
-
-
-    }
-
     public void applyVip(){
 
         VIPService VIPService =new VIPService(PayActivity.this);
@@ -232,7 +223,7 @@ public class PayActivity extends BaseActivity {
 
     }
 
-    //还不是VIP的提示框
+    //VIP开通成功的提示框
     private void showVIPSuccessDialog() {
         DialogPlus dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.vip_open_success))
@@ -269,7 +260,7 @@ public class PayActivity extends BaseActivity {
         vipService.verifyVIPInfo(userId, backTrade_no, backTotal_fee, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
-                Toast.makeText(PayActivity.this,"上报成功",Toast.LENGTH_SHORT).show();
+                applyVip();
             }
 
             @Override

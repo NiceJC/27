@@ -149,15 +149,15 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         layoutInflater = LayoutInflater.from(context);
         requestQueue = GlobalConstants.getRequestQueue();
         initData();
-        initHead();
+//        initHead();
         initView();
     }
 
-    private void initHead() {
-        Request<String> headRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/newPushUser", RequestMethod.POST);
-        headRequest.add("access_token", (String) SPUtils.get(context, GlobalConstants.TOKEN, ""));
-        requestQueue.add(PUSH_USER, headRequest, this);
-    }
+//    private void initHead() {
+//        Request<String> headRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/push/newPushUser", RequestMethod.POST);
+//        headRequest.add("access_token", (String) SPUtils.get(context, GlobalConstants.TOKEN, ""));
+//        requestQueue.add(PUSH_USER, headRequest, this);
+//    }
 
     private void initView() {
         forumAdapter = new CommonAdapter<AllForumBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_forum_show, forumList) {
@@ -475,7 +475,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 forumList.clear();
                 pageNum = 1;
                 initData();
-                initHead();
+//                initHead();
             }
 
             @Override
@@ -625,58 +625,58 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
         //装饰者设计模式，把原来的adapter传入
         headerAndFooterWrapper = new HeaderAndFooterWrapper(myCommonAdapter);
         //添加头布局View对象
-        headerAndFooterWrapper.addHeaderView(setHeadView());
+//        headerAndFooterWrapper.addHeaderView(setHeadView());
 
         prvForumActivityShow.getRefreshableView().setLayoutManager(linearLayoutManager);
         prvForumActivityShow.getRefreshableView().setAdapter(headerAndFooterWrapper);
     }
 
-    /**
-     * 初始化头视图
-     *
-     * @return
-     */
-    private View setHeadView() {
-        layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.layout_all_forum_head, null);
-        RecyclerView rv_head_show = (RecyclerView) view.findViewById(R.id.rv_all_forum_head_show);
-        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfoListBean>(context, R.layout.item_all_forum_head, pushUserList) {
-
-            @Override
-            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfoListBean userInfosBean, int position) {
-                DIYImageView diyiv_userimg = holder.getView(R.id.diyiv_all_forum_head_userimg);
-                TextView tv_nickname = holder.getView(R.id.tv_all_forum_head_nickname);
-                LinearLayout ll_bg = holder.getView(R.id.ll_all_forum_head_bg);
-                Glide.with(context)
-                        .load(userInfosBean.getImgUrl())
-                        .into(diyiv_userimg);
-                tv_nickname.setText(userInfosBean.getNickName());
-//                if (position == 0 || position == 3 || position == 6 || position == 9) {
-//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item1);
-//                } else if (position == 1 || position == 4 || position == 7) {
-//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item2);
-//                } else {
-//                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item3);
-//                }
-            }
-        };
-        headAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(context, UserInfoActivty.class);
-                intent.putExtra(USERID, pushUserList.get(position).getUserId());
-                startActivity(intent);
-            }
-
-            @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                return false;
-            }
-        });
-        rv_head_show.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        rv_head_show.setAdapter(headAdapter);
-        return view;
-    }
+//    /**
+//     * 初始化头视图
+//     *
+//     * @return
+//     */
+//    private View setHeadView() {
+//        layoutInflater = LayoutInflater.from(context);
+//        View view = layoutInflater.inflate(R.layout.layout_all_forum_head, null);
+//        RecyclerView rv_head_show = (RecyclerView) view.findViewById(R.id.rv_all_forum_head_show);
+//        headAdapter = new CommonAdapter<PushUserBean.DataBean.UserInfoListBean>(context, R.layout.item_all_forum_head, pushUserList) {
+//
+//            @Override
+//            protected void convert(ViewHolder holder, PushUserBean.DataBean.UserInfoListBean userInfosBean, int position) {
+//                DIYImageView diyiv_userimg = holder.getView(R.id.diyiv_all_forum_head_userimg);
+//                TextView tv_nickname = holder.getView(R.id.tv_all_forum_head_nickname);
+//                LinearLayout ll_bg = holder.getView(R.id.ll_all_forum_head_bg);
+//                Glide.with(context)
+//                        .load(userInfosBean.getImgUrl())
+//                        .into(diyiv_userimg);
+//                tv_nickname.setText(userInfosBean.getNickName());
+////                if (position == 0 || position == 3 || position == 6 || position == 9) {
+////                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item1);
+////                } else if (position == 1 || position == 4 || position == 7) {
+////                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item2);
+////                } else {
+////                    ll_bg.setBackgroundResource(R.drawable.shape_linearlayout_forum_head_item3);
+////                }
+//            }
+//        };
+//        headAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                Intent intent = new Intent(context, UserInfoActivty.class);
+//                intent.putExtra(USERID, pushUserList.get(position).getUserId());
+//                startActivity(intent);
+//            }
+//
+//            @Override
+//            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                return false;
+//            }
+//        });
+//        rv_head_show.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+//        rv_head_show.setAdapter(headAdapter);
+//        return view;
+//    }
 
     /**
      * 全国微博点赞

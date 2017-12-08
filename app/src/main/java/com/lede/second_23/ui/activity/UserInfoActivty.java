@@ -314,11 +314,15 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
                 switch (what) {
                     case REQUEST_USER_INFO:
                         mRefreshLayout.finishRefresh();
-                        parseUserInfo(response.get());
+                        if(!UserInfoActivty.this.isDestroyed()){
+                            parseUserInfo(response.get());
+                        }
+
                         break;
                     case REQUEST_USER_RELATION:
-
-                        parseIfConcerned(response.get());
+                        if(!UserInfoActivty.this.isDestroyed()){
+                            parseIfConcerned(response.get());
+                        }
                         break;
                     case REQUEST_CANCAL:
                         if(userInfo!=null){

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/mate_bg"
+    >
+
+    <ImageView
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="28dp"
+        android:id="@+id/back"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/back_bg" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+
+        android:gravity="center">
+
+        <ImageView
+            android:layout_centerInParent="true"
+
+            android:id="@+id/mating_gif"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/head_img"
+
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+
+            android:layout_centerInParent="true"
+            android:layout_gravity="center" />
+
+        <android.support.v7.widget.RecyclerView
+            android:paddingLeft="40dp"
+            android:layout_centerInParent="true"
+
+            android:visibility="gone"
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+
+
+            android:id="@+id/mate_before"
+            android:layout_gravity="center"
+            android:src="@mipmap/mate_font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/mating"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_centerInParent="true"
+                android:textColor="#dddddd"
+                android:text="匹配中"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+
+
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/mating_timer"
+                    android:gravity="center"
+                    android:layout_alignBottom="@+id/mating_1"
+                    android:text="0"
+                    android:textColor="#dddddd"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:textColor="#dddddd"
+                    android:text="s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <TextView
+
+            android:visibility="gone"
+            android:id="@+id/mate_no_result"
+            android:layout_centerInParent="true"
+            android:textColor="#dddddd"
+            android:text="暂无匹配结果"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+
+    </RelativeLayout>
+
+
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+        <ImageView
+
+            android:id="@+id/start_mate"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:src="@drawable/slector_mate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+
+            android:visibility="gone"
+            android:id="@+id/mate_result_bottom"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+
+                    android:id="@+id/to_refresh"
+                    android:src="@mipmap/refresh_mate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+
+                    android:id="@+id/remain_time_linear"
+                    android:layout_gravity="bottom"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:text="剩余"
+
+                        android:textColor="#ffffff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+
+
+                        android:id="@+id/remain_time"
+                        android:textColor="#ffffff"
+
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="#ffffff"
+
+                        android:text="次刷新"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/start_chat"
+                    android:src="@drawable/chat_mate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/to_apply_vip"
+                android:layout_marginTop="20dp"
+                android:textColor="#ffffff"
+                android:text="(开通会员不限制刷新次数，前去开通)"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <View
+
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+
+
+</LinearLayout>

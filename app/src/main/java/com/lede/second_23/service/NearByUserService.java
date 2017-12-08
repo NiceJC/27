@@ -144,11 +144,11 @@ public class NearByUserService {
     }
     public void requestCityAll(String address,int pageNum,int pageSize,MyCallBack myCallBack){
         this.cityAllCallBack=myCallBack;
-        cityGirlRequest= NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserByAddress", RequestMethod.POST);
-        cityGirlRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
-        cityGirlRequest.add("address",address);
-        cityGirlRequest.add("pageNum", pageNum);
-        cityGirlRequest.add("pageSize", pageSize);
+        cityAllRequest= NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserByAddress", RequestMethod.POST);
+        cityAllRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        cityAllRequest.add("address",address);
+        cityAllRequest.add("pageNum", pageNum);
+        cityAllRequest.add("pageSize", pageSize);
         RequestServer.getInstance().request(REQUEST_CITY_ALL, cityAllRequest, simpleResponseListener);
 
 
