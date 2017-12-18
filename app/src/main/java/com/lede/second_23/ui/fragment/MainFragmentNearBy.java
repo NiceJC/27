@@ -50,8 +50,9 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.ISGIRL;
+import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 
 /**
  * Created by ld on 17/10/19.
@@ -96,6 +97,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> allList=new ArrayList<>();
 
     String address;
+    String matchedSex="女";
 
     @Nullable
     @Override
@@ -108,6 +110,11 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         mRequestManager = Glide.with(getContext());
         mGson = new Gson();
         address= (String) SPUtils.get(getActivity(), ADDRESS, "");
+        String sex= (String) SPUtils.get(getActivity(),USER_SEX,"男");
+
+        if(sex.equals("女")){
+            matchedSex="男";
+        }
         initView();
         initEvent();
         getLocation();
@@ -120,15 +127,16 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
     public void onClick(View view){
         switch (view.getId()){
             case R.id.women_img_more:
+                //改为获取异性同城用户
                 Intent intent=new Intent(getActivity(), SameCityActivity.class);
                 intent.putExtra(ADDRESS,address);
-                intent.putExtra(ISGIRL,true);
+                intent.putExtra(SEXTYPE,matchedSex);
                 startActivity(intent);
                 break;
             case R.id.all_img_more:
                 Intent intent2=new Intent(getActivity(), SameCityActivity.class);
                 intent2.putExtra(ADDRESS,address);
-                intent2.putExtra(ISGIRL,false);
+                intent2.putExtra(SEXTYPE,"all");
                 startActivity(intent2);
                 break;
             default:
@@ -183,10 +191,16 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
                ImageView imageView=holder.getView(R.id.user_icon);
                 TextView textView=holder.getView(R.id.user_nickName);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
                 mRequestManager.load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(imageView);
                 textView.setText(userInfoListBean.getNickName());
+                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -207,10 +221,17 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
                 ImageView imageView=holder.getView(R.id.user_icon);
                 TextView textView=holder.getView(R.id.user_nickName);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
                 mRequestManager.load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(imageView);
                 textView.setText(userInfoListBean.getNickName());
+                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
+
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -268,7 +289,7 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         });
 
 
-        nearByUserService.requestCityGirl(address, 1, 3, new MyCallBack() {
+        nearByUserService.requestCitySingleSex(address,matchedSex, 1, 3, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;

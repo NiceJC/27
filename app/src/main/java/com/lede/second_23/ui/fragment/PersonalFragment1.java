@@ -42,6 +42,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.USERID;
@@ -367,6 +369,26 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
 
         RequestServer.getInstance().request(REQUEST_USER_INFO, userInfoRequest, simpleResponseListener);
 
+        /**
+         * 通过回调方式，获取所有未读消息数。即除了聊天室之外其它所有会话类型的未读消息数。
+         *
+         * @param callback 消息数的回调。
+         */
+        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer integer) {
+                if(integer>0){
+                    msgClick.setSelected(true);
+                }else{
+                    msgClick.setSelected(false);
+                }
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }
+        },Conversation.ConversationType.PRIVATE);
 
     }
 
@@ -388,6 +410,14 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
         } else {
             boyOrGirl.setSelected(true);
         }
+
+        if(userInfo.getTrueName()!=null&&userInfo.getTrueName().equals("1")){
+            vipLogo.setVisibility(View.VISIBLE);
+
+        }else{
+            vipLogo.setVisibility(View.GONE);
+        }
+
         userSign.setText(userInfo.getNote());
         Glide.with(getContext())
                 .load(userInfo.getImgUrl())
@@ -409,5 +439,26 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
         super.onResume();
         mRefreshLayout.isRefreshing();
         doRequest();
+        /**
+         * 通过回调方式，获取所有未读消息数。即除了聊天室之外其它所有会话类型的未读消息数。
+         *
+         * @param callback 消息数的回调。
+         */
+        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer integer) {
+                if(integer>0){
+                    msgClick.setSelected(true);
+                }else{
+                    msgClick.setSelected(false);
+                }
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }
+        },Conversation.ConversationType.PRIVATE);
+
     }
 }

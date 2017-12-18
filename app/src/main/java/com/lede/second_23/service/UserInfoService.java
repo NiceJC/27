@@ -7,14 +7,11 @@ import com.lede.second_23.bean.PersonalAlbumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
-import com.lede.second_23.utils.SPUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.Response;
 import com.yolanda.nohttp.rest.SimpleResponseListener;
-
-import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
  * Created by ld on 17/11/21.
@@ -76,7 +73,7 @@ public class UserInfoService {
                 }
             }
         };
-        userId = (String) SPUtils.get(mActivity, USERID, "");
+
         userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/showUserPhotoHome", RequestMethod.POST);
         userInfoRequest.add("userId", userId);
         userInfoRequest.add("pageNum", 1);

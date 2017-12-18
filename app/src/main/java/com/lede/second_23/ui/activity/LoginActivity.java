@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
         UserInfoBean userInfoBean = gson.fromJson(json, UserInfoBean.class);
 
         if (userInfoBean.getData().getInfo() == null) {
-            SPUtils.put(this, GlobalConstants.HEAD_IMG, "");
+            SPUtils.put(this, GlobalConstants.USER_HEAD_IMG, "");
 
             Intent intent = new Intent(this, EditRegisterInfoActivity.class);
             startActivity(intent);

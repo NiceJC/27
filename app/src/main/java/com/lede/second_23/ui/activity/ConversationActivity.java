@@ -22,6 +22,8 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
 
+import static com.lede.second_23.global.GlobalConstants.USERID;
+
 /**
  * 融云单聊页
  */
@@ -58,7 +60,12 @@ public class ConversationActivity extends AppCompatActivity {
         RongIM.setConversationBehaviorListener(new RongIM.ConversationBehaviorListener() {
             @Override
             public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-                return false;
+                Intent intent = new Intent(context, UserInfoActivty.class);
+                intent.putExtra(USERID, userInfo.getUserId());
+                startActivity(intent);
+
+                return true;
+
             }
 
             @Override
@@ -81,6 +88,10 @@ public class ConversationActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+
+
     }
 
     @OnClick({R.id.iv_conversation_activity_back})

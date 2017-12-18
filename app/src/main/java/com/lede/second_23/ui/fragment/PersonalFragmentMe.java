@@ -33,7 +33,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.ISGIRL;
+import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
 import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
@@ -106,7 +106,7 @@ public class PersonalFragmentMe extends Fragment {
                 if(address!=null&&!address.trim().equals("")){
                     Intent intent=new Intent(getActivity(), SameCityActivity.class);
                     intent.putExtra(ADDRESS,address);
-                    intent.putExtra(ISGIRL,false);
+                    intent.putExtra(SEXTYPE,"all");
                     startActivity(intent);
                 }else{
                     Toast.makeText(getActivity(),"暂无位置信息",Toast.LENGTH_SHORT).show();

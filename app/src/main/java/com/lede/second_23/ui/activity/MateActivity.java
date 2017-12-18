@@ -9,17 +9,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.MatchedUserBean;
 import com.lede.second_23.bean.NewMatingUserBean;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.MatingService;
+import com.lede.second_23.service.PushService;
 import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.StatusBarUtil;
@@ -43,8 +47,9 @@ import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-import static com.lede.second_23.global.GlobalConstants.HEAD_IMG;
-import static com.lede.second_23.global.GlobalConstants.SET_SEX;
+import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.USER_HEAD_IMG;
+import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
 import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
@@ -60,13 +65,15 @@ public class MateActivity extends BaseActivity {
     @Bind(R.id.head_img)
     ImageView headImageView;
 
+    @Bind(R.id.result_text)
+    TextView resultText;
     @Bind(R.id.mating_gif)
     ImageView matingGIF;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
     @Bind(R.id.start_mate)
-    ImageView mateButton;
+    Button mateButton;
 
     @Bind(R.id.mate_before)
     ImageView mateBeforeView;
@@ -106,6 +113,7 @@ public class MateActivity extends BaseActivity {
 
     private MatingService matingService;
 
+    private PushService pushService;
     private CommonAdapter adapter;
     private String matchedSex="女";
     private int pageNum=1;
@@ -118,14 +126,16 @@ public class MateActivity extends BaseActivity {
         StatusBarUtil.transparencyBar(this);
 
         matingService=new MatingService(this);
+        pushService=new PushService(this);
+
         ButterKnife.bind(this);
         mGson = new Gson();
-        headImgURl = (String) SPUtils.get(this, HEAD_IMG, "");
-        String sex= (String) SPUtils.get(this,SET_SEX,"");
+        headImgURl = (String) SPUtils.get(this, USER_HEAD_IMG, "");
+        String sex= (String) SPUtils.get(this,USER_SEX,"男");
 
         String vipstatus=(String)SPUtils.get(this,VIPSTATUS,"");
 
-        remainedTimes=getIntent().getIntExtra("times",3);
+
 
         if(vipstatus.equals(NOTOVERDUE)){
             isVIP=true;
@@ -135,8 +145,11 @@ public class MateActivity extends BaseActivity {
             matchedSex="男";
         }
         initView();
+        initEvent();
 
     }
+
+
 
     @OnClick({R.id.back, R.id.start_mate, R.id.to_refresh, R.id.start_chat,R.id.to_apply_vip})
     public void onClick(View view) {
@@ -179,6 +192,8 @@ public class MateActivity extends BaseActivity {
                     }
 
                     //开始匹配
+                    Glide.with(this).load(R.mipmap.flash8).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(matingGIF);
+
                     isMating = true;
                     choosenUserList.clear();
                     mateButton.setSelected(true);
@@ -203,9 +218,17 @@ public class MateActivity extends BaseActivity {
                 }
 
 
+
+
                 choosenUserList.clear();
+
+
+                Glide.with(this).load(R.mipmap.flash8).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(matingGIF);
+
                 isMating = true;
+                resultText.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
                 mateResultView.setVisibility(View.GONE);
                 mateButton.setVisibility(View.VISIBLE);
                 matingView.setVisibility(View.VISIBLE);
@@ -217,6 +240,7 @@ public class MateActivity extends BaseActivity {
                 startMating();
                 break;
             case R.id.start_chat:
+
                 // 构造 TextMessage 实例
                 TextMessage myTextMessage = TextMessage.obtain("hi");
 
@@ -226,7 +250,7 @@ public class MateActivity extends BaseActivity {
                 */
                 for(NewMatingUserBean.DataBean.UserInfoListBean user :choosenUserList){
                     Message myMessage = Message.obtain(user.getUserId(), Conversation.ConversationType.PRIVATE, myTextMessage);
-
+                    pushMatchedInfo(user.getUserId());
                     RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
                         @Override
                         public void onAttached(Message message) {
@@ -236,6 +260,7 @@ public class MateActivity extends BaseActivity {
                         @Override
                         public void onSuccess(Message message) {
                             //消息通过网络发送成功的回调
+
                         }
 
                         @Override
@@ -329,6 +354,7 @@ public class MateActivity extends BaseActivity {
             recyclerView.setVisibility(View.VISIBLE);
             mateResultView.setVisibility(View.VISIBLE);
 
+            resultText.setVisibility(View.VISIBLE);
             matingView.setVisibility(View.GONE);
             matingGIF.setVisibility(View.GONE);
             headImageView.setVisibility(View.GONE);
@@ -403,6 +429,29 @@ public class MateActivity extends BaseActivity {
         dialogPlus.show();
 
     }
+
+    //在这里进行验证
+    private void initEvent() {
+
+        matingService.requestVerify(new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+
+                remainedTimes= (int) o;
+                mateButton.setEnabled(true);
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+                mateButton.setEnabled(true);
+                Toast.makeText(MateActivity.this,mistakeInfo,Toast.LENGTH_SHORT).show();
+            }
+        });
+        mateButton.setEnabled(false);
+
+    }
+
     public void initView() {
 
         remainTimes.setText(remainedTimes+"");
@@ -479,15 +528,33 @@ public class MateActivity extends BaseActivity {
                 .load(headImgURl)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(headImageView);
-        Glide.with(this).load(R.mipmap.mating2).asGif().into(matingGIF);
 
         adapter = new CommonAdapter<NewMatingUserBean.DataBean.UserInfoListBean>(this, R.layout.matched_user_item, userList) {
             @Override
             protected void convert(ViewHolder holder, final NewMatingUserBean.DataBean.UserInfoListBean userInfoBean, int position) {
                 ImageView headImage = holder.getView(R.id.head_img);
                 final ImageView indicator = holder.getView(R.id.choose_indicator);
+                ImageView sexBg=holder.getView(R.id.sex_bg);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
+                if(userInfoBean.getSex().equals("男")){
+                    sexBg.setSelected(true);
+                }else{
+                    sexBg.setSelected(false);
+                }
+                if(userInfoBean.getTrueName()!=null&&userInfoBean.getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
+
                 Glide.with(MateActivity.this).load(userInfoBean.getImgUrl()).bitmapTransform(new CropCircleTransformation(MateActivity.this)).into(headImage);
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+
+                if(!choosenUserList.contains(userInfoBean)){
+                    indicator.setSelected(false);
+                }
+
+
+                indicator.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (!indicator.isSelected()) {
@@ -507,11 +574,40 @@ public class MateActivity extends BaseActivity {
 
                     }
                 });
+                headImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(MateActivity.this,UserInfoActivty.class);
+                        intent.putExtra(USERID,userInfoBean.getUserId());
+
+                        startActivity(intent);
+
+                    }
+                });
 
             }
         };
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+
+
+    }
+
+
+    //匹配成功后  发起推送ce118769b71f4a90b35960aca22b3778
+    public  void pushMatchedInfo(String userID){
+
+        pushService.pushMatchedInfo(userID  , new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
 
 
     }

@@ -29,14 +29,14 @@ public class NearByUserService {
 
     private static final int REQUEST_NEARBY_PHOTO = 11515;
     private static final int REQUEST_CITY_ALL=21212;
-    private static final int REQUEST_CITY_GIRL=12111;
+    private static final int REQUEST_CITY_SINGLE_SEX =12111;
 
 
     private Gson mGson;
     private SimpleResponseListener<String> simpleResponseListener;
     private Request<String> nearbyPhotoRequest = null;
     private Request<String> cityAllRequest = null;
-    private Request<String> cityGirlRequest=null;
+    private Request<String> citySingleSexRequest =null;
 
 
 
@@ -69,8 +69,8 @@ public class NearByUserService {
                         parseCityAll(response.get());
 
                         break;
-                    case REQUEST_CITY_GIRL:
-                        parseCityGirl(response.get());
+                    case REQUEST_CITY_SINGLE_SEX:
+                        parseCitySingleSex(response.get());
 
 
                         break;
@@ -87,7 +87,7 @@ public class NearByUserService {
                     case REQUEST_CITY_ALL:
                         cityAllCallBack.onFail(response.get().toString());
                         break;
-                    case REQUEST_CITY_GIRL:
+                    case REQUEST_CITY_SINGLE_SEX:
                         cityGirlCallBack.onFail(response.get().toString());
                         break;
                     default:
@@ -132,16 +132,23 @@ public class NearByUserService {
 
     }
 
-    public void requestCityGirl(String address,int pageNum,int pageSize,MyCallBack myCallBack){
+
+
+
+    //请求同城的特定性别用户
+    public void requestCitySingleSex(String address, String sex,int pageNum, int pageSize, MyCallBack myCallBack){
         this.cityGirlCallBack=myCallBack;
-        cityGirlRequest= NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserHomeByGirl", RequestMethod.POST);
-        cityGirlRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
-        cityGirlRequest.add("address",address);
-        cityGirlRequest.add("pageNum", pageNum);
-        cityGirlRequest.add("pageSize", pageSize);
-        RequestServer.getInstance().request(REQUEST_CITY_GIRL, cityGirlRequest, simpleResponseListener);
+        citySingleSexRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/findPersion", RequestMethod.POST);
+        citySingleSexRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        citySingleSexRequest.add("address",address);
+        citySingleSexRequest.add("sex",sex);
+        citySingleSexRequest.add("pageNum", pageNum);
+        citySingleSexRequest.add("pageSize", pageSize);
+        RequestServer.getInstance().request(REQUEST_CITY_SINGLE_SEX, citySingleSexRequest, simpleResponseListener);
 
     }
+
+    //请求同城的所有用户
     public void requestCityAll(String address,int pageNum,int pageSize,MyCallBack myCallBack){
         this.cityAllCallBack=myCallBack;
         cityAllRequest= NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserByAddress", RequestMethod.POST);
@@ -194,7 +201,7 @@ public class NearByUserService {
         cityAllCallBack.onSuccess(list);
     }
 
-    private void parseCityGirl(String s){
+    private void parseCitySingleSex(String s){
 
         SameCityUserBean sameCityUserBean = mGson.fromJson(s, SameCityUserBean.class);
 

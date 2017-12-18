@@ -68,6 +68,9 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
     ImageView boyOrGirl;
     @Bind(R.id.tv_personfragment_username)
     TextView userName;
+    @Bind(R.id.vip_logo)
+    ImageView vipLogo;
+
     @Bind(R.id.tv_personfragment_sign)
     TextView userSign;
     @Bind(R.id.ctiv_personfragment_userimg)
@@ -420,6 +423,11 @@ public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreL
             boyOrGirl.setSelected(true);
         }
 
+        if(userInfo.getTrueName()!=null&&userInfo.getTrueName().equals("1")){
+            vipLogo.setVisibility(View.VISIBLE);
+        }else{
+            vipLogo.setVisibility(View.GONE);
+        }
 
         userSign.setText(userInfo.getNote());
         Glide.with(this)

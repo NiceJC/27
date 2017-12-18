@@ -192,7 +192,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 
     @OnClick({
             R.id.photo,
-            R.id.diyiv_conern_activity_2_userimg,
+
             R.id.iv_concern_activity_concern
             , R.id.iv_concern_activity_back, R.id.iv_concern_activity_message
             , R.id.iv_concern_activity_location

@@ -9,8 +9,8 @@
         android:layout_height="60dp">
         <com.example.myapplication.views.diyimage.DIYImageView
             android:id="@+id/diyiv_item_get_reply_userimg"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             app:diy_image_Type="circle"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
@@ -19,7 +19,7 @@
             android:id="@+id/tv_item_get_reply_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="#222222"
             android:text="用户名"
             android:layout_marginLeft="10dp"
@@ -29,8 +29,9 @@
             android:id="@+id/tv_item_get_reply_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="#999999"
+            android:layout_marginBottom="5dp"
             android:text="时间"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/diyiv_item_get_reply_userimg"
@@ -45,13 +46,14 @@
             android:layout_marginRight="10dp"/>
     </RelativeLayout>
     <TextView
+        android:layout_marginTop="5dp"
         android:id="@+id/tv_item_get_reply_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="内容主体"
         android:textColor="#222222"
-        android:textSize="18sp"
-        android:layout_marginLeft="55dp"
+        android:textSize="15sp"
+        android:layout_marginLeft="65dp"
         android:layout_marginRight="15dp"/>
     <View
         android:layout_width="match_parent"

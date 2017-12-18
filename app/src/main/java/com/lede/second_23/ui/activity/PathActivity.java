@@ -65,7 +65,7 @@ public class PathActivity extends AppCompatActivity implements RouteSearch.OnRou
         ButterKnife.bind(this);
         //获取请求队列
         requestQueue = GlobalConstants.getRequestQueue();
-//        loadBitmap((String)SPUtils.get(this,GlobalConstants.HEAD_IMG,""));
+//        loadBitmap((String)SPUtils.get(this,GlobalConstants.USER_HEAD_IMG,""));
         Intent intent=getIntent();
         latitude=Double.parseDouble(intent.getStringExtra("lat"));
         longitude=Double.parseDouble(intent.getStringExtra("lon"));
@@ -271,7 +271,7 @@ public class PathActivity extends AppCompatActivity implements RouteSearch.OnRou
 
             @Override
             public void onSucceed(int what, Response<Bitmap> response) {
-                if (url.equals(SPUtils.get(PathActivity.this, GlobalConstants.HEAD_IMG,""))) {
+                if (url.equals(SPUtils.get(PathActivity.this, GlobalConstants.USER_HEAD_IMG,""))) {
 //                    walkRouteOverlay.setStartBitmap(response.get());
                     startBitmap=response.get();
                 }else {

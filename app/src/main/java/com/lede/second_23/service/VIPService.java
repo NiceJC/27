@@ -117,6 +117,7 @@ public class VIPService {
 
     }
 
+    //验证VIP的身份
     public void checkVIP(MyCallBack myCallBack){
         this.myCallBack=myCallBack;
         checkVIPRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/vip/vipVerifyTime", RequestMethod.POST);
@@ -138,6 +139,7 @@ public class VIPService {
 
 
 
+    //支付成功后  向后台提交支付结果
     public void verifyVIPInfo(String userId, String trade_no, String total_fee, MyCallBack myCallBack){
         this.myCallBack=myCallBack;
         verifyVIPInfor = NoHttp.createStringRequest(GlobalConstants.URL + "/vip/vipVerifyInfo", RequestMethod.POST);

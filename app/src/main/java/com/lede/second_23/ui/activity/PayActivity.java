@@ -127,7 +127,7 @@ public class PayActivity extends BaseActivity {
          *
          * orderInfo的获取必须来自服务端；
          */
-        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID,"0.01",subject);
+        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID,totalAmount,subject);
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
 
         String privateKey =RSA2_PRIVATE ;
@@ -208,7 +208,7 @@ public class PayActivity extends BaseActivity {
     public void applyVip(){
 
         VIPService VIPService =new VIPService(PayActivity.this);
-        VIPService.applyVIP("1", 1, new MyCallBack() {
+        VIPService.applyVIP("1", mouthCount*30, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 showVIPSuccessDialog();
@@ -239,6 +239,8 @@ public class PayActivity extends BaseActivity {
                         switch (view.getId()) {
                             case R.id.hole_view:
                                 dialog.dismiss();
+                                VIPApplyActivity.instance.finish();
+                                finish();
                                 break;
                             default:
                                 break;
@@ -261,6 +263,7 @@ public class PayActivity extends BaseActivity {
             @Override
             public void onSuccess(Object o) {
                 applyVip();
+
             }
 
             @Override

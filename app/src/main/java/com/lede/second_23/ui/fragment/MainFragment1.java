@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.lede.second_23.R;
 import com.lede.second_23.ui.activity.BilateralActivity;
@@ -42,6 +43,8 @@ public class MainFragment1 extends Fragment {
     private List<ImageView> iconList;
     private List<View> lineList;
 
+    public static MainFragment1 instance=null;
+    private ObjectAnimator animator;
 
     @Bind(R.id.main_fragment_indicator_like_click)
     LinearLayout likeClick;
@@ -71,6 +74,10 @@ public class MainFragment1 extends Fragment {
     @Bind(R.id.main_fragment_indicator_message_line)
     View messageLine;
 
+    @Bind(R.id.topView)
+    RelativeLayout topView;
+    @Bind(R.id.underTopView)
+    LinearLayout underTopView;
 
     @Bind(R.id.main_fragment_viewpager)
     ViewPager viewPager;
@@ -144,6 +151,7 @@ public class MainFragment1 extends Fragment {
 
         ButterKnife.bind(this,view);
 
+        instance=this;
 
         initView();
         initialIndicators();
@@ -185,6 +193,7 @@ public class MainFragment1 extends Fragment {
             }
         };
 
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -219,6 +228,25 @@ public class MainFragment1 extends Fragment {
 
 
 
+    public void scrollTopView(int i){
+
+        animator = null;
+        if (i == 0) {
+            topView.scrollBy(0,-topView.getHeight());
+            underTopView.scrollBy(0,-topView.getHeight());
+//            animator = ObjectAnimator.ofFloat(topView, "translationY", 0, topView.getHeight());
+//            animator.setDuration(500);
+//            animator.start();
+        } else {
+            topView.scrollBy(0,topView.getHeight());
+            underTopView.scrollBy(0,topView.getHeight());
+//            animator = ObjectAnimator.ofFloat(topView, "translationY", topView.getHeight(), 0);
+//            animator.setDuration(500);
+//            animator.start();
+        }
+
+
+    }
 
 
     //初始化indicator

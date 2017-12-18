@@ -22,7 +22,7 @@ import static com.lede.second_23.ui.activity.VIPSettingActivity.GIRL;
  * Created by ld on 17/11/30.
  */
 
-public class PushUserService {
+public class PushedUserService {
 
 
     private static final int REQUEST_PUSH_USER = 1515;
@@ -45,11 +45,11 @@ public class PushUserService {
 
 
 
-    public PushUserService() {
+    public PushedUserService() {
 
     }
 
-    public PushUserService(Activity activity) {
+    public PushedUserService(Activity activity) {
         this.mActivity = activity;
         mGson=new Gson();
         simpleResponseListener = new SimpleResponseListener<String>() {

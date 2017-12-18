@@ -133,8 +133,8 @@
                                     <ImageView
                                         android:visibility="gone"
                                         android:id="@+id/vip_logo"
-                                        android:layout_marginLeft="10dp"
-                                        android:src="@mipmap/vip_logo"
+                                        android:layout_marginLeft="5dp"
+                                        android:src="@mipmap/vipicon_02"
 
                                         android:layout_width="wrap_content"
 

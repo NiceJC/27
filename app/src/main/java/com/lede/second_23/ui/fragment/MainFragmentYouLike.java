@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.fragment;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,15 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.SameCityUserBean;
 import com.lede.second_23.interface_utils.MyCallBack;
-import com.lede.second_23.service.MatingService;
-import com.lede.second_23.service.PushUserService;
+import com.lede.second_23.service.PushedUserService;
 import com.lede.second_23.ui.activity.MateActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
@@ -77,7 +76,8 @@ public class MainFragmentYouLike extends Fragment {
     private boolean isHasNextPage = true;
     private int choosenSex ;
     private String VIPStatus;
-
+    private boolean isshowBottom = true;
+    private ObjectAnimator animator;
     private ArrayList<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> pushUserList = new ArrayList<>();
 
     @Nullable
@@ -99,11 +99,50 @@ public class MainFragmentYouLike extends Fragment {
         return view;
     }
 
-
+    private void bottom_show(int i) {
+        animator = null;
+        if (i == 0) {
+            animator = ObjectAnimator.ofFloat(mate, "translationY", 0, mate.getHeight()+UiUtils.dip2px(25));
+            animator.setDuration(500);
+            animator.start();
+        } else {
+            animator = ObjectAnimator.ofFloat(mate, "translationY", mate.getHeight()+UiUtils.dip2px(25), 0);
+            animator.setDuration(500);
+            animator.start();
+        }
+    }
     private void initView() {
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy >= 30) {
+                    if (isshowBottom) {
+                        return;
+                    } else {
+                        isshowBottom = true;
+//                        if(MainFragment1.instance!=null){
+//                            MainFragment1.instance.scrollTopView(1);
+//                        }
+                        bottom_show(0);
+                    }
+
+                } else if (dy <= -30) {
+                    if (isshowBottom) {
+                        isshowBottom = false;
+//                        if(MainFragment1.instance!=null){
+//                            MainFragment1.instance.scrollTopView(0);
+//                        }
+                        bottom_show(1);
+                    } else {
+                        return;
+                    }
+                }
+            }
+        });
 
         mAdapter = new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.fragment_youlike_item, pushUserList) {
             @Override
@@ -118,11 +157,17 @@ public class MainFragmentYouLike extends Fragment {
                 }
                 ImageView userIcon = holder.getView(R.id.user_icon);
                 TextView user_nickName = holder.getView(R.id.user_nickName);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
                 user_nickName.setText(userInfoListBean.getNickName());
                 Glide.with(getContext())
                         .load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(userIcon);
+                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
 
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -152,28 +197,11 @@ public class MainFragmentYouLike extends Fragment {
         mate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), MateActivity.class);
 
-                MatingService matingService=new MatingService(getActivity());
-                matingService.requestVerify(new MyCallBack() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        mate.setEnabled(true);
 
-                        int times= (int) o;
-                        Intent intent=new Intent(getActivity(), MateActivity.class);
+                startActivity(intent);
 
-                        intent.putExtra("times",times);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onFail(String mistakeInfo) {
-                        mate.setEnabled(true);
-
-                        Toast.makeText(getActivity(),mistakeInfo,Toast.LENGTH_SHORT).show();
-                    }
-                });
-                mate.setEnabled(false);
 
 
             }
@@ -226,8 +254,8 @@ public class MainFragmentYouLike extends Fragment {
             choosenSex=ALL;
         }
 
-        PushUserService pushUserService=new PushUserService(getActivity());
-        pushUserService.requestPushUser(choosenSex, page, PAGE_SIZE, new MyCallBack() {
+        PushedUserService pushedUserService =new PushedUserService(getActivity());
+        pushedUserService.requestPushUser(choosenSex, page, PAGE_SIZE, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 mRefreshLayout.finishRefresh();

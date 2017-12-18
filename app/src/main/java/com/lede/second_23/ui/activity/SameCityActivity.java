@@ -36,7 +36,7 @@ import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.ISGIRL;
+import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -66,7 +66,7 @@ public class SameCityActivity extends BaseActivity {
     private boolean isHasNextPage = true;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
-    private boolean isGirl = false;
+    private String  sex ; //要展示的用户性别
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,8 @@ public class SameCityActivity extends BaseActivity {
         ButterKnife.bind(context);
         mGson = new Gson();
         address = getIntent().getStringExtra(ADDRESS);
-        isGirl = getIntent().getBooleanExtra(ISGIRL, false);
+
+        sex = getIntent().getStringExtra(SEXTYPE);
 
         initView();
         initEvent();
@@ -116,11 +117,21 @@ public class SameCityActivity extends BaseActivity {
                 }
                 ImageView userIcon = holder.getView(R.id.user_icon);
                 TextView user_nickName = holder.getView(R.id.user_nickName);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
+
                 user_nickName.setText(userInfoListBean.getNickName());
+
+
                 Glide.with(SameCityActivity.this)
                         .load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(SameCityActivity.this))
                         .into(userIcon);
+                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
+
 
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -224,10 +235,11 @@ public class SameCityActivity extends BaseActivity {
         };
 
 
-        if (isGirl) {
-            nearByUserService.requestCityGirl(address, page, PAGE_SIZE, callBack);
-        } else {
+        if (sex.equals("all")) {
             nearByUserService.requestCityAll(address, page, PAGE_SIZE, callBack);
+        } else {
+            nearByUserService.requestCitySingleSex(address,sex, page, PAGE_SIZE, callBack);
+
         }
 
 

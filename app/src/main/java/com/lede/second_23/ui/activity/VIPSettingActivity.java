@@ -14,6 +14,7 @@ import com.lede.second_23.utils.SPUtils;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -38,6 +39,8 @@ public class VIPSettingActivity extends BaseActivity {
     private int choosenSex ;
     private String VIPStatus;
 
+    @Bind(R.id.sex)
+    ImageView sexImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,22 @@ public class VIPSettingActivity extends BaseActivity {
 
         VIPStatus = (String) SPUtils.get(this, VIPSTATUS, NOTOPEN);
         choosenSex = (int) SPUtils.get(this, VIPPUSHSEX,ALL);
+
+        switch (choosenSex){
+            case BOY:
+                sexImage.setImageResource(R.mipmap.boy11);
+                break;
+            case GIRL:
+                sexImage.setImageResource(R.mipmap.girl11);
+                break;
+            case ALL:
+                sexImage.setImageResource(R.mipmap.all11);
+                break;
+            default:
+                break;
+
+        }
+
     }
 
     @OnClick({R.id.back, R.id.vip_apply, R.id.vip_intro, R.id.vip_push_sex})
@@ -66,24 +85,34 @@ public class VIPSettingActivity extends BaseActivity {
                 startActivity(intent1);
                 break;
             case R.id.vip_push_sex:
-                VIPService vipService = new VIPService(this);
-                vipService.checkVIP(new MyCallBack() {
-                    @Override
-                    public void onSuccess(Object o) {
-                    }
 
-                    @Override
-                    public void onFail(String mistakeInfo) {
-                    }
-                });
-
-                if (VIPStatus.equals(NOTOPEN)) {
-                    showNotVIPDialog();
-                } else if (VIPStatus.equals(OVERDUE)) {
-                    showOverdueDialog();
-                } else if (VIPStatus.equals(NOTOVERDUE)) {
+                //如果用户是vip 直接打开，如果不是，再验证一遍，防止刚刚开通的用户点不开特权
+                if (VIPStatus.equals(NOTOVERDUE)) {
                     showChooseSexDialog();
+                }else{
+                    VIPService vipService = new VIPService(this);
+                    vipService.checkVIP(new MyCallBack() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            VIPStatus = (String) SPUtils.get(VIPSettingActivity.this, VIPSTATUS, NOTOPEN);
+                            if (VIPStatus.equals(NOTOPEN)) {
+                                showNotVIPDialog();
+                            } else if (VIPStatus.equals(OVERDUE)) {
+                                showOverdueDialog();
+                            } else if (VIPStatus.equals(NOTOVERDUE)) {
+                                showChooseSexDialog();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(String mistakeInfo) {
+                        }
+                    });
+
+
                 }
+
+
                 break;
             default:
                 break;
@@ -143,6 +172,7 @@ public class VIPSettingActivity extends BaseActivity {
                                 girl.setSelected(false);
                                 all.setSelected(false);
                                 choosenSex = BOY;
+
                                 break;
 
                             case R.id.girl:
@@ -158,7 +188,22 @@ public class VIPSettingActivity extends BaseActivity {
                                 choosenSex = ALL;
                                 break;
                             case R.id.confirm:
+
                                 SPUtils.put(VIPSettingActivity.this,VIPPUSHSEX,choosenSex);
+                                switch (choosenSex){
+                                    case BOY:
+                                        sexImage.setImageResource(R.mipmap.boy11);
+                                        break;
+                                    case GIRL:
+                                        sexImage.setImageResource(R.mipmap.girl11);
+                                        break;
+                                    case ALL:
+                                        sexImage.setImageResource(R.mipmap.all11);
+                                        break;
+                                    default:
+                                        break;
+
+                                }
                                 dialog.dismiss();
                                 break;
                             default:

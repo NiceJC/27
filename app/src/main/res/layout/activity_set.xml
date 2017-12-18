@@ -91,17 +91,18 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"/>
-        <TextView
+        <ImageView
 
+            android:src="@mipmap/all11"
             android:id="@+id/tv_set_activity_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="@color/text_color_333333"
 
-            android:text="性别"
+
             android:layout_toLeftOf="@id/iv_set_activity_go1"
-            android:layout_marginRight="22dp"
+            android:layout_marginRight="15dp"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
     <LinearLayout
@@ -353,13 +354,16 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <LinearLayout
         android:id="@+id/ll_set_activity_exit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"
         android:gravity="center"
         android:background="@drawable/shape_linearlayout_all">
         <TextView
@@ -369,4 +373,8 @@
             android:textSize="20sp"
             android:textColor="#222222"/>
     </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>

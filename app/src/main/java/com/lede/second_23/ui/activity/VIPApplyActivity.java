@@ -80,6 +80,7 @@ public class VIPApplyActivity extends BaseActivity {
     private String totalAmount="";
 
 
+    public static VIPApplyActivity instance=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class VIPApplyActivity extends BaseActivity {
         setContentView(R.layout.activity_vip_apply);
 
         ButterKnife.bind(this);
+        instance=this;
 
         mouthCount=3;
         totalAmount="30.00";

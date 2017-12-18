@@ -116,6 +116,10 @@
 
     </ImageView>
 
+    <View
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
     <LinearLayout
 
         android:id="@+id/pay_confirm"
@@ -157,5 +161,8 @@
             android:textSize="20sp" />
 
     </LinearLayout>
-
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 </LinearLayout>

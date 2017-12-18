@@ -5,15 +5,48 @@
     android:background="@mipmap/mate_bg"
     >
 
-    <ImageView
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
+
+
+    <RelativeLayout
+
+
         android:layout_marginTop="28dp"
-        android:id="@+id/back"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_centerVertical="true"
-        android:src="@mipmap/back_bg" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+
+            android:padding="5dp"
+            android:src="@mipmap/back_bg" />
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/result_text"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:text="匹配结果"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="370dp">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,9 +58,10 @@
         <ImageView
             android:layout_centerInParent="true"
 
+            android:scaleType="fitXY"
             android:id="@+id/mating_gif"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:visibility="gone" />
 
         <ImageView
@@ -39,16 +73,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center" />
 
-        <android.support.v7.widget.RecyclerView
-            android:paddingLeft="40dp"
-            android:layout_centerInParent="true"
 
-            android:visibility="gone"
-            android:id="@+id/recyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
 
@@ -57,7 +82,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp">
 
         <ImageView
 
@@ -76,8 +101,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_centerInParent="true"
-                android:textColor="#dddddd"
-                android:text="匹配中"
+                android:text="匹配中..."
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -95,7 +119,6 @@
                     android:gravity="center"
                     android:layout_alignBottom="@+id/mating_1"
                     android:text="0"
-                    android:textColor="#dddddd"
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -103,7 +126,6 @@
                 <TextView
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:textColor="#dddddd"
                     android:text="s"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -118,7 +140,6 @@
             android:visibility="gone"
             android:id="@+id/mate_no_result"
             android:layout_centerInParent="true"
-            android:textColor="#dddddd"
             android:text="暂无匹配结果"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -128,8 +149,21 @@
 
     </RelativeLayout>
 
+    </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:paddingLeft="40dp"
+            android:layout_centerInParent="true"
+
+            android:visibility="gone"
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
 
 
+    </RelativeLayout>
     <View
         android:layout_weight="1"
         android:layout_width="0dp"
@@ -143,14 +177,14 @@
 
 
 
-        <ImageView
+        <Button
 
             android:id="@+id/start_mate"
             android:layout_gravity="center"
             android:layout_centerInParent="true"
-            android:src="@drawable/slector_mate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/slector_mate"
+            android:layout_width="150dp"
+            android:layout_height="40dp" />
 
         <LinearLayout
 
@@ -190,20 +224,17 @@
                     <TextView
                         android:text="剩余"
 
-                        android:textColor="#ffffff"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
 
 
                         android:id="@+id/remain_time"
-                        android:textColor="#ffffff"
 
                         android:text="0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
-                        android:textColor="#ffffff"
 
                         android:text="次刷新"
                         android:layout_width="wrap_content"
@@ -227,7 +258,6 @@
             <TextView
                 android:id="@+id/to_apply_vip"
                 android:layout_marginTop="20dp"
-                android:textColor="#ffffff"
                 android:text="(开通会员不限制刷新次数，前去开通)"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"

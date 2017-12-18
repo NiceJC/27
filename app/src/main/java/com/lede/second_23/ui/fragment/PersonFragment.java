@@ -252,7 +252,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener , L
         Glide.with(context)
                 .load(personBean.getData().getUser().getImgUrl())
                 .into(ctiv_userimg);
-        SPUtils.put(context,GlobalConstants.HEAD_IMG,personBean.getData().getUser().getImgUrl());
+        SPUtils.put(context,GlobalConstants.USER_HEAD_IMG,personBean.getData().getUser().getImgUrl());
         tv_converned_num.setText(personBean.getData().getFriendsCount()+"");
         tv_fans_num.setText(personBean.getData().getFollowersCount()+"");
 //        tv_tie_num.setText(personBean.getData().getSimple().getTotal()+"");

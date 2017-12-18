@@ -28,8 +28,8 @@ public class GlobalConstants {
     //网络访问
 
 //    public static final String URL = "http://101.37.85.56:8088";  //测试
-    public static final String URL = "http://192.168.31.134:8080"; //联调环境
-//    public static final String URL = "http://api.ledeseven.com";
+//    public static final String URL = "http://192.168.31.134:8080"; //联调环境
+    public static final String URL = "http://api.ledeseven.com";
 //
 
 
@@ -38,7 +38,10 @@ public class GlobalConstants {
     // access_token
     public static final String TOKEN = "ACCESS_TOKEN";
     //用户头像imgac
-    public static final String HEAD_IMG = "HEAD_IMG";
+    public static final String USER_HEAD_IMG = "USER_HEAD_IMG";  //用户头想
+
+    public static final String USER_SEX = "USER_SEX";  //用户性别
+
     //用户的融云Token
     public static final String RONGIM_TOKEN="RONGIM_TOKEN";
 
@@ -90,11 +93,13 @@ public class GlobalConstants {
     public static final String IMAGE_URLS="imageURL";
     public static final String POSITION="position";
     public static final String ADDRESS="address";
-    public static final String ISGIRL="ISGIRL";
+    public static final String SEXTYPE ="SEXTYPE";
 
 
     public static final int APPID=1106236230;
 
+
+    public static final String MESSAGE_TYPE = "MESSAGE_TYPE";
 
 
     public static final String VIRIFYMARRY="VIRIFYMARRY";
@@ -105,6 +110,7 @@ public class GlobalConstants {
 
     public static final String VIPSTATUS="VIPSTATUS";
 
+    //VIP特权  选择主页推送的用户性别
     public static final String VIPPUSHSEX="VIPPUSHSEX";
 
 

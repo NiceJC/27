@@ -99,7 +99,7 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
                 tv_nickname.setText(listBean.getUserInfo().getNickName());
                 tv_time.setText(listBean.getCreatTime());
                 if (listBean.getNoticeType()==0) {
-                    tv_text.setText("评论: "+listBean.getNoticeText());
+                    tv_text.setText(listBean.getNoticeText());
                 }else {
                     tv_text.setText("回复: "+listBean.getNoticeText());
                 }

@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity implements OnResponseListene
                 T.showShort(this, "登陆过期请重新登陆");
                 SPUtils.remove(this, GlobalConstants.TOKEN);
                 SPUtils.remove(this, GlobalConstants.USERNAME);
-                SPUtils.remove(this, GlobalConstants.HEAD_IMG);
+                SPUtils.remove(this, GlobalConstants.USER_HEAD_IMG);
                 SPUtils.remove(this, GlobalConstants.CERTIFICATION);
                 finish();
                 startActivity(new Intent(this, WelcomeActivity.class));

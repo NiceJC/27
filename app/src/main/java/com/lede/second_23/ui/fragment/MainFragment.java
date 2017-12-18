@@ -293,7 +293,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
                 friendList.clear();
                 userList.clear();
                 Glide.with(mContext)
-                        .load(SPUtils.get(mContext, GlobalConstants.HEAD_IMG, ""))
+                        .load(SPUtils.get(mContext, GlobalConstants.USER_HEAD_IMG, ""))
                         .asBitmap()
                         .error(R.mipmap.loading)
                         .placeholder(R.mipmap.loading)
@@ -332,7 +332,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
         iv_show_video = (ImageView) view.findViewById(R.id.iv_main_head_show_video);
         iv_show_video.setOnClickListener(this);
         Glide.with(mContext)
-                .load(SPUtils.get(mContext, GlobalConstants.HEAD_IMG, ""))
+                .load(SPUtils.get(mContext, GlobalConstants.USER_HEAD_IMG, ""))
                 .asBitmap()
                 .error(R.mipmap.loading)
                 .placeholder(R.mipmap.loading)
@@ -488,7 +488,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
 //                }
 //            friendList.addAll(friendBean.getData());
                 Glide.with(mContext)
-                        .load(SPUtils.get(mContext, GlobalConstants.HEAD_IMG, ""))
+                        .load(SPUtils.get(mContext, GlobalConstants.USER_HEAD_IMG, ""))
                         .error(R.mipmap.loading)
                         .placeholder(R.mipmap.loading)
                         .into(diyiv_main_head_myimg);

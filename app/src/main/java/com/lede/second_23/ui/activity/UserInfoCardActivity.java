@@ -44,6 +44,8 @@ public class UserInfoCardActivity extends AppCompatActivity {
     ImageView userImg;
     @Bind(R.id.user_name)
     TextView userName;
+    @Bind(R.id.vip_tag)
+    ImageView vipTag;
     @Bind(R.id.user_sex)
     ImageView userSex;
     @Bind(R.id.user_intro)
@@ -146,6 +148,11 @@ public class UserInfoCardActivity extends AppCompatActivity {
             userSex.setSelected(false);
         } else {
             userSex.setSelected(true);
+        }
+        if(userInfo.getTrueName()!=null&&userInfo.getTrueName().equals("1")){
+            vipTag.setVisibility(View.VISIBLE);
+        }else{
+            vipTag.setVisibility(View.GONE);
         }
         userIntro.setText(userInfo.getNote());
 

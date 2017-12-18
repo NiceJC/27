@@ -31,8 +31,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.HEAD_IMG;
+import static com.lede.second_23.global.GlobalConstants.USER_HEAD_IMG;
 import static com.lede.second_23.global.GlobalConstants.USERNAME;
+import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 
 public class WelcomeActivity extends AppCompatActivity implements OnResponseListener<String> {
 
@@ -189,9 +190,12 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
 
     //打开APP更新本地用户信息
     public void saveUserInfoToSP(UserInfoBean.DataBean.InfoBean infoBean){
-       SPUtils.put(this,HEAD_IMG,infoBean.getImgUrl());
+       SPUtils.put(this, USER_HEAD_IMG,infoBean.getImgUrl());
         SPUtils.put(this,ADDRESS,infoBean.getAddress());
         SPUtils.put(this,USERNAME,infoBean.getNickName());
+        SPUtils.put(this,USER_SEX,infoBean.getSex());
+
+
     }
     /**
      * 延时任务

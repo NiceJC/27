@@ -49,6 +49,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lede.second_23.global.GlobalConstants.ADDRESS;
+import static com.lede.second_23.global.GlobalConstants.USERNAME;
+import static com.lede.second_23.global.GlobalConstants.USER_SEX;
+
 
 /**
  * 修改用户信息（仅修改）
@@ -385,6 +389,10 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
      * 修改用户请求
      */
     public void updateUserInfo() {
+
+
+
+
         Request<String> updateUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/update", RequestMethod.POST);
         updateUserRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
         updateUserRequest.add("wechat", tv_edit_information_activity_hobby.getText().toString().trim());
@@ -399,6 +407,13 @@ public class EditInformationActivity extends AppCompatActivity implements OnResp
         updateUserRequest.add("sex", isBoy);
         updateUserRequest.add("hometown", tvEditInformationActivitySchool.getText().toString().trim());
         requestQueue.add(UPDATE_USER, updateUserRequest, this);
+
+
+        SPUtils.put(this,ADDRESS,tv_edit_information_activity_city.getText().toString().trim());
+        SPUtils.put(this,USERNAME, tv_edit_information_activity_nickname.getText().toString().trim());
+        SPUtils.put(this,USER_SEX,isBoy? "男" :"女");
+
+
 
     }
 

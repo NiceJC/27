@@ -6,11 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lede.second_23.R;
@@ -20,6 +21,8 @@ import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.L;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.glide.GlideCatchUtil;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnClickListener;
 import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -33,6 +36,8 @@ import org.ielse.widget.RangeSeekBar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.lede.second_23.global.GlobalConstants.SET_SEX;
 
 public class SetActivity extends BaseActivity {
 
@@ -49,7 +54,7 @@ public class SetActivity extends BaseActivity {
     @Bind(R.id.rl_set_activity_sex)
     RelativeLayout rl_sex;
     @Bind(R.id.tv_set_activity_sex)
-    TextView tv_sex;
+    ImageView tv_sex;
     @Bind(R.id.tv_set_activity_distance)
     TextView tv_distance;
     @Bind(R.id.tv_set_activity_catchsize)
@@ -60,6 +65,7 @@ public class SetActivity extends BaseActivity {
     private RequestQueue requestQueue;
     private Gson mGson;
     private int yourChoice=-1;
+    private String choosenSex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +114,29 @@ public class SetActivity extends BaseActivity {
 
     private void initData() {
         tv_catchSize.setText(GlideCatchUtil.getInstance().getCacheSize());
-        if (SPUtils.contains(mContext, GlobalConstants.SET_SEX)) {
-            tv_sex.setText((String) SPUtils.get(mContext, GlobalConstants.SET_SEX, ""));
-        } else {
-            tv_sex.setText("All");
+        if (SPUtils.contains(mContext, SET_SEX)) {
+            String sex=(String)SPUtils.get(mContext, SET_SEX,"All");
+
+            choosenSex=sex;
+
+            switch (sex){
+                case "男":
+                    tv_sex.setImageResource(R.mipmap.boy11);
+                    break;
+                case "女":
+                    tv_sex.setImageResource(R.mipmap.girl11);
+                    break;
+                case "All":
+                    tv_sex.setImageResource(R.mipmap.all11);
+                    break;
+                default:
+                    tv_sex.setImageResource(R.mipmap.all11);
+                    break;
+            }
+        }else{
+                choosenSex="All";
+            SPUtils.put(this,SET_SEX,"All");
+
         }
         if (SPUtils.contains(mContext, GlobalConstants.SET_MINAGE)) {
             rsb_age.setValue((float) SPUtils.get(mContext, GlobalConstants.SET_MINAGE, 0.0f), (float) SPUtils.get(mContext, GlobalConstants.SET_MAXAGE, 41.0f));
@@ -144,10 +169,10 @@ public class SetActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.rl_set_activity_sex:
-                showDialog();
+                showChooseSexDialog();
                 break;
             case R.id.tv_set_activity_save:
-                SPUtils.put(mContext, GlobalConstants.SET_SEX, tv_sex.getText().toString());
+                SPUtils.put(mContext, SET_SEX, choosenSex);
                 SPUtils.put(mContext, GlobalConstants.SET_DISTANCE, Integer.parseInt(tv_distance.getText().toString()));
                 SPUtils.put(mContext, GlobalConstants.SET_MINAGE, minAge);
                 SPUtils.put(mContext, GlobalConstants.SET_MAXAGE, maxAge);
@@ -166,7 +191,7 @@ public class SetActivity extends BaseActivity {
                  */
 //                SPUtils.remove(this,GlobalConstants.TOKEN);
 //                SPUtils.remove(this,GlobalConstants.USERID);
-//                SPUtils.remove(this,GlobalConstants.HEAD_IMG);
+//                SPUtils.remove(this,GlobalConstants.USER_HEAD_IMG);
 //                SPUtils.remove(this,GlobalConstants.SET_SEX);
 //                SPUtils.remove(this,GlobalConstants.SET_MINAGE);
 //                SPUtils.remove(this,GlobalConstants.SET_MAXAGE);
@@ -270,31 +295,115 @@ public class SetActivity extends BaseActivity {
         });
     }
 
-    private void showDialog() {
-        final String items[] = {"All", "男", "女"};
-        //dialog参数设置
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //先得到构造器
-        builder.setTitle("选择性别"); //设置标题
-        builder.setIcon(R.mipmap.logo);//设置图标，图片id即可
-        //设置列表显示，注意设置了列表显示就不要设置builder.setMessage()了，否则列表不起作用。
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Toast.makeText(mContext, items[which], Toast.LENGTH_SHORT).show();
-                tv_sex.setText(items[which]);
-            }
-        });
-//        builder.setPositiveButton("确定",new DialogInterface.OnClickListener() {
+//    private void showDialog() {
+//        final String items[] = {"All", "男", "女"};
+//        //dialog参数设置
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //先得到构造器
+//        builder.setTitle("选择性别"); //设置标题
+//        builder.setIcon(R.mipmap.logo);//设置图标，图片id即可
+//        //设置列表显示，注意设置了列表显示就不要设置builder.setMessage()了，否则列表不起作用。
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {
 //                dialog.dismiss();
-//                Toast.makeText(mContext, "确定", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, items[which], Toast.LENGTH_SHORT).show();
+//                tv_sex.setText(items[which]);
 //            }
 //        });
-        builder.create().show();
-    }
+////        builder.setPositiveButton("确定",new DialogInterface.OnClickListener() {
+////            @Override
+////            public void onClick(DialogInterface dialog, int which) {
+////                dialog.dismiss();
+////                Toast.makeText(mContext, "确定", Toast.LENGTH_SHORT).show();
+////            }
+////        });
+//        builder.create().show();
+//    }
+    //VIP的功能实现框
+    private void showChooseSexDialog() {
 
+        DialogPlus dialogPlus = DialogPlus.newDialog(this)
+                .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.choose_sex_dialog))
+                .setContentBackgroundResource(R.drawable.shape_linearlayout_all)
+                .setCancelable(true)
+                .setGravity(Gravity.CENTER)
+                .setInAnimation(R.anim.fade_in)
+                .setOutAnimation(R.anim.fade_out)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+
+                        ImageView boy = (ImageView) dialog.findViewById(R.id.boy);
+                        ImageView girl = (ImageView) dialog.findViewById(R.id.girl);
+                        ImageView all = (ImageView) dialog.findViewById(R.id.all);
+
+                        switch (view.getId()) {
+                            case R.id.boy:
+                                boy.setSelected(true);
+                                girl.setSelected(false);
+                                all.setSelected(false);
+                                choosenSex = "男";
+                                break;
+
+                            case R.id.girl:
+                                boy.setSelected(false);
+                                girl.setSelected(true);
+                                all.setSelected(false);
+                                choosenSex = "女";
+
+                                break;
+                            case R.id.all:
+                                boy.setSelected(false);
+                                girl.setSelected(false);
+                                all.setSelected(true);
+                                choosenSex = "All";
+
+                                break;
+                            case R.id.confirm:
+                                switch (choosenSex){
+                                    case "男":
+                                        tv_sex.setImageResource(R.mipmap.boy11);
+
+                                        break;
+                                    case "女":
+                                        tv_sex.setImageResource(R.mipmap.girl11);
+                                        break;
+                                  case "All":
+                                        tv_sex.setImageResource(R.mipmap.all11);
+                                        break;
+                                    default:
+                                        break;
+
+                                }
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .setExpanded(false).create();
+
+        ImageView boy = (ImageView) dialogPlus.findViewById(R.id.boy);
+        ImageView girl = (ImageView) dialogPlus.findViewById(R.id.girl);
+        ImageView all = (ImageView) dialogPlus.findViewById(R.id.all);
+        TextView tittle= (TextView) dialogPlus.findViewById(R.id.tittle);
+        tittle.setText("附近动态性别显示");
+        switch (choosenSex){
+            case "男":
+                boy.setSelected(true);
+                break;
+            case "女":
+                girl.setSelected(true);
+                break;
+            case "All":
+                all.setSelected(true);
+                break;
+
+        }
+        dialogPlus.show();
+
+    }
 
 
     private void show_loactionChoiceDialog() {

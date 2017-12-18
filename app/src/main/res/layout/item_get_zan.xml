@@ -19,12 +19,24 @@
             android:id="@+id/tv_item_get_zan_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="#222222"
-            android:text="xx等x人赞了你"
+            android:text="xx"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/diyiv_item_get_zan_userimg"/>
+
+        <TextView
+            android:textSize="14sp"
+
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_item_get_zan_nickname"
+            android:text="等x人赞了你"
+            android:id="@+id/zan_count"
+            android:textColor="#999999"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <ImageView
             android:id="@+id/iv_item_get_zan_forum_pic"

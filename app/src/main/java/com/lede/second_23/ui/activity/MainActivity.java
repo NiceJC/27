@@ -1,6 +1,7 @@
 package com.lede.second_23.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,17 +24,20 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.nearby.NearbySearch;
 import com.amap.api.services.nearby.NearbySearchResult;
 import com.amap.api.services.nearby.UploadInfo;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
 import com.lede.second_23.adapter.MyFragmentPagerAdapter;
 import com.lede.second_23.bean.CheckPhotoBean;
+import com.lede.second_23.bean.PersonalAlbumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
 import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.service.VIPService;
 import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment1;
@@ -59,6 +63,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.lede.second_23.global.GlobalConstants.MESSAGE_TYPE;
+import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.USER_HEAD_IMG;
 
 /**
  * 管理
@@ -94,12 +106,18 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     private CheckPhotoBean checkPhotoBean = null;
     private Gson mGson;
 
+    private String pushUserId;
+    private int messageType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         StatusBarUtil.StatusBarLightMode(this);
+
+
+        pushUserId=getIntent().getStringExtra(USERID);
+        messageType=getIntent().getIntExtra(MESSAGE_TYPE,1);
 
         mGson = new Gson();
         instance = this;
@@ -111,6 +129,43 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         initView();
         requestPhoto();
         checkVIP();
+
+        handlePushMesesage(pushUserId,messageType);
+
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        pushUserId=intent.getStringExtra(USERID);
+        messageType=intent.getIntExtra(MESSAGE_TYPE,1);
+        handlePushMesesage(pushUserId,messageType);
+
+
+    }
+
+    public void handlePushMesesage(String pushUserId,int messageType){
+        switch (messageType){
+            case 1://系统消息，匹配成功推送
+                if(pushUserId!=null&&!pushUserId.equals("")){
+                    showPushMessageDialog();
+                }
+
+                break;
+            case 2://聊天消息
+                startActivity(new Intent(this, ConversationListDynamicActivtiy.class));
+
+
+                break;
+            default:
+                break;
+
+
+
+        }
+
+
 
     }
 
@@ -148,7 +203,71 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         });
 
         initFragmentViewPager();
+
+
+
+
     }
+
+
+
+    //展示收到推送的dialog
+    private void  showPushMessageDialog(){
+
+        UserInfoService userInfoService=new UserInfoService(this);
+        userInfoService.getUserInfo(pushUserId, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                PersonalAlbumBean.DataBean.UserInfo userInfo= (PersonalAlbumBean.DataBean.UserInfo) o;
+                String pushUserImgUrl=userInfo.getImgUrl();
+                final String pushUserName=userInfo.getNickName();
+
+                String myImgUrl= (String) SPUtils.get(MainActivity.this,USER_HEAD_IMG,"");
+                DialogPlus dialogPlus = DialogPlus.newDialog(MainActivity.this)
+                        .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.push_message_dialog))
+                        .setContentBackgroundResource(R.drawable.shape_linearlayout_all)
+                        .setCancelable(true)
+                        .setGravity(Gravity.CENTER)
+                        .setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(DialogPlus dialog, View view) {
+
+                                switch (view.getId()) {
+                                    case R.id.close:
+
+                                        dialog.dismiss();
+
+                                        break;
+                                    case R.id.toChat:
+                                        RongIM.getInstance().startConversation(MainActivity.this, Conversation.ConversationType.PRIVATE, pushUserId, pushUserName);
+                                        dialog.dismiss();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        })
+                        .setExpanded(false).create();
+
+                ImageView pushImageView= (ImageView) dialogPlus.findViewById(R.id.image_push_user);
+                ImageView myImageView= (ImageView) dialogPlus.findViewById(R.id.image_me);
+                Glide.with(MainActivity.this).load(pushUserImgUrl).bitmapTransform(new CropCircleTransformation(MainActivity.this)).into(pushImageView);
+                Glide.with(MainActivity.this).load(myImgUrl).bitmapTransform(new CropCircleTransformation(MainActivity.this)).into(myImageView);
+
+
+                dialogPlus.show();
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
+
+
+    }
+
 
     private void initFragmentViewPager() {
         fragmentList = new ArrayList<Fragment>();
@@ -436,7 +555,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         //设置上传数据位置,位置的获取推荐使用高德定位sdk进行获取
         loadInfo.setPoint(new LatLonPoint(myLatitude, myLongitude));
         //设置上传用户id
-        loadInfo.setUserID((String) SPUtils.get(this, GlobalConstants.USERID, ""));
+        loadInfo.setUserID((String) SPUtils.get(this, USERID, ""));
         //调用异步上传接口
         mNearbySearch.uploadNearbyInfoAsyn(loadInfo);
         mNearbySearch.addNearbyListener(new NearbySearch.NearbyListener() {

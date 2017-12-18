@@ -166,6 +166,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             @Override
             protected void convert(ViewHolder holder, final AllForumBean.DataBean.SimpleBean.ListBean listBean, final int position) {
                 DIYImageView diy_userimg = holder.getView(R.id.diyiv_item_forum_userimg);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
                 TextView tv_nickname = holder.getView(R.id.tv_item_forum_nickname);
 //
 //                if (listBean.getUser().getTrueName().equals("1")) {
@@ -317,7 +318,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                             imgViews.add(iv_9_6);
                             imgViews.add(iv_9_7);
                             imgViews.add(iv_9_8);
-                            imgViews.add(iv_9_9);
+                            imgViews.add(iv_9_9);vipTag.setVisibility(View.VISIBLE);
                         }
 
                         for (int i = 0; i < imgViews.size(); i++) {
@@ -437,6 +438,12 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                         startActivity(intent);
                     }
                 });
+
+                if(listBean.getUser().getTrueName()!=null&&listBean.getUser().getTrueName().equals("1")){
+                    vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
+                }
                 Date createDate = null;
                 //"2017-05-19 17:15:40"
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -454,9 +461,9 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(context, ForumDetailActivity.class);
-                intent.putExtra("forumId", forumList.get(position - 1).getForumId());
-                intent.putExtra("userId", forumList.get(position - 1).getUserId());
-                intent.putExtra("forum", forumList.get(position - 1));
+                intent.putExtra("forumId", forumList.get(position ).getForumId());
+                intent.putExtra("userId", forumList.get(position ).getUserId());
+                intent.putExtra("forum", forumList.get(position ));
                 startActivity(intent);
             }
 

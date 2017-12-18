@@ -16,6 +16,9 @@ import io.rong.push.notification.PushNotificationMessage;
 public class SealNotificationReceiver extends PushMessageReceiver {
     @Override
     public boolean onNotificationMessageArrived(Context context, PushNotificationMessage message) {
+
+        PushNotificationMessage message1=message;
+
         if (message.getConversationType() == RongPushClient.ConversationType.SYSTEM) {
             MyApplication.instance.showSystemNotification(message.getSenderId());
             Log.i("TAG", "push收到新消息:pushID" + message.getPushId()+"targetID"+message.getTargetId());

@@ -2,7 +2,6 @@ package com.lede.second_23.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -183,14 +182,12 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
             @Override
             protected void convert(ViewHolder holder, final ConcernOrFansBean.DataBean.ListBean listBean, final int position) {
                 CircleTextImageView cliv_touxiang=holder.getView(R.id.cliv_concern_or_fans_item_touxiang);
+                ImageView vipTag=holder.getView(R.id.vip_tag);
                 TextView tv_nickName=holder.getView(R.id.tv_concern_or_fans_item_nickname);
-                if (listBean.getTrueName().equals("1")) {
-                    Drawable drawableRight = getResources().getDrawable(
-                            R.mipmap.v1_fans);
-
-                    tv_nickName.setCompoundDrawablesWithIntrinsicBounds(null,
-                            null, drawableRight, null);
-                    tv_nickName.setCompoundDrawablePadding(2);
+                if (listBean.getTrueName()!=null&&listBean.getTrueName().equals("1")) {
+                   vipTag.setVisibility(View.VISIBLE);
+                }else{
+                    vipTag.setVisibility(View.GONE);
                 }
                 tv_right=holder.getView(R.id.iv_concern_or_fans_item_right);
 

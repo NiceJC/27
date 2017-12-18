@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.bean.RongIMBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.ui.activity.GetReplyActivity;
+import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -47,6 +47,7 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
 
+import static com.lede.second_23.global.GlobalConstants.MESSAGE_TYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static io.rong.imkit.utils.SystemUtils.getCurProcessName;
 
@@ -109,36 +110,7 @@ public class MyApplication extends Application {
         RongIM.getInstance().enableNewComingMessageIcon(true);//显示新消息提醒
         RongIM.getInstance().enableUnreadMessageIcon(true);//显示未读消息数目
 
-        RongIM.setConversationBehaviorListener(new RongIM.ConversationBehaviorListener() {
-            @Override
-            public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-                Intent intent = new Intent(context, UserInfoActivty.class);
-                intent.putExtra(USERID, userInfo.getUserId());
-                startActivity(intent);
-
-                return true;
-            }
-
-            @Override
-            public boolean onUserPortraitLongClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-                return false;
-            }
-
-            @Override
-            public boolean onMessageClick(Context context, View view, Message message) {
-                return false;
-            }
-
-            @Override
-            public boolean onMessageLinkClick(Context context, String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onMessageLongClick(Context context, View view, Message message) {
-                return false;
-            }
-        });
+        RongIM.setConversationBehaviorListener(new MyConversationBehaviorListener());
 
         //初始化nohttp
         NoHttp.initialize(this, new NoHttp.Config()
@@ -390,17 +362,57 @@ public class MyApplication extends Application {
         @Override
         public boolean onReceived(Message message, int left) {
             //开发者根据自己需求自行处理
+
+
             if (message.getConversationType() == Conversation.ConversationType.SYSTEM) {
                 showSystemNotification(message.getSenderUserId());
                 Log.i("TAG", "收到新消息:" + message.getSenderUserId());
                 return true;
-            } else {
-//                showMessageNotification(message);
-                return false;
+            } else if(message.getConversationType() == Conversation.ConversationType.PRIVATE) {
+
+                showMessageNotification(message);
+                return true;
+            }else{
+                return  false;
             }
 //            Toast.makeText(context, "收到新消息:"+message.getSenderUserId(), Toast.LENGTH_SHORT).show();
 
-//            return false;
+
+        }
+    }
+
+    private class MyConversationBehaviorListener implements  RongIM.ConversationBehaviorListener{
+
+        @Override
+        public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
+
+
+
+            Intent intent = new Intent(context, UserInfoActivty.class);
+            intent.putExtra(USERID, userInfo.getUserId());
+            startActivity(intent);
+
+            return true;
+        }
+
+        @Override
+        public boolean onUserPortraitLongClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
+            return false;
+        }
+
+        @Override
+        public boolean onMessageClick(Context context, View view, Message message) {
+            return false;
+        }
+
+        @Override
+        public boolean onMessageLinkClick(Context context, String s) {
+            return false;
+        }
+
+        @Override
+        public boolean onMessageLongClick(Context context, View view, Message message) {
+            return false;
         }
     }
 
@@ -418,19 +430,21 @@ public class MyApplication extends Application {
     }
 
     /**
-     * 收到点笑脸请求 显示通知 ios无法实现  废弃
+     * 匹配聊天  通知  点击进主页展示弹窗
      *
      * @param userid
      */
     public void showSystemNotification(String userid) {
-        SPUtils.put(context,GlobalConstants.GETREPLY,(int)SPUtils.get(context,GlobalConstants.GETREPLY,0)+1);
+//        SPUtils.put(context,GlobalConstants.GETREPLY,(int)SPUtils.get(context,GlobalConstants.GETREPLY,0)+1);
         //创建大图标的Bitmap
         LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
         //1.从系统服务中获得通知管理器
         myManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         //3.定义一个PendingIntent，点击Notification后启动一个Activity
-        Intent intent = new Intent(context, GetReplyActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(USERID,userid);
+        intent.putExtra(MESSAGE_TYPE,1);
         PendingIntent pi = PendingIntent.getActivity(
                 context,
                 100,
@@ -441,8 +455,7 @@ public class MyApplication extends Application {
         //2.通过Notification.Builder来创建通知
         Notification.Builder myBuilder = new Notification.Builder(context);
         myBuilder.setContentTitle("27")
-                .setContentText("通知")
-                .setSubText("您收到一条新的评论")
+                .setContentText("您收到一条新的匹配聊天")
 //                .setTicker("您收到新的消息")
                 //设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示
                 .setSmallIcon(R.mipmap.logo)
@@ -464,49 +477,52 @@ public class MyApplication extends Application {
     }
 
 
-//    public void showMessageNotification(Message message) {
-//        //创建大图标的Bitmap
-//        LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-//        //1.从系统服务中获得通知管理器
-//        myManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//
-//        //3.定义一个PendingIntent，点击Notification后启动一个Activity
+    /**
+     * 聊天消息的通知，点击进主页  打开聊天窗口
+     * @param message
+     */
+    public void showMessageNotification(Message message) {
+        //创建大图标的Bitmap
+        LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        //1.从系统服务中获得通知管理器
+        myManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        //3.定义一个PendingIntent，点击Notification后启动一个Activity
 //        Intent intent = new Intent(context, NotificationClickReceiver.class);
 //        intent.putExtra("userid",message.getSenderUserId());
-////        intent.putExtra("name",message.getContent().getUserInfo().getName());
-//
-//        PendingIntent pi = PendingIntent.getActivity(
-//                context,
-//                100,
-//                intent,
-//                PendingIntent.FLAG_CANCEL_CURRENT
-//        );
-////        RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE,message.getSenderUserId(),username);
-//
-//
-//        //2.通过Notification.Builder来创建通知
-//        Notification.Builder myBuilder = new Notification.Builder(context);
-//        myBuilder.setContentTitle("23's")
-////                .setContentText(message.getContent().getUserInfo().getName())
-//                .setContentText("收到")
-//                .setSubText("收到一条新消息")
-////                .setTicker("您收到新的消息")
-//                //设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setLargeIcon(LargeBitmap)
-//                //设置默认声音和震动
-//                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-//                .setAutoCancel(true)//点击后取消
-//                .setWhen(System.currentTimeMillis())//设置通知时间
-//                .setPriority(Notification.PRIORITY_HIGH)//高优先级
-////                        .setVisibility(Notification.VISIBILITY_PUBLIC)
-//                //android5.0加入了一种新的模式Notification的显示等级，共有三种：
-//                //VISIBILITY_PUBLIC  只有在没有锁屏时会显示通知
-//                //VISIBILITY_PRIVATE 任何情况都会显示通知
-//                //VISIBILITY_SECRET  在安全锁和没有锁屏的情况下显示通知
-//                .setContentIntent(pi);  //3.关联PendingIntent
-//        myNotification = myBuilder.build();
-//        //4.通过通知管理器来发起通知，ID区分通知
-//        myManager.notify(1, myNotification);
-//    }
+//        intent.putExtra("name",message.getContent().getUserInfo().getName());
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(USERID,message.getSenderUserId());
+        intent.putExtra(MESSAGE_TYPE,2);
+        PendingIntent pi = PendingIntent.getActivity(
+                context,
+                100,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT
+        );
+
+        //2.通过Notification.Builder来创建通知
+        Notification.Builder myBuilder = new Notification.Builder(context);
+        myBuilder.setContentTitle("27")
+//                .setContentText(message.getContent().getUserInfo().getName())
+                .setContentText("您收到一条新消息")
+//                .setTicker("您收到新的消息")
+                //设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示
+                .setSmallIcon(R.mipmap.logo)
+                .setLargeIcon(LargeBitmap)
+                //设置默认声音和震动
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setAutoCancel(true)//点击后取消
+                .setWhen(System.currentTimeMillis())//设置通知时间
+                .setPriority(Notification.PRIORITY_HIGH)//高优先级
+//                        .setVisibility(Notification.VISIBILITY_PUBLIC)
+                //android5.0加入了一种新的模式Notification的显示等级，共有三种：
+                //VISIBILITY_PUBLIC  只有在没有锁屏时会显示通知
+                //VISIBILITY_PRIVATE 任何情况都会显示通知
+                //VISIBILITY_SECRET  在安全锁和没有锁屏的情况下显示通知
+                .setContentIntent(pi);  //3.关联PendingIntent
+        myNotification = myBuilder.build();
+        //4.通过通知管理器来发起通知，ID区分通知
+        myManager.notify(1, myNotification);
+    }
 }

@@ -4,12 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="70dp">
 
-    <com.thinkcool.circletextimageview.CircleTextImageView
-        android:id="@+id/cliv_concern_or_fans_item_touxiang"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true" />
+    <RelativeLayout
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/jj"
+        android:layout_width="54dp"
+        android:layout_height="54dp">
+        <com.thinkcool.circletextimageview.CircleTextImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/cliv_concern_or_fans_item_touxiang"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true" />
+        <ImageView
+            android:id="@+id/vip_tag"
+            android:background="@mipmap/vipicon_01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
 
 
     <TextView
@@ -18,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="夏天夏天"
         android:textSize="18sp"
-        android:layout_toRightOf="@id/cliv_concern_or_fans_item_touxiang"
+        android:layout_toRightOf="@id/jj"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"/>
     <ImageView
@@ -33,5 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="#eeeeee"></View>
+        android:background="#eeeeee">
+
+    </View>
 </RelativeLayout>

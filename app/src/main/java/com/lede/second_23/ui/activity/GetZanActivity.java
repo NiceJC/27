@@ -48,6 +48,8 @@ public class GetZanActivity extends AppCompatActivity implements OnResponseListe
     ImageView ivGetZanActivityBack;
     @Bind(R.id.prv_get_zan_activity_show)
     PullToRrefreshRecyclerView prvGetZanActivityShow;
+
+
     private RequestQueue requestQueue;
     private Gson mGson;
     private Context context;
@@ -85,6 +87,8 @@ public class GetZanActivity extends AppCompatActivity implements OnResponseListe
                 DIYImageView diyiv_userimg=holder.getView(R.id.diyiv_item_get_zan_userimg);
                 TextView tv_nickname=holder.getView(R.id.tv_item_get_zan_nickname);
                 ImageView iv_forum_pic=holder.getView(R.id.iv_item_get_zan_forum_pic);
+                TextView zanCount=holder.getView(R.id.zan_count);
+
                 iv_forum_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -99,7 +103,8 @@ public class GetZanActivity extends AppCompatActivity implements OnResponseListe
                 }else {
                     Glide.with(context).load(listBean.getAllRecord().getUrl()).into(iv_forum_pic);
                 }
-                tv_nickname.setText(listBean.getUserInfo().get(0).getNickName()+"等"+listBean.getCountLike()+"人赞了你");
+                tv_nickname.setText(listBean.getUserInfo().get(0).getNickName());
+                zanCount.setText("  等"+listBean.getCountLike()+"人赞了你");
             }
         };
         getZanAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
