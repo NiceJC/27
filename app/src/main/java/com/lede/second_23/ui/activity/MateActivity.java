@@ -40,10 +40,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
-import io.rong.imlib.IRongCallback;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -108,7 +105,12 @@ public class MateActivity extends BaseActivity {
     private boolean isVIP = false;
     private int remainedTimes = 3;
 
+    private int choosenItem=-1;
     private List<NewMatingUserBean.DataBean.UserInfoListBean> userList = new ArrayList<>(); //要显示的User
+
+
+    private NewMatingUserBean.DataBean.UserInfoListBean choosenUser;
+
     private List<NewMatingUserBean.DataBean.UserInfoListBean> choosenUserList = new ArrayList<>(); //选中的User
 
     private MatingService matingService;
@@ -195,7 +197,13 @@ public class MateActivity extends BaseActivity {
                     Glide.with(this).load(R.mipmap.flash8).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(matingGIF);
 
                     isMating = true;
-                    choosenUserList.clear();
+//                    choosenUserList.clear();
+
+                    choosenItem=-1;
+                    startChat.setSelected(false);
+                    startChat.setClickable(false);
+
+
                     mateButton.setSelected(true);
                     matingGIF.setVisibility(View.VISIBLE);
                     matingView.setVisibility(View.VISIBLE);
@@ -220,7 +228,9 @@ public class MateActivity extends BaseActivity {
 
 
 
-                choosenUserList.clear();
+                choosenItem=-1;
+                startChat.setSelected(false);
+                startChat.setClickable(false);
 
 
                 Glide.with(this).load(R.mipmap.flash8).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(matingGIF);
@@ -244,34 +254,44 @@ public class MateActivity extends BaseActivity {
                 // 构造 TextMessage 实例
                 TextMessage myTextMessage = TextMessage.obtain("hi");
 
+
+                String username=choosenUser.getNickName();
+                String userId=choosenUser.getUserId();
+
+                RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
+
+                pushMatchedInfo(userId);
                 /* 生成 Message 对象。
                  * "7127" 为目标 Id。根据不同的 conversationType，可能是用户 Id、讨论组 Id、群组 Id 或聊天室 Id。
                  * Conversation.ConversationType.PRIVATE 为私聊会话类型，根据需要，也可以传入其它会话类型，如群组，讨论组等。
                 */
-                for(NewMatingUserBean.DataBean.UserInfoListBean user :choosenUserList){
-                    Message myMessage = Message.obtain(user.getUserId(), Conversation.ConversationType.PRIVATE, myTextMessage);
-                    pushMatchedInfo(user.getUserId());
-                    RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
-                        @Override
-                        public void onAttached(Message message) {
-                            //消息本地数据库存储成功的回调
-                        }
 
-                        @Override
-                        public void onSuccess(Message message) {
-                            //消息通过网络发送成功的回调
+                
 
-                        }
 
-                        @Override
-                        public void onError(Message message, RongIMClient.ErrorCode errorCode) {
-                            //消息发送失败的回调
-                        }
-                    });
+//                for(NewMatingUserBean.DataBean.UserInfoListBean user :choosenUserList){
+//                    Message myMessage = Message.obtain(user.getUserId(), Conversation.ConversationType.PRIVATE, myTextMessage);
+//                    pushMatchedInfo(user.getUserId());
+//                    RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
+//                        @Override
+//                        public void onAttached(Message message) {
+//                            //消息本地数据库存储成功的回调
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(Message message) {
+//                            //消息通过网络发送成功的回调
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Message message, RongIMClient.ErrorCode errorCode) {
+//                            //消息发送失败的回调
+//                        }
+//                    });
+//
+//                }
 
-                }
-
-                startActivity(new Intent(this, ConversationListDynamicActivtiy.class));
 
 
 
@@ -456,6 +476,9 @@ public class MateActivity extends BaseActivity {
 
         remainTimes.setText(remainedTimes+"");
 
+        startChat.setSelected(false);
+        startChat.setClickable(false);
+
         runnable = new Runnable() { //计数
             @Override
             public void run() {
@@ -529,9 +552,15 @@ public class MateActivity extends BaseActivity {
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(headImageView);
 
+
+
         adapter = new CommonAdapter<NewMatingUserBean.DataBean.UserInfoListBean>(this, R.layout.matched_user_item, userList) {
             @Override
-            protected void convert(ViewHolder holder, final NewMatingUserBean.DataBean.UserInfoListBean userInfoBean, int position) {
+            protected void convert(ViewHolder holder, final NewMatingUserBean.DataBean.UserInfoListBean userInfoBean, final int position) {
+
+
+
+
                 ImageView headImage = holder.getView(R.id.head_img);
                 final ImageView indicator = holder.getView(R.id.choose_indicator);
                 ImageView sexBg=holder.getView(R.id.sex_bg);
@@ -549,28 +578,39 @@ public class MateActivity extends BaseActivity {
 
                 Glide.with(MateActivity.this).load(userInfoBean.getImgUrl()).bitmapTransform(new CropCircleTransformation(MateActivity.this)).into(headImage);
 
-                if(!choosenUserList.contains(userInfoBean)){
+//                if(!choosenUserList.contains(userInfoBean)){
+//                    indicator.setSelected(false);
+//                }
+
+                if(choosenItem==position){
+                    indicator.setSelected(true);
+                }else{
                     indicator.setSelected(false);
                 }
-
 
                 indicator.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!indicator.isSelected()) {
-                            indicator.setSelected(true);
-                            choosenUserList.add(userInfoBean);
-                        } else {
-                            indicator.setSelected(false);
-                            choosenUserList.remove(userInfoBean);
-                        }
-                        if (choosenUserList.size() == 0) {
-                            startChat.setSelected(false);
-                            startChat.setClickable(false);
-                        } else {
-                            startChat.setSelected(true);
-                            startChat.setClickable(true);
-                        }
+//                        if (!indicator.isSelected()) {
+//                            indicator.setSelected(true);
+//                            choosenUserList.add(userInfoBean);
+//                        } else {
+//                            indicator.setSelected(false);
+//                            choosenUserList.remove(userInfoBean);
+//                        }
+//                        if (choosenUserList.size() == 0) {
+//                            startChat.setSelected(false);
+//                            startChat.setClickable(false);
+//                        } else {
+//                            startChat.setSelected(true);
+//                            startChat.setClickable(true);
+//                        }
+                        startChat.setSelected(true);
+                        startChat.setClickable(true);
+                        choosenItem=position;
+                        choosenUser=userInfoBean;
+                        adapter.notifyDataSetChanged();
+
 
                     }
                 });
@@ -589,6 +629,7 @@ public class MateActivity extends BaseActivity {
         };
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+
 
 
     }

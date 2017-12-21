@@ -5,35 +5,28 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.google.gson.Gson;
-import com.lede.second_23.MyApplication;
 import com.lede.second_23.R;
-import com.lede.second_23.bean.NearbyPhotoBean;
+import com.lede.second_23.bean.AllForumBean;
 import com.lede.second_23.bean.SameCityUserBean;
-import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.service.ForumService;
 import com.lede.second_23.service.NearByUserService;
-import com.lede.second_23.ui.activity.ConcernActivity_2;
-import com.lede.second_23.ui.activity.SameCityActivity;
+import com.lede.second_23.ui.activity.NearByActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
-import com.lede.second_23.utils.T;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -50,7 +43,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 
@@ -58,7 +50,7 @@ import static com.lede.second_23.global.GlobalConstants.USER_SEX;
  * Created by ld on 17/10/19.
  */
 
-public class MainFragmentNearBy extends Fragment implements AMapLocationListener {
+public class MainFragmentNearBy extends Fragment {
 
 
     @Bind(R.id.refresh_layout)
@@ -70,34 +62,28 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
     @Bind(R.id.recyclerView_girl)
     RecyclerView girlRecyclerView;
-    @Bind(R.id.recyclerView_all)
-    RecyclerView allRecyclerView;
-
 
 
     private Gson mGson;
 
     private CommonAdapter mAdapter;
     private CommonAdapter girlAdapter;
-    private CommonAdapter allAdapter;
 
 
-    //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
-    private double myLatitude;//纬度
-    private double myLongitude;//经度
-    public AMapLocationClientOption mLocationOption = null;
-
-
+    private ForumService forumService;
     public MultiTransformation transformation;
     private RequestManager mRequestManager;
-    private ArrayList<NearbyPhotoBean.DataBean.UserPhotoBean> nearbyUserPhotoList = new ArrayList<>();
 
-    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList=new ArrayList<>();
-    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> allList=new ArrayList<>();
+    private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumList = new ArrayList<>();
+    private ArrayList<List<AllForumBean.DataBean.SimpleBean.ListBean>> forumListList = new ArrayList<>();
+    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList = new ArrayList<>();
 
+    private boolean isRefresh = true;
+    private boolean isHasNextPage = true;
+
+    private int currentPage = 1;
     String address;
-    String matchedSex="女";
+    String matchedSex = "女";
 
     @Nullable
     @Override
@@ -109,45 +95,39 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
 
         mRequestManager = Glide.with(getContext());
         mGson = new Gson();
-        address= (String) SPUtils.get(getActivity(), ADDRESS, "");
-        String sex= (String) SPUtils.get(getActivity(),USER_SEX,"男");
+        address = (String) SPUtils.get(getActivity(), ADDRESS, "");
+        String sex = (String) SPUtils.get(getActivity(), USER_SEX, "男");
+        forumService = new ForumService(getActivity());
 
-        if(sex.equals("女")){
-            matchedSex="男";
+        if (sex.equals("女")) {
+            matchedSex = "男";
         }
         initView();
         initEvent();
-        getLocation();
+
+        toRefresh();
         mRefreshLayout.isRefreshing();
         return view;
     }
 
 
-    @OnClick({  R.id.women_img_more,R.id.all_img_more })
-    public void onClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.women_img_more})
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.women_img_more:
                 //改为获取异性同城用户
-                Intent intent=new Intent(getActivity(), SameCityActivity.class);
-                intent.putExtra(ADDRESS,address);
-                intent.putExtra(SEXTYPE,matchedSex);
+                Intent intent = new Intent(getActivity(), NearByActivity.class);
+
                 startActivity(intent);
                 break;
-            case R.id.all_img_more:
-                Intent intent2=new Intent(getActivity(), SameCityActivity.class);
-                intent2.putExtra(ADDRESS,address);
-                intent2.putExtra(SEXTYPE,"all");
-                startActivity(intent2);
-                break;
+
             default:
                 break;
-
 
 
         }
 
     }
-
 
 
     private void initView() {
@@ -160,24 +140,135 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         );
 
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mAdapter = new CommonAdapter<NearbyPhotoBean.DataBean.UserPhotoBean>(getActivity(), R.layout.fragment_nearby_item, nearbyUserPhotoList) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
             @Override
-            protected void convert(ViewHolder holder, final NearbyPhotoBean.DataBean.UserPhotoBean userPhotoBean, int position) {
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        mAdapter = new CommonAdapter<List<AllForumBean.DataBean.SimpleBean.ListBean>>(getActivity(), R.layout.pushed_forum_item, forumListList) {
+            @Override
+            protected void convert(ViewHolder holder, final List<AllForumBean.DataBean.SimpleBean.ListBean> list, int position) {
 
-                ImageView imageView = holder.getView(R.id.iv_item_test);
-                mRequestManager
-                        .load(userPhotoBean.getUrlImg())
-                        .bitmapTransform(transformation)
-                        .into(imageView);
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
-                        intent.putExtra(USERID, userPhotoBean.getUserId());
-                        getActivity().startActivity(intent);
-                    }
-                });
+                ImageView imageView0 = holder.getView(R.id.image1);
+                ImageView imageView1 = holder.getView(R.id.image2);
+                ImageView imageView2 = holder.getView(R.id.image3);
+                ImageView imageView3 = holder.getView(R.id.image4);
+                ImageView imageView4 = holder.getView(R.id.image5);
+                ImageView imageView5 = holder.getView(R.id.image6);
+                ImageView imageView6 = holder.getView(R.id.image7);
+                ImageView imageView7 = holder.getView(R.id.image8);
+                ImageView imageView8 = holder.getView(R.id.image9);
+
+
+
+
+
+
+//                List<ImageView> viewList=new ArrayList<>();
+//                viewList.add(imageView0);
+//                viewList.add(imageView1);
+//                viewList.add(imageView2);
+//                viewList.add(imageView3);
+//                viewList.add(imageView4);
+//                viewList.add(imageView5);
+//                viewList.add(imageView6);
+//                viewList.add(imageView7);
+
+//                for(int i=0;i<list.size();i++){
+//
+//
+//                }
+
+
+
+
+                if (list.size()<1) {
+//                    imageView0.setVisibility(View.GONE);
+                } else if (!list.get(0).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(0).getAllRecords().get(0).getUrl()).into(imageView0);
+                } else {
+                    mRequestManager.load(list.get(0).getAllRecords().get(0).getUrlThree()).into(imageView0);
+                }
+
+                if (list.size()<2) {
+//                    imageView1.setVisibility(View.GONE);
+                } else if (!list.get(1).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(1).getAllRecords().get(0).getUrl()).into(imageView1);
+                } else {
+                    mRequestManager.load(list.get(1).getAllRecords().get(0).getUrlThree()).into(imageView1);
+                }
+
+                if (list.size()<3) {
+//                    imageView2.setVisibility(View.GONE);
+                } else if (!list.get(2).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(2).getAllRecords().get(0).getUrl()).into(imageView2);
+                } else {
+                    mRequestManager.load(list.get(2).getAllRecords().get(0).getUrlThree()).into(imageView2);
+                }
+
+
+                if (list.size()<4) {
+//                    imageView3.setVisibility(View.GONE);
+                } else if (!list.get(3).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(3).getAllRecords().get(0).getUrl()).into(imageView3);
+                } else {
+                    mRequestManager.load(list.get(3).getAllRecords().get(0).getUrlThree()).into(imageView3);
+                }
+
+                if (list.size()<5) {
+//                    imageView4.setVisibility(View.GONE);
+                } else if (!list.get(4).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(4).getAllRecords().get(0).getUrl()).into(imageView4);
+                } else {
+                    mRequestManager.load(list.get(4).getAllRecords().get(0).getUrlThree()).into(imageView4);
+                }
+                if (list.size()<6) {
+//                    imageView5.setVisibility(View.GONE);
+                } else if (!list.get(5).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(5).getAllRecords().get(0).getUrl()).into(imageView5);
+                } else {
+                    mRequestManager.load(list.get(5).getAllRecords().get(0).getUrlThree()).into(imageView5);
+                }
+                if (list.size()<7) {
+//                    imageView6.setVisibility(View.GONE);
+                } else if (!list.get(6).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(6).getAllRecords().get(0).getUrl()).into(imageView6);
+                } else {
+                    mRequestManager.load(list.get(6).getAllRecords().get(0).getUrlThree()).into(imageView6);
+                }
+                if (list.size()<8) {
+//                    imageView7.setVisibility(View.GONE);
+                } else if (!list.get(7).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(7).getAllRecords().get(0).getUrl()).into(imageView7);
+                } else {
+                    mRequestManager.load(list.get(7).getAllRecords().get(0).getUrlThree()).into(imageView7);
+                }
+                if (list.size()<9) {
+//                    imageView0.setVisibility(View.GONE);
+                } else if (!list.get(8).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(list.get(8).getAllRecords().get(0).getUrl()).into(imageView8);
+                } else {
+                    mRequestManager.load(list.get(8).getAllRecords().get(0).getUrlThree()).into(imageView8);
+                }
+
+
+//                if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+//                    mRequestManager.load(listBean.getAllRecords().get(0).getUrl()).into(showView_show);
+//                    showView_play.setVisibility(View.GONE);
+//                    if(listBean.getAllRecords().size()==1||listBean.getAllRecords().size()==0){
+//                        showView_photos.setVisibility(View.GONE);
+//                    }else{
+//                        showView_photos.setVisibility(View.VISIBLE);
+//                    }
+
+
+//                }else {
+//                    Log.i("videopic", "convert: "+listBean.getAllRecords().get(0).getUrlThree());
+//                    mRequestManager.load(listBean.getAllRecords().get(0).getUrlThree()).into(showView_show);
+//                    showView_play.setVisibility(View.VISIBLE);
+//                    showView_photos.setVisibility(View.GONE);
+//                }
 
 
             }
@@ -185,20 +276,20 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         mRecyclerView.setAdapter(mAdapter);
 
 
-        girlRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
-        girlAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, girlList) {
+        girlRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        girlAdapter = new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, girlList) {
             @Override
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
-               ImageView imageView=holder.getView(R.id.user_icon);
-                TextView textView=holder.getView(R.id.user_nickName);
-                ImageView vipTag=holder.getView(R.id.vip_tag);
+                ImageView imageView = holder.getView(R.id.user_icon);
+                TextView textView = holder.getView(R.id.user_nickName);
+                ImageView vipTag = holder.getView(R.id.vip_tag);
                 mRequestManager.load(userInfoListBean.getImgUrl())
                         .bitmapTransform(new CropCircleTransformation(getContext()))
                         .into(imageView);
                 textView.setText(userInfoListBean.getNickName());
-                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
+                if (userInfoListBean.getTrueName() != null && userInfoListBean.getTrueName().equals("1")) {
                     vipTag.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     vipTag.setVisibility(View.GONE);
                 }
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
@@ -215,37 +306,6 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         girlRecyclerView.setAdapter(girlAdapter);
 
 
-        allRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
-        allAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, allList) {
-            @Override
-            protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
-                ImageView imageView=holder.getView(R.id.user_icon);
-                TextView textView=holder.getView(R.id.user_nickName);
-                ImageView vipTag=holder.getView(R.id.vip_tag);
-                mRequestManager.load(userInfoListBean.getImgUrl())
-                        .bitmapTransform(new CropCircleTransformation(getContext()))
-                        .into(imageView);
-                textView.setText(userInfoListBean.getNickName());
-                if(userInfoListBean.getTrueName()!=null&&userInfoListBean.getTrueName().equals("1")){
-                    vipTag.setVisibility(View.VISIBLE);
-                }else{
-                    vipTag.setVisibility(View.GONE);
-                }
-
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), UserInfoActivty.class);
-                        intent.putExtra(USERID, userInfoListBean.getUserId());
-                        startActivity(intent);
-                    }
-                });
-
-            }
-        };
-        allRecyclerView.setAdapter(allAdapter);
-
-
     }
 
 
@@ -254,46 +314,43 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                getLocation();
+                toRefresh();
             }
         });
 
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore(200);
+                toLoadMore();
             }
         });
     }
 
+    public void toRefresh() {
 
-    private void doRequest() {
+        isRefresh = true;
+        doRequest(1);
+    }
 
-        NearByUserService nearByUserService= new NearByUserService(getActivity());
-        nearByUserService.requestNearbyPhoto(address, myLatitude, myLongitude, new MyCallBack() {
+    public void toLoadMore() {
+
+
+        if (isHasNextPage) {
+            isRefresh = false;
+            doRequest(currentPage + 1);
+        } else {
+            mRefreshLayout.finishLoadmore();
+        }
+    }
+
+    private void doRequest(int pageNum) {
+
+        NearByUserService nearByUserService = new NearByUserService(getActivity());
+
+        nearByUserService.requestCitySingleSex(address, matchedSex, 1, 3, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
-                List<NearbyPhotoBean.DataBean.UserPhotoBean> list= (List<NearbyPhotoBean.DataBean.UserPhotoBean>) o;
-                nearbyUserPhotoList.clear();
-                nearbyUserPhotoList.addAll(list);
-                mAdapter.notifyDataSetChanged();
-                mRefreshLayout.finishRefresh();
-
-            }
-
-            @Override
-            public void onFail(String mistakeInfo) {
-                mRefreshLayout.finishRefresh();
-
-            }
-        });
-
-
-        nearByUserService.requestCitySingleSex(address,matchedSex, 1, 3, new MyCallBack() {
-            @Override
-            public void onSuccess(Object o) {
-                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
-
+                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list = (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
                 girlList.clear();
                 girlList.addAll(list);
                 girlAdapter.notifyDataSetChanged();
@@ -306,78 +363,64 @@ public class MainFragmentNearBy extends Fragment implements AMapLocationListener
             }
         });
 
-        nearByUserService.requestCityAll(address, 1,3, new MyCallBack() {
+        forumService.requestPushForum(pageNum,100, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
-                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
+                List<AllForumBean.DataBean.SimpleBean.ListBean> list = (List<AllForumBean.DataBean.SimpleBean.ListBean>) o;
+                List<AllForumBean.DataBean.SimpleBean.ListBean> list1 = new ArrayList<AllForumBean.DataBean.SimpleBean.ListBean>();
+                List<AllForumBean.DataBean.SimpleBean.ListBean> list2 = new ArrayList<AllForumBean.DataBean.SimpleBean.ListBean>();
+
+                if (list.size() != 0) {
+
+                    if (isRefresh) {
+                        forumListList.clear();
+                        currentPage = 1;
+                        isHasNextPage = true;
+                    } else {
+                        currentPage++;
+                    }
+
+                    if (list.size() > 9) {
+                        for (int i = 0; i < 9; i++) {
+                            list1.add(list.get(i));
+
+                        }
+                        for (int i = 9; i < list.size(); i++) {
+                            list2.add(list.get(i));
+                        }
+
+                        forumListList.add(list1);
+                        forumListList.add(list2);
 
 
-                allList.clear();
-                allList.addAll(list);
-                allAdapter.notifyDataSetChanged();
+                    } else {
+                        for (int i = 0; i < list.size(); i++) {
+                            list1.add(list.get(i));
+                        }
+                        forumListList.add(list1);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    isHasNextPage = false;
+                }
+
+
+
 
 
             }
 
             @Override
             public void onFail(String mistakeInfo) {
-
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
             }
         });
 
 
     }
-
-
-
-
-
-    //定位
-    public void getLocation() {
-
-
-        mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(this);
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        mLocationOption.setOnceLocation(true);//一次定位
-        mLocationOption.setOnceLocationLatest(true);//返回最近3s内精度最高的一次定位结果
-
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
-    }
-
-
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if (aMapLocation != null) {
-            if (aMapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                myLatitude = aMapLocation.getLatitude();//获取纬度
-                SPUtils.put(getActivity(), "" + GlobalConstants.LATITUDE, myLatitude);
-                myLongitude = aMapLocation.getLongitude();//获取经度
-                SPUtils.put(getActivity(), "" + GlobalConstants.LONGITUDE, myLongitude);
-
-                doRequest();
-
-                mLocationClient.stopLocation();
-
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + aMapLocation.getErrorCode() + ", errInfo:"
-                        + aMapLocation.getErrorInfo());
-                T.showShort(MyApplication.getInstance(), "定位失败,请检查是否开启应用定位权限");
-                mRefreshLayout.finishRefresh();
-            }
-        }
-    }
-
-
 
 
 }

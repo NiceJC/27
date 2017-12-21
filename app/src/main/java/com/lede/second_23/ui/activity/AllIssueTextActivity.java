@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -73,6 +74,13 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
     @Bind(R.id.rv_all_issue_text_activity_show)
     RecyclerView rvAllIssueTextActivityShow;
 
+    @Bind(R.id.location_check)
+    LinearLayout locationCheck;
+    @Bind(R.id.location_text)
+    TextView locationTextView;
+    @Bind(R.id.location_delete)
+    ImageView locationDelete;
+
     private static final int GET_QIUNIUTOKEN = 1000;
     private static final int PIC_UP_SERVICE = 2000;
 
@@ -106,6 +114,7 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
     private String video_path;
     private boolean isFirstIn = true;
 
+    private String locationText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,6 +247,26 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
                 .create();
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+         locationText=intent.getStringExtra("location");
+        if(locationText.equals("")){
+            return;
+        }
+        locationTextView.setText(locationText);
+        locationDelete.setVisibility(View.VISIBLE);
+        locationDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                locationTextView.setText("显示位置");
+                locationDelete.setVisibility(View.GONE);
+            }
+        });
+
+    }
 
     private void initRecyclerView() {
         mAdapter = new CommonAdapter<LocalMedia>(mContext, R.layout.item, selectMedia) {
@@ -424,12 +453,17 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
         }
     }
 
-    @OnClick({R.id.iv_all_issue_text_activity_back, R.id.iv_all_issue_text_activity_send})
+    @OnClick({R.id.iv_all_issue_text_activity_back, R.id.iv_all_issue_text_activity_send,R.id.location_check})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_all_issue_text_activity_back:
                 finish();
                 break;
+            case R.id.location_check:
+                Intent intent=new Intent(this,LocationCheckinActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.iv_all_issue_text_activity_send:
                 if ((selectMedia.size() == 1 && selectMedia.get(0) == null)) {
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
@@ -665,7 +699,6 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
             ArrayList<AllRecord> recordArrayList = new ArrayList<>();
             recordArrayList.add(new AllRecord(1, 0, qiniuvideoFirst, qiniuVieoPatch, null, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), forumId, null, null));
             allForum = new AllForum((String) SPUtils.get(mContext, GlobalConstants.TOKEN, ""), forumId, (String) SPUtils.get(mContext, GlobalConstants.USERID, ""), etAllIssueTextActivityText.getText().toString().trim(), (String) SPUtils.get(mContext, GlobalConstants.LATITUDE, ""), (String) SPUtils.get(mContext, GlobalConstants.LONGITUDE, ""), recordArrayList);
-
         }
         String str = mGson.toJson(allForum);
         Log.i("json", "uploadService: " + str);

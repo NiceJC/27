@@ -246,6 +246,7 @@
         <activity android:name=".ui.activity.AllReplyActivity" />
         <activity android:name=".ui.activity.AllIssueTextActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             />
         <activity android:name=".ui.activity.ShowAllForumByVideoActivity" />
         <activity
@@ -289,6 +290,8 @@
         <activity android:name=".ui.activity.VIPIntroduceActivity"/>
 
         <activity android:name=".ui.activity.MateActivity"/>
+        <activity android:name=".ui.activity.LocationCheckinActivity"/>
+        <activity android:name=".ui.activity.NearByActivity"/>
 
 
 
