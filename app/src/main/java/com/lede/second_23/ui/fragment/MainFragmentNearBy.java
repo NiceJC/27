@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,13 +24,16 @@ import com.lede.second_23.bean.SameCityUserBean;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.ForumService;
 import com.lede.second_23.service.NearByUserService;
+import com.lede.second_23.ui.activity.ForumDetailActivity;
 import com.lede.second_23.ui.activity.NearByActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.UiUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
@@ -47,6 +50,10 @@ import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 
 /**
+ * 这个瓜皮布局的思路要记一下
+ * 这是写的最有意思的一个页面
+ * <p>
+ * <p>
  * Created by ld on 17/10/19.
  */
 
@@ -75,7 +82,9 @@ public class MainFragmentNearBy extends Fragment {
     private RequestManager mRequestManager;
 
     private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumList = new ArrayList<>();
-    private ArrayList<List<AllForumBean.DataBean.SimpleBean.ListBean>> forumListList = new ArrayList<>();
+    private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumAddList = new ArrayList<>();
+    private ArrayList<AllForumBean.DataBean.SimpleBean.ListBean> forumOriginalList = new ArrayList<>();
+
     private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList = new ArrayList<>();
 
     private boolean isRefresh = true;
@@ -140,139 +149,126 @@ public class MainFragmentNearBy extends Fragment {
         );
 
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 3) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
-        });
-        mAdapter = new CommonAdapter<List<AllForumBean.DataBean.SimpleBean.ListBean>>(getActivity(), R.layout.pushed_forum_item, forumListList) {
+        };
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            protected void convert(ViewHolder holder, final List<AllForumBean.DataBean.SimpleBean.ListBean> list, int position) {
+            public int getSpanSize(int position) {
 
-                ImageView imageView0 = holder.getView(R.id.image1);
-                ImageView imageView1 = holder.getView(R.id.image2);
-                ImageView imageView2 = holder.getView(R.id.image3);
-                ImageView imageView3 = holder.getView(R.id.image4);
-                ImageView imageView4 = holder.getView(R.id.image5);
-                ImageView imageView5 = holder.getView(R.id.image6);
-                ImageView imageView6 = holder.getView(R.id.image7);
-                ImageView imageView7 = holder.getView(R.id.image8);
-                ImageView imageView8 = holder.getView(R.id.image9);
-
-
-
-
-
-
-//                List<ImageView> viewList=new ArrayList<>();
-//                viewList.add(imageView0);
-//                viewList.add(imageView1);
-//                viewList.add(imageView2);
-//                viewList.add(imageView3);
-//                viewList.add(imageView4);
-//                viewList.add(imageView5);
-//                viewList.add(imageView6);
-//                viewList.add(imageView7);
-
-//                for(int i=0;i<list.size();i++){
-//
-//
-//                }
-
-
-
-
-                if (list.size()<1) {
-//                    imageView0.setVisibility(View.GONE);
-                } else if (!list.get(0).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(0).getAllRecords().get(0).getUrl()).into(imageView0);
+                if (position % 16 == 0 || position % 16 == 9) {
+                    return 2;
                 } else {
-                    mRequestManager.load(list.get(0).getAllRecords().get(0).getUrlThree()).into(imageView0);
+                    return 1;
                 }
-
-                if (list.size()<2) {
-//                    imageView1.setVisibility(View.GONE);
-                } else if (!list.get(1).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(1).getAllRecords().get(0).getUrl()).into(imageView1);
-                } else {
-                    mRequestManager.load(list.get(1).getAllRecords().get(0).getUrlThree()).into(imageView1);
-                }
-
-                if (list.size()<3) {
-//                    imageView2.setVisibility(View.GONE);
-                } else if (!list.get(2).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(2).getAllRecords().get(0).getUrl()).into(imageView2);
-                } else {
-                    mRequestManager.load(list.get(2).getAllRecords().get(0).getUrlThree()).into(imageView2);
-                }
-
-
-                if (list.size()<4) {
-//                    imageView3.setVisibility(View.GONE);
-                } else if (!list.get(3).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(3).getAllRecords().get(0).getUrl()).into(imageView3);
-                } else {
-                    mRequestManager.load(list.get(3).getAllRecords().get(0).getUrlThree()).into(imageView3);
-                }
-
-                if (list.size()<5) {
-//                    imageView4.setVisibility(View.GONE);
-                } else if (!list.get(4).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(4).getAllRecords().get(0).getUrl()).into(imageView4);
-                } else {
-                    mRequestManager.load(list.get(4).getAllRecords().get(0).getUrlThree()).into(imageView4);
-                }
-                if (list.size()<6) {
-//                    imageView5.setVisibility(View.GONE);
-                } else if (!list.get(5).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(5).getAllRecords().get(0).getUrl()).into(imageView5);
-                } else {
-                    mRequestManager.load(list.get(5).getAllRecords().get(0).getUrlThree()).into(imageView5);
-                }
-                if (list.size()<7) {
-//                    imageView6.setVisibility(View.GONE);
-                } else if (!list.get(6).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(6).getAllRecords().get(0).getUrl()).into(imageView6);
-                } else {
-                    mRequestManager.load(list.get(6).getAllRecords().get(0).getUrlThree()).into(imageView6);
-                }
-                if (list.size()<8) {
-//                    imageView7.setVisibility(View.GONE);
-                } else if (!list.get(7).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(7).getAllRecords().get(0).getUrl()).into(imageView7);
-                } else {
-                    mRequestManager.load(list.get(7).getAllRecords().get(0).getUrlThree()).into(imageView7);
-                }
-                if (list.size()<9) {
-//                    imageView0.setVisibility(View.GONE);
-                } else if (!list.get(8).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    mRequestManager.load(list.get(8).getAllRecords().get(0).getUrl()).into(imageView8);
-                } else {
-                    mRequestManager.load(list.get(8).getAllRecords().get(0).getUrlThree()).into(imageView8);
-                }
-
-
-//                if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-//                    mRequestManager.load(listBean.getAllRecords().get(0).getUrl()).into(showView_show);
-//                    showView_play.setVisibility(View.GONE);
-//                    if(listBean.getAllRecords().size()==1||listBean.getAllRecords().size()==0){
-//                        showView_photos.setVisibility(View.GONE);
-//                    }else{
-//                        showView_photos.setVisibility(View.VISIBLE);
-//                    }
-
-
-//                }else {
-//                    Log.i("videopic", "convert: "+listBean.getAllRecords().get(0).getUrlThree());
-//                    mRequestManager.load(listBean.getAllRecords().get(0).getUrlThree()).into(showView_show);
-//                    showView_play.setVisibility(View.VISIBLE);
-//                    showView_photos.setVisibility(View.GONE);
-//                }
 
 
             }
+        });
+
+        mRecyclerView.setLayoutManager(manager);
+        mAdapter = new CommonAdapter<AllForumBean.DataBean.SimpleBean.ListBean>(getActivity(), R.layout.imageview_item, forumList) {
+            @Override
+            protected void convert(ViewHolder holder, final AllForumBean.DataBean.SimpleBean.ListBean bean, int position) {
+//
+                ImageView imageview1 = holder.getView(R.id.image1);
+                ImageView imageview2 = holder.getView(R.id.image2);
+                if (position % 16 == 0 || position % 16 == 9) {
+                    imageview1.setLayoutParams(new LinearLayout.LayoutParams(UiUtils.dip2px(254), UiUtils.dip2px(254)));
+                    imageview2.setVisibility(View.GONE);
+                } else if (position % 16 == 1 || position % 16 == 8) {
+                    imageview2.setVisibility(View.VISIBLE);
+                    imageview1.setLayoutParams(new LinearLayout.LayoutParams(UiUtils.dip2px(125), UiUtils.dip2px(125)));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(UiUtils.dip2px(125), UiUtils.dip2px(125));
+                    lp.setMargins(0, UiUtils.dip2px(4), 0, 0);
+                    imageview2.setLayoutParams(lp);
+
+                    int count = position / 16;
+
+
+                    if (position % 16 == 1) {
+
+                       final int fcount  = count * 2 + 0;
+                        if (forumAddList.size() >= fcount + 1) {
+                            if (!forumAddList.get(fcount).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                                mRequestManager.load(forumAddList.get(fcount).getAllRecords().get(0).getUrl()).into(imageview2);
+
+                            } else {
+                                mRequestManager.load(forumAddList.get(fcount).getAllRecords().get(0).getUrlThree()).into(imageview2);
+                            }
+                            imageview2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(getActivity(), ForumDetailActivity.class);
+                                    intent.putExtra("forumId", forumAddList.get(fcount).getForumId());
+                                    intent.putExtra("userId", forumAddList.get(fcount).getUserId());
+                                    intent.putExtra("forum", forumAddList.get(fcount));
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+
+
+                    } else if (position % 16 == 8) {
+                       final int  fcount = count * 2 + 1;
+                        if (forumAddList.size() >= fcount + 1) {
+
+                            if (!forumAddList.get(fcount).getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                                mRequestManager.load(forumAddList.get(fcount).getAllRecords().get(0).getUrl()).into(imageview2);
+
+                            } else {
+                                mRequestManager.load(forumAddList.get(fcount).getAllRecords().get(0).getUrlThree()).into(imageview2);
+                            }
+                            imageview2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(getActivity(), ForumDetailActivity.class);
+                                    intent.putExtra("forumId", forumAddList.get(fcount).getForumId());
+                                    intent.putExtra("userId", forumAddList.get(fcount).getUserId());
+                                    intent.putExtra("forum", forumAddList.get(fcount));
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+
+
+
+
+                } else {
+                    imageview2.setVisibility(View.GONE);
+                    imageview1.setLayoutParams(new LinearLayout.LayoutParams(UiUtils.dip2px(125), UiUtils.dip2px(125)));
+
+                }
+
+
+                if (!bean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    mRequestManager.load(bean.getAllRecords().get(0).getUrl()).into(imageview1);
+                } else {
+                    mRequestManager.load(bean.getAllRecords().get(0).getUrlThree()).into(imageview1);
+                }
+
+            }
         };
+
+        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent=new Intent(getActivity(), ForumDetailActivity.class);
+                intent.putExtra("forumId", forumList.get(position).getForumId());
+                intent.putExtra("userId", forumList.get(position).getUserId());
+                intent.putExtra("forum", forumList.get(position));
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -280,6 +276,7 @@ public class MainFragmentNearBy extends Fragment {
         girlAdapter = new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(getActivity(), R.layout.near_user_item, girlList) {
             @Override
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
+
                 ImageView imageView = holder.getView(R.id.user_icon);
                 TextView textView = holder.getView(R.id.user_nickName);
                 ImageView vipTag = holder.getView(R.id.vip_tag);
@@ -363,53 +360,29 @@ public class MainFragmentNearBy extends Fragment {
             }
         });
 
-        forumService.requestPushForum(pageNum,100, new MyCallBack() {
+        forumService.requestPushForum(pageNum, 100, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 mRefreshLayout.finishRefresh();
                 mRefreshLayout.finishLoadmore();
                 List<AllForumBean.DataBean.SimpleBean.ListBean> list = (List<AllForumBean.DataBean.SimpleBean.ListBean>) o;
-                List<AllForumBean.DataBean.SimpleBean.ListBean> list1 = new ArrayList<AllForumBean.DataBean.SimpleBean.ListBean>();
-                List<AllForumBean.DataBean.SimpleBean.ListBean> list2 = new ArrayList<AllForumBean.DataBean.SimpleBean.ListBean>();
 
                 if (list.size() != 0) {
 
                     if (isRefresh) {
-                        forumListList.clear();
+                        forumList.clear();
+                        forumOriginalList.clear();
                         currentPage = 1;
                         isHasNextPage = true;
                     } else {
                         currentPage++;
                     }
-
-                    if (list.size() > 9) {
-                        for (int i = 0; i < 9; i++) {
-                            list1.add(list.get(i));
-
-                        }
-                        for (int i = 9; i < list.size(); i++) {
-                            list2.add(list.get(i));
-                        }
-
-                        forumListList.add(list1);
-                        forumListList.add(list2);
-
-
-                    } else {
-                        for (int i = 0; i < list.size(); i++) {
-                            list1.add(list.get(i));
-                        }
-                        forumListList.add(list1);
-                    }
-                    mAdapter.notifyDataSetChanged();
+                    forumList.addAll(list);
+                    forumOriginalList.addAll(list);
+                    checkData();
                 } else {
                     isHasNextPage = false;
                 }
-
-
-
-
-
             }
 
             @Override
@@ -418,8 +391,42 @@ public class MainFragmentNearBy extends Fragment {
                 mRefreshLayout.finishLoadmore();
             }
         });
+    }
+
+    /**
+     * 对即将进行展示的data进行处理，以符合瓜皮布局
+     * <p>
+     * 每9个数据抽出一个数据
+     * <p>
+     * 每18个数据 ，抽出 position=2 ，position=9
+     */
+    public void checkData() {
+
+        forumAddList.clear();
+        int addCount = forumOriginalList.size() / 18;
+
+        for (int i = 0; i <= addCount; i++) {
+            if (i < addCount) {
+                forumAddList.add(forumOriginalList.get(i * 18 + 2));
+                forumAddList.add(forumOriginalList.get(i * 18 + 9));
+            } else {
+
+                int position18 = forumOriginalList.size() % 18;
+                if (position18 >= 2) {
+                    forumAddList.add(forumOriginalList.get(i * 18 + 2));
+                }
+
+                if (position18 >= 9) {
+                    forumAddList.add(forumOriginalList.get(i * 18 + 9));
+
+                }
+            }
 
 
+        }
+
+        forumList.removeAll(forumAddList);
+        mAdapter.notifyDataSetChanged();
     }
 
 

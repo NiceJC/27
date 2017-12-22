@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/forum_discover"
+            android:src="@mipmap/forum1"
              />
     </RelativeLayout>
     <View

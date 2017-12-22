@@ -44,6 +44,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
+import static com.lede.second_23.global.GlobalConstants.LATITUDE;
+import static com.lede.second_23.global.GlobalConstants.LONGITUDE;
 import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.USER_SEX;
@@ -62,18 +64,18 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
     RecyclerView mRecyclerView;
 
 
-    @Bind(R.id.recyclerView_girl)
-    RecyclerView girlRecyclerView;
-    @Bind(R.id.recyclerView_all)
-    RecyclerView allRecyclerView;
+    @Bind(R.id.recyclerView_girl_1)
+    RecyclerView girlRecyclerView1;
+    @Bind(R.id.recyclerView_girl_2)
+    RecyclerView girlRecyclerView2;
 
 
 
     private Gson mGson;
 
     private CommonAdapter mAdapter;
-    private CommonAdapter girlAdapter;
-    private CommonAdapter allAdapter;
+    private CommonAdapter girlAdapter1;
+    private CommonAdapter girlAdapter2;
 
 
     //声明AMapLocationClient类对象
@@ -87,8 +89,8 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
     private RequestManager mRequestManager;
     private ArrayList<NearbyPhotoBean.DataBean.UserPhotoBean> nearbyUserPhotoList = new ArrayList<>();
 
-    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList=new ArrayList<>();
-    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> allList=new ArrayList<>();
+    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList1 =new ArrayList<>();
+    private List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> girlList2 =new ArrayList<>();
 
     String address;
     String matchedSex="女";
@@ -105,36 +107,39 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
         address= (String) SPUtils.get(this, ADDRESS, "");
         String sex= (String) SPUtils.get(this,USER_SEX,"男");
 
+        myLatitude=Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LATITUDE,""));
+        myLongitude=Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LONGITUDE,""));
+
+
+//
+
+
+
         if(sex.equals("女")){
             matchedSex="男";
         }
         initView();
         initEvent();
-        getLocation();
+        doRequest();
         mRefreshLayout.isRefreshing();
     }
 
 
 
-    @OnClick({  R.id.back,R.id.women_img_more,R.id.all_img_more })
+    @OnClick({  R.id.back,R.id.girl_more })
     public void onClick(View view){
         switch (view.getId()){
             case R.id.back:
                 finish();
                 break;
-            case R.id.women_img_more:
+            case R.id.girl_more:
                 //改为获取异性同城用户
                 Intent intent=new Intent(this, SameCityActivity.class);
                 intent.putExtra(ADDRESS,address);
                 intent.putExtra(SEXTYPE,matchedSex);
                 startActivity(intent);
                 break;
-            case R.id.all_img_more:
-                Intent intent2=new Intent(this, SameCityActivity.class);
-                intent2.putExtra(ADDRESS,address);
-                intent2.putExtra(SEXTYPE,"all");
-                startActivity(intent2);
-                break;
+
             default:
                 break;
 
@@ -156,7 +161,14 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
         );
 
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        GridLayoutManager manager1=new   GridLayoutManager(this, 3){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
+        mRecyclerView.setLayoutManager(manager1);
         mAdapter = new CommonAdapter<NearbyPhotoBean.DataBean.UserPhotoBean>(this, R.layout.fragment_nearby_item, nearbyUserPhotoList) {
             @Override
             protected void convert(ViewHolder holder, final NearbyPhotoBean.DataBean.UserPhotoBean userPhotoBean, int position) {
@@ -181,8 +193,8 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
         mRecyclerView.setAdapter(mAdapter);
 
 
-        girlRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        girlAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(this, R.layout.near_user_item, girlList) {
+        girlRecyclerView1.setLayoutManager(new GridLayoutManager(this,4));
+        girlAdapter1 = new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(this, R.layout.near_user_item, girlList1) {
             @Override
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
                 ImageView imageView=holder.getView(R.id.user_icon);
@@ -208,11 +220,11 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
 
             }
         };
-        girlRecyclerView.setAdapter(girlAdapter);
+        girlRecyclerView1.setAdapter(girlAdapter1);
 
 
-        allRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        allAdapter= new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(this, R.layout.near_user_item, allList) {
+        girlRecyclerView2.setLayoutManager(new GridLayoutManager(this,3));
+        girlAdapter2 = new CommonAdapter<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>(this, R.layout.near_user_item, girlList2) {
             @Override
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
                 ImageView imageView=holder.getView(R.id.user_icon);
@@ -239,7 +251,7 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
 
             }
         };
-        allRecyclerView.setAdapter(allAdapter);
+        girlRecyclerView2.setAdapter(girlAdapter2);
 
 
     }
@@ -285,14 +297,26 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
         });
 
 
-        nearByUserService.requestCitySingleSex(address,matchedSex, 1, 3, new MyCallBack() {
+        nearByUserService.requestCitySingleSex(address,matchedSex, 1, 7, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
 
-                girlList.clear();
-                girlList.addAll(list);
-                girlAdapter.notifyDataSetChanged();
+
+                girlList1.clear();
+                girlList1.add(list.get(0));
+                girlList1.add(list.get(1));
+                girlList1.add(list.get(2));
+                girlList1.add(list.get(3));
+
+
+                girlAdapter1.notifyDataSetChanged();
+
+                girlList2.clear();
+                girlList2.add(list.get(4));
+                girlList2.add(list.get(5));
+                girlList2.add(list.get(6));
+                girlAdapter2.notifyDataSetChanged();
 
             }
 
@@ -302,24 +326,6 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
             }
         });
 
-        nearByUserService.requestCityAll(address, 1,3, new MyCallBack() {
-            @Override
-            public void onSuccess(Object o) {
-                List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> list= (List<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean>) o;
-
-
-                allList.clear();
-                allList.addAll(list);
-                allAdapter.notifyDataSetChanged();
-
-
-            }
-
-            @Override
-            public void onFail(String mistakeInfo) {
-
-            }
-        });
 
 
     }
@@ -354,9 +360,9 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
                 //定位成功回调信息，设置相关消息
                 aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                 myLatitude = aMapLocation.getLatitude();//获取纬度
-                SPUtils.put(this, "" + GlobalConstants.LATITUDE, myLatitude);
+                SPUtils.put(this, LATITUDE, myLatitude);
                 myLongitude = aMapLocation.getLongitude();//获取经度
-                SPUtils.put(this, "" + GlobalConstants.LONGITUDE, myLongitude);
+                SPUtils.put(this, LONGITUDE, myLongitude);
 
                 doRequest();
 

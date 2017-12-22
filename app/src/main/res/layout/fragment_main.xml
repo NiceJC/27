@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="附近动态"
+                android:text="发现"
                 android:textColor="@color/text_color_000000" />
             <View
                 android:id="@+id/main_fragment_indicator_nearby_line"

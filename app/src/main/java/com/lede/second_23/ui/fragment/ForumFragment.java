@@ -509,7 +509,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (linearLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
-                    ivForumTitle.setImageResource(R.mipmap.forum_discover);
+                    ivForumTitle.setImageResource(R.mipmap.forum1);
                 }else {
                     ivForumTitle.setImageResource(R.mipmap.forum_27);
                 }
