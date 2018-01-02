@@ -49,6 +49,8 @@ public class SetActivity extends BaseActivity {
     TextView tv_save;
     @Bind(R.id.sb_set_activity_distance)
     SeekBar sb_distance;
+    @Bind(R.id.edit_user_info)
+    RelativeLayout user_info_edit;
     @Bind(R.id.rl_set_activity_vip)
     RelativeLayout vip_set;
     @Bind(R.id.rl_set_activity_sex)
@@ -157,12 +159,17 @@ public class SetActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.rl_set_activity_vip,
+    @OnClick({R.id.rl_set_activity_vip,R.id.edit_user_info,
             R.id.rl_set_activity_sex, R.id.tv_set_activity_save, R.id.ll_set_activity_exit
             , R.id.ll_set_activity_clear, R.id.ll_set_activity_about, R.id.iv_set_activity_back
             , R.id.ll_set_activity_clear_location,R.id.ll_set_activity_update})
     public void onclick(View view) {
         switch (view.getId()) {
+
+            case R.id.edit_user_info:
+                Intent intent2=new Intent(SetActivity.this,UserInfoActivity2.class);
+                startActivity(intent2);
+                break;
             case R.id.rl_set_activity_vip:
 
                 Intent intent=new Intent(SetActivity.this,VIPSettingActivity.class);

@@ -41,7 +41,7 @@ import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.service.VIPService;
 import com.lede.second_23.ui.fragment.ForumFragment;
 import com.lede.second_23.ui.fragment.MainFragment1;
-import com.lede.second_23.ui.fragment.PersonalFragment1;
+import com.lede.second_23.ui.fragment.PersonalFragment2;
 import com.lede.second_23.utils.MyViewPager;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.SnackBarUtil;
@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
     private long exitTime = 0;
     private ForumFragment forumFragment;
     private MainFragment1 mainFragment1;
-    private PersonalFragment1 personFragment1;
+    private PersonalFragment2 personFragment2;
 
     private AMapLocationClient mlocationClient;
     private double myLatitude;//纬度
@@ -277,9 +277,9 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 //        childFragment=new ChildFragment();
 //        fragmentList.add(childFragment);
         mainFragment1 = new MainFragment1();
-        personFragment1 = new PersonalFragment1();
+        personFragment2 = new PersonalFragment2();
         fragmentList.add(mainFragment1);
-        fragmentList.add(personFragment1);
+        fragmentList.add(personFragment2);
 
         /**
          * 获取屏幕像素密度

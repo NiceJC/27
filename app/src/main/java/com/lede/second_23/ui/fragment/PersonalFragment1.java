@@ -51,6 +51,9 @@ import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
 import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
 /**
+ *
+ *
+ * 版本改动太大，此页面废弃
  * Created by ld on 17/10/26.
  */
 

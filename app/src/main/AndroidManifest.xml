@@ -292,6 +292,8 @@
         <activity android:name=".ui.activity.MateActivity"/>
         <activity android:name=".ui.activity.LocationCheckinActivity"/>
         <activity android:name=".ui.activity.NearByActivity"/>
+        <activity android:name=".ui.activity.UserInfoActivity2"/>
+
 
 
 

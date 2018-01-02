@@ -360,7 +360,7 @@ public class MainFragmentNearBy extends Fragment {
             }
         });
 
-        forumService.requestPushForum(pageNum, 100, new MyCallBack() {
+        forumService.requestPushForum(pageNum, 80, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 mRefreshLayout.finishRefresh();
@@ -412,11 +412,11 @@ public class MainFragmentNearBy extends Fragment {
             } else {
 
                 int position18 = forumOriginalList.size() % 18;
-                if (position18 >= 2) {
+                if (position18 > 2) {
                     forumAddList.add(forumOriginalList.get(i * 18 + 2));
                 }
 
-                if (position18 >= 9) {
+                if (position18 > 9) {
                     forumAddList.add(forumOriginalList.get(i * 18 + 9));
 
                 }

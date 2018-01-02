@@ -366,9 +366,17 @@ public class MyApplication extends Application {
 
             if (message.getConversationType() == Conversation.ConversationType.SYSTEM) {
                 showSystemNotification(message.getSenderUserId());
+
+                
+
+
+
+
                 Log.i("TAG", "收到新消息:" + message.getSenderUserId());
                 return true;
             } else if(message.getConversationType() == Conversation.ConversationType.PRIVATE) {
+
+
 
                 showMessageNotification(message);
                 return true;

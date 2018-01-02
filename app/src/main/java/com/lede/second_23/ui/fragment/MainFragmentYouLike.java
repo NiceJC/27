@@ -113,7 +113,12 @@ public class MainFragmentYouLike extends Fragment {
     }
     private void initView() {
 
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+
+        StaggeredGridLayoutManager manager=new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
+        mRecyclerView.setLayoutManager(manager);
+
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

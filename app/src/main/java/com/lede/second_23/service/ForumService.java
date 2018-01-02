@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.google.gson.Gson;
 import com.lede.second_23.bean.AllForumBean;
+import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
@@ -21,12 +22,16 @@ public class ForumService {
 
 
     private static final int REQUEST_PUSH_FORUM = 162505;
+    private static final int REQUEST_MY_FORUM=1213121;
 
 
 
     private Gson mGson;
     private SimpleResponseListener<String> simpleResponseListener;
+
+
     private Request<String> pushForumRequest = null;
+    private Request<String> myForumRequest=null;
 
 
 
@@ -50,6 +55,10 @@ public class ForumService {
                     case REQUEST_PUSH_FORUM:
                         parseForumJson(response.get());
                         break;
+                    case REQUEST_MY_FORUM:
+                        parseMyAllForum(response.get());
+                        break;
+
 
                     default:
                         break;
@@ -60,6 +69,9 @@ public class ForumService {
                 switch (what) {
                     case REQUEST_PUSH_FORUM:
 
+                        myCallBack.onFail("数据请求出错");
+                        break;
+                    case REQUEST_MY_FORUM:
                         myCallBack.onFail("数据请求出错");
                         break;
                     default:
@@ -83,6 +95,17 @@ public class ForumService {
 
     }
 
+    public void requestMyForum(String userId,int pageNum,int pageSize,MyCallBack myCallBack){
+        this.myCallBack=myCallBack;
+        myForumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/showForumByHome", RequestMethod.POST);
+        myForumRequest.add("userId", userId);
+        myForumRequest.add("pageNum", pageNum);
+        myForumRequest.add("pageSize", pageSize);
+        RequestServer.getInstance().request(REQUEST_MY_FORUM, myForumRequest, simpleResponseListener);
+
+    }
+
+
 
 
     /**
@@ -98,6 +121,19 @@ public class ForumService {
             myCallBack.onFail("数据请求出错");
         }
 
+    }
+    /**
+     * 解析个人全国微博
+     *
+     * @param json
+     */
+    private void parseMyAllForum(String json) {
+        PersonAllForumBean personAllForumBean = mGson.fromJson(json, PersonAllForumBean.class);
+        if(personAllForumBean.getResult()==10000){
+            myCallBack.onSuccess(personAllForumBean.getData().getSimple().getList());
+        }else{
+            myCallBack.onFail("数据请求出错");
+        }
     }
 
 
