@@ -7,6 +7,7 @@ import com.lede.second_23.bean.PersonalAlbumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.utils.SPUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
@@ -52,14 +53,19 @@ public class AlbumService {
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
             public void onSucceed(int what, Response<String> response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_MY_ALBUM:
                         parseGetMyAlbum(response.get());
                         break;
                     case DELETE_MY_ALBUM:
+                        parseDeleteAlbum(response.get());
 
                         break;
                     case POST_MY_ALBUM:
+                        parsePostAlbum(response.get());
                         break;
 
 
@@ -69,6 +75,9 @@ public class AlbumService {
             }
             @Override
             public void onFailed(int what, Response response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_MY_ALBUM:
                     case DELETE_MY_ALBUM:
@@ -84,16 +93,36 @@ public class AlbumService {
 
 
 
-    //匹配成功后，向被匹配的用户发送推送
     public void getMyAlbum(String userId, MyCallBack myCallBack){
         this.myCallBack=myCallBack;
         getMyAlbumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/showUserPhotoHome", RequestMethod.POST);
         getMyAlbumRequest.add("userId", userId);
         getMyAlbumRequest.add("pageNum",1);
-        getMyAlbumRequest.add("pageSize", 6);
+        getMyAlbumRequest.add("pageSize", 5);
         RequestServer.getInstance().request(REQUEST_MY_ALBUM, getMyAlbumRequest, simpleResponseListener);
 
     }
+    public void deleteAlbum(Integer id,MyCallBack myCallBack){
+        this.myCallBack=myCallBack;
+        deleteMyAlbumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/deleteUserPhoto", RequestMethod.POST);
+
+        deleteMyAlbumRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        deleteMyAlbumRequest.add("id",id);
+        RequestServer.getInstance().request(DELETE_MY_ALBUM, deleteMyAlbumRequest, simpleResponseListener);
+
+
+    }
+
+    public void postAlbum(){
+
+        postMyAlbumRequest= NoHttp.createStringRequest(GlobalConstants.URL + "/photo/deleteUserPhoto", RequestMethod.POST);
+
+    }
+
+
+
+
+
 
 
     public void parseGetMyAlbum(String json){
@@ -107,7 +136,15 @@ public class AlbumService {
 
     }
 
+    public void parseDeleteAlbum(String json){
+        myCallBack.onSuccess("");
 
+    }
+
+    public void parsePostAlbum(String json){
+        myCallBack.onSuccess("");
+
+    }
 
 
 

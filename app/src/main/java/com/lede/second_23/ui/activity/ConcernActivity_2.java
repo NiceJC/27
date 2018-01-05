@@ -51,6 +51,7 @@ import io.rong.message.TextMessage;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.IMAGE_URLS;
+import static com.lede.second_23.global.GlobalConstants.TYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -161,6 +162,14 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
             iv_concern_activity_location.setVisibility(View.GONE);
             tv_title.setText("我的照片");
         }else{
+
+            if(intent.getIntExtra(TYPE,0)!=0&&intent.getIntExtra(TYPE,0)==2){
+                tv_title.setText("照片");
+            }
+
+
+
+
             if (((Boolean) SPUtils.get(this, GlobalConstants.DECLARATION,true))) {
                 iv_declaration.setVisibility(View.VISIBLE);
             }else {

@@ -82,7 +82,7 @@ public class PersonalAlbumBean {
             private int followersCount;
             private int friendsCount;
             private String hobby;
-            private String hometowm;
+            private String hometown;
             private String imgUrl;
             private String nickName;
             private String note;
@@ -125,12 +125,13 @@ public class PersonalAlbumBean {
                 this.hobby = hobby;
             }
 
-            public String getHometowm() {
-                return hometowm;
+
+            public String getHometown() {
+                return hometown;
             }
 
-            public void setHometowm(String hometowm) {
-                this.hometowm = hometowm;
+            public void setHometown(String hometown) {
+                this.hometown = hometown;
             }
 
             public String getImgUrl() {

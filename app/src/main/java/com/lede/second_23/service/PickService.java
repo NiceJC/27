@@ -45,23 +45,23 @@ public class PickService {
     }
 
     //图片选择  传入一个回调接口
-    public void pickPhoto(PictureConfig.OnSelectResultCallback callback){
+    public void pickPhoto(int pickNum,PictureConfig.OnSelectResultCallback callback){
         this.resultCallback=callback;
-        chooseImg(TYPE_PHOTO);
+        chooseImg(TYPE_PHOTO,pickNum);
     }
 
     //头像选择  传入一个回调接口
     public void pickPortrait(PictureConfig.OnSelectResultCallback callback){
         this.resultCallback=callback;
-        chooseImg(TYPE_PORTRAIT);
+        chooseImg(TYPE_PORTRAIT,1);
 
     }
 
 
-    private void chooseImg(int type) {
+    private void chooseImg(int type,int num) {
 
         if(type==TYPE_PHOTO){
-            initPhotoPickOptions();
+            initPhotoPickOptions(num);
             PictureConfig.getInstance().init(optionsPhoto).openPhoto(mActivity, resultCallback);
         }else{
             initPortraitPickPotions();
@@ -72,14 +72,14 @@ public class PickService {
     }
 
     //选取照片的配置
-    private void initPhotoPickOptions() {
+    private void initPhotoPickOptions(int pickNum) {
         optionsPhoto = new FunctionOptions.Builder()
                 .setType(FunctionConfig.TYPE_IMAGE) // 图片or视频 FunctionConfig.TYPE_IMAGE  TYPE_VIDEO
                 .setCropMode(FunctionConfig.CROP_MODEL_1_1) // 裁剪模式 默认、1:1、3:4、3:2、16:9
                 .setCompress(true) //是否压缩
                 .setEnablePixelCompress(true) //是否启用像素压缩
                 .setEnableQualityCompress(true) //是否启质量压缩
-                .setMaxSelectNum(9) // 可选择图片的数量
+                .setMaxSelectNum(pickNum) // 可选择图片的数量
                 .setMinSelectNum(1)// 图片或视频最低选择数量，默认代表无限制
                 .setSelectMode(FunctionConfig.MODE_MULTIPLE) // 单选 or 多选 FunctionConfig.MODE_SINGLE FunctionConfig.MODE_MULTIPLE
                 .setVideoS(0)// 查询多少秒内的视频 单位:秒

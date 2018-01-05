@@ -118,6 +118,8 @@ public class GlobalConstants {
 
 
     public static final String USERID="USERID";
+    public static final String TYPE="TYPE";
+
 
     //七牛云控件域名
     public static final String QINIU = "http://my-photo.lacoorent.com/";

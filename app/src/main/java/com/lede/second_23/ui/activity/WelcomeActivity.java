@@ -218,7 +218,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                             finish();
 
                         } else {
-                            intent = new Intent(WelcomeActivity.this, EditRegisterInfoActivity.class);
+                            intent = new Intent(WelcomeActivity.this, EditRegisterInfoActivity2.class);
                             Toast.makeText(WelcomeActivity.this, "您还没有创建过用户信息", Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             finish();

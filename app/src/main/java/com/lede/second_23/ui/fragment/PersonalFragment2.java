@@ -3,6 +3,7 @@ package com.lede.second_23.ui.fragment;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.bean.PersonalAlbumBean;
@@ -29,7 +32,9 @@ import com.lede.second_23.service.AlbumService;
 import com.lede.second_23.service.ForumService;
 import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
+import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
+import com.lede.second_23.ui.activity.EditUserInfoActivity2;
 import com.lede.second_23.ui.activity.ForumDetailActivity;
 import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.SetActivity;
@@ -49,7 +54,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.IMAGE_URLS;
 import static com.lede.second_23.global.GlobalConstants.USERID;
@@ -72,12 +80,18 @@ public class PersonalFragment2 extends Fragment {
     @Bind(R.id.more_user_info)
     ImageView moreUserInfo;
     @Bind(R.id.new_message)
-    ImageView newMessage;
+    TextView newMessage;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
 
+    @Bind(R.id.bigLinear)
+    LinearLayout bigLinear;
+
+
+    @Bind(R.id.vip_logo)
+    ImageView vipLogo;
 
     @Bind(R.id.user_info_card)
     LinearLayout userInfoCard;
@@ -95,6 +109,8 @@ public class PersonalFragment2 extends Fragment {
     TextView userCity;
     @Bind(R.id.user_hobby)
     TextView userHobby;
+    @Bind(R.id.user_school)
+    TextView userSchool;
 
     private Context context;
     private CommonAdapter forumAdapter;
@@ -102,8 +118,12 @@ public class PersonalFragment2 extends Fragment {
     private int pageSize = 15;
     private boolean isHasNextPage = false;
     private RequestManager requestManager;
-    private boolean isInfoCardShown=false; //默认隐藏用户的详细资料卡
+    private boolean isInfoCardShown = false; //默认隐藏用户的详细资料卡
     private ObjectAnimator animator;
+
+
+
+
 
     private int forumItemWidth;
 
@@ -118,6 +138,7 @@ public class PersonalFragment2 extends Fragment {
     private AlbumService albumService;
     private UserInfoService userInfoService;
     private String userID;
+    public MultiTransformation transformation;
 
     @Nullable
     @Override
@@ -128,42 +149,77 @@ public class PersonalFragment2 extends Fragment {
         ButterKnife.bind(this, view);
         requestManager = Glide.with(getContext());
 
-        forumItemWidth = ((UiUtils.getScreenWidth() - UiUtils.dip2px(40)) / 3);
+        forumItemWidth = ((UiUtils.getScreenWidth() - UiUtils.dip2px(20)) / 3);
 
         userID = (String) SPUtils.get(context, USERID, "");
+
+
+
 
 
         initView();
 
         initEvent();
         toRefresh();
-        refreshLayout.isRefreshing();
+
+
+
+
         refreshLayout.setEnableAutoLoadmore(false);
         return view;
     }
 
 
-    @OnClick({R.id.back, R.id.set, R.id.more_user_info,R.id.user_info_card, R.id.new_message})
+
+
+
+    @OnClick({R.id.back, R.id.set, R.id.bigLinear, R.id.more_user_info, R.id.new_message, R.id.user_info_card, R.id.user_img, R.id.user_concern, R.id.user_fans})
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.back:
                 MainActivity.instance.vp_main_fg.setCurrentItem(1);
 
                 break;
             case R.id.set:
-                Intent intent = new Intent(context, SetActivity.class);
+                intent = new Intent(context, SetActivity.class);
                 startActivity(intent);
+
+
+                break;
+            case R.id.bigLinear:
+                if (isInfoCardShown) {
+                    bottom_show();
+                }
+
+
                 break;
             case R.id.more_user_info:
 
                 bottom_show();
                 break;
-            case R.id.user_info_card:
-                bottom_show();
-                break;
+
             case R.id.new_message:
                 startActivity(new Intent(context, ConversationListDynamicActivtiy.class));
+                break;
+            case R.id.user_info_card:
 
+                break;
+            case R.id.user_img:
+                intent = new Intent(context, EditUserInfoActivity2.class);
+                startActivity(intent);
+                break;
+            case R.id.user_concern:
+                intent = new Intent(context, ConcernOrFansActivity.class);
+                intent.putExtra("type", 0);
+                intent.putExtra("id", userID);
+                startActivity(intent);
+                break;
+            case R.id.user_fans:
+                intent = new Intent(context, ConcernOrFansActivity.class);
+                intent.putExtra("type", 1);
+                intent.putExtra("id", userID);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -176,13 +232,23 @@ public class PersonalFragment2 extends Fragment {
 
     private void initView() {
 
-        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,forumItemWidth*3);
+
+//        bigLinear.setFocusable(true);
+//        bigLinear.setFocusableInTouchMode(true);
+//        bigLinear.requestFocus();
+
+
+        transformation = new MultiTransformation(
+                new CenterCrop(context),
+                new RoundedCornersTransformation(context,UiUtils.dip2px(3) , 0, RoundedCornersTransformation.CornerType.ALL)
+        );
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, forumItemWidth * 3);
         viewpagerBox.setLayoutParams(layoutParams);
 
-        animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, UiUtils.dip2px(300));
+        animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, UiUtils.dip2px(500));
         animator.setDuration(0);
         animator.start();
-        isInfoCardShown=false;
+        isInfoCardShown = false;
 
 
         forumAdapter = new CommonAdapter<PersonAllForumBean.DataBean.SimpleBean.ListBean>(getActivity(), R.layout.item_person_fragment_show, mForumList) {
@@ -195,7 +261,7 @@ public class PersonalFragment2 extends Fragment {
                 ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
                 ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
                 if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
-                    requestManager.load(listBean.getAllRecords().get(0).getUrl()).into(showView_show);
+                    requestManager.load(listBean.getAllRecords().get(0).getUrl()).bitmapTransform(transformation).into(showView_show);
                     showView_play.setVisibility(View.GONE);
                     if (listBean.getAllRecords().size() == 1 || listBean.getAllRecords().size() == 0) {
                         showView_photos.setVisibility(View.GONE);
@@ -206,7 +272,7 @@ public class PersonalFragment2 extends Fragment {
 
                 } else {
                     Log.i("videopic", "convert: " + listBean.getAllRecords().get(0).getUrlThree());
-                    requestManager.load(listBean.getAllRecords().get(0).getUrlThree()).into(showView_show);
+                    requestManager.load(listBean.getAllRecords().get(0).getUrlThree()).bitmapTransform(transformation).into(showView_show);
                     showView_play.setVisibility(View.VISIBLE);
                     showView_photos.setVisibility(View.GONE);
                 }
@@ -242,7 +308,7 @@ public class PersonalFragment2 extends Fragment {
     private void initEvent() {
         forumService = new ForumService(getActivity());
         albumService = new AlbumService(getActivity());
-        userInfoService=new UserInfoService(getActivity());
+        userInfoService = new UserInfoService(getActivity());
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -256,22 +322,24 @@ public class PersonalFragment2 extends Fragment {
             }
         });
     }
+
     private void bottom_show() {
         animator = null;
         if (isInfoCardShown) {
             //藏起
-            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, userInfoCard.getHeight()+UiUtils.dip2px(5));
+            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, userInfoCard.getHeight() + UiUtils.dip2px(5));
             animator.setDuration(500);
             animator.start();
-            isInfoCardShown=false;
+            isInfoCardShown = false;
         } else {
             //展开
-            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", userInfoCard.getHeight()+UiUtils.dip2px(5), 0);
+            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", userInfoCard.getHeight() + UiUtils.dip2px(5), 0);
             animator.setDuration(500);
             animator.start();
-            isInfoCardShown=true;
+            isInfoCardShown = true;
         }
     }
+
     public void toRefresh() {
 
         isRefresh = true;
@@ -305,9 +373,7 @@ public class PersonalFragment2 extends Fragment {
 
                         currentPage = 1;
                         isHasNextPage = true;
-                        if(list.size()<18){
-                            isHasNextPage=false;
-                        }
+
 
                     } else {
                         currentPage++;
@@ -330,18 +396,18 @@ public class PersonalFragment2 extends Fragment {
         albumService.getMyAlbum(userID, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
-                PersonalAlbumBean personalAlbumBean= (PersonalAlbumBean) o;
+                PersonalAlbumBean personalAlbumBean = (PersonalAlbumBean) o;
 
-                List<PersonalAlbumBean.DataBean.SimpleBean.UserPhotoBean> list =personalAlbumBean.getData().getSimple().getList() ;
+                List<PersonalAlbumBean.DataBean.SimpleBean.UserPhotoBean> list = personalAlbumBean.getData().getSimple().getList();
 
-
+                userInfoBean = personalAlbumBean.getData().getUserInfo().get(0);
+                dataBean = personalAlbumBean.getData();
 
                 mAlbumList.clear();
                 mAlbumList.addAll(list);
                 setAlbum();
-                if(isRefresh){
-                    userInfoBean =personalAlbumBean.getData().getUserInfo().get(0);
-                    dataBean=personalAlbumBean.getData();
+                if (isRefresh) {
+
                     setUserInfo();
                 }
 
@@ -353,12 +419,27 @@ public class PersonalFragment2 extends Fragment {
             }
         });
 
+        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer integer) {
+                if (integer > 0) {
+                    newMessage.setSelected(true);
+                    newMessage.setTextColor(Color.parseColor("#ff0000"));
+                } else {
+                    newMessage.setSelected(false);
+                    newMessage.setTextColor(Color.parseColor("#4aa3e7"));
+                }
+            }
 
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
 
+            }
+        }, Conversation.ConversationType.PRIVATE);
     }
 
 
-    public void setUserInfo(){
+    public void setUserInfo() {
         userName.setText(userInfoBean.getNickName());
         userInfo.setText(userInfoBean.getNote());
 
@@ -368,14 +449,14 @@ public class PersonalFragment2 extends Fragment {
         } else {
             sexBg.setSelected(false);
         }
-//
-//        if(userInfoBean.getTrueName()!=null&& userInfoBean.getTrueName().equals("1")){
-//            vipLogo.setVisibility(View.VISIBLE);
-//
-//        }else{
-//            vipLogo.setVisibility(View.GONE);
-//        }
-//
+
+        if (userInfoBean.getTrueName() != null && userInfoBean.getTrueName().equals("1")) {
+            vipLogo.setVisibility(View.VISIBLE);
+
+        } else {
+            vipLogo.setVisibility(View.GONE);
+        }
+
         Glide.with(getContext())
                 .load(userInfoBean.getImgUrl())
                 .bitmapTransform(new CropCircleTransformation(getContext()))
@@ -385,52 +466,82 @@ public class PersonalFragment2 extends Fragment {
         userCity.setText(userInfoBean.getAddress());
         userAge.setText(userInfoBean.getHobby());
         userHobby.setText(userInfoBean.getWechat());
+        userSchool.setText(userInfoBean.getHometown());
 
 
     }
 
 
     //将相册的图片设置在viewpager里面
-    public void setAlbum(){
+    public void setAlbum() {
         viewPager.setOffscreenPageLimit(3);
 
-        PagerAdapter pagerAdapter=new PagerAdapter() {
+        PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {
-                return mAlbumList.size();
+                return mAlbumList.size() + 1;
             }
 
             @Override
             public boolean isViewFromObject(View view, Object object) {
-                return view==object;
+                return view == object;
             }
+
             @Override
 
-            public void destroyItem(ViewGroup container,int position,Object o){
+            public void destroyItem(ViewGroup container, int position, Object o) {
             }
+
             @Override
 
-            public Object instantiateItem(ViewGroup container, final int position){
+            public Object instantiateItem(ViewGroup container, final int position) {
 
-                LayoutInflater inflater=LayoutInflater.from(getActivity());
-                View imgeLayout=inflater.inflate(R.layout.activity_viewpager_pic_item,container,false);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                View imgeLayout = inflater.inflate(R.layout.activity_viewpager_pic_item, container, false);
                 imgeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
-                        intent.putExtra(IMAGE_URLS,mAlbumList.get(position).getUrlImg());
-                        intent.putExtra(USERID,userID);
-                        getActivity().startActivity(intent);                    }
+                        if (isInfoCardShown) {
+                            //藏起
+                            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, userInfoCard.getHeight() + UiUtils.dip2px(5));
+                            animator.setDuration(500);
+                            animator.start();
+                            isInfoCardShown = false;
+                        } else {
+                            if (position != 0) {
+                                Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                                intent.putExtra(IMAGE_URLS, mAlbumList.get(position - 1).getUrlImg());
+                                intent.putExtra(USERID, userID);
+
+                                getActivity().startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(getActivity(), ConcernActivity_2.class);
+                                intent.putExtra(IMAGE_URLS, userInfoBean.getImgUrl());
+                                intent.putExtra(USERID, userID);
+                                getActivity().startActivity(intent);
+
+
+                            }
+
+                        }
+                    }
                 });
-                ImageView imageView= (ImageView) imgeLayout.findViewById(R.id.imageView);
+                ImageView imageView = (ImageView) imgeLayout.findViewById(R.id.imageView);
 
 
-                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(forumItemWidth*3,forumItemWidth*3);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(forumItemWidth * 3 + UiUtils.dip2px(10), forumItemWidth * 3);
 
 
-                imageView.setLayoutParams(layoutParams);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                requestManager.load(mAlbumList.get(position).getUrlImg()).into(imageView);
+//                imageView.setLayoutParams(layoutParams);
+//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                if (position == 0) {
+                    requestManager.load(userInfoBean.getImgUrl()).bitmapTransform(transformation).into(imageView);
+
+                } else {
+                    requestManager.load(mAlbumList.get(position - 1).getUrlImg()).bitmapTransform(transformation).into(imageView);
+
+                }
 
                 container.addView(imgeLayout);
 
@@ -441,10 +552,45 @@ public class PersonalFragment2 extends Fragment {
 
         };
         viewPager.setAdapter(pagerAdapter);
-
+        if (mAlbumList.size() != 0) {
+            viewPager.setCurrentItem(1);
+        }
 
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+
+//        bigLinear.setFocusable(true);
+//        bigLinear.setFocusableInTouchMode(true);
+//        bigLinear.requestFocus();
+
+
+
+        /**
+         * 通过回调方式，获取所有未读消息数。即除了聊天室之外其它所有会话类型的未读消息数。
+         *
+         * @param callback 消息数的回调。
+         */
+        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer integer) {
+                if (integer > 0) {
+                    newMessage.setSelected(true);
+                    newMessage.setTextColor(Color.parseColor("#ff0000"));
+                } else {
+                    newMessage.setSelected(false);
+                    newMessage.setTextColor(Color.parseColor("#4aa3e7"));
+                }
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }
+        }, Conversation.ConversationType.PRIVATE);
+    }
 }

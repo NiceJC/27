@@ -7,8 +7,8 @@
     >
 
     <RelativeLayout
-        android:layout_width="84dp"
-        android:layout_height="84dp">
+        android:layout_width="110dp"
+        android:layout_height="110dp">
 
 
 
@@ -18,8 +18,8 @@
 
             android:id="@+id/head_img"
             android:layout_centerInParent="true"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="106dp"
+            android:layout_height="106dp" />
         <ImageView
 
             android:id="@+id/sex_bg"
@@ -28,30 +28,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageView
-            android:visibility="gone"
             android:id="@+id/vip_tag"
             android:paddingRight="2dp"
             android:paddingBottom="2dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:src="@mipmap/vipicon_001"
+            android:src="@mipmap/vipicon_mate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
 
     </RelativeLayout>
 
-
-    <ImageView
-
-        android:id="@+id/choose_indicator"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/selector_mated_user"
-
-        android:padding="5dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
 
 
 

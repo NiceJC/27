@@ -54,6 +54,9 @@ public class VIPService {
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
             public void onSucceed(int what, Response<String> response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_APPLY_VIP:
                         parseApplyResult(response.get());
@@ -71,6 +74,9 @@ public class VIPService {
             }
             @Override
             public void onFailed(int what, Response response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_APPLY_VIP:
                     case REQUEST_CHECK_VIP:

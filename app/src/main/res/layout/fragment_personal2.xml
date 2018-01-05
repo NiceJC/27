@@ -37,7 +37,7 @@
             <ImageView
                 android:id="@+id/set"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:src="@mipmap/set"
@@ -76,15 +76,22 @@
             </LinearLayout>
 
             <android.support.v4.widget.NestedScrollView
+
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
+
+                    android:id="@+id/bigLinear"
+                    android:descendantFocusability="blocksDescendants"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <RelativeLayout
+
                         android:id="@+id/view_pager_box"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
@@ -99,7 +106,8 @@
                             android:layout_marginRight="20dp"
                             android:clipChildren="false"
 
-                            />
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
                     </RelativeLayout>
 
@@ -107,8 +115,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp">
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
                         <RelativeLayout
 
@@ -127,6 +135,18 @@
                                 android:text="高尔基"
                                 android:textColor="#000000"
                                 android:textSize="20sp" />
+
+                            <ImageView
+                                android:visibility="gone"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/user_name"
+                                android:id="@+id/vip_logo"
+                                android:layout_marginLeft="8dp"
+                                android:src="@mipmap/vipicon_05"
+
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content" />
 
 
                             <ImageView
@@ -152,40 +172,26 @@
                             android:ellipsize="end"
                             android:maxEms="30"
                             android:maxLines="2"
-                            android:text="放假啊诶结果i弄个人呢给哦人弄IGN诶荣给你而那个那个人i尼尔那个"
                             android:textColor="#666666"
                             android:textSize="14sp" />
 
 
-                        <RelativeLayout
+
+                        <TextView
+                            android:layout_marginTop="28dp"
+                            android:id="@+id/new_message"
+
+                            android:background="@drawable/message_bt_bg"
+                            android:gravity="center"
+                            android:textColor="#4aa3e7"
+                            android:textSize="18sp"
+                            android:text="消息"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="动态"
-                                android:textColor="#000000"
-                                android:textSize="24sp" />
-
-                            <ImageView
-
-                                android:id="@+id/new_message"
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/selector_new_message" />
-
-
-                        </RelativeLayout>
+                            android:layout_height="37dp" />
+                        
 
                         <android.support.v7.widget.RecyclerView
+
                             android:id="@+id/recyclerView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -207,13 +213,15 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:id="@+id/user_info_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/userinfo_bg"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="72dp"
@@ -244,6 +252,7 @@
             android:layout_marginTop="40dp">
 
             <TextView
+                android:padding="4dp"
                 android:id="@+id/user_concern"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -251,6 +260,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:padding="4dp"
                 android:id="@+id/user_fans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -263,7 +273,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="16dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -348,7 +358,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:layout_marginTop="15dp">
 
             <LinearLayout
@@ -388,6 +397,53 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/personal_school" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="学校"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/user_school"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
     </LinearLayout>
 
 

@@ -1,0 +1,8 @@
+bug报错如下
+java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
+        经过排查 ，发现是Glide引发的报错，原因是在网速很慢的情况下，打开一个需要向服务器请求资源并用Glide加载的页面，
+在请求的服务器资源返回之前快速的finish掉这个页面，那么在请求结果返回之后，Glide就被要求在一个不存在的activity上
+进行加载，如果你向Glide传的context还正好是这个activity，那么就会报如上错误。
+       解决办法：在activity的onDestroy中进行页面资源的回收，包括进行中的请求取消；
+               或者在处理请求回调的时候，加个判断，activity.isDestoryed()，如果返回true，就不处理回调接口返回的数据
+               倾向于向service传递的context为当前activity，在service的返回之前加context存活与否的判断，不存活就不返回

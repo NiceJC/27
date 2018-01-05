@@ -360,7 +360,7 @@ public class MainFragmentNearBy extends Fragment {
             }
         });
 
-        forumService.requestPushForum(pageNum, 80, new MyCallBack() {
+        forumService.requestPushForum(pageNum, 50, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 mRefreshLayout.finishRefresh();

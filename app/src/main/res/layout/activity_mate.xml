@@ -89,7 +89,6 @@
 
             android:id="@+id/mate_before"
             android:layout_gravity="center"
-            android:src="@mipmap/mate_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -152,7 +151,6 @@
     </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:paddingLeft="40dp"
             android:layout_centerInParent="true"
 
             android:visibility="gone"

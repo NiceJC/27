@@ -497,7 +497,7 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
 
     public void upLoadAlbum() {
         PickService pickService = new PickService(this);
-        pickService.pickPhoto(new PictureConfig.OnSelectResultCallback() {
+        pickService.pickPhoto(5,new PictureConfig.OnSelectResultCallback() {
             @Override
             public void onSelectSuccess(List<LocalMedia> list) {
 

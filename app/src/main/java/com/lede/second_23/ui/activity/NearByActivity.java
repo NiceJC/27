@@ -304,18 +304,34 @@ public class NearByActivity extends BaseActivity implements AMapLocationListener
 
 
                 girlList1.clear();
-                girlList1.add(list.get(0));
-                girlList1.add(list.get(1));
-                girlList1.add(list.get(2));
-                girlList1.add(list.get(3));
-
+                if(list.size()>0){
+                    girlList1.add(list.get(0));
+                }
+                if(list.size()>1){
+                    girlList1.add(list.get(1));
+                }
+                if(list.size()>2){
+                    girlList1.add(list.get(2));
+                }
+                if(list.size()>3){
+                    girlList1.add(list.get(3));
+                }
 
                 girlAdapter1.notifyDataSetChanged();
 
                 girlList2.clear();
-                girlList2.add(list.get(4));
-                girlList2.add(list.get(5));
-                girlList2.add(list.get(6));
+                if(list.size()>4){
+                    girlList2.add(list.get(4));
+                }
+                if(list.size()>5){
+                    girlList2.add(list.get(5));
+
+                }
+                if(list.size()>6){
+                    girlList2.add(list.get(6));
+
+                }
+
                 girlAdapter2.notifyDataSetChanged();
 
             }

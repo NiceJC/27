@@ -357,7 +357,7 @@ public class PersonalFragmentAlbum extends Fragment {
 
     public void upLoadAlbum(){
         PickService pickService = new PickService(getActivity());
-        pickService.pickPhoto(new PictureConfig.OnSelectResultCallback() {
+        pickService.pickPhoto(5,new PictureConfig.OnSelectResultCallback() {
             @Override
             public void onSelectSuccess(List<LocalMedia> list) {
                 OnUploadFinish onUploadFinish = new OnUploadFinish() {

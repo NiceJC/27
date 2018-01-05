@@ -160,12 +160,12 @@
         "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-xhdpi-v4/abc_list_divider_mtrl_alpha.9.png"
     },
     {
-        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
-        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png"
-    },
-    {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
         "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "source": "/Users/ld/.android/build-cache/0cf91543ef195ad971a2dbda2e60c959241ef10b/output/res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png"
     },
     {
         "merged": "/Users/ld/AndroidProject/Second_23/pulToRefresh_Library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",

@@ -55,6 +55,9 @@ public class PushedUserService {
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
             public void onSucceed(int what, Response<String> response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_PUSH_USER:
                         parsePushUser(response.get());
@@ -66,6 +69,9 @@ public class PushedUserService {
             }
             @Override
             public void onFailed(int what, Response response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_PUSH_USER:
                         myCallBack.onFail(response.get().toString());

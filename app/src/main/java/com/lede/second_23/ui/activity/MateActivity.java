@@ -41,14 +41,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
-import io.rong.message.TextMessage;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.USER_HEAD_IMG;
 import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
-import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
 /**
  * Created by ld on 17/12/1.
@@ -93,7 +91,7 @@ public class MateActivity extends BaseActivity {
     TextView toApplyVIP;
 
     @Bind(R.id.remain_time_linear)
-            LinearLayout remainTimeLinear;
+    LinearLayout remainTimeLinear;
 
 
     Runnable runnable;
@@ -105,20 +103,20 @@ public class MateActivity extends BaseActivity {
     private boolean isVIP = false;
     private int remainedTimes = 3;
 
-    private int choosenItem=-1;
+    private int choosenItem = -1;
+
     private List<NewMatingUserBean.DataBean.UserInfoListBean> userList = new ArrayList<>(); //要显示的User
 
 
     private NewMatingUserBean.DataBean.UserInfoListBean choosenUser;
 
-    private List<NewMatingUserBean.DataBean.UserInfoListBean> choosenUserList = new ArrayList<>(); //选中的User
 
     private MatingService matingService;
 
     private PushService pushService;
     private CommonAdapter adapter;
-    private String matchedSex="女";
-    private int pageNum=1;
+    private String matchedSex = "女";
+    private int pageNum = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,24 +125,24 @@ public class MateActivity extends BaseActivity {
         setContentView(R.layout.activity_mate);
         StatusBarUtil.transparencyBar(this);
 
-        matingService=new MatingService(this);
-        pushService=new PushService(this);
+        matingService = new MatingService(this);
+        pushService = new PushService(this);
 
         ButterKnife.bind(this);
         mGson = new Gson();
         headImgURl = (String) SPUtils.get(this, USER_HEAD_IMG, "");
-        String sex= (String) SPUtils.get(this,USER_SEX,"男");
+        String sex = (String) SPUtils.get(this, USER_SEX, "男");
 
-        String vipstatus=(String)SPUtils.get(this,VIPSTATUS,"");
+        String vipstatus = (String) SPUtils.get(this, VIPSTATUS, "");
 
 
+        //去除次数限制  就假定都是会员
+//        if(vipstatus.equals(NOTOVERDUE)){
+        isVIP = true;
+//        }
 
-        if(vipstatus.equals(NOTOVERDUE)){
-            isVIP=true;
-        }
-
-        if(sex.equals("女")){
-            matchedSex="男";
+        if (sex.equals("女")) {
+            matchedSex = "男";
         }
         initView();
         initEvent();
@@ -152,8 +150,7 @@ public class MateActivity extends BaseActivity {
     }
 
 
-
-    @OnClick({R.id.back, R.id.start_mate, R.id.to_refresh, R.id.start_chat,R.id.to_apply_vip})
+    @OnClick({R.id.back, R.id.start_mate, R.id.to_refresh, R.id.start_chat, R.id.to_apply_vip})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -187,7 +184,7 @@ public class MateActivity extends BaseActivity {
                 } else {
 
 
-                    if(!isVIP&&remainedTimes<=0){
+                    if (!isVIP && remainedTimes <= 0) {
                         showNomoreDialog();
                         return;
 
@@ -199,7 +196,7 @@ public class MateActivity extends BaseActivity {
                     isMating = true;
 //                    choosenUserList.clear();
 
-                    choosenItem=-1;
+                    choosenItem = -1;
                     startChat.setSelected(false);
                     startChat.setClickable(false);
 
@@ -211,7 +208,7 @@ public class MateActivity extends BaseActivity {
                     handler.postDelayed(runnable, 1000);
 
 
-                    pageNum=1;
+                    pageNum = 1;
                     startMating();
 
 
@@ -219,16 +216,14 @@ public class MateActivity extends BaseActivity {
                 break;
 
             case R.id.to_refresh:
-                if(!isVIP&&remainedTimes<=0){
+                if (!isVIP && remainedTimes <= 0) {
                     showNomoreDialog();
                     return;
 
                 }
 
 
-
-
-                choosenItem=-1;
+                choosenItem = -1;
                 startChat.setSelected(false);
                 startChat.setClickable(false);
 
@@ -251,55 +246,19 @@ public class MateActivity extends BaseActivity {
                 break;
             case R.id.start_chat:
 
-                // 构造 TextMessage 实例
-                TextMessage myTextMessage = TextMessage.obtain("hi");
 
 
-                String username=choosenUser.getNickName();
-                String userId=choosenUser.getUserId();
+                String username = choosenUser.getNickName();
+                String userId = choosenUser.getUserId();
 
                 RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
 
                 pushMatchedInfo(userId);
-                /* 生成 Message 对象。
-                 * "7127" 为目标 Id。根据不同的 conversationType，可能是用户 Id、讨论组 Id、群组 Id 或聊天室 Id。
-                 * Conversation.ConversationType.PRIVATE 为私聊会话类型，根据需要，也可以传入其它会话类型，如群组，讨论组等。
-                */
-
-                
-
-
-//                for(NewMatingUserBean.DataBean.UserInfoListBean user :choosenUserList){
-//                    Message myMessage = Message.obtain(user.getUserId(), Conversation.ConversationType.PRIVATE, myTextMessage);
-//                    pushMatchedInfo(user.getUserId());
-//                    RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
-//                        @Override
-//                        public void onAttached(Message message) {
-//                            //消息本地数据库存储成功的回调
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(Message message) {
-//                            //消息通过网络发送成功的回调
-//
-//                        }
-//
-//                        @Override
-//                        public void onError(Message message, RongIMClient.ErrorCode errorCode) {
-//                            //消息发送失败的回调
-//                        }
-//                    });
-//
-//                }
-
-
-
-
 
                 break;
 
             case R.id.to_apply_vip:
-                Intent intent=new Intent(MateActivity.this,VIPApplyActivity.class);
+                Intent intent = new Intent(MateActivity.this, VIPApplyActivity.class);
                 startActivity(intent);
 
                 break;
@@ -319,7 +278,6 @@ public class MateActivity extends BaseActivity {
      * 返回结果不为空，即停止匹配
      */
     private void startMating() {
-
 
 
         matingService.requestCreate(new MyCallBack() {
@@ -343,13 +301,11 @@ public class MateActivity extends BaseActivity {
     /**
      * 匹配返回结果不为空，则视为匹配成功
      * 成功后 停止匹配，并且如果用户不是VIP，需要次数减一
-     *
      */
     private void parseMatchedUsers(List<NewMatingUserBean.DataBean.UserInfoListBean> list) {
 
 
-
-        if(!isVIP&&remainedTimes<=0){
+        if (!isVIP && remainedTimes <= 0) {
             showNomoreDialog();
             isMating = false;
             mateButton.setSelected(false);
@@ -365,10 +321,9 @@ public class MateActivity extends BaseActivity {
         if (list.size() != 0) {
 
 
-
             isMating = false;
             userList.clear();
-            userList.addAll(list);
+            userList.add(list.get(0));
             adapter.notifyDataSetChanged();
 
             recyclerView.setVisibility(View.VISIBLE);
@@ -379,7 +334,7 @@ public class MateActivity extends BaseActivity {
             matingGIF.setVisibility(View.GONE);
             headImageView.setVisibility(View.GONE);
             mateButton.setVisibility(View.GONE);
-            if(isVIP){
+            if (isVIP) {
 
                 toApplyVIP.setVisibility(View.GONE);
                 remainTimeLinear.setVisibility(View.INVISIBLE);
@@ -404,7 +359,7 @@ public class MateActivity extends BaseActivity {
                 @Override
                 public void onSuccess(Object o) {
                     remainedTimes--;
-                    remainTimes.setText(remainedTimes+"");
+                    remainTimes.setText(remainedTimes + "");
                 }
 
                 @Override
@@ -435,7 +390,7 @@ public class MateActivity extends BaseActivity {
                                 break;
                             case R.id.yes:
 
-                                Intent intent=new Intent(MateActivity.this,VIPApplyActivity.class);
+                                Intent intent = new Intent(MateActivity.this, VIPApplyActivity.class);
                                 startActivity(intent);
 
                                 dialog.dismiss();
@@ -457,7 +412,7 @@ public class MateActivity extends BaseActivity {
             @Override
             public void onSuccess(Object o) {
 
-                remainedTimes= (int) o;
+                remainedTimes = (int) o;
                 mateButton.setEnabled(true);
 
             }
@@ -465,7 +420,7 @@ public class MateActivity extends BaseActivity {
             @Override
             public void onFail(String mistakeInfo) {
                 mateButton.setEnabled(true);
-                Toast.makeText(MateActivity.this,mistakeInfo,Toast.LENGTH_SHORT).show();
+                Toast.makeText(MateActivity.this, mistakeInfo, Toast.LENGTH_SHORT).show();
             }
         });
         mateButton.setEnabled(false);
@@ -474,7 +429,7 @@ public class MateActivity extends BaseActivity {
 
     public void initView() {
 
-        remainTimes.setText(remainedTimes+"");
+        remainTimes.setText(remainedTimes + "");
 
         startChat.setSelected(false);
         startChat.setClickable(false);
@@ -498,15 +453,15 @@ public class MateActivity extends BaseActivity {
 
 
                     //如果15s仍未有相互匹配的实时用户，则调用另一个随机返回用户的借接口
-                    if(spendSeconds>=12){
+                    if (spendSeconds >= 12) {
 
                         matingService1.requestNewMating(matchedSex, new MyCallBack() {
                             @Override
                             public void onSuccess(Object o) {
-                                NewMatingUserBean newMatingUserBean= (NewMatingUserBean) o;
+                                NewMatingUserBean newMatingUserBean = (NewMatingUserBean) o;
 
-                                remainedTimes=Integer.parseInt(newMatingUserBean.getData().getUserMarries().get(0).getMarryDesp());
-                                remainTimes.setText(remainedTimes+"");
+                                remainedTimes = Integer.parseInt(newMatingUserBean.getData().getUserMarries().get(0).getMarryDesp());
+                                remainTimes.setText(remainedTimes + "");
 
 
                                 parseMatchedUsers(newMatingUserBean.getData().getUserInfoList());
@@ -521,17 +476,17 @@ public class MateActivity extends BaseActivity {
                         });
 
 
-                    }else{
+                    } else {
 
-                        matingService1.requestMating(matchedSex, pageNum, 3, new MyCallBack() {
+                        matingService1.requestMating(matchedSex, pageNum, 1, new MyCallBack() {
                             @Override
                             public void onSuccess(Object o) {
 
 
-                                MatchedUserBean matchedUserBean= (MatchedUserBean) o;
+                                MatchedUserBean matchedUserBean = (MatchedUserBean) o;
 
-                                remainedTimes=Integer.parseInt(matchedUserBean.getData().getUserMarry().get(0).getMarryDesp());
-                                remainTimes.setText(remainedTimes+"");
+                                remainedTimes = Integer.parseInt(matchedUserBean.getData().getUserMarry().get(0).getMarryDesp());
+                                remainTimes.setText(remainedTimes + "");
                                 parseMatchedUsers(matchedUserBean.getData().getUserInfoList().getList());
                             }
 
@@ -553,26 +508,22 @@ public class MateActivity extends BaseActivity {
                 .into(headImageView);
 
 
-
         adapter = new CommonAdapter<NewMatingUserBean.DataBean.UserInfoListBean>(this, R.layout.matched_user_item, userList) {
             @Override
             protected void convert(ViewHolder holder, final NewMatingUserBean.DataBean.UserInfoListBean userInfoBean, final int position) {
 
 
-
-
                 ImageView headImage = holder.getView(R.id.head_img);
-                final ImageView indicator = holder.getView(R.id.choose_indicator);
-                ImageView sexBg=holder.getView(R.id.sex_bg);
-                ImageView vipTag=holder.getView(R.id.vip_tag);
-                if(userInfoBean.getSex().equals("男")){
+                ImageView sexBg = holder.getView(R.id.sex_bg);
+                ImageView vipTag = holder.getView(R.id.vip_tag);
+                if (userInfoBean.getSex().equals("男")) {
                     sexBg.setSelected(true);
-                }else{
+                } else {
                     sexBg.setSelected(false);
                 }
-                if(userInfoBean.getTrueName()!=null&&userInfoBean.getTrueName().equals("1")){
+                if (userInfoBean.getTrueName() != null && userInfoBean.getTrueName().equals("1")) {
                     vipTag.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     vipTag.setVisibility(View.GONE);
                 }
 
@@ -582,43 +533,43 @@ public class MateActivity extends BaseActivity {
 //                    indicator.setSelected(false);
 //                }
 
-                if(choosenItem==position){
-                    indicator.setSelected(true);
-                }else{
-                    indicator.setSelected(false);
-                }
-
-                indicator.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        if (!indicator.isSelected()) {
-//                            indicator.setSelected(true);
-//                            choosenUserList.add(userInfoBean);
-//                        } else {
-//                            indicator.setSelected(false);
-//                            choosenUserList.remove(userInfoBean);
-//                        }
-//                        if (choosenUserList.size() == 0) {
-//                            startChat.setSelected(false);
-//                            startChat.setClickable(false);
-//                        } else {
-//                            startChat.setSelected(true);
-//                            startChat.setClickable(true);
-//                        }
+//                if(choosenItem==position){
+//                    indicator.setSelected(true);
+//                }else{
+//                    indicator.setSelected(false);
+//                }
+//
+//                indicator.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+////                        if (!indicator.isSelected()) {
+////                            indicator.setSelected(true);
+////                            choosenUserList.add(userInfoBean);
+////                        } else {
+////                            indicator.setSelected(false);
+////                            choosenUserList.remove(userInfoBean);
+////                        }
+////                        if (choosenUserList.size() == 0) {
+////                            startChat.setSelected(false);
+////                            startChat.setClickable(false);
+////                        } else {
+////                            startChat.setSelected(true);
+////                            startChat.setClickable(true);
+////                        }
                         startChat.setSelected(true);
                         startChat.setClickable(true);
-                        choosenItem=position;
+//                        choosenItem=position;
                         choosenUser=userInfoBean;
-                        adapter.notifyDataSetChanged();
-
-
-                    }
-                });
+//                        adapter.notifyDataSetChanged();
+//
+//
+//                    }
+//                });
                 headImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(MateActivity.this,UserInfoActivty.class);
-                        intent.putExtra(USERID,userInfoBean.getUserId());
+                        Intent intent = new Intent(MateActivity.this, UserInfoActivty.class);
+                        intent.putExtra(USERID, userInfoBean.getUserId());
 
                         startActivity(intent);
 
@@ -631,14 +582,13 @@ public class MateActivity extends BaseActivity {
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 
 
-
     }
 
 
     //匹配成功后  发起推送ce118769b71f4a90b35960aca22b3778
-    public  void pushMatchedInfo(String userID){
+    public void pushMatchedInfo(String userID) {
 
-        pushService.pushMatchedInfo(userID  , new MyCallBack() {
+        pushService.pushMatchedInfo(userID, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
 

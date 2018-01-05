@@ -60,6 +60,9 @@ public class NearByUserService {
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
             public void onSucceed(int what, Response<String> response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_NEARBY_PHOTO:
                         parseNearbyPhoto(response.get());
@@ -80,6 +83,9 @@ public class NearByUserService {
             }
             @Override
             public void onFailed(int what, Response response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_NEARBY_PHOTO:
                         nearbyPhotoCallBack.onFail(response.get().toString());

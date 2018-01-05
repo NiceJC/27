@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,6 +26,17 @@
             android:text="填写资料"
             android:textColor="#222222"
             android:textSize="18sp" />
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp" />
+
 
     </RelativeLayout>
 
@@ -35,16 +45,43 @@
         android:layout_height="1dp"
         android:background="#dddddd" />
 
-    <ScrollView
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+
+        android:orientation="vertical">
+
 
         <LinearLayout
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/pull_to_refresh_progress"
+                style="?android:progressBarStyleInverse"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/progressbar_bar_loading"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
+        <ScrollView
+            android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
             <android.support.v7.widget.RecyclerView
@@ -55,206 +92,259 @@
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
-                android:padding="10dp"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:id="@+id/user_name_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_name" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="昵称"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/user_name"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="40dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
 
                 <LinearLayout
                     android:id="@+id/user_info_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_sign"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_sign" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="签名"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:maxEms="10"
-                        android:ellipsize="end"
-                        android:id="@+id/user_info"
-                        android:textSize="18sp"
                         android:textColor="#000000"
-                        android:layout_marginLeft="40dp"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/user_info"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:ellipsize="end"
+                        android:maxEms="10"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
                 <LinearLayout
                     android:id="@+id/user_sex_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_sex"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_sex" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="性别"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/user_sex"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="40dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
                 <LinearLayout
                     android:id="@+id/user_age_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_age"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_age" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="年龄"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/user_age"
 
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="40dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
                 <LinearLayout
                     android:id="@+id/user_city_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_city"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_city" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="城市"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/user_city"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="40dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
                 <LinearLayout
                     android:id="@+id/user_hobby_layout"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:src="@mipmap/edit_interest"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_interest" />
+
                     <TextView
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="爱好"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/user_hobby"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
                         android:layout_marginLeft="40dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <View
-                    android:background="#dddddd"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+                <LinearLayout
+                    android:id="@+id/user_school_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/edit_school" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="学校"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/user_school"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="40dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
             </LinearLayout>
-
-
-
-
 
 
         </LinearLayout>
 
+        </ScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    </ScrollView>
 
 </LinearLayout>

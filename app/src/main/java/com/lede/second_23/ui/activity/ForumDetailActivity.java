@@ -361,7 +361,6 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
                     pageNum++;
                     initData();
                 } else {
-                    Toast.makeText(context, "没有更多的评论", Toast.LENGTH_SHORT).show();
                     prvForumDetailShow.onRefreshComplete();
                 }
             }
@@ -761,7 +760,6 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
     private void parseForumDetail(String json) {
         forumDetailCommentBean = mGson.fromJson(json, ForumDetailCommentBean.class);
         if (forumDetailCommentBean.getData().getSimple().getList().size() == 0 || forumDetailCommentBean.getData().getSimple().getList() == null) {
-            Toast.makeText(context, "没有更多的评论了", Toast.LENGTH_SHORT).show();
             isHasNextPage = false;
         } else {
             forumDetailList.addAll(forumDetailCommentBean.getData().getSimple().getList());

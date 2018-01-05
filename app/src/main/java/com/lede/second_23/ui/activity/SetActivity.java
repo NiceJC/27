@@ -167,7 +167,7 @@ public class SetActivity extends BaseActivity {
         switch (view.getId()) {
 
             case R.id.edit_user_info:
-                Intent intent2=new Intent(SetActivity.this,UserInfoActivity2.class);
+                Intent intent2=new Intent(SetActivity.this,EditUserInfoActivity2.class);
                 startActivity(intent2);
                 break;
             case R.id.rl_set_activity_vip:
@@ -235,6 +235,9 @@ public class SetActivity extends BaseActivity {
 
     private void qureyLatType(){
         Request<String> qureyLatType_Request = NoHttp.createStringRequest(GlobalConstants.URL + "/homes/userDistance", RequestMethod.POST);
+
+
+        String userId=(String) SPUtils.get(this, GlobalConstants.USERID, "");
         qureyLatType_Request.add("userId", (String) SPUtils.get(this, GlobalConstants.USERID, ""));
         requestQueue.add(200, qureyLatType_Request, new OnResponseListener<String>() {
             @Override
@@ -262,6 +265,9 @@ public class SetActivity extends BaseActivity {
 
     private void parseLoactionType(String json) {
         LocationBean locationBean = mGson.fromJson(json, LocationBean.class);
+        if(locationBean.getData().getUserAmap()==null){
+            return;
+        }
         yourChoice=Integer.parseInt(locationBean.getData().getUserAmap().getType());
     }
 

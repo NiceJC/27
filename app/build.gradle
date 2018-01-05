@@ -7,8 +7,8 @@ android {
         applicationId "com.lede.second_23"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 10
-        versionName "3.4.0"
+        versionCode 11
+        versionName "3.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         manifestPlaceholders=[UMENG_CHANNEL_VALUE:"umeng"]
@@ -47,7 +47,7 @@ android {
     productFlavors{
         //在这里添加渠道号
 
-        c360{}
+        xiaomi{}
 
     }
     productFlavors.all{

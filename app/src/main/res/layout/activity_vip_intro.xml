@@ -50,14 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="matrix"
-            android:src="@mipmap/vip_explain1" />
+            android:src="@mipmap/vip_explain" />
 
-        <ImageView
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-            android:scaleType="matrix"
-            android:src="@mipmap/vip_explain2" />
     </LinearLayout>
     </ScrollView>
 

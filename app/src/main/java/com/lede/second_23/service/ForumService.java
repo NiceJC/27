@@ -51,6 +51,9 @@ public class ForumService {
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
             public void onSucceed(int what, Response<String> response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_PUSH_FORUM:
                         parseForumJson(response.get());
@@ -66,6 +69,9 @@ public class ForumService {
             }
             @Override
             public void onFailed(int what, Response response) {
+                if(mActivity.isDestroyed()){
+                    return;
+                }
                 switch (what) {
                     case REQUEST_PUSH_FORUM:
 

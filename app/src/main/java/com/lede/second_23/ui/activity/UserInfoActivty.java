@@ -1,37 +1,45 @@
 package com.lede.second_23.ui.activity;
 
+import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.lede.second_23.R;
-import com.lede.second_23.bean.IfConcernBean;
+import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.bean.PersonalAlbumBean;
-import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.global.RequestServer;
-import com.lede.second_23.interface_utils.RefreshAndLoadMoreListener;
+import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.service.AlbumService;
+import com.lede.second_23.service.ForumService;
+import com.lede.second_23.service.SocialService;
+import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.ui.base.BaseActivity;
-import com.lede.second_23.ui.fragment.PersonalFragmentAlbum;
-import com.lede.second_23.ui.fragment.PersonalFragmentAllBlog;
-import com.lede.second_23.ui.fragment.PersonalFragmentMe;
-import com.lede.second_23.utils.SPUtils;
+import com.lede.second_23.utils.UiUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.rest.SimpleResponseListener;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,418 +48,526 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.IMAGE_URLS;
+import static com.lede.second_23.global.GlobalConstants.TYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
- *
- * 版本改动太大，此页面废弃
- * Created by ld on 17/11/2.
+ * Created by ld on 18/1/4.
  */
 
-public class UserInfoActivty extends BaseActivity implements RefreshAndLoadMoreListener{
+public class UserInfoActivty extends BaseActivity {
 
 
-
-
-    @Bind(R.id.iv_personfragment_back)
-    ImageView back;
-    @Bind(R.id.personfragment_me)
-    ImageView meClick;
-    @Bind(R.id.personfragment_dongtai)
-    ImageView dongtaiClick;
-    @Bind(R.id.personfragment_album)
-    ImageView albumClick;
-    @Bind(R.id.viewPager)
+    @Bind(R.id.viewpager)
     ViewPager viewPager;
+    @Bind(R.id.view_pager_box)
+    RelativeLayout viewpagerBox;
 
-    @Bind(R.id.iv_person_fragment_item_sex)
-    ImageView boyOrGirl;
-    @Bind(R.id.tv_personfragment_username)
+    @Bind(R.id.user_name)
     TextView userName;
     @Bind(R.id.vip_logo)
     ImageView vipLogo;
 
-    @Bind(R.id.tv_personfragment_sign)
-    TextView userSign;
-    @Bind(R.id.ctiv_personfragment_userimg)
-    ImageView userImg;
-    @Bind(R.id.tv_converned_num)
-    TextView followingsNum;
-    @Bind(R.id.tv_fans_num)
-    TextView fansNum;
-    @Bind(R.id.ll_person_fragment_concerned)
-    LinearLayout followingClick;
-    @Bind(R.id.ll_person_fragment_fans)
-    LinearLayout fansClick;
-    @Bind(R.id.iv_personfragment_concern)
-    ImageView concernClick;
+    @Bind(R.id.user_info)
+    TextView userInfo;
+    @Bind(R.id.more_user_info)
+    ImageView moreUserInfo;
+    @Bind(R.id.new_message)
+    TextView concernView;
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
     @Bind(R.id.refresh_layout)
-    RefreshLayout mRefreshLayout;
-
-    @OnClick({R.id.ll_person_fragment_fans, R.id.ll_person_fragment_concerned, R.id.iv_personfragment_concern,
-            R.id.personfragment_me,R.id.personfragment_dongtai, R.id.personfragment_album, R.id.iv_personfragment_back,
-            R.id.ctiv_personfragment_userimg
-    })
-    public void onClick(View view) {
-        Intent intent = null;
-        switch (view.getId()) {
-            case R.id.ctiv_personfragment_userimg:
-                intent = new Intent(UserInfoActivty.this, UserInfoCardActivity.class);
-                intent.putExtra(USERID,userId);
-                startActivity(intent);
-                break;
-
-            case R.id.iv_personfragment_back:
-                finish();
-                break;
-
-            case R.id.ll_person_fragment_concerned:
-                intent = new Intent(this, ConcernOrFansActivity.class);
-                intent.putExtra("type", 0);
-                intent.putExtra("id", userId);
-                startActivity(intent);
-                break;
-            case R.id.ll_person_fragment_fans:
-                intent = new Intent(this, ConcernOrFansActivity.class);
-                intent.putExtra("type", 1);
-                intent.putExtra("id", userId);
-                startActivity(intent);
-                break;
-            case R.id.iv_personfragment_concern:
-
-                boolean isConcerned=concernClick.isSelected();
-                if (isConcerned){
-                    cancelCollect(userId);
-                }else{
-                    createCollect(userId);
-                }
-
-                break;
-            case R.id.personfragment_me:
-                if (currentPage != 0) {
-                    viewPager.setCurrentItem(0, true);
-                    meClick.setSelected(true);
-                    dongtaiClick.setSelected(false);
-                    albumClick.setSelected(false);
-                    currentPage = 0;
-                }
-                break;
-
-            case R.id.personfragment_dongtai:
-                if (currentPage != 1) {
-                    viewPager.setCurrentItem(1, true);
-                    meClick.setSelected(false);
-                    dongtaiClick.setSelected(true);
-                    albumClick.setSelected(false);
-                    currentPage = 1;
-                }
-                break;
-            case R.id.personfragment_album:
-                if (currentPage != 2) {
-                    viewPager.setCurrentItem(2, true);
-                    meClick.setSelected(false);
-                    albumClick.setSelected(true);
-                    dongtaiClick.setSelected(false);
-                    currentPage = 2;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    private Gson mGson;
-    private SimpleResponseListener<String> simpleResponseListener;
-    private static final int REQUEST_USER_INFO = 51515;
-    private static final int REQUEST_USER_RELATION=534341;
-    private static final int REQUEST_CANCAL=23223;
-    private static final int REQUEST_Concern=23255;
+    SmartRefreshLayout refreshLayout;
 
 
+    @Bind(R.id.user_info_card)
+    LinearLayout userInfoCard;
+    @Bind(R.id.user_img)
+    ImageView userImg;
+    @Bind(R.id.sex_bg)
+    ImageView sexBg;
+    @Bind(R.id.user_concern)
+    TextView userConcern;
+    @Bind(R.id.user_fans)
+    TextView userFans;
+    @Bind(R.id.user_age)
+    TextView userAge;
+    @Bind(R.id.user_city)
+    TextView userCity;
+    @Bind(R.id.user_hobby)
+    TextView userHobby;
+    @Bind(R.id.user_school)
+    TextView userSchool;
 
-    private String userId;
-    private PersonalAlbumBean.DataBean.UserInfo userInfo;
-    private int currentPage = 0;//当前页 初始默认为0
+    private Context context;
+    private CommonAdapter forumAdapter;
+    private int currentPage = 1;
+    private int pageSize = 15;
+    private boolean isHasNextPage = false;
+    private RequestManager requestManager;
+    private boolean isInfoCardShown=false; //默认隐藏用户的详细资料卡
+    private ObjectAnimator animator;
 
-    private PersonalFragmentAlbum personalFragmentAlbum;
-    private PersonalFragmentAllBlog personalFragmentAllBlog;
-    private PersonalFragmentMe personalFragmentMe;
-    private FragmentPagerAdapter mAdapter;
-    private List<Fragment> fragmentList;
+    private int forumItemWidth;
+
+    private ArrayList<PersonAllForumBean.DataBean.SimpleBean.ListBean> mForumList = new ArrayList<>();
+    private ArrayList<PersonalAlbumBean.DataBean.SimpleBean.UserPhotoBean> mAlbumList = new ArrayList<>();
+
+    private boolean isRefresh = true; //刷新种类 刷新还是加载更多
+
+    private PersonalAlbumBean.DataBean.UserInfo userInfoBean;
     private PersonalAlbumBean.DataBean dataBean;
-    private Request<String> userInfoRequest = null;
-    private Request<String> userRelationRequest=null;
+    private ForumService forumService;
+    private AlbumService albumService;
+    private SocialService socialService;
+    private UserInfoService userInfoService;
+    private String userID;
+    private boolean isVIP=false;
+
+
+    public MultiTransformation transformation;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_info);
 
-        userId=getIntent().getStringExtra(USERID);
+        setContentView(R.layout.activity_user_info);
+        context = this;
+        ButterKnife.bind(this);
+        requestManager = Glide.with(context);
+
+        forumItemWidth = ((UiUtils.getScreenWidth() - UiUtils.dip2px(20)) / 3);
+
+        userID=getIntent().getStringExtra(USERID);
         ButterKnife.bind(this);
 
-        mGson = new Gson();
+
 
         initView();
+
         initEvent();
-        doRequest();
-        mRefreshLayout.isRefreshing();
-        mRefreshLayout.setEnableLoadmore(false);
+        toRefresh();
+        refreshLayout.isRefreshing();
+        refreshLayout.setEnableAutoLoadmore(false);
+
     }
 
+
+
+    @OnClick({R.id.back,R.id.bigLinear, R.id.more_user_info, R.id.new_message,R.id.user_info_card,R.id.user_img,R.id.user_concern,R.id.user_fans})
+    public void onClick(View view) {
+        Intent intent=null;
+        switch (view.getId()) {
+            case R.id.back:
+
+                finish();
+                break;
+
+            case R.id.more_user_info:
+
+                bottom_show();
+                break;
+
+            case R.id.bigLinear:
+                if(isInfoCardShown){
+                    bottom_show();
+                }
+                break;
+            case R.id.new_message:
+
+                if(concernView.isSelected()){
+                    socialService.cancelCollect(userID, new MyCallBack() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            Toast.makeText(context,"已取消关注",Toast.LENGTH_SHORT).show();
+                            toRefresh();
+                        }
+
+                        @Override
+                        public void onFail(String mistakeInfo) {
+
+                        }
+                    });
+                }else {
+                    socialService.createCollect(userID, new MyCallBack() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            Toast.makeText(context,"关注成功",Toast.LENGTH_SHORT).show();
+                            toRefresh();
+                        }
+
+                        @Override
+                        public void onFail(String mistakeInfo) {
+
+                        }
+                    });
+
+
+                }
+
+
+
+                break;
+            case R.id.user_info_card:
+
+                break;
+            case R.id.user_img:
+
+                break;
+            case R.id.user_concern:
+                intent = new Intent(context, ConcernOrFansActivity.class);
+                intent.putExtra("type", 0);
+                intent.putExtra("id", userID);
+                startActivity(intent);
+                break;
+            case R.id.user_fans:
+                intent = new Intent(context, ConcernOrFansActivity.class);
+                intent.putExtra("type", 1);
+                intent.putExtra("id",userID);
+                startActivity(intent);
+                break;
+            default:
+                break;
+
+
+        }
+
+
+    }
 
     private void initView() {
-        fragmentList = new ArrayList<>();
-        if (personalFragmentMe == null) {
-            personalFragmentMe = new PersonalFragmentMe();
-        }
-        fragmentList.add(personalFragmentMe);
 
-        if (personalFragmentAllBlog == null) {
-            personalFragmentAllBlog = new PersonalFragmentAllBlog();
-        }
-        fragmentList.add(personalFragmentAllBlog);
+        transformation = new MultiTransformation(
+                new CenterCrop(context),
+                new RoundedCornersTransformation(context, UiUtils.dip2px(3), 0, RoundedCornersTransformation.CornerType.ALL)
+        );
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,forumItemWidth*3);
+        viewpagerBox.setLayoutParams(layoutParams);
 
-        if (personalFragmentAlbum == null) {
-            personalFragmentAlbum = new PersonalFragmentAlbum();
-        }
-        fragmentList.add(personalFragmentAlbum);
-        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+        animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, UiUtils.dip2px(500));
+        animator.setDuration(0);
+        animator.start();
+        isInfoCardShown=false;
+
+
+        forumAdapter = new CommonAdapter<PersonAllForumBean.DataBean.SimpleBean.ListBean>(context, R.layout.item_person_fragment_show, mForumList) {
             @Override
-            public Fragment getItem(int position) {
-                return fragmentList.get(position);
-            }
+            protected void convert(ViewHolder holder, PersonAllForumBean.DataBean.SimpleBean.ListBean listBean, int position) {
+                holder.getConvertView().setLayoutParams(new LinearLayout.LayoutParams(forumItemWidth, forumItemWidth));
 
-            @Override
-            public int getCount() {
-                return fragmentList.size();
+
+                ImageView showView_photos = (ImageView) holder.getView(R.id.iv_person_fragment_item_photos);
+                ImageView showView_show = (ImageView) holder.getView(R.id.iv_person_fragment_item_show);
+                ImageView showView_play = (ImageView) holder.getView(R.id.iv_person_fragment_item_play);
+                if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
+                    requestManager.load(listBean.getAllRecords().get(0).getUrl()).bitmapTransform(transformation).into(showView_show);
+                    showView_play.setVisibility(View.GONE);
+                    if (listBean.getAllRecords().size() == 1 || listBean.getAllRecords().size() == 0) {
+                        showView_photos.setVisibility(View.GONE);
+                    } else {
+                        showView_photos.setVisibility(View.VISIBLE);
+                    }
+
+
+                } else {
+                    Log.i("videopic", "convert: " + listBean.getAllRecords().get(0).getUrlThree());
+                    requestManager.load(listBean.getAllRecords().get(0).getUrlThree()).bitmapTransform(transformation).into(showView_show);
+                    showView_play.setVisibility(View.VISIBLE);
+                    showView_photos.setVisibility(View.GONE);
+                }
+
             }
         };
-        viewPager.setAdapter(mAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        forumAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(context, ForumDetailActivity.class);
+                intent.putExtra("forumId", mForumList.get(position).getForumId()); //position-1?
+                startActivity(intent);
             }
 
             @Override
-            public void onPageSelected(int position) {
-
-                if (position == 0) {
-                    currentPage=0;
-                    meClick.setSelected(true);
-                    dongtaiClick.setSelected(false);
-                    albumClick.setSelected(false);
-                }
-
-                if (position == 1) {
-                    currentPage=1;
-                    meClick.setSelected(false);
-                    dongtaiClick.setSelected(true);
-                    albumClick.setSelected(false);
-                }
-                if (position == 2) {
-                    currentPage=2;
-                    meClick.setSelected(false);
-                    dongtaiClick.setSelected(false);
-                    albumClick.setSelected(true);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
             }
         });
+        GridLayoutManager manager = new GridLayoutManager(context, 3) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
 
-        currentPage = 0;
-        viewPager.setCurrentItem(currentPage, false);
-        meClick.setSelected(true);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(forumAdapter);
+
+
     }
 
-
-    public void initEvent() {
-
-
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+    private void initEvent() {
+        forumService = new ForumService(this);
+        albumService = new AlbumService(this);
+        userInfoService=new UserInfoService(this);
+        socialService=new SocialService(this);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                if (userInfoRequest != null) {
-                    userInfoRequest.cancel();
-                }
-                doRequest();
-                if (personalFragmentAllBlog.isResumed()) {
-                    personalFragmentAllBlog.toRefresh();
-                }
-                if (personalFragmentAlbum.isResumed()) {
-                    personalFragmentAlbum.toRefresh();
-                }
-                if(personalFragmentMe.isResumed()){
-                    personalFragmentMe.doRequest();
-                }
-
-
+                toRefresh();
             }
         });
-
-        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                if (personalFragmentAllBlog.isResumed()) {
-                    personalFragmentAllBlog.toLoadMore();
-                }
-                if (personalFragmentAlbum.isResumed()) {
-                    personalFragmentAlbum.toLoadMore();
-                }
+                toLoadMore();
             }
         });
     }
-
-
-    private void doRequest() {
-
-        simpleResponseListener = new SimpleResponseListener<String>() {
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                switch (what) {
-                    case REQUEST_USER_INFO:
-                        mRefreshLayout.finishRefresh();
-                        if(!UserInfoActivty.this.isDestroyed()){
-                            parseUserInfo(response.get());
-                        }
-
-                        break;
-                    case REQUEST_USER_RELATION:
-                        if(!UserInfoActivty.this.isDestroyed()){
-                            parseIfConcerned(response.get());
-                        }
-                        break;
-                    case REQUEST_CANCAL:
-                        if(userInfo!=null){
-                            userInfo.setFollowersCount(userInfo.getFollowersCount()-1);;
-                        }
-                        fansNum.setText(userInfo.getFollowersCount()+"");
-                        concernClick.setSelected(false);
-                        Toast.makeText(UserInfoActivty.this,"已取消关注",Toast.LENGTH_SHORT).show();
-                        break;
-                    case REQUEST_Concern:
-
-                        if(userInfo!=null){
-                            userInfo.setFollowersCount(userInfo.getFollowersCount()+1);;
-                        }
-                        fansNum.setText(userInfo.getFollowersCount()+"");
-                        concernClick.setSelected(true);
-                        Toast.makeText(UserInfoActivty.this,"关注成功",Toast.LENGTH_SHORT).show();
-                        break;
-
-
-                    default:
-                        break;
-                }
-            }
-            @Override
-            public void onFailed(int what, Response response) {
-                switch (what) {
-                    case REQUEST_USER_INFO:
-                        mRefreshLayout.finishRefresh();
-                        break;
-                    case REQUEST_USER_RELATION:
-
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-        userInfoRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/showUserPhotoHome", RequestMethod.POST);
-
-        userInfoRequest.add("userId", userId);
-        userInfoRequest.add("pageNum", 1);
-        userInfoRequest.add("pageSize", 1);
-        RequestServer.getInstance().request(REQUEST_USER_INFO, userInfoRequest, simpleResponseListener);
-
-        userRelationRequest=NoHttp.createStringRequest(GlobalConstants.URL + "/collection/collectReship", RequestMethod.POST);
-        userRelationRequest.add("userId",(String) SPUtils.get(this, GlobalConstants.USERID, ""));
-        userRelationRequest.add("toUserId",userId);
-        RequestServer.getInstance().request(REQUEST_USER_RELATION, userRelationRequest, simpleResponseListener);
-
-
-
-    }
-    /**
-     * 关注用户
-     */
-    private void createCollect(String id) {
-        Request<String> createCollectRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/createCollect", RequestMethod.POST);
-        createCollectRequest.add("id",id);
-        createCollectRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
-        RequestServer.getInstance().request(REQUEST_Concern,createCollectRequest,simpleResponseListener);
-    }
-
-    /**
-     * 取消关注
-     */
-    private void cancelCollect(String id) {
-        Request<String> cancelCollectRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/cancelCollect", RequestMethod.POST);
-        cancelCollectRequest.add("id",id);
-        cancelCollectRequest.add("access_token",(String) SPUtils.get(this,GlobalConstants.TOKEN,""));
-        RequestServer.getInstance().request(REQUEST_CANCAL,cancelCollectRequest,simpleResponseListener);
-    }
-
-
-    private void parseUserInfo(String s) {
-        PersonalAlbumBean personalAlbumBean = mGson.fromJson(s, PersonalAlbumBean.class);
-        userInfo = personalAlbumBean.getData().getUserInfo().get(0);
-        dataBean=personalAlbumBean.getData();
-        setUserInfo();
-    }
-    public void parseIfConcerned(String s){
-
-        IfConcernBean ifConcernBean= mGson.fromJson(s, IfConcernBean.class);
-        concernClick.setSelected(ifConcernBean.getData().isCollect());
-
-
-    }
-    public void setUserInfo() {
-        userName.setText(userInfo.getNickName());
-        if (userInfo.getSex().equals("男")) {
-
-            boyOrGirl.setSelected(false);
+    private void bottom_show() {
+        animator = null;
+        if (isInfoCardShown) {
+            //藏起
+            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, userInfoCard.getHeight()+UiUtils.dip2px(5));
+            animator.setDuration(500);
+            animator.start();
+            isInfoCardShown=false;
         } else {
-            boyOrGirl.setSelected(true);
+            //展开
+            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", userInfoCard.getHeight()+UiUtils.dip2px(5), 0);
+            animator.setDuration(500);
+            animator.start();
+            isInfoCardShown=true;
+        }
+    }
+    public void toRefresh() {
+
+        isRefresh = true;
+        doRequest(1);
+    }
+
+    public void toLoadMore() {
+
+
+        if (isHasNextPage) {
+            isRefresh = false;
+            doRequest(currentPage + 1);
+        } else {
+            refreshLayout.finishLoadmore();
+        }
+    }
+
+    private void doRequest(int pageNum) {
+
+        forumService.requestMyForum(userID, pageNum, 18, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                refreshLayout.finishRefresh();
+                refreshLayout.finishLoadmore();
+                List<PersonAllForumBean.DataBean.SimpleBean.ListBean> list = (List<PersonAllForumBean.DataBean.SimpleBean.ListBean>) o;
+
+                if (list.size() != 0) {
+
+                    if (isRefresh) {
+                        mForumList.clear();
+
+                        currentPage = 1;
+                        isHasNextPage = true;
+
+
+                    } else {
+                        currentPage++;
+                    }
+                    mForumList.addAll(list);
+
+                    forumAdapter.notifyDataSetChanged();
+                } else {
+                    isHasNextPage = false;
+                }
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+                refreshLayout.finishRefresh();
+                refreshLayout.finishLoadmore();
+            }
+        });
+
+        albumService.getMyAlbum(userID, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                PersonalAlbumBean personalAlbumBean= (PersonalAlbumBean) o;
+
+                List<PersonalAlbumBean.DataBean.SimpleBean.UserPhotoBean> list =personalAlbumBean.getData().getSimple().getList() ;
+
+
+
+                mAlbumList.clear();
+                mAlbumList.addAll(list);
+                userInfoBean =personalAlbumBean.getData().getUserInfo().get(0);
+                dataBean=personalAlbumBean.getData();
+                setAlbum();
+                if(isRefresh){
+
+                    setUserInfo();
+                }
+
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
+
+        socialService.checkIfConcern(userID, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                boolean isConcern= (boolean) o;
+                if(isConcern){ //已关注
+                    concernView.setText("已关注");
+                    concernView.setTextColor(Color.parseColor("#ffffff"));
+                    concernView.setSelected(true);
+                }else{
+                    concernView.setSelected(false);
+                    concernView.setText("关注");
+                    concernView.setTextColor(Color.parseColor("#4aa3e7"));
+
+                }
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+
+            }
+        });
+
+
+    }
+
+
+
+
+    public void setUserInfo(){
+        userName.setText(userInfoBean.getNickName());
+        userInfo.setText(userInfoBean.getNote());
+
+        if (userInfoBean.getSex().equals("男")) {
+
+            sexBg.setSelected(true);
+        } else {
+            sexBg.setSelected(false);
         }
 
-        if(userInfo.getTrueName()!=null&&userInfo.getTrueName().equals("1")){
+        if(userInfoBean.getTrueName()!=null&& userInfoBean.getTrueName().equals("1")){
             vipLogo.setVisibility(View.VISIBLE);
+
         }else{
             vipLogo.setVisibility(View.GONE);
         }
 
-        userSign.setText(userInfo.getNote());
         Glide.with(this)
-                .load(userInfo.getImgUrl())
+                .load(userInfoBean.getImgUrl())
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(userImg);
-        followingsNum.setText(dataBean.getFriendsCount() + "");
-        fansNum.setText(dataBean.getFollowersCount() + "");
-//        PersonalAlbumBean.DataBean.UserInfo
+        userConcern.setText(dataBean.getFriendsCount() + " 关注");
+        userFans.setText(dataBean.getFollowersCount() + " 粉丝");
+        userCity.setText(userInfoBean.getAddress());
+        userAge.setText(userInfoBean.getHobby());
+        userHobby.setText(userInfoBean.getWechat());
+        userSchool.setText(userInfoBean.getHometown());
+
+
+
     }
 
 
+    //将相册的图片设置在viewpager里面
+    public void setAlbum(){
+        viewPager.setOffscreenPageLimit(3);
 
-    @Override
-    public void isOver() {
-        mRefreshLayout.finishRefresh();
-        mRefreshLayout.finishLoadmore();
+        PagerAdapter pagerAdapter=new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return mAlbumList.size()+1;
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return view==object;
+            }
+            @Override
+
+            public void destroyItem(ViewGroup container,int position,Object o){
+            }
+            @Override
+
+            public Object instantiateItem(final ViewGroup container, final int position){
+
+
+                LayoutInflater inflater=LayoutInflater.from(context);
+                View imgeLayout=inflater.inflate(R.layout.activity_viewpager_pic_item,container,false);
+                imgeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isInfoCardShown) {
+                            //藏起
+                            animator = ObjectAnimator.ofFloat(userInfoCard, "translationY", 0, userInfoCard.getHeight()+UiUtils.dip2px(5));
+                            animator.setDuration(500);
+                            animator.start();
+                            isInfoCardShown=false;
+                        }else{
+                            if(position!=0){
+
+                                Intent intent = new Intent(context, ConcernActivity_2.class);
+                                intent.putExtra(IMAGE_URLS,mAlbumList.get(position-1).getUrlImg());
+                                intent.putExtra(USERID,userID);
+                                intent.putExtra(TYPE,2);
+                                startActivity(intent);
+                            }
+
+                        }                   }
+                });
+                ImageView imageView= (ImageView) imgeLayout.findViewById(R.id.imageView);
+                LinearLayout linearLayout= (LinearLayout) imgeLayout.findViewById(R.id.linearLayout);
+
+
+                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(forumItemWidth*3+UiUtils.dip2px(10),forumItemWidth*3);
+
+
+//                linearLayout.setLayoutParams(layoutParams);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                if(position==0){
+                    requestManager.load(userInfoBean.getImgUrl()).bitmapTransform(transformation).into(imageView);
+
+                }else{
+                    requestManager.load(mAlbumList.get(position-1).getUrlImg()).bitmapTransform(transformation).into(imageView);
+
+                }
+
+                container.addView(imgeLayout);
+
+                return imgeLayout;
+
+            }
+
+
+        };
+
+        viewPager.setAdapter(pagerAdapter);
+        if(mAlbumList.size()!=0){
+            viewPager.setCurrentItem(1);
+        }else{
+            viewPager.setCurrentItem(0);
+        }
+
+
+
+
     }
-
-
-
-
-
-
 
 }
