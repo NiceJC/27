@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:paddingBottom="30dp"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="150dp"
+        android:layout_height="150dp">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="150dp"
+            android:layout_height="110dp" />
+        <TextView
+            android:maxEms="8"
+            android:maxLines="1"
+            android:ellipsize="end"
+
+            android:paddingLeft="5dp"
+            android:id="@+id/text"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:text="浙江大学"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+
+    </LinearLayout>
+    
+    
+    
+</LinearLayout>

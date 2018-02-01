@@ -407,6 +407,10 @@ public class UserInfoActivty extends BaseActivity {
 
                 mAlbumList.clear();
                 mAlbumList.addAll(list);
+                if(personalAlbumBean.getData().getUserInfo()==null||personalAlbumBean.getData().getUserInfo().size()==0){
+                    return;
+                }
+
                 userInfoBean =personalAlbumBean.getData().getUserInfo().get(0);
                 dataBean=personalAlbumBean.getData();
                 setAlbum();

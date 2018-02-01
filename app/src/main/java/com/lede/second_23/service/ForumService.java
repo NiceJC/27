@@ -8,6 +8,7 @@ import com.lede.second_23.bean.PersonAllForumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.utils.SPUtils;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
@@ -23,6 +24,7 @@ public class ForumService {
 
     private static final int REQUEST_PUSH_FORUM = 162505;
     private static final int REQUEST_MY_FORUM=1213121;
+    private static final int REQUEST_PRAISE_FORUM=1217878;
 
 
 
@@ -32,6 +34,7 @@ public class ForumService {
 
     private Request<String> pushForumRequest = null;
     private Request<String> myForumRequest=null;
+    private Request<String> praiseForumRequest=null;
 
 
 
@@ -61,6 +64,8 @@ public class ForumService {
                     case REQUEST_MY_FORUM:
                         parseMyAllForum(response.get());
                         break;
+                    case REQUEST_PRAISE_FORUM:
+                        parsePraiseForum(response.get());
 
 
                     default:
@@ -74,11 +79,10 @@ public class ForumService {
                 }
                 switch (what) {
                     case REQUEST_PUSH_FORUM:
-
-                        myCallBack.onFail("数据请求出错");
-                        break;
                     case REQUEST_MY_FORUM:
+                    case REQUEST_PRAISE_FORUM:
                         myCallBack.onFail("数据请求出错");
+
                         break;
                     default:
                         break;
@@ -89,7 +93,7 @@ public class ForumService {
 
 
 
-    //匹配成功后，向被匹配的用户发送推送
+    //获取推送的高品质动态
     public void requestPushForum(int pageNum,int pageSize, MyCallBack myCallBack){
 
         this.myCallBack = myCallBack;
@@ -101,6 +105,7 @@ public class ForumService {
 
     }
 
+    //获取自己发布过的的动态
     public void requestMyForum(String userId,int pageNum,int pageSize,MyCallBack myCallBack){
         this.myCallBack=myCallBack;
         myForumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/showForumByHome", RequestMethod.POST);
@@ -109,6 +114,15 @@ public class ForumService {
         myForumRequest.add("pageSize", pageSize);
         RequestServer.getInstance().request(REQUEST_MY_FORUM, myForumRequest, simpleResponseListener);
 
+    }
+
+    //给喜欢的动态点赞
+    public void praiseForum(long forumId,MyCallBack myCallBack){
+        this.myCallBack=myCallBack;
+        praiseForumRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/allForum/clickLike", RequestMethod.POST);
+        praiseForumRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        praiseForumRequest.add("forumId", forumId);
+        RequestServer.getInstance().request(REQUEST_PRAISE_FORUM, praiseForumRequest, simpleResponseListener);
     }
 
 
@@ -142,6 +156,11 @@ public class ForumService {
         }
     }
 
+    private void parsePraiseForum(String json){
+        myCallBack.onSuccess("");
+
+
+    }
 
 
 

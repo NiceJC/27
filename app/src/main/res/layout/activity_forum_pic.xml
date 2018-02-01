@@ -17,6 +17,7 @@
 
     </com.lede.second_23.ui.view.HackyViewPager>
     <LinearLayout
+        android:id="@+id/count_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

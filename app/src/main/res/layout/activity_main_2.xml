@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
+
+    <com.lede.second_23.ui.view.NoScrollViewPager
+        android:id="@+id/no_scroll_viewpager"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+    </com.lede.second_23.ui.view.NoScrollViewPager>
+
+
+
+
+    <View
+        android:background="#cccccc"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <RadioGroup
+
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp">
+
+        <RadioButton
+
+
+            android:id="@+id/bt_search"
+            android:layout_width="0dp"
+
+
+            android:drawablePadding="-2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_menu_01"
+            android:gravity="center"
+            android:text="探索"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/bt_find"
+
+            android:drawablePadding="-2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_menu_02"
+            android:gravity="center"
+            android:text="发现"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/bt_recommend"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-2dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="-2dp"
+            android:drawableTop="@drawable/selector_menu_03"
+            android:gravity="center"
+            android:text="推荐"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/bt_message"
+
+            android:drawablePadding="-2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_menu_04"
+            android:gravity="center"
+            android:text="消息"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/bt_me"
+
+            android:drawablePadding="-2dp"
+            android:layout_marginTop="-2dp"            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_menu_05"
+            android:gravity="center"
+            android:text="我"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+
+</LinearLayout>

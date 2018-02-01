@@ -10,7 +10,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import com.lede.second_23.bean.SameCityUserBean;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.PushedUserService;
 import com.lede.second_23.ui.activity.MateActivity;
+import com.lede.second_23.ui.activity.SameCityActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.UiUtils;
@@ -32,6 +32,7 @@ import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.SimpleResponseListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.ADDRESS;
+import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 import static com.lede.second_23.global.GlobalConstants.VIPPUSHSEX;
 import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
 import static com.lede.second_23.ui.activity.VIPSettingActivity.ALL;
@@ -59,7 +63,8 @@ public class MainFragmentYouLike extends Fragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @Bind(R.id.mate)
-    Button mate;
+    ImageView mate;
+
 
     private Gson mGson;
 
@@ -78,7 +83,10 @@ public class MainFragmentYouLike extends Fragment {
     private String VIPStatus;
     private boolean isshowBottom = true;
     private ObjectAnimator animator;
+    String address;
+    String sex;
     private ArrayList<SameCityUserBean.DataBean.UserInfoList.UserInfoListBean> pushUserList = new ArrayList<>();
+    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
     @Nullable
     @Override
@@ -90,6 +98,8 @@ public class MainFragmentYouLike extends Fragment {
 
         mGson = new Gson();
 
+        address= (String) SPUtils.get(getActivity(), ADDRESS, "杭州市");
+        sex= (String) SPUtils.get(getActivity(),USER_SEX,"男");
 
 
         initView();
@@ -153,7 +163,7 @@ public class MainFragmentYouLike extends Fragment {
             @Override
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
 
-                if (position == 1) {
+                if (position == 2) {
                     LinearLayout linearLayout = (LinearLayout) holder.getConvertView();
                     linearLayout.setPadding(0, UiUtils.dip2px(80), 0, 0);
                 } else { //复用第二个的padding会导致滑动时错乱，将其他的padding定为0即可
@@ -192,6 +202,23 @@ public class MainFragmentYouLike extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
+        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_you_like_head, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.same_city);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), SameCityActivity.class);
+
+                intent.putExtra(ADDRESS,address);
+                intent.putExtra(SEXTYPE,"all");
+                startActivity(intent);
+            }
+        });
+        mHeaderAndFooterWrapper.addHeaderView(view);
+        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
+//        mHeaderAndFooterWrapper.notifyDataSetChanged();
+
 
     }
 
@@ -226,6 +253,9 @@ public class MainFragmentYouLike extends Fragment {
                 toLoadMore();
             }
         });
+
+
+
     }
 
     public void toRefresh() {
@@ -279,7 +309,7 @@ public class MainFragmentYouLike extends Fragment {
                 }
 
                 pushUserList.addAll(list);
-                mAdapter.notifyDataSetChanged();
+                mHeaderAndFooterWrapper.notifyDataSetChanged();
             }
 
             @Override

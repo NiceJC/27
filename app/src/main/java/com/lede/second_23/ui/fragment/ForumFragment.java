@@ -40,7 +40,6 @@ import com.lede.second_23.ui.activity.ForumPicActivity;
 import com.lede.second_23.ui.activity.ForumReplyVideoPlayActivity;
 import com.lede.second_23.ui.activity.ForumVideoPlayActivity;
 import com.lede.second_23.ui.activity.ForumVideoReplyActivity;
-import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.SearchingActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.ui.view.HackyViewPager;
@@ -181,19 +180,8 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 TextView tv_time = holder.getView(R.id.tv_item_forum_time);
                 TextView tv_text = holder.getView(R.id.tv_item_forum_text);
                 RelativeLayout rl_pic = holder.getView(R.id.rl_item_forum_pic);
-                ImageView iv_video_reply = holder.getView(R.id.iv_item_forum_video_reply);
-                TextView iv_video_count = holder.getView(R.id.tv_item_forum_videocount);
-                iv_video_reply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        forumVideoReplyList.clear();
-                        forumVideoReplyList.add(null);
-                        showVideoByUserList(listBean.getForumId());
-                        currentForumId = listBean.getForumId();
-                        showPopwindow();
 
-                    }
-                });
+
                 rl_pic.removeAllViews();
                 View view = null;
                 if (!listBean.getAllRecords().get(0).getUrl().equals("http://my-photo.lacoorent.com/null")) {
@@ -385,7 +373,6 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                         }
                     });
                 }
-                iv_video_count.setText(listBean.getVideoCount() + "");
                 final TextView tv_likeCount = holder.getView(R.id.tv_item_forum_likecount);
                 tv_likeCount.setText(listBean.getLikeCount() + "");
                 TextView tv_commentCount = holder.getView(R.id.tv_item_forum_commentcount);
@@ -732,7 +719,7 @@ public class ForumFragment extends Fragment implements OnResponseListener<String
                 startActivity(intent);
                 break;
             case R.id.iv_forum_activity_back:
-                MainActivity.instance.vp_main_fg.setCurrentItem(1);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(1);
 //                finish();
                 break;
             case R.id.iv_forum_activity_search:

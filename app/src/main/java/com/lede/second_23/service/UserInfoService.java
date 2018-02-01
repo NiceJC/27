@@ -4,7 +4,9 @@ import android.app.Activity;
 
 import com.google.gson.Gson;
 import com.lede.second_23.bean.MsgBean;
+import com.lede.second_23.bean.OnlyUserBean;
 import com.lede.second_23.bean.PersonalAlbumBean;
+import com.lede.second_23.bean.SearchingResultBean;
 import com.lede.second_23.bean.UpUserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
@@ -34,6 +36,8 @@ public class UserInfoService {
     private static final int UPDATE_USER_INFO=2311;
     private static final int CREATE_USER=124179;
     private static final int UPDATE_USER_IMG=23141;
+    private static final int REQUEST_USRE_BY_NAME=235132;
+    private static final int REQUEST_ONLY_USER_BY_NAME=2313932;
 
 
 
@@ -43,6 +47,9 @@ public class UserInfoService {
     private Request<String> updateUserInfoRequest=null;
     private Request<String> createUserInfoRequest=null;
     private Request<String> userInfoRequest = null;
+    private Request<String> userByNameRequest=null;
+    private Request<String> userOnlyByNameRequest=null;
+
 
     private PersonalAlbumBean.DataBean.UserInfo userInfo;
 
@@ -80,7 +87,12 @@ public class UserInfoService {
                     case CREATE_USER:
                         parseCreateUser(response.get());
                         break;
-
+                    case REQUEST_USRE_BY_NAME:
+                        parseMatchUsers(response.get());
+                        break;
+                    case REQUEST_ONLY_USER_BY_NAME:
+                        parseOnlyMatchedUser(response.get());
+                        break;
 
                     default:
                         break;
@@ -96,11 +108,12 @@ public class UserInfoService {
                     case UPDATE_USER_IMG:
                     case UPDATE_USER_INFO:
                     case CREATE_USER:
+                    default:
+
                         myCallBack.onFail(response.get().toString());
                         break;
 
-                    default:
-                        break;
+
                 }
             }
         };
@@ -130,6 +143,29 @@ public class UserInfoService {
         updateHeadImgRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
         updateHeadImgRequest.add("pic", new File(img));
         RequestServer.getInstance().request(UPDATE_USER_IMG, updateHeadImgRequest, simpleResponseListener);
+
+    }
+
+    //根据用户名 模糊查询 返回匹配到的用户列表
+    public void requestUserByNmae(String mkName,MyCallBack myCallBack){
+
+        this.myCallBack=myCallBack;
+        userByNameRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserNameLike", RequestMethod.POST);
+        userByNameRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        userByNameRequest.add("mkName",mkName);
+        RequestServer.getInstance().request(REQUEST_USRE_BY_NAME, userByNameRequest,simpleResponseListener);
+
+    }
+
+    //根据用户名 精确查询 返回匹配到的用户
+    public void requestOnlyUserByName(String mkName,MyCallBack myCallBack){
+        this.myCallBack=myCallBack;
+
+        userOnlyByNameRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserByName", RequestMethod.POST);
+        userOnlyByNameRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
+        userOnlyByNameRequest.add("name",mkName);
+        RequestServer.getInstance().request(REQUEST_ONLY_USER_BY_NAME, userOnlyByNameRequest,simpleResponseListener);
+
 
     }
 
@@ -206,6 +242,37 @@ public class UserInfoService {
 
 
 
+    private void parseMatchUsers(String json){
+
+        SearchingResultBean searchingResultBean = mGson.fromJson(json, SearchingResultBean.class);
+        if(searchingResultBean.getResult()==100205){
+
+            myCallBack.onFail("暂无数据");
+        }else{
+            myCallBack.onSuccess(searchingResultBean.getData().getUserInfos());
+
+        }
+    }
+
+    private void parseOnlyMatchedUser(String json){
+
+        OnlyUserBean onlyUserBean = mGson.fromJson(json, OnlyUserBean.class);
+        if(onlyUserBean.getResult()==10000){
+
+            if(onlyUserBean.getData().getUserInfoList().size()==1){
+                myCallBack.onSuccess(onlyUserBean.getData().getUserInfoList().get(0));
+            }else{
+                myCallBack.onFail("暂无数据");
+
+            }
+
+
+        }else{
+            myCallBack.onFail("暂无数据");
+
+        }
+
+    }
 
     //每次请求用户信息的时候，顺便存一波到本地
     private void parseUserInfo(String s) {

@@ -12,43 +12,6 @@
         android:orientation="vertical">
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:src="@mipmap/back" />
-
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="个人中心"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:src="@mipmap/set"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eeeeee" />
-
         <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
@@ -84,11 +47,54 @@
                 <LinearLayout
 
                     android:id="@+id/bigLinear"
-                    android:descendantFocusability="blocksDescendants"
-
                     android:layout_width="match_parent"
+
                     android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+
+                        <TextView
+                            android:id="@+id/user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="十大神兽"
+                            android:textColor="#333333"
+                            android:textSize="30sp" />
+
+                        <ImageView
+                            android:visibility="gone"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/user_name"
+                            android:id="@+id/vip_logo"
+                            android:layout_marginLeft="8dp"
+                            android:src="@mipmap/vipicon_05"
+
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="wrap_content" />
+
+
+
+                        <ImageView
+
+                            android:id="@+id/user_image"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/test2" />
+
+
+                    </RelativeLayout>
 
                     <RelativeLayout
 
@@ -102,12 +108,12 @@
                             android:id="@+id/viewpager"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:clipChildren="false"
-
                             android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true" />
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="20dp"
+
+                            android:layout_marginRight="20dp"
+                            android:clipChildren="false" />
 
                     </RelativeLayout>
 
@@ -118,49 +124,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp">
 
-                        <RelativeLayout
 
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp">
-
-                            <TextView
-                                android:id="@+id/user_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-
-                                android:layout_centerVertical="true"
-                                android:text="高尔基"
-                                android:textColor="#000000"
-                                android:textSize="20sp" />
-
-                            <ImageView
-                                android:visibility="gone"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/user_name"
-                                android:id="@+id/vip_logo"
-                                android:layout_marginLeft="8dp"
-                                android:src="@mipmap/vipicon_05"
-
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="wrap_content" />
-
-
-                            <ImageView
-
-                                android:id="@+id/more_user_info"
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:src="@mipmap/personal_moredata" />
-
-
-                        </RelativeLayout>
 
 
                         <TextView
@@ -172,23 +136,22 @@
                             android:ellipsize="end"
                             android:maxEms="30"
                             android:maxLines="2"
-                            android:textColor="#666666"
-                            android:textSize="14sp" />
-
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
 
 
                         <TextView
-                            android:layout_marginTop="28dp"
-                            android:id="@+id/new_message"
+                            android:id="@+id/set"
+                            android:layout_width="match_parent"
 
+                            android:layout_height="37dp"
+                            android:layout_marginTop="28dp"
                             android:background="@drawable/message_bt_bg"
                             android:gravity="center"
+                            android:text="账户编辑"
                             android:textColor="#4aa3e7"
-                            android:textSize="18sp"
-                            android:text="消息"
-                            android:layout_width="match_parent"
-                            android:layout_height="37dp" />
-                        
+                            android:textSize="18sp" />
+
 
                         <android.support.v7.widget.RecyclerView
 
@@ -214,14 +177,16 @@
 
     <LinearLayout
 
+
         android:id="@+id/user_info_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:background="@drawable/userinfo_bg"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        >
 
         <RelativeLayout
             android:layout_width="72dp"
@@ -252,19 +217,19 @@
             android:layout_marginTop="40dp">
 
             <TextView
-                android:padding="4dp"
                 android:id="@+id/user_concern"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
             <TextView
-                android:padding="4dp"
                 android:id="@+id/user_fans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
+                android:padding="4dp"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
@@ -397,6 +362,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -440,8 +406,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>

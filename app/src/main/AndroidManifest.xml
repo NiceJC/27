@@ -62,9 +62,11 @@
         tools:replace="android:icon, android:theme">
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".ui.activity.MainActivity"
+        <activity android:name=".ui.activity.MainActivity2"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             />
+
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -119,7 +121,7 @@
         <!-- android:screenOrientation="portrait" /> -->
         <!-- <activity android:name=".ui.base.BaseActivity" /> -->
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.LoginAndRegisterActivity"
             android:launchMode="singleTop"
             android:theme="@style/MyFullScreenTheme">
 
@@ -294,6 +296,27 @@
         <activity android:name=".ui.activity.NearByActivity"/>
         <activity android:name=".ui.activity.EditUserInfoActivity2"/>
         <activity android:name=".ui.activity.EditRegisterInfoActivity2"/>
+        <activity android:name=".ui.activity.TopicsActivity"/>
+        <activity android:name=".ui.activity.TopicItemsActivity"/>
+        <activity android:name=".ui.activity.GreetEachActivity"/>
+        <activity android:name=".ui.activity.GreetReceiveActivity"/>
+        <activity android:name=".ui.activity.NewForumActivity"
+            android:theme="@style/MyFullScreenTheme"
+            />
+        <activity android:name=".ui.activity.TopicCreateActivity"/>
+        <activity android:name=".ui.activity.TopicItemCreateActivity"/>
+        <activity android:name=".ui.activity.TopicItemDetailActivity"/>
+        <activity android:name=".ui.activity.PostFootMarkActivity"/>
+        <activity android:name=".ui.activity.TopicEditActivity"/>
+        <activity android:name=".ui.activity.TopicItemEditActivity"/>
+        <activity android:name=".ui.activity.TopicItemsRankActivity"/>
+        <activity android:name=".ui.activity.TopicsRankActivity"/>
+
+        <activity
+            android:name="com.zaaach.citypicker.CityPickerActivity"
+            android:theme="@style/CityPicker.NoActionBar"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
 
 
 

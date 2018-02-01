@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lede.second_23.R;
@@ -24,6 +26,8 @@ public class ForumPicActivity extends AppCompatActivity {
     TextView imageCurrent;
     @Bind(R.id.image_count)
     TextView imageCount;
+    @Bind(R.id.count_layout)
+    LinearLayout countLayout;
 
 
     private ArrayList<String> banner;
@@ -39,6 +43,12 @@ public class ForumPicActivity extends AppCompatActivity {
         StatusBarUtil.transparencyBar(this);
         intent = getIntent();
         banner=intent.getStringArrayListExtra("banner");
+        if(banner.size()==1){
+            countLayout.setVisibility(View.GONE);
+        }else{
+            countLayout.setVisibility(View.VISIBLE);
+
+        }
         position = intent.getIntExtra("position",0);
         imageCount.setText(banner.size()+"");
         initData();

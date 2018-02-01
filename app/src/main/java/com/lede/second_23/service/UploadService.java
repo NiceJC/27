@@ -5,12 +5,10 @@ import android.app.Activity;
 import com.google.gson.Gson;
 import com.lede.second_23.MyApplication;
 import com.lede.second_23.bean.QiNiuTokenBean;
-import com.lede.second_23.bean.UploadAlbumBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
-import com.lede.second_23.interface_utils.OnUploadFinish;
+import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.utils.FileUtils;
-import com.lede.second_23.utils.SPUtils;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
@@ -31,10 +29,11 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by ld on 17/11/10.
+ * Created by ld on 18/1/19.
  */
 
 public class UploadService {
+
     private static final int GET_QIUNIUTOKEN = 132323;
     private static final int UPLOADREQUEST = 224444;
     private SimpleResponseListener<String> simpleResponseListener;
@@ -42,10 +41,12 @@ public class UploadService {
     private UploadManager uploadManager;
 
     private Activity mActivity;
-    private OnUploadFinish onUploadFinish;
+
     private List<LocalMedia> selectedMedias=new ArrayList<>();
     private Gson mGson;
     private int remainPicNum; //用于统计尚未上传并回报的图片数量
+    private List<String> imageKeys=new ArrayList<>();
+    private MyCallBack myCallBack;
     public UploadService() {
 
     }
@@ -59,10 +60,10 @@ public class UploadService {
 
 
     //图片上传 传入需要上传的资源 和一个回调接口
-    public void upload(List<LocalMedia> selectedMedias, final OnUploadFinish onUploadFinish){
-
+    public void upload(List<LocalMedia> selectedMedias, final MyCallBack myCallBack){
+        this.myCallBack=myCallBack;
         this.selectedMedias.addAll(selectedMedias);
-        this.onUploadFinish=onUploadFinish;
+
         uploadManager = MyApplication.getUploadManager();
         simpleResponseListener = new SimpleResponseListener<String>() {
             @Override
@@ -72,12 +73,8 @@ public class UploadService {
                     case GET_QIUNIUTOKEN:
                         parseQiNiuToken(response.get());
                         break;
-                    case UPLOADREQUEST:
-                        parseUploadService(response.get());
-                        if(remainPicNum==0){
-                            onUploadFinish.success();
-                        }
-                        break;
+
+
                     default:
                         break;
                 }
@@ -87,11 +84,9 @@ public class UploadService {
             public void onFailed(int what, Response response) {
                 switch (what) {
                     case GET_QIUNIUTOKEN:
-                        onUploadFinish.failed();
+                        myCallBack.onFail("");
                         break;
-                    case UPLOADREQUEST:
-                        onUploadFinish.failed();
-                        break;
+
 
                     default:
                         break;
@@ -119,12 +114,6 @@ public class UploadService {
         uploadPics(qiNiuTokenBean.getData().getUptoken(), selectedMedias);
 
     }
-    private void parseUploadService(String json){
-        UploadAlbumBean uploadAlbumBean=mGson.fromJson(json,UploadAlbumBean.class);
-        if(uploadAlbumBean.getResult()==10000){
-            remainPicNum=remainPicNum-1;
-        }
-    }
 
     /**
      * 上传图片文件
@@ -133,11 +122,12 @@ public class UploadService {
 
         remainPicNum=localMediaList.size();
         final int num = new Random().nextInt(100001);
-        final long imgID = System.currentTimeMillis() * 100000 + num;
+//        final long imgID = System.currentTimeMillis() * 100000 + num;
         for (LocalMedia pic:localMediaList
                 ) {
             File img=new File(pic.getPath());
             String key = (System.currentTimeMillis() * 100000 + num) + "." + FileUtils.getExtensionName(img.getName());
+            imageKeys.add(key);
 
             uploadManager.put(img, key, token,
                     new UpCompletionHandler() {
@@ -145,9 +135,13 @@ public class UploadService {
                         public void complete(String key, ResponseInfo info, JSONObject res) {
                             //res包含hash、key等信息，具体字段取决于上传策略的设置
                             if (info.isOK()) {
-                                uploadService(imgID,key);
+                                remainPicNum=remainPicNum-1;
+                                if(remainPicNum==0){
+                                    myCallBack.onSuccess(imageKeys);
+                                }
+
                             } else {
-                                onUploadFinish.failed();
+                                myCallBack.onFail("");
                                 //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
                             }
                         }
@@ -157,14 +151,6 @@ public class UploadService {
                         }
                     }, null));
         }
-    }
-
-    private void uploadService(long imgID, String imgKey) {
-        Request<String> uploadRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/photo/creatUserPhoto", RequestMethod.POST);
-        uploadRequest.add("access_token", (String) SPUtils.get(mActivity, GlobalConstants.TOKEN, ""));
-        uploadRequest.add("photoId",imgID);
-        uploadRequest.add("photoImg",imgKey);
-        RequestServer.getInstance().request(UPLOADREQUEST, uploadRequest,simpleResponseListener);
     }
 
 

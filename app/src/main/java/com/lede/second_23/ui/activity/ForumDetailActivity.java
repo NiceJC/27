@@ -379,22 +379,10 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         tv_text = (TextView) view.findViewById(R.id.tv_item_forum_text);
         rl_pic = (RelativeLayout) view.findViewById(R.id.rl_item_forum_pic);
         tv_likeCount = (TextView) view.findViewById(R.id.tv_item_forum_likecount);
-        tv_videocount = (TextView) view.findViewById(R.id.tv_item_forum_videocount);
         tv_commentCount = (TextView) view.findViewById(R.id.tv_item_forum_commentcount);
 
         iv_like = (ImageView) view.findViewById(R.id.iv_item_forum_like);
-        iv_video_reply = (ImageView) view.findViewById(R.id.iv_item_forum_video_reply);
-        iv_video_reply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                forumVideoReplyList.clear();
-                forumVideoReplyList.add(null);
-                showVideoByUserList(listBean.getForumId());
-                currentForumId = listBean.getForumId();
-                showPopwindow();
 
-            }
-        });
 
         return view;
     }
@@ -552,7 +540,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         commentForReplyRequest.add("forunId", forumId);
         commentForReplyRequest.add("commentId", commentId);
         commentForReplyRequest.add("replyText", replyForUserText);
-        commentForReplyRequest.add("userName", (String) SPUtils.get(context, GlobalConstants.USERNAME, ""));
+        commentForReplyRequest.add("businessName", (String) SPUtils.get(context, GlobalConstants.USERNAME, ""));
         NoHttp.getRequestQueueInstance().add(COMMENT_FOR_REPLY, commentForReplyRequest, this);
     }
 
@@ -968,7 +956,6 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
             });
         }
 
-        tv_videocount.setText(listBean.getVideoCount()+"");
         tv_commentCount.setText(listBean.getClickCount() + "");
         tv_likeCount.setText(listBean.getLikeCount() + "");
         if (listBean.isLike()) {
@@ -1031,13 +1018,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
             e.printStackTrace();
         }
         tv_text.setText(listBean.getForumText());
-        if (isOpenReplyVideo) {
-            forumVideoReplyList.clear();
-            forumVideoReplyList.add(null);
-            showVideoByUserList(listBean.getForumId());
-            currentForumId = listBean.getForumId();
-            showPopwindow();
-        }
+
     }
 
 

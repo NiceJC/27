@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,7 +107,7 @@ public class SameCityActivity extends BaseActivity {
             protected void convert(ViewHolder holder, final SameCityUserBean.DataBean.UserInfoList.UserInfoListBean userInfoListBean, int position) {
 
 
-                if (position == 2) {
+                if (position == 1) {
                     LinearLayout linearLayout = (LinearLayout) holder.getConvertView();
                     linearLayout.setPadding(0, UiUtils.dip2px(80), 0, 0);
                 } else { //复用第二个的padding会导致滑动时错乱，将其他的padding定为0即可
@@ -147,13 +146,8 @@ public class SameCityActivity extends BaseActivity {
         };
 
 
-        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
-        View view = LayoutInflater.from(this).inflate(R.layout.same_city_acivity_head, null);
-        mHeaderAndFooterWrapper.addHeaderView(view);
-        TextView textView = (TextView) view.findViewById(R.id.location);
-        textView.setText(address);
-        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
-        mHeaderAndFooterWrapper.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
+
 
 
     }
@@ -224,7 +218,7 @@ public class SameCityActivity extends BaseActivity {
                 }
 
                 sameCityUserList.addAll(list);
-                mHeaderAndFooterWrapper.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override

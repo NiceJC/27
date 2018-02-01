@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.lede.second_23.R;
 import com.lede.second_23.global.GlobalConstants;
@@ -37,7 +37,7 @@ public class ForgetPassword_PassWordActivity extends BaseActivity implements OnR
     @Bind(R.id.et_forget_password_pwd_activity_repwd)
     EditText et_forget_password_pwd_activity_repwd;
     @Bind(R.id.tv_forget_password_pwd_activity_update)
-    TextView tv_forget_password_pwd_activity_update;
+    ImageView tv_forget_password_pwd_activity_update;
 
     private String pwd;
     private String repwd;

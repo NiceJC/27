@@ -8,23 +8,23 @@
 
    <ImageView
        android:id="@+id/iv_pic_or_video_activity_9pic"
-       android:layout_width="60dp"
-       android:layout_height="60dp"
+       android:layout_width="70dp"
+       android:layout_height="70dp"
        android:src="@mipmap/gongge"
        android:layout_marginTop="172dp"
        android:layout_marginLeft="87dp"/>
     <ImageView
         android:id="@+id/iv_pic_or_video_activity_tuceng"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@mipmap/layer"
         android:layout_alignParentRight="true"
         android:layout_marginTop="172dp"
         android:layout_marginRight="87dp"/>
     <ImageView
         android:id="@+id/iv_pic_or_video_activity_video"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@mipmap/video"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="292dp"/>

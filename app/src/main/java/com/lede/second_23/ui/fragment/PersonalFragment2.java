@@ -3,7 +3,6 @@ package com.lede.second_23.ui.fragment;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,7 +35,6 @@ import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
 import com.lede.second_23.ui.activity.EditUserInfoActivity2;
 import com.lede.second_23.ui.activity.ForumDetailActivity;
-import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.SetActivity;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.UiUtils;
@@ -54,8 +52,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.rong.imlib.RongIMClient;
-import io.rong.imlib.model.Conversation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -74,13 +70,13 @@ public class PersonalFragment2 extends Fragment {
 
     @Bind(R.id.user_name)
     TextView userName;
+    @Bind(R.id.user_image)
+    ImageView userImage;
 
     @Bind(R.id.user_info)
     TextView userInfo;
-    @Bind(R.id.more_user_info)
-    ImageView moreUserInfo;
-    @Bind(R.id.new_message)
-    TextView newMessage;
+
+
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.refresh_layout)
@@ -173,14 +169,11 @@ public class PersonalFragment2 extends Fragment {
 
 
 
-    @OnClick({R.id.back, R.id.set, R.id.bigLinear, R.id.more_user_info, R.id.new_message, R.id.user_info_card, R.id.user_img, R.id.user_concern, R.id.user_fans})
+    @OnClick({ R.id.set, R.id.bigLinear, R.id.user_image, R.id.user_info_card, R.id.user_img, R.id.user_concern, R.id.user_fans})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
-            case R.id.back:
-                MainActivity.instance.vp_main_fg.setCurrentItem(1);
 
-                break;
             case R.id.set:
                 intent = new Intent(context, SetActivity.class);
                 startActivity(intent);
@@ -194,7 +187,7 @@ public class PersonalFragment2 extends Fragment {
 
 
                 break;
-            case R.id.more_user_info:
+            case R.id.user_image:
 
                 bottom_show();
                 break;
@@ -419,23 +412,7 @@ public class PersonalFragment2 extends Fragment {
             }
         });
 
-        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
-            @Override
-            public void onSuccess(Integer integer) {
-                if (integer > 0) {
-                    newMessage.setSelected(true);
-                    newMessage.setTextColor(Color.parseColor("#ff0000"));
-                } else {
-                    newMessage.setSelected(false);
-                    newMessage.setTextColor(Color.parseColor("#4aa3e7"));
-                }
-            }
 
-            @Override
-            public void onError(RongIMClient.ErrorCode errorCode) {
-
-            }
-        }, Conversation.ConversationType.PRIVATE);
     }
 
 
@@ -461,6 +438,11 @@ public class PersonalFragment2 extends Fragment {
                 .load(userInfoBean.getImgUrl())
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(userImg);
+        Glide.with(getContext())
+                .load(userInfoBean.getImgUrl())
+                .bitmapTransform(new CropCircleTransformation(getContext()))
+                .into(userImage);
+
         userConcern.setText(dataBean.getFriendsCount() + " 关注");
         userFans.setText(dataBean.getFollowersCount() + " 粉丝");
         userCity.setText(userInfoBean.getAddress());
@@ -564,33 +546,6 @@ public class PersonalFragment2 extends Fragment {
         super.onResume();
 
 
-//        bigLinear.setFocusable(true);
-//        bigLinear.setFocusableInTouchMode(true);
-//        bigLinear.requestFocus();
 
-
-
-        /**
-         * 通过回调方式，获取所有未读消息数。即除了聊天室之外其它所有会话类型的未读消息数。
-         *
-         * @param callback 消息数的回调。
-         */
-        RongIMClient.getInstance().getUnreadCount(new RongIMClient.ResultCallback<Integer>() {
-            @Override
-            public void onSuccess(Integer integer) {
-                if (integer > 0) {
-                    newMessage.setSelected(true);
-                    newMessage.setTextColor(Color.parseColor("#ff0000"));
-                } else {
-                    newMessage.setSelected(false);
-                    newMessage.setTextColor(Color.parseColor("#4aa3e7"));
-                }
-            }
-
-            @Override
-            public void onError(RongIMClient.ErrorCode errorCode) {
-
-            }
-        }, Conversation.ConversationType.PRIVATE);
     }
 }

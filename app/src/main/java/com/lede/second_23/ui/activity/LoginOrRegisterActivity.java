@@ -142,7 +142,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.tv_login_or_register_login:
-                startActivity(new Intent(this,LoginActivity.class));
+                startActivity(new Intent(this,LoginAndRegisterActivity.class));
                 finish();
                 break;
             case R.id.tv_login_or_register_register:

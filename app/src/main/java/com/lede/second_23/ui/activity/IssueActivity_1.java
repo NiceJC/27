@@ -529,7 +529,7 @@
 //        UploadTextBean uploadTextBean = mGson.fromJson(json, UploadTextBean.class);
 //        if (uploadTextBean.getMsg().equals("用户没有登录")) {
 //            Toast.makeText(this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(this, LoginActivity.class));
+//            startActivity(new Intent(this, LoginAndRegisterActivity.class));
 //        } else {
 //            if (imgOrVideoType == 0) {
 //                uploadImgServce(uploadTextBean.getData().getForumId());

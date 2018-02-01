@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 
 import com.lede.second_23.R;
 import com.lede.second_23.ui.activity.BilateralActivity;
-import com.lede.second_23.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,10 +98,10 @@ public class MainFragment1 extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_toLeft:
-                MainActivity.instance.vp_main_fg.setCurrentItem(0);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(0);
                 break;
             case R.id.main_fragment_toRight:
-                MainActivity.instance.vp_main_fg.setCurrentItem(2);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(2);
                 break;
             case R.id.main_fragment_indicator_like_click: //0
 

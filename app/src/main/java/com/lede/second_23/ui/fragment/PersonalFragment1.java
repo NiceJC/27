@@ -23,7 +23,6 @@ import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.RefreshAndLoadMoreListener;
 import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
-import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.SetActivity;
 import com.lede.second_23.ui.activity.UserInfoCardActivity;
 import com.lede.second_23.utils.SPUtils;
@@ -115,7 +114,7 @@ public class PersonalFragment1 extends Fragment implements RefreshAndLoadMoreLis
                 break;
 
             case R.id.iv_personfragment_back:
-                MainActivity.instance.vp_main_fg.setCurrentItem(1);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(1);
                 break;
             case R.id.iv_personfragment_set:
                 intent = new Intent(context, SetActivity.class);

@@ -33,6 +33,8 @@ public class GlobalConstants {
 //
 
 
+   public final static boolean ISMANAGER=false; //管理版本标记
+
     public static final String MAIN_FRAGMENT_CURRENT_PAGE="MAIN_FRAGMENT_CURRENT_PAGE";
 
     // access_token
@@ -102,6 +104,9 @@ public class GlobalConstants {
     public static final String MESSAGE_TYPE = "MESSAGE_TYPE";
 
 
+    public static final String CURRENT_CITY="CURRENT_CITY";
+    public static final String CURRENT_PROVINCE="CURRENT_PROVINCE";
+
     public static final String VIRIFYMARRY="VIRIFYMARRY";
     public static final String DECLARATION="DECLARATION";
     public static final String DECLARATIONMAIN="DECLARATIONMAIN";
@@ -113,6 +118,8 @@ public class GlobalConstants {
     //VIP特权  选择主页推送的用户性别
     public static final String VIPPUSHSEX="VIPPUSHSEX";
 
+    public static final String TOPICID="TOPICID"; //主题id
+    public static final String TOPICITEMID="TOPICITEMID"; //版块id
 
 
 

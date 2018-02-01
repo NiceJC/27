@@ -53,6 +53,9 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.lede.second_23.global.GlobalConstants.IMAGE_URLS;
 import static com.lede.second_23.global.GlobalConstants.TYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
+import static com.lede.second_23.global.GlobalConstants.VIPSTATUS;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOPEN;
+import static com.lede.second_23.ui.activity.VIPSettingActivity.NOTOVERDUE;
 
 /**
  * 动态点击页
@@ -135,6 +138,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
 //    private String picurl;
     private UserRelationBean userRelationBean;
     private String imageUrl=null;
+    private String VIPStatus;
 
 
     private String intentURL;
@@ -146,6 +150,8 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         intent = getIntent();
         userId = intent.getStringExtra(USERID);
         intentURL=intent.getStringExtra(IMAGE_URLS);
+        VIPStatus = (String) SPUtils.get(this, VIPSTATUS, NOTOPEN);
+
 //        videourl = intent.getStringExtra("videourl");
 //        picurl = intent.getStringExtra("picurl");
 //        time = intent.getStringExtra("time");
@@ -241,11 +247,16 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
                 finish();
                 break;
             case R.id.iv_concern_activity_message:
-                if (userRelationBean.getData().isEnd()) {
+                if (VIPStatus.equals(NOTOVERDUE)) {
                     RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
-                } else {
-                    showHintDialog(1);
+                }else{
+                    if (userRelationBean.getData().isEnd()) {
+                        RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE, userId, username);
+                    } else {
+                        showHintDialog(1);
+                    }
                 }
+
 
                 break;
             case R.id.iv_concern_activity_location:

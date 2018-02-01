@@ -205,7 +205,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
             @Override
             public void run() {
 //                if ((Boolean) SPUtils.get(WelcomeActivity.this, GlobalConstants.TOKENUNUSEFULL,true)) {
-//                    startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
+//                    startActivity(new Intent(WelcomeActivity.this,LoginAndRegisterActivity.class));
 //                }else {
 //
 //                }
@@ -213,7 +213,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                 if (isNetWork) {
                     if (SPUtils.contains(WelcomeActivity.this, GlobalConstants.TOKEN) && !(Boolean) SPUtils.get(WelcomeActivity.this, GlobalConstants.TOKENUNUSEFULL, true)) {
                         if (isHasInfo) {
-                            intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                            intent = new Intent(WelcomeActivity.this, MainActivity2.class);
                             startActivity(intent);
                             finish();
 
@@ -228,7 +228,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnResponseList
                     } else {
 //                        tvWelcomeLogin.setVisibility(View.VISIBLE);
 //                        tvWelcomeRegister.setVisibility(View.VISIBLE);
-                        intent = new Intent(WelcomeActivity.this, LoginOrRegisterActivity.class);
+                        intent = new Intent(WelcomeActivity.this, LoginAndRegisterActivity.class);
                         startActivity(intent);
                     }
                 } else {

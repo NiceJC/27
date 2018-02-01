@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lede.second_23.R;
@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
     @Bind(R.id.et_register_activity_validate)
     EditText et_register_activity_validate;
     @Bind(R.id.tv_register_activity_register)
-    TextView tv_register_activity_register;
+    ImageView tv_register_activity_register;
     @Bind(R.id.bt_register_activity_send)
     Button bt_register_activity_send;
 
@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
 
 
     @OnClick({R.id.tv_register_activity_register, R.id.bt_register_activity_send
-            ,R.id.iv_register_activity_back,R.id.tv_register_activity_login})
+            ,R.id.tv_register_activity_login})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.bt_register_activity_send:
@@ -116,11 +116,9 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                 tv_register_activity_register.setClickable(false);
                 submitValidateToServce(phone, validate);
                 break;
-            case R.id.iv_register_activity_back:
-                finish();
-                break;
+
             case R.id.tv_register_activity_login:
-                startActivity(new Intent(this,LoginActivity.class));
+                startActivity(new Intent(this,LoginAndRegisterActivity.class));
                 finish();
                 break;
         }
@@ -219,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity implements OnResponseLis
                         msg = jsonobject.getString("msg");
                         if (msg.equals("注册成功")) {
                             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(this,LoginActivity.class);
+                            Intent intent=new Intent(this,LoginAndRegisterActivity.class);
                             intent.putExtra("isRegister",true);
                             startActivity(intent);
                             finish();

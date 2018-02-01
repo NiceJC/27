@@ -13,8 +13,8 @@
     </RelativeLayout>
     <ImageButton
         android:id="@+id/ib_all_issue_activity_change"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@mipmap/change_video"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

@@ -30,7 +30,6 @@ import com.lede.second_23.ui.activity.ConcernOrFansActivity;
 import com.lede.second_23.ui.activity.ConversationListDynamicActivtiy;
 import com.lede.second_23.ui.activity.EditInformationActivity;
 import com.lede.second_23.ui.activity.ForumDetailActivity;
-import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.MyPhotoActivity;
 import com.lede.second_23.ui.activity.MyVideoActivity;
 import com.lede.second_23.ui.activity.SetActivity;
@@ -649,7 +648,7 @@ public class PersonFragment_1 extends Fragment implements View.OnClickListener ,
                 break;
             case R.id.iv_personfragment_back:
 //                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(0);
-                MainActivity.instance.vp_main_fg.setCurrentItem(1);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(1);
                 break;
             case R.id.iv_personfragment_near:
                 if (isNear) {

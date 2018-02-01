@@ -1,5 +1,6 @@
 package com.lede.second_23.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,19 +17,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.google.gson.Gson;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.SearchingResultBean;
-import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.global.RequestServer;
+import com.lede.second_23.bean.TopicItemsBean;
+import com.lede.second_23.interface_utils.MyCallBack;
+import com.lede.second_23.service.FindMoreService;
+import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.ui.base.BaseActivity;
-import com.lede.second_23.utils.SPUtils;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.rest.SimpleResponseListener;
-import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.lede.second_23.utils.UiUtils;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
@@ -41,7 +41,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.TOPICID;
+import static com.lede.second_23.global.GlobalConstants.TOPICITEMID;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
@@ -56,19 +59,54 @@ public class SearchingActivity extends BaseActivity {
     @Bind(R.id.searching_button)
     ImageView goSearching;
 
-    @Bind(R.id.searching_history_list)
-    RecyclerView searchingHistory;
-
     @Bind(R.id.searching_text)
     EditText editText;
 
     @Bind(R.id.searching_result)
-    RecyclerView searchingResult;
+    RecyclerView mRecyclerView;
 
     @Bind(R.id.when_no_data)
     TextView whenNoData;
 
-    @OnClick({R.id.searching_back,R.id.searching_button})
+    @Bind(R.id.type_man)
+    ImageView typeMan;
+    @Bind(R.id.type_topic)
+    ImageView typeTopic;
+
+    private ArrayList<String> keyWordsList = new ArrayList<>();
+    private Set<String> wordsSet;
+
+    private RequestManager requestManager;
+
+    private List<Object> objectList=new ArrayList<>();
+
+    private MultiItemTypeAdapter mAdapter;
+    private FindMoreService findMoreService;
+    private UserInfoService userInfoService;
+    private Activity context;
+
+    private MultiTransformation transformation;
+    private boolean isSearchingUsers=true;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
+
+
+        requestManager= Glide.with(this);
+        context=this;
+        typeMan.setSelected(true);
+
+
+        initView();
+        initEvent();
+        getWordsFromSP();
+
+    }
+
+    @OnClick({R.id.searching_back,R.id.searching_button,R.id.type_man,R.id.type_topic})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.searching_back:
@@ -76,8 +114,21 @@ public class SearchingActivity extends BaseActivity {
                 break;
             case R.id.search_button:
                 String keyWord=editText.getText().toString();
-                saveWordsToSP(keyWord);
+
                 goSearching(keyWord);
+
+                break;
+            case R.id.type_man:
+                isSearchingUsers=true;
+                typeMan.setSelected(true);
+                typeTopic.setSelected(false);
+                goSearching(editText.getText().toString());
+                break;
+            case R.id.type_topic:
+                isSearchingUsers=false;
+                typeMan.setSelected(false);
+                typeTopic.setSelected(true);
+                goSearching(editText.getText().toString());
 
                 break;
             default:
@@ -88,110 +139,152 @@ public class SearchingActivity extends BaseActivity {
     }
 
 
-    private Gson mGson;
-    private RequestManager requestManager;
-
-    private CommonAdapter historyAdapter;
-    private CommonAdapter resultAdapter;
-    private SimpleResponseListener<String> simpleResponseListener;
-
-    private static final int REQUEST_MATCHED_USER=616;
-    private ArrayList<String> keyWordsList = new ArrayList<>();
-    private List<SearchingResultBean.DataBean.UserBean> resultUsers=new ArrayList<>();
-    private Set<String> wordsSet;
-
-
-
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
-
-        mGson=new Gson();
-        requestManager= Glide.with(this);
-        getWordsFromSP();
-        initView();
-        initEvent();
-
-    }
-
 
 
 
 
 
     private void initView() {
-
-        searchingHistory.setLayoutManager(new LinearLayoutManager(this));
-        historyAdapter=new CommonAdapter<String>(this,R.layout.searching_history_item,keyWordsList) {
-            @Override
-            protected void convert(ViewHolder holder, final String keyWord, final int position) {
-                TextView textView=holder.getView(R.id.searching_list_item_text);
-                ImageView delete=holder.getView(R.id.searching_list_item_delete);
-                textView.setText(keyWord);
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        editText.setText(keyWord);
-                        goSearching(keyWord);
-                    }
-                });
-
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        deleteWordFromSP(keyWord);
-                        keyWordsList.remove(position);
-                        historyAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-        searchingHistory.setAdapter(historyAdapter);
-
-        searchingResult.setLayoutManager(new LinearLayoutManager(this));
-        resultAdapter= new CommonAdapter<SearchingResultBean.DataBean.UserBean>(this, R.layout.searching_result_item, resultUsers) {
-            @Override
-            protected void convert(ViewHolder holder, final SearchingResultBean.DataBean.UserBean userBean, int position) {
-                ImageView imageView=holder.getView(R.id.user_img);
-                TextView textView=holder.getView(R.id.user_name);
-                requestManager.load(userBean.getImgUrl())
-                        .bitmapTransform(new CropCircleTransformation(SearchingActivity.this))
-                        .into(imageView);
-                textView.setText(userBean.getNickName());
-
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        saveWordsToSP(userBean.getNickName());
-                    }
-                });
-
-                holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent=new Intent(SearchingActivity.this,UserInfoActivty.class);
-                        intent.putExtra(USERID,userBean.getUserId());
-                        startActivity(intent);
+        transformation = new MultiTransformation(
+                new CenterCrop(context),
+                new RoundedCornersTransformation(context, UiUtils.dip2px(5), 0, RoundedCornersTransformation.CornerType.ALL)
+        );
+        findMoreService=new FindMoreService(context);
+        userInfoService=new UserInfoService(context);
 
 
-
-                    }
-                });
-
-
-
-            }
-        };
-
-
-
-        searchingResult.setAdapter(resultAdapter);
-
+        mAdapter=new MultiItemTypeAdapter(this,objectList);
+        mAdapter.addItemViewDelegate(new HistoryDelegate());
+        mAdapter.addItemViewDelegate(new TopicResultDelegate());
+        mAdapter.addItemViewDelegate(new UserResultDelegate());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setAdapter(mAdapter);
 
     }
+
+
+    public void goSearching(String mkName){
+        if(mkName==null||mkName.equals("")){
+            return;
+        }
+       if(isSearchingUsers){
+           goSearchingUsers(mkName);
+       } else{
+           goSearchingTopics(mkName);
+       }
+    }
+
+
+    public class HistoryDelegate implements  ItemViewDelegate<Object> {
+        @Override
+        public int getItemViewLayoutId() {
+            return R.layout.searching_history_item;
+        }
+
+        @Override
+        public boolean isForViewType(Object item, int position) {
+            return item instanceof String;
+        }
+
+        @Override
+        public void convert(ViewHolder holder, Object o, final int position) {
+            final String keyWord= (String) o;
+            TextView textView=holder.getView(R.id.searching_list_item_text);
+            ImageView delete=holder.getView(R.id.searching_list_item_delete);
+            textView.setText(keyWord);
+            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editText.setText(keyWord);
+                    goSearching(keyWord);
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteWordFromSP(keyWord);
+                    objectList.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+
+        }
+    }
+
+    public class UserResultDelegate implements ItemViewDelegate<Object> {
+        @Override
+        public int getItemViewLayoutId() {
+            return R.layout.searching_result_item;
+        }
+
+        @Override
+        public boolean isForViewType(Object item, int position) {
+            return item instanceof SearchingResultBean.DataBean.UserBean;
+        }
+
+        @Override
+        public void convert(ViewHolder holder, Object o, final int position) {
+            final SearchingResultBean.DataBean.UserBean userBean= (SearchingResultBean.DataBean.UserBean) o;
+            ImageView imageView=holder.getView(R.id.user_img);
+            TextView textView=holder.getView(R.id.user_name);
+
+            requestManager.load(userBean.getImgUrl())
+                    .bitmapTransform(new CropCircleTransformation(SearchingActivity.this))
+                    .into(imageView);
+            textView.setText(userBean.getNickName());
+
+            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveWordsToSP(userBean.getNickName());
+                    Intent intent=new Intent(SearchingActivity.this,UserInfoActivty.class);
+                    intent.putExtra(USERID,userBean.getUserId());
+                    startActivity(intent);
+
+
+
+                }
+            });
+
+        }
+    }
+
+    public class TopicResultDelegate implements ItemViewDelegate<Object> {
+        @Override
+        public int getItemViewLayoutId() {
+            return R.layout.item_topic_content;
+        }
+
+        @Override
+        public boolean isForViewType(Object item, int position) {
+            return item instanceof TopicItemsBean.DataBean.SimpleBean.ListBean;
+        }
+
+        @Override
+        public void convert(ViewHolder holder, Object o, final int position) {
+            final TopicItemsBean.DataBean.SimpleBean.ListBean topicItem= (TopicItemsBean.DataBean.SimpleBean.ListBean) o;
+
+            ImageView imageView=holder.getView(R.id.image);
+            TextView textView=holder.getView(R.id.text);
+            requestManager.load(topicItem.getUrlOne()).bitmapTransform(transformation).into(imageView);
+            textView.setText(topicItem.getDetailsName());
+
+            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveWordsToSP(topicItem.getDetailsName());
+                    Intent intent=new Intent(context, TopicItemDetailActivity.class);
+                    intent.putExtra(TOPICID,topicItem.getUuid());
+                    intent.putExtra(TOPICITEMID,topicItem.getUuidBySub());
+                    startActivity(intent);
+
+                }
+            });
+
+        }
+    }
+
 
 
     public void initEvent(){
@@ -212,60 +305,69 @@ public class SearchingActivity extends BaseActivity {
 
             }
         });
+
+
+        getWordsFromSP();
     }
 
-    public void goSearching(String keyWord){
+    public void goSearchingUsers(String keyWord){
 
-        searchingHistory.setVisibility(View.GONE);
-        simpleResponseListener=new SimpleResponseListener<String>() {
+
+        userInfoService.requestUserByNmae(keyWord, new MyCallBack() {
             @Override
-            public void onSucceed(int what, Response<String> response) {
-                switch (what){
-                    case REQUEST_MATCHED_USER:
-                        parseMatchedUser(response.get());
-                        break;
-                    default:
-                        break;
+            public void onSuccess(Object o) {
+                List<SearchingResultBean.DataBean.UserBean> list= (List<SearchingResultBean.DataBean.UserBean>) o;
+                objectList.clear();
+                objectList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+                whenNoData.setVisibility(View.GONE);
+                if(list.size()==0){
+                    whenNoData.setVisibility(View.VISIBLE);
                 }
-
             }
 
             @Override
-            public void onFailed(int what, Response response) {
-                switch (what){
-                    case REQUEST_MATCHED_USER:
-                        break;
-                    default:
-                        break;
+            public void onFail(String mistakeInfo) {
+                objectList.clear();
+                mAdapter.notifyDataSetChanged();
+                whenNoData.setVisibility(View.VISIBLE);
 
-                }            }
-        };
+            }
+        });
+    }
 
-        Request<String> getMatchedUserRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/users/findUserNameLike", RequestMethod.POST);
-        getMatchedUserRequest.add("access_token", (String) SPUtils.get(this, GlobalConstants.TOKEN, ""));
-        getMatchedUserRequest.add("mkName",keyWord);
-        RequestServer.getInstance().request(REQUEST_MATCHED_USER, getMatchedUserRequest,simpleResponseListener);
+    public void goSearchingTopics(String keyWord){
+
+        findMoreService.requestTopicItemsByName(keyWord, 1, 100, new MyCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+
+                List<TopicItemsBean.DataBean.SimpleBean.ListBean> list = (List<TopicItemsBean.DataBean.SimpleBean.ListBean>) o;
+
+
+
+                whenNoData.setVisibility(View.GONE);
+                objectList.clear();
+                objectList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+                if(list.size()==0){
+                    whenNoData.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFail(String mistakeInfo) {
+                objectList.clear();
+                mAdapter.notifyDataSetChanged();
+                whenNoData.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+
 
     }
 
-
-    /**
-     * 解析推送用户
-     *
-     * @param json
-     */
-    private void parseMatchedUser(String json) {
-        resultUsers.clear();
-        SearchingResultBean searchingResultBean = mGson.fromJson(json, SearchingResultBean.class);
-        if(searchingResultBean.getResult()==100205){
-            whenNoData.setVisibility(View.VISIBLE);
-            resultAdapter.notifyDataSetChanged();
-        }else{
-            whenNoData.setVisibility(View.GONE);
-            resultUsers.addAll(searchingResultBean.getData().getUserInfos());
-            resultAdapter.notifyDataSetChanged();
-        }
-    }
 
 
 
@@ -300,6 +402,11 @@ public class SearchingActivity extends BaseActivity {
             String keyWord = it.next();
             keyWordsList.add(keyWord);
         }
+        objectList.clear();
+        objectList.addAll(keyWordsList);
+        mAdapter.notifyDataSetChanged();
+
+
     }
 
 

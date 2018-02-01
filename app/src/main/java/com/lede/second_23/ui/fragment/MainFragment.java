@@ -39,7 +39,6 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.ui.activity.AllIssueActivity;
 import com.lede.second_23.ui.activity.BilateralActivity;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
-import com.lede.second_23.ui.activity.MainActivity;
 import com.lede.second_23.ui.activity.ShowAllForumByVideoActivity;
 import com.lede.second_23.ui.activity.WelcomeActivity;
 import com.lede.second_23.utils.SPUtils;
@@ -603,15 +602,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, AMap
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_mainFragment_person:
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
+//                startActivity(new Intent(getActivity(), LoginAndRegisterActivity.class));
 //                ChildFragment.instance.vp_childFragment_ViewPager.setCurrentItem(1);
-                MainActivity.instance.vp_main_fg.setCurrentItem(2);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(2);
                 break;
             case R.id.iv_mainFragment_camera:
 //                ViewPager viewPager=(ViewPager)getActivity().findViewById(R.id.vp_main_fg);
 //                viewPager.setCurrentItem(0);
 //                startActivity(new Intent(getActivity(), ForumActivity.class));
-                MainActivity.instance.vp_main_fg.setCurrentItem(0);
+//                MainActivity.instance.vp_main_fg.setCurrentItem(0);
                 break;
             case R.id.iv_mainfragment_send:
                 Intent intent = new Intent(getActivity(), AllIssueActivity.class);

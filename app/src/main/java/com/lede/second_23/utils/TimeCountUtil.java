@@ -29,10 +29,10 @@ public class TimeCountUtil extends CountDownTimer {
     @Override
     public void onTick(long millisUntilFinished) {
         btn.setClickable(false);//设置不能点击
-        btn.setText(millisUntilFinished / 1000 + "秒后可重新发送");//设置倒计时时间
+        btn.setText(millisUntilFinished / 1000 + "");//设置倒计时时间
 
 //设置按钮为灰色，这时是不能点击的
-        btn.setBackground(mActivity.getResources().getDrawable(R.drawable.shape_btn_tenancy));
+//        btn.setBackground(mActivity.getResources().getDrawable(R.drawable.shape_btn_tenancy));
 //        Spannable span = new SpannableString(btn.getText().toString());//获取按钮的文字
 //        span.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);//讲倒计时时间显示为红色
 //        btn.setText(span);

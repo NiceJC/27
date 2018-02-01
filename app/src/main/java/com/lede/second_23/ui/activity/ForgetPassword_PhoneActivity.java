@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lede.second_23.R;
@@ -45,7 +45,7 @@ public class ForgetPassword_PhoneActivity extends BaseActivity implements OnResp
     @Bind(R.id.bt_forget_password_activity_send)
     Button bt_forget_password_activity_send;
     @Bind(R.id.tv_forget_password_activity_next)
-    TextView tv_forget_password_activity_next;
+    ImageView tv_forget_password_activity_next;
 
     //手机号
     private String phone;

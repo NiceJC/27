@@ -25,7 +25,7 @@ import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.AlbumService;
 import com.lede.second_23.service.PickService;
-import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.UploadAlbumService;
 import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.SPUtils;
@@ -532,8 +532,8 @@ public class EditUserInfoActivity2 extends BaseActivity {
                         doRequest();
                     }
                 };
-                UploadService uploadService = new UploadService(context);
-                uploadService.upload(list, onUploadFinish);
+                UploadAlbumService uploadAlbumService = new UploadAlbumService(context);
+                uploadAlbumService.upload(list, onUploadFinish);
                 snackbar= SnackBarUtil.getLongTimeInstance(mRecyclerView,"上传中，请稍候...");
                 snackbar.show();
 

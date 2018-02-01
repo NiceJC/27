@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.lede.second_23.bean.RongIMBean;
 import com.lede.second_23.bean.UserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
-import com.lede.second_23.ui.activity.MainActivity;
+import com.lede.second_23.ui.activity.MainActivity2;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -282,9 +282,9 @@ public class MyApplication extends Application {
                  */
                 @Override
                 public void onSuccess(String userid) {
-                    Log.d("LoginActivity", "--onSuccess" + userid);
+                    Log.d("LoginAndRegisterActivity", "--onSuccess" + userid);
                     Log.i("TAG", "onSuccess: " + userid);
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    startActivity(new Intent(LoginAndRegisterActivity.this, MainActivity.class));
 //                    finish();
                     SPUtils.put(context, GlobalConstants.ISCONNECTED_RONGIM, true);
                     //TODO
@@ -450,7 +450,7 @@ public class MyApplication extends Application {
         myManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         //3.定义一个PendingIntent，点击Notification后启动一个Activity
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity2.class);
         intent.putExtra(USERID,userid);
         intent.putExtra(MESSAGE_TYPE,1);
         PendingIntent pi = PendingIntent.getActivity(
@@ -499,7 +499,7 @@ public class MyApplication extends Application {
 //        Intent intent = new Intent(context, NotificationClickReceiver.class);
 //        intent.putExtra("userid",message.getSenderUserId());
 //        intent.putExtra("name",message.getContent().getUserInfo().getName());
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity2.class);
         intent.putExtra(USERID,message.getSenderUserId());
         intent.putExtra(MESSAGE_TYPE,2);
         PendingIntent pi = PendingIntent.getActivity(

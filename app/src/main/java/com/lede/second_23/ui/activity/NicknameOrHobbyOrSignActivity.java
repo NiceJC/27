@@ -64,6 +64,22 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
 
                 et_text.setHint("请输入学校");
                 break;
+
+            case 5:
+                et_text.setHint("请输入商家用户名");
+                break;
+
+            case 6:
+                et_text.setHint("请输入版块名称");
+                break;
+            case 7:
+                et_text.setHint("请输入版块简介");
+                break;
+
+
+
+
+
         }
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -112,6 +128,13 @@ public class NicknameOrHobbyOrSignActivity extends Activity {
                     case 4:
                         intent.putExtra("body",body);
                         break;
+                    case 5:
+                    case 6:
+                    case 7:
+                        intent.putExtra("body",body);
+                        break;
+
+
                     default:
                         break;
                 }

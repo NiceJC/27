@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import butterknife.OnClick;
 /**
  * 登陆页面
  */
-public class LoginActivity extends AppCompatActivity implements OnResponseListener<String> {
+public class LoginAndRegisterActivity extends AppCompatActivity implements OnResponseListener<String> {
 
     private static final int LOGIN_REQUEST = 3000;
     private static final int REPORTREGISTER=4000;
@@ -46,11 +47,11 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
     @Bind(R.id.et_login_activity_pwd)
     EditText etLoginPwd;
     @Bind(R.id.tv_login_activity_login)
-    TextView tv_login_activity_login;
+    ImageView tv_login_activity_login;
     @Bind(R.id.btn_login_register)
     TextView btnLoginRegister;
     @Bind(R.id.btn_login_forget_pwd)
-    TextView btnLoginForgetPwd;
+    ImageView btnLoginForgetPwd;
     private RequestQueue requestQueue;
     private Gson mGson;
 
@@ -175,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
 //        SPUtils.put(this, GlobalConstants.CERTIFICATION, loginBean.certification);
             //提示用户登陆成功并退出登陆界面
             T.showShort(this, "登录成功");
-            SPUtils.put(LoginActivity.this, GlobalConstants.TOKENUNUSEFULL, false);
+            SPUtils.put(LoginAndRegisterActivity.this, GlobalConstants.TOKENUNUSEFULL, false);
             loadUserInfo();
 
 
@@ -233,7 +234,6 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
 
     @Override
     public void onSucceed(int what, Response<String> response) {
-        Log.i("LoginActivity", "onSucceed: "+response.get());
         switch (what) {
             case REPORTREGISTER:
 
@@ -251,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
                 } else {
                     if (!TextUtils.isEmpty(response.get())) {
                         MsgBean msgBean = mGson.fromJson(response.get(), MsgBean.class);
-                        T.showShort(LoginActivity.this, msgBean.getMsg());
+                        T.showShort(LoginAndRegisterActivity.this, msgBean.getMsg());
                     }
                 }
                 break;
@@ -262,12 +262,12 @@ public class LoginActivity extends AppCompatActivity implements OnResponseListen
     public void onFailed(int what, Response<String> response) {
         switch (what) {
             case LOGIN_REQUEST:
-                T.showShort(LoginActivity.this, "网络访问失败，请检查网络重新登陆");
+                T.showShort(LoginAndRegisterActivity.this, "网络访问失败，请检查网络重新登陆");
                 Log.i("TAGG", "onFailed: --------->" + response.responseCode());
                 tv_login_activity_login.setClickable(true);
                 break;
             default:
-                T.showShort(LoginActivity.this,"网络访问失败，请检查网络");
+                T.showShort(LoginAndRegisterActivity.this,"网络访问失败，请检查网络");
                 break;
         }
     }

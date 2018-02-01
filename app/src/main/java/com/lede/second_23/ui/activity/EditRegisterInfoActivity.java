@@ -26,7 +26,7 @@ import com.lede.second_23.bean.UpUserInfoBean;
 import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
-import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.UploadAlbumService;
 import com.lede.second_23.utils.ProgressDialogUtils;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.SnackBarUtil;
@@ -522,8 +522,8 @@ public class EditRegisterInfoActivity extends AppCompatActivity implements OnRes
                         Glide.with(mContext).load(list.get(1).getCompressPath()).bitmapTransform(transformation).into(uploadImage2);
 
                     }
-                    UploadService uploadService = new UploadService(EditRegisterInfoActivity.this);
-                    uploadService.upload(list, onUploadFinish);
+                    UploadAlbumService uploadAlbumService = new UploadAlbumService(EditRegisterInfoActivity.this);
+                    uploadAlbumService.upload(list, onUploadFinish);
                 }
 
             }

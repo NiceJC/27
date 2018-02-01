@@ -207,7 +207,7 @@ public class SetActivity extends BaseActivity {
                 SPUtils.put(this, GlobalConstants.ISFIRST, "ISFRIST");
                 startActivity(new Intent(this, WelcomeActivity.class));
 //                MainActivity.instance.onDestroy();
-                MainActivity.instance.finish();
+                MainActivity2.instance.finish();
                 finish();
                 break;
             case R.id.ll_set_activity_clear:

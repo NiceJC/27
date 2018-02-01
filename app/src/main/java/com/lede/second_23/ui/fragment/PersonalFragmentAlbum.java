@@ -31,7 +31,7 @@ import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
-import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.UploadAlbumService;
 import com.lede.second_23.ui.activity.ConcernActivity_2;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
@@ -372,8 +372,8 @@ public class PersonalFragmentAlbum extends Fragment {
 
                     }
                 };
-                UploadService uploadService = new UploadService(getActivity());
-                uploadService.upload(list, onUploadFinish);
+                UploadAlbumService uploadAlbumService = new UploadAlbumService(getActivity());
+                uploadAlbumService.upload(list, onUploadFinish);
             }
             @Override
             public void onSelectSuccess(LocalMedia localMedia) {

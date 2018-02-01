@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
 
+    android:background="#ffffff"
+
     >
 
     <RelativeLayout
@@ -89,13 +91,50 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/searching_history_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
 
-    </android.support.v7.widget.RecyclerView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"/>
+
+    <LinearLayout
+        android:id="@+id/type_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+
+
+
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+
+                android:id="@+id/type_man"
+                android:src="@drawable/selector_search_man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/type_topic"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/selector_search_topic"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:padding="10dp"
         android:id="@+id/searching_result"
@@ -103,13 +142,17 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
+
+
+
     <TextView
 
-
         android:visibility="gone"
+
         android:id="@+id/when_no_data"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
+        android:textSize="18sp"
         android:text="无匹配结果"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

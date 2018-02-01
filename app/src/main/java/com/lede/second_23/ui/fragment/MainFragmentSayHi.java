@@ -43,6 +43,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 
 /**
+ *
+ * 向我打招呼的人 列表页面
  * Created by ld on 17/10/19.
  */
 

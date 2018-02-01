@@ -36,7 +36,7 @@ import com.lede.second_23.global.RequestServer;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.interface_utils.OnUploadFinish;
 import com.lede.second_23.service.PickService;
-import com.lede.second_23.service.UploadService;
+import com.lede.second_23.service.UploadAlbumService;
 import com.lede.second_23.service.UserInfoService;
 import com.lede.second_23.service.VIPService;
 import com.lede.second_23.ui.fragment.ForumFragment;
@@ -449,8 +449,8 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
 
                     }
                 };
-                UploadService uploadService = new UploadService(MainActivity.this);
-                uploadService.upload(list, onUploadFinish);
+                UploadAlbumService uploadAlbumService = new UploadAlbumService(MainActivity.this);
+                uploadAlbumService.upload(list, onUploadFinish);
             }
 
             @Override
@@ -570,15 +570,10 @@ public class MainActivity extends FragmentActivity implements AMapLocationListen
         mNearbySearch.addNearbyListener(new NearbySearch.NearbyListener() {
             @Override
             public void onUserInfoCleared(int i) {
-
-                int a=i;
             }
 
             @Override
             public void onNearbyInfoSearched(NearbySearchResult nearbySearchResult, int i) {
-
-                NearbySearchResult result=nearbySearchResult;
-                int a=i;
             }
 
             @Override
