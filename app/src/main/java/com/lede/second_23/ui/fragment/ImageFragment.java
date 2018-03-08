@@ -2,9 +2,11 @@ package com.lede.second_23.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -23,8 +25,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -178,34 +178,83 @@ public class ImageFragment extends Fragment {
             }
         }
     };
+
+
+//
+//    //适用于安卓7.0以上  的运行时权限适配
+//    private void checkLocatePermission() {
+//
+//        boolean isGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                == PackageManager.PERMISSION_GRANTED;
+//        if (isGranted) {
+//
+//            DialogUtil.showItemSelectDialog(SetUpActivity.this, screenWidth / 25 * 24, onItemSelectedListener, FROM_NATIVE, FROM_CAMERA);
+//
+//        } else {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, REQUEST_CODE);
+//        }
+//
+//
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//
+//        switch (requestCode) {
+//            case REQUEST_CODE:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    //用户同意授权
+//                    DialogUtil.showItemSelectDialog(SetUpActivity.this, screenWidth / 25 * 24, onItemSelectedListener, FROM_NATIVE, FROM_CAMERA);
+//
+//                } else {
+//                    //用户拒绝授权
+//                    ToastUtils.toast(this, "没有权限将可能出现异常，用户可以前往应用权限进行设置");
+//                }
+//                break;
+//        }
+//    }
     /**
      * 保存图片方法
      * @param bm
      */
     public void saveBitmap(Bitmap bm) {
-        SimpleDateFormat formatter    =   new    SimpleDateFormat    ("yyyy年MM月dd日HH:mm:ss");
-        Date curDate    =   new    Date(System.currentTimeMillis());//获取当前时间
-        String    str    =    formatter.format(curDate);
-        Log.e("TAG", "保存图片");
-        File file = new File("/sdcard/27/");
-        //判断文件夹是否存在,如果不存在则创建文件夹
-        if (!file.exists()) {
-            file.mkdir();
+
+        //新建文件夹 先选好路径 再调用mkdir函数 现在是根目录下面的photo文件夹
+        File nf = new File(Environment.getExternalStorageDirectory() + "/27");
+
+        if(!nf.exists()){
+            nf.mkdir();
         }
-        File f = new File("/sdcard/27/", str+".png");
-        if (f.exists()) {
-            f.delete();
-        }
-        Resources r = this.getContext().getResources();
-        //TODO  水印
-//        Bitmap bitmap= BitmapFactory.decodeResource(r,R.mipmap.shuiying);
-//        Bitmap bitmap1=ImageUtil.createWaterMaskRightBottom(getActivity(),bm,bitmap,10,200);
+
+
+        //在根目录下面的photo文件夹下 创建jpg文件
+        String fileName="/"+System.currentTimeMillis()+"photo.jpg";
+        File f = new File(Environment.getExternalStorageDirectory() + "/photo", fileName);
+//            + "/Ask" + "/okkk.jpg"
+
+//          FileOutputStream out = null;
+//        //打开输出流 将图片数据填入文件中
+//         out = new FileOutputStream(f);
+//        photo.compress(Bitmap.CompressFormat.PNG, 90, out);
+//
+
+
+
+
+
+
+
         try {
 
             FileOutputStream out = new FileOutputStream(f);
             bm.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
+            Uri uri = Uri.fromFile(f);
+            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
             Toast.makeText(getActivity(), "图片已保存到27文件夹中", Toast.LENGTH_SHORT).show();
             Log.i("TAG", "已经保存");
         } catch (FileNotFoundException e) {

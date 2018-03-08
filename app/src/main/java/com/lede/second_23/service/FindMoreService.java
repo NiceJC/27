@@ -335,7 +335,7 @@ public class FindMoreService  {
 
 
     }
-    //根据名称查询主题
+    //根据名称查询版块（模糊查询）
     public void requestTopicItemsByName(String name,int pageNum,int PageSize,MyCallBack myCallBack){
 
         this.myCallBack=myCallBack;
@@ -362,7 +362,7 @@ public class FindMoreService  {
 
     }
 
-    //分页查询主题下特定城市下版块
+    //分页查询主题下特定城市下版块（城市是作为模糊查询字段，版块定位包括 省 市 区）
     public void requestTopicItemsByTopicAndCity(long uuid,String city, int pageNum, int PageSize, MyCallBack myCallBack){
 
         this.myCallBack=myCallBack;
@@ -378,7 +378,7 @@ public class FindMoreService  {
 
     }
 
-    //分页查询城市下所有版块  管理版本用
+    //分页查询城市下所有版块（城市是作为模糊查询字段，版块定位包括 省 市 区）
     public void requestTopicItemsByCity(String city, int pageNum, int PageSize, MyCallBack myCallBack){
         this.myCallBack=myCallBack;
         topicItemsByCItyRequest =NoHttp.createStringRequest(GlobalConstants.URL + "/notes/showCityByNotes", RequestMethod.POST);

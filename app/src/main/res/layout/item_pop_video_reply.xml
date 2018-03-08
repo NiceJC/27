@@ -11,6 +11,6 @@
         android:layout_height="55dp"
         android:layout_margin="10dp"
         app:diy_image_Type="circle"
-        android:src="@mipmap/test2"/>
+        />
 
 </LinearLayout>

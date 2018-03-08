@@ -469,9 +469,11 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
                     Toast.makeText(mContext, "请选择图片视频", Toast.LENGTH_SHORT).show();
                     break;
                 } else {
-                    Intent intent2=new Intent(AllIssueTextActivity.this,NewForumActivity.class);
-                    intent2.putExtra("posting",true);
+                    Intent intent2=new Intent(AllIssueTextActivity.this,MainActivity2.class);
+
+
                     startActivity(intent2);
+                    MainActivity2.instance.showSnackBar();
 
 
                     forumId = System.currentTimeMillis() * 1000000 + random.nextInt(1000001);
@@ -720,16 +722,16 @@ public class AllIssueTextActivity extends BaseActivity implements OnResponseList
     private void parseForum(String json) {
         ForumSuccessBean foumSuccessBean = mGson.fromJson(json, ForumSuccessBean.class);
         if (foumSuccessBean.getResult() == 10000) {
-            if(NewForumActivity.instance!=null){
-                NewForumActivity.instance.closeSnackBar("发布成功");
+            if(MainActivity2.instance!=null){
+                MainActivity2.instance.closeSnackBar("发布成功");
             }
 
 
             AllIssueActivity.instance.finish();
             finish();
         } else {
-            if(NewForumActivity.instance!=null) {
-                NewForumActivity.instance.closeSnackBar("发布失败");
+            if(MainActivity2.instance!=null) {
+                MainActivity2.instance.closeSnackBar("发布失败");
             }
         }
     }

@@ -2,6 +2,7 @@ package com.lede.second_23.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +21,11 @@ import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.FindMoreService;
 import com.lede.second_23.ui.base.BaseActivity;
 import com.lede.second_23.utils.UiUtils;
+import com.lljjcoder.citypickerview.widget.CityPicker;
+
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.zaaach.citypicker.CityPickerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -111,9 +113,8 @@ public class TopicItemsActivity extends BaseActivity {
                 break;
             case R.id.address:
                 //启动
-                startActivityForResult(new Intent(context, CityPickerActivity.class),
-                        REQUEST_CODE_PICK_CITY);
 
+                showCityDialog();
                 break;
 
             default:
@@ -121,6 +122,56 @@ public class TopicItemsActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 城市选择Dialog
+     */
+    private void showCityDialog() {
+        CityPicker cityPicker = new CityPicker.Builder(TopicItemsActivity.this)
+                .textSize(20)
+                .title("地址选择")
+                .backgroundPop(0xa0000000)
+                .titleBackgroundColor("#ffffff")
+                .titleTextColor("#000000")
+                .backgroundPop(0xa0000000)
+                .confirTextColor("#000000")
+                .cancelTextColor("#000000")
+                .province("浙江省")
+                .city("杭州市")
+                .onlyShowProvinceAndCity(true)
+                .textColor(Color.parseColor("#000000"))
+                .provinceCyclic(true)
+                .cityCyclic(false)
+                .districtCyclic(false)
+                .visibleItemsCount(7)
+                .itemPadding(10)
+                .build();
+        cityPicker.show();
+        //监听方法，获取选择结果
+        cityPicker.setOnCityItemClickListener(new CityPicker.OnCityItemClickListener() {
+            @Override
+            public void onSelected(String... citySelected) {
+                //省份
+                String province = citySelected[0];
+                //城市
+                String city = citySelected[1];
+                //区县（如果设定了两级联动，那么该项返回空）
+//                String district = citySelected[2];
+                //邮编
+//                String code = citySelected[3];
+
+                currentCity=city;
+                address.setText(currentCity);
+                isCitySelected=true;
+                toRefresh();
+
+            }
+
+            @Override
+            public void onCancel() {
+//                Toast.makeText(EditInformationActivity.this, "已取消", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private void initView() {
 
@@ -180,19 +231,6 @@ public class TopicItemsActivity extends BaseActivity {
     }
 
 
-    //重写onActivityResult方法
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
-            if (data != null){
-                currentCity= data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY)+"市";
-
-                address.setText(currentCity);
-                isCitySelected=true;
-                toRefresh();
-            }
-        }
-    }
 
 
     public void initEvent() {

@@ -149,6 +149,7 @@ public class AllForumBean {
                 private int likeCount;
                 private String longitude;
                 private int type;
+                private boolean status;
                 private UserBean user;
                 private String userId;
                 private int videoCount;
@@ -224,6 +225,14 @@ public class AllForumBean {
 
                 public void setType(int type) {
                     this.type = type;
+                }
+
+                public boolean isStatus() {
+                    return status;
+                }
+
+                public void setStatus(boolean status) {
+                    this.status = status;
                 }
 
                 public UserBean getUser() {

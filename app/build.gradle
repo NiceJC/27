@@ -7,8 +7,8 @@ android {
         applicationId "com.lede.second_23"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 11
-        versionName "3.5.0"
+        versionCode 14
+        versionName "3.6.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         manifestPlaceholders=[UMENG_CHANNEL_VALUE:"umeng"]
@@ -47,7 +47,7 @@ android {
     productFlavors{
         //在这里添加渠道号
 
-        xiaomi{}
+        yingyongbao{}
 
     }
     productFlavors.all{
@@ -123,7 +123,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.youth.banner:banner:1.4.10'
-    compile 'com.zaaach:citypicker:1.1'
 
     testCompile 'junit:junit:4.12'
 

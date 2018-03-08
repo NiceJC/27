@@ -139,17 +139,17 @@ public class NewForumActivity extends BaseActivity {
 
     }
     public void closeSnackBar(String s){
-       if(snackbar!=null){
-           snackbar.setText(s);
+        if(snackbar!=null){
+            snackbar.setText(s);
 
-       }
-      getNewForum();
-       new Handler().postDelayed(new Runnable() {
-           @Override
-           public void run() {
-               snackbar.dismiss();
-           }
-       },1000);
+        }
+        getNewForum();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                snackbar.dismiss();
+            }
+        },1000);
 
     }
 

@@ -135,6 +135,8 @@ public class ConcernOrFansActivity extends BaseActivity implements OnResponseLis
         }
     }
 
+
+
     private void fansService(int pageNum) {
         Request<String> fansRequest = NoHttp.createStringRequest(GlobalConstants.URL + "/collection/"+id+"/toCollect", RequestMethod.POST);
         fansRequest.add("toUserId", (String) SPUtils.get(this, USERID,""));

@@ -141,6 +141,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
     private String VIPStatus;
 
 
+    private boolean isFromUserInfoActivity;//标记是否从个人主页跳转而来，如果是 要防止重复跳转（点击头像又跳个人主页）
     private String intentURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,7 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         intent = getIntent();
         userId = intent.getStringExtra(USERID);
         intentURL=intent.getStringExtra(IMAGE_URLS);
+        isFromUserInfoActivity=intent.getBooleanExtra("isFromUserInfoActivity",false);
         VIPStatus = (String) SPUtils.get(this, VIPSTATUS, NOTOPEN);
 
 //        videourl = intent.getStringExtra("videourl");
@@ -232,9 +234,12 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
                 break;
 
             case R.id.ll_concern_activity_2_info:
-                intent = new Intent(this, UserInfoActivty.class);
-                intent.putExtra(USERID, userId);
-                startActivity(intent);
+                if(!isFromUserInfoActivity){
+                    intent = new Intent(this, UserInfoActivty.class);
+                    intent.putExtra(USERID, userId);
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.iv_concern_activity_concern:
                 if (!isFriend) {
@@ -489,14 +494,19 @@ public class ConcernActivity_2 extends BaseActivity implements OnResponseListene
         distance = AMapUtils.calculateLineDistance(mStartPoint, mEndPoint);
 
 
-        if(distance>1000){
-            distance=distance/1000;
-            tv_distance.setText((int) distance + "km");
+        //超过20公里不显示
+        if(distance<20*1000){
+            if(distance>1000){
+                distance=distance/1000;
+                tv_distance.setText((int) distance + "km");
 
-        }else{
-            tv_distance.setText((int) distance + "m");
+            }else{
+                tv_distance.setText((int) distance + "m");
 
+            }
         }
+
+
 
 
 

@@ -21,7 +21,6 @@ import com.lede.second_23.bean.SameCityUserBean;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.service.PushedUserService;
 import com.lede.second_23.ui.activity.MateActivity;
-import com.lede.second_23.ui.activity.SameCityActivity;
 import com.lede.second_23.ui.activity.UserInfoActivty;
 import com.lede.second_23.utils.SPUtils;
 import com.lede.second_23.utils.UiUtils;
@@ -42,7 +41,6 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.lede.second_23.global.GlobalConstants.ADDRESS;
-import static com.lede.second_23.global.GlobalConstants.SEXTYPE;
 import static com.lede.second_23.global.GlobalConstants.USERID;
 import static com.lede.second_23.global.GlobalConstants.USER_SEX;
 import static com.lede.second_23.global.GlobalConstants.VIPPUSHSEX;
@@ -204,17 +202,17 @@ public class MainFragmentYouLike extends Fragment {
 
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_you_like_head, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.same_city);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), SameCityActivity.class);
-
-                intent.putExtra(ADDRESS,address);
-                intent.putExtra(SEXTYPE,"all");
-                startActivity(intent);
-            }
-        });
+//        ImageView imageView = (ImageView) view.findViewById(R.id.same_city);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent=new Intent(getActivity(), SameCityActivity.class);
+//
+//                intent.putExtra(ADDRESS,address);
+//                intent.putExtra(SEXTYPE,"all");
+//                startActivity(intent);
+//            }
+//        });
         mHeaderAndFooterWrapper.addHeaderView(view);
         mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
 //        mHeaderAndFooterWrapper.notifyDataSetChanged();

@@ -70,11 +70,13 @@ public class UserInfoActivty extends BaseActivity {
     TextView userName;
     @Bind(R.id.vip_logo)
     ImageView vipLogo;
+    @Bind(R.id.user_image)
+    ImageView userImage;
+
 
     @Bind(R.id.user_info)
     TextView userInfo;
-    @Bind(R.id.more_user_info)
-    ImageView moreUserInfo;
+
     @Bind(R.id.new_message)
     TextView concernView;
     @Bind(R.id.recyclerView)
@@ -159,7 +161,7 @@ public class UserInfoActivty extends BaseActivity {
 
 
 
-    @OnClick({R.id.back,R.id.bigLinear, R.id.more_user_info, R.id.new_message,R.id.user_info_card,R.id.user_img,R.id.user_concern,R.id.user_fans})
+    @OnClick({R.id.back,R.id.bigLinear,R.id.user_image, R.id.new_message,R.id.user_info_card,R.id.user_img,R.id.user_concern,R.id.user_fans})
     public void onClick(View view) {
         Intent intent=null;
         switch (view.getId()) {
@@ -168,7 +170,7 @@ public class UserInfoActivty extends BaseActivity {
                 finish();
                 break;
 
-            case R.id.more_user_info:
+            case R.id.user_image:
 
                 bottom_show();
                 break;
@@ -477,6 +479,10 @@ public class UserInfoActivty extends BaseActivity {
                 .load(userInfoBean.getImgUrl())
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(userImg);
+        Glide.with(this)
+                .load(userInfoBean.getImgUrl())
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(userImage);
         userConcern.setText(dataBean.getFriendsCount() + " 关注");
         userFans.setText(dataBean.getFollowersCount() + " 粉丝");
         userCity.setText(userInfoBean.getAddress());
@@ -528,6 +534,14 @@ public class UserInfoActivty extends BaseActivity {
 
                                 Intent intent = new Intent(context, ConcernActivity_2.class);
                                 intent.putExtra(IMAGE_URLS,mAlbumList.get(position-1).getUrlImg());
+                                intent.putExtra("isFromUserInfoActivity",true);
+                                intent.putExtra(USERID,userID);
+                                intent.putExtra(TYPE,2);
+                                startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(context, ConcernActivity_2.class);
+                                intent.putExtra(IMAGE_URLS,userInfoBean.getImgUrl());
+                                intent.putExtra("isFromUserInfoActivity",true);
                                 intent.putExtra(USERID,userID);
                                 intent.putExtra(TYPE,2);
                                 startActivity(intent);

@@ -118,9 +118,6 @@ public class PersonalFragment2 extends Fragment {
     private ObjectAnimator animator;
 
 
-
-
-
     private int forumItemWidth;
 
     private ArrayList<PersonAllForumBean.DataBean.SimpleBean.ListBean> mForumList = new ArrayList<>();
@@ -276,6 +273,8 @@ public class PersonalFragment2 extends Fragment {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(getActivity(), ForumDetailActivity.class);
+                intent.putExtra("isRefreshMineFragment",true);
+
                 intent.putExtra("forumId", mForumList.get(position).getForumId()); //position-1?
                 startActivity(intent);
             }
@@ -352,7 +351,7 @@ public class PersonalFragment2 extends Fragment {
 
     private void doRequest(int pageNum) {
 
-        forumService.requestMyForum(userID, pageNum, 18, new MyCallBack() {
+        forumService.requestMyForum(userID, pageNum, 50, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 refreshLayout.finishRefresh();

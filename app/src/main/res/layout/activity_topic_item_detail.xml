@@ -60,17 +60,16 @@
                         <TextView
                             android:textStyle="bold"
                             android:id="@+id/name"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="杭州~银泰"
+                            android:layout_marginRight="20dp"
                             android:textColor="#484848"
                             android:textSize="24sp" />
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+
 
                         <ImageView
                             android:id="@+id/business_image"

@@ -39,7 +39,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 显示 发布微博事的定位信息
+ *  用户发布时的定位
+ *
  * Created by ld on 17/12/18.
  */
 

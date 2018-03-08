@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff"
-    >
+    android:orientation="vertical">
 
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,109 +34,171 @@
         </LinearLayout>
 
 
-        <android.support.v4.widget.NestedScrollView
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-
-        <LinearLayout
-            android:descendantFocusability="blocksDescendants"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
 
 
             <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <TextView
-                    android:textStyle="bold"
-
-                    android:text="发现"
-                    android:textColor="#333333"
-                    android:textSize="30sp"
-                    android:padding="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-                <ImageView
-
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/find_send"
-                    android:padding="2dp"
-                    android:src="@mipmap/find_send"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp">
-
-                <ImageView
-
-                    android:id="@+id/find_my_trends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/find_mytrends" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-
-                    android:id="@+id/find_change"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="2dp"
-                    android:src="@drawable/selector_find_change" />
-
-
-            </LinearLayout>
-
-
-            <View
-                android:background="#dddddd"
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"/>
-
-
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_marginTop="20dp"
-                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
+
+                <android.support.design.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
 
-            </android.support.v7.widget.RecyclerView>
+
+                <android.support.design.widget.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff">
 
 
-        </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+
+
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="match_parent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+
+
+
+                <LinearLayout
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:text="发现"
+                        android:textColor="#333333"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+
+                        android:id="@+id/find_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="20dp"
+                        android:padding="2dp"
+                        android:src="@mipmap/find_send" />
+
+
+                </LinearLayout>
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
+                   >
+
+
+                    <TextView
+                        android:textColor="@drawable/text_blue_black"
+
+                        android:id="@+id/recommend_tab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="发现"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="·" />
+
+                    <TextView
+                        android:textColor="@drawable/text_blue_black"
+
+                        android:id="@+id/concern_tab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="关注"
+                        android:textSize="16sp" />
+
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/manager"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/push_bg_2"
+                        android:padding="5dp"
+                        android:text="动态管理" />
+
+
+                    <ImageView
+
+                        android:id="@+id/find_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:src="@drawable/selector_find_change" />
+
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
+                </android.support.design.widget.AppBarLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v4.view.ViewPager>
+
+                <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:id="@+id/recyclerView"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:overScrollMode="never"-->
+                <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+
+                <!--</android.support.v7.widget.RecyclerView>-->
+
+                </android.support.design.widget.CoordinatorLayout>
+
+            </LinearLayout>
+
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

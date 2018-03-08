@@ -31,6 +31,22 @@
         android:paddingBottom="4dp">
 
         <RadioButton
+            android:id="@+id/bt_find"
+
+            android:drawablePadding="-2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_menu_02"
+            android:gravity="center"
+            android:text="发现"
+            android:textColor="@drawable/selector_menu_text"
+            android:textSize="12sp" />
+
+        <RadioButton
 
 
             android:id="@+id/bt_search"
@@ -46,22 +62,6 @@
             android:drawableTop="@drawable/selector_menu_01"
             android:gravity="center"
             android:text="探索"
-            android:textColor="@drawable/selector_menu_text"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/bt_find"
-
-            android:drawablePadding="-2dp"
-            android:layout_marginTop="-2dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/selector_menu_02"
-            android:gravity="center"
-            android:text="发现"
             android:textColor="@drawable/selector_menu_text"
             android:textSize="12sp" />
 
@@ -101,7 +101,8 @@
             android:id="@+id/bt_me"
 
             android:drawablePadding="-2dp"
-            android:layout_marginTop="-2dp"            android:layout_width="0dp"
+            android:layout_marginTop="-2dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"

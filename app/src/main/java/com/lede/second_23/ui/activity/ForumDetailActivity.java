@@ -140,6 +140,8 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
     private TextView tv_videocount;
     private String commentUserId;
     private boolean isOpenReplyVideo;
+    private boolean isRefreshNearbyFragment; //从 MainFragmentNearby跳转而来，如果删除成功 要刷新
+    private boolean isRefreshMineFragment;  //从PersonalFragment2跳转而来，如果删除成功  要刷新
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +152,16 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         Intent intent = getIntent();
         forumId = intent.getLongExtra("forumId", 0);
         isOpenReplyVideo = intent.getBooleanExtra("isOpenReplyVideo", false);
+        isRefreshNearbyFragment = intent.getBooleanExtra("isRefreshNearbyFragment", false);
+        isRefreshMineFragment = intent.getBooleanExtra("isRefreshMineFragment", false);
+
+
+
 //        forumuserId = intent.getStringExtra("userId");
 //        listBean = (AllForumBean.DataBean.SimpleBean.ListBean) intent.getSerializableExtra("forum");
+
+
+
         mUserId = (String) SPUtils.get(context, USERID, "");
         mGson = new Gson();
 
@@ -661,6 +671,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseDeleteComment(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         MsgBean msgBean=mGson.fromJson(json,MsgBean.class);
         if (msgBean.getResult()==10000) {
             Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
@@ -677,6 +690,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseReplyForCommentJson(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         ReplyForCommentBean replyForCommentBean=mGson.fromJson(json,ReplyForCommentBean.class);
         if (replyForCommentBean.getResult()==10000) {
             Toast.makeText(context, "回复成功", Toast.LENGTH_SHORT).show();
@@ -695,6 +711,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseCommentForForumJson(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         CommentForForumBean commentForForumBean=mGson.fromJson(json,CommentForForumBean.class);
         if (commentForForumBean.getResult()==10000) {
             Toast.makeText(context, "评论成功", Toast.LENGTH_SHORT).show();
@@ -720,9 +739,20 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseForumDeleteJson(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         ForumDeleteBean forumDelteBean=mGson.fromJson(json,ForumDeleteBean.class);
         if (forumDelteBean.getResult()==10000) {
             Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+           if(isRefreshNearbyFragment){
+               MainActivity2.instance.refreshNearByFragment();
+
+           }
+           if(isRefreshMineFragment){
+               MainActivity2.instance.refreshMineFragment();
+           }
+
             finish();
         }
     }
@@ -746,6 +776,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
     }
 
     private void parseForumDetail(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         forumDetailCommentBean = mGson.fromJson(json, ForumDetailCommentBean.class);
         if (forumDetailCommentBean.getData().getSimple().getList().size() == 0 || forumDetailCommentBean.getData().getSimple().getList() == null) {
             isHasNextPage = false;
@@ -766,6 +799,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      * @param json
      */
     private void parseShowVideo(String json) {
+        if(this.isDestroyed()){
+            return;
+        }
         ForumVideoReplyBean forumVideoReplyBean = mGson.fromJson(json, ForumVideoReplyBean.class);
         if (forumVideoReplyBean.getResult()==10000) {
             if (forumVideoReplyBean.getData().getSimplePageInfo().getList().size()==0) {
@@ -786,6 +822,9 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
      */
     private void parseDetailJson(String json) {
 
+        if(this.isDestroyed()){
+            return;
+        }
 
 
         forumDetailHeadBean = mGson.fromJson(json, ForumDetailHeadBean.class);

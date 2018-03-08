@@ -191,6 +191,11 @@ public class TopicItemCreateActivity extends BaseActivity {
 
             case R.id.city_layout:
                 showCityDialog();
+//                intent = new Intent(this, LocationChooseActivity.class);
+//
+//                startActivity(intent);
+
+
                 break;
 
             case R.id.tag_layout:

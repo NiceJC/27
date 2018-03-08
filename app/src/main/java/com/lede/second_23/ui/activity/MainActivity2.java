@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -111,7 +113,7 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
     private MessageFragment messageFragment;
     private PersonalFragment2 personalFragment;
 
-
+    private Snackbar snackbar;
 
     private AMapLocationClient mlocationClient;
 
@@ -185,9 +187,8 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
         }
 
 
-
-        fragmentList.add(searchMoreFragment);
         fragmentList.add(findFragment);
+        fragmentList.add(searchMoreFragment);
         fragmentList.add(recommendFragment);
         fragmentList.add(messageFragment);
         fragmentList.add(personalFragment);
@@ -232,10 +233,12 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
                 FragmentManager fragmentManager=getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
                 switch (i){
-                    case R.id.bt_search:
+                    case R.id.bt_find:
+
                         viewPager.setCurrentItem(0,false);
                         break;
-                    case R.id.bt_find:
+                    case R.id.bt_search:
+
                         viewPager.setCurrentItem(1,false);
                         break;
                     case R.id.bt_recommend:
@@ -257,7 +260,7 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
 
             }
         });
-        radioGroup.check(R.id.bt_search);
+        radioGroup.check(R.id.bt_find);
         viewPager.setCurrentItem(0,false);
 
 
@@ -687,12 +690,41 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
     }
 
 
-    public void showSnackBar(String text){
+//    public void showSnackBar(String text){
+//
+//        SnackBarUtil.getInstance(viewPager,text).show();
+//
+//    }
+    public void showSnackBar(){
 
-        SnackBarUtil.getInstance(viewPager,text).show();
+        snackbar=SnackBarUtil.getLongTimeInstance(viewPager,"正在发送");
+
+
+        snackbar.show();
+        findFragment.changeToConcern();
+
+    }
+    public void closeSnackBar(String s){
+        if(snackbar!=null){
+            snackbar.setText(s);
+
+        }
+        findFragment.toRefresh();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                snackbar.dismiss();
+            }
+        },1000);
 
     }
 
+    public void refreshNearByFragment(){
+        findFragment.toRefresh();
+    }
+    public void refreshMineFragment(){
+        personalFragment.toRefresh();
+    }
 
 
 }

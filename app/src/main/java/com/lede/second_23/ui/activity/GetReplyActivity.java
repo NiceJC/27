@@ -124,9 +124,16 @@ public class GetReplyActivity extends AppCompatActivity implements OnResponseLis
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 // TODO  直接回复
-                Intent intent=new Intent(context,ForumDetailActivity.class);
-                intent.putExtra("forumId",getReplyList.get(position).getForumId());
-                startActivity(intent);
+
+                if(getReplyList.get(position).getAllForum().getType()==0){
+                    Intent intent=new Intent(context,ForumDetailActivity.class);
+                    intent.putExtra("forumId",getReplyList.get(position).getForumId());
+                    startActivity(intent);
+                }else{
+                   Toast.makeText(GetReplyActivity.this,"该动态已被删除",Toast.LENGTH_SHORT).show();
+                }
+
+
             }
 
             @Override
