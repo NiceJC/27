@@ -106,6 +106,8 @@ public class GlobalConstants {
 
     public static final String CURRENT_CITY="CURRENT_CITY";
     public static final String CURRENT_PROVINCE="CURRENT_PROVINCE";
+    public static final String CURRENT_AREA="CURRENT_AREA";
+
 
     public static final String VIRIFYMARRY="VIRIFYMARRY";
     public static final String DECLARATION="DECLARATION";

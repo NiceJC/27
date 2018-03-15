@@ -74,7 +74,9 @@ public class TopicItemsRankActivity extends BaseActivity {
     private boolean isRefresh = true;
 
     private boolean isHasNextPage = true;
+    private String currentProvince;
     private String currentCity;
+    private String currentArea;
 
     private MultiTransformation transformation;
     private FindMoreService findMoreService;
@@ -84,6 +86,8 @@ public class TopicItemsRankActivity extends BaseActivity {
     private RequestManager requestManager;
 
     private boolean isEditing = false;
+
+    private boolean isOld=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,17 @@ public class TopicItemsRankActivity extends BaseActivity {
         mGson = new Gson();
         requestManager = Glide.with(context);
         currentCity = getIntent().getStringExtra("city");
+        currentArea = getIntent().getStringExtra("area");
+        currentProvince=getIntent().getStringExtra("province");
+
+        if(isOld){
+            address.setText(currentCity);
+
+        }else{
+            address.setText(currentCity+" "+currentArea);
+
+        }
+
 
         mRefreshLayout.setEnableLoadmore(false);
 
@@ -352,25 +367,50 @@ public class TopicItemsRankActivity extends BaseActivity {
      * 城市选择Dialog
      */
     private void showCityDialog() {
-        CityPicker cityPicker = new CityPicker.Builder(context)
-                .textSize(20)
-                .title("地址选择")
-                .backgroundPop(0xa0000000)
-                .titleBackgroundColor("#ffffff")
-                .titleTextColor("#000000")
-                .backgroundPop(0xa0000000)
-                .confirTextColor("#000000")
-                .cancelTextColor("#000000")
-                .province("浙江省")
-                .city("杭州市")
-                .onlyShowProvinceAndCity(true)
-                .textColor(Color.parseColor("#000000"))
-                .provinceCyclic(true)
-                .cityCyclic(false)
-                .districtCyclic(false)
-                .visibleItemsCount(7)
-                .itemPadding(10)
-                .build();
+        CityPicker cityPicker;
+        if(isOld){
+            cityPicker = new CityPicker.Builder(context)
+                    .textSize(20)
+                    .title("地址选择")
+                    .backgroundPop(0xa0000000)
+                    .titleBackgroundColor("#ffffff")
+                    .titleTextColor("#000000")
+                    .backgroundPop(0xa0000000)
+                    .confirTextColor("#000000")
+                    .cancelTextColor("#000000")
+                    .province(currentProvince)
+                    .city(currentCity)
+                    .onlyShowProvinceAndCity(true)
+                    .textColor(Color.parseColor("#000000"))
+                    .provinceCyclic(true)
+                    .cityCyclic(false)
+                    .districtCyclic(false)
+                    .visibleItemsCount(7)
+                    .itemPadding(10)
+                    .build();
+        }else{
+            cityPicker = new CityPicker.Builder(context)
+                    .textSize(20)
+                    .title("地址选择")
+                    .backgroundPop(0xa0000000)
+                    .titleBackgroundColor("#ffffff")
+                    .titleTextColor("#000000")
+                    .backgroundPop(0xa0000000)
+                    .confirTextColor("#000000")
+                    .cancelTextColor("#000000")
+                    .province(currentProvince)
+                    .city(currentCity)
+                    .district(currentArea)
+                    .onlyShowProvinceAndCity(false)
+                    .textColor(Color.parseColor("#000000"))
+                    .provinceCyclic(true)
+                    .cityCyclic(false)
+                    .districtCyclic(false)
+                    .visibleItemsCount(7)
+                    .itemPadding(10)
+                    .build();
+        }
+
         cityPicker.show();
         //监听方法，获取选择结果
         cityPicker.setOnCityItemClickListener(new CityPicker.OnCityItemClickListener() {
@@ -380,12 +420,24 @@ public class TopicItemsRankActivity extends BaseActivity {
                 String province = citySelected[0];
                 //城市
                 String city = citySelected[1];
+
                 //区县（如果设定了两级联动，那么该项返回空）
-//                String district = citySelected[2];
+                String district = citySelected[2];
                 //邮编
 //                String code = citySelected[3];
-                currentCity = city;
-                address.setText(currentCity);
+
+                if(isOld){
+                    currentProvince=province;
+                    currentCity = city;
+                    address.setText(currentCity);
+
+                }else{
+                    currentProvince=province;
+                    currentCity = city;
+                    currentArea=district;
+                    address.setText(currentCity+" "+currentArea);
+                }
+
 
                 toRefresh();
             }
@@ -400,7 +452,16 @@ public class TopicItemsRankActivity extends BaseActivity {
     private void doRequest(int page) {
 
 
-        findMoreService.requestTopicItemsByCity(currentCity, page, PAGE_SIZE, new MyCallBack() {
+        String location;
+
+        if(isOld){
+            location=currentCity;
+        }else{
+            location=currentCity+" "+currentArea;
+
+        }
+
+        findMoreService.requestTopicItemsByCity(location, page, PAGE_SIZE, new MyCallBack() {
             @Override
             public void onSuccess(Object o) {
                 mRefreshLayout.finishRefresh();

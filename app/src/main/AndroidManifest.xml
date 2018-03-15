@@ -304,11 +304,17 @@
             android:theme="@style/MyFullScreenTheme"
             />
         <activity android:name=".ui.activity.TopicCreateActivity"/>
-        <activity android:name=".ui.activity.TopicItemCreateActivity"/>
+        <activity android:name=".ui.activity.TopicItemCreateActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
         <activity android:name=".ui.activity.TopicItemDetailActivity"/>
         <activity android:name=".ui.activity.PostFootMarkActivity"/>
         <activity android:name=".ui.activity.TopicEditActivity"/>
-        <activity android:name=".ui.activity.TopicItemEditActivity"/>
+        <activity android:name=".ui.activity.TopicItemEditActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
         <activity android:name=".ui.activity.TopicItemsRankActivity"/>
         <activity android:name=".ui.activity.TopicsRankActivity"/>
         <activity android:name=".ui.activity.PushForumActivity"/>

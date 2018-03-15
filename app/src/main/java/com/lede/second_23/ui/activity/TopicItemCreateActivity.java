@@ -10,12 +10,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
@@ -108,6 +110,7 @@ public class TopicItemCreateActivity extends BaseActivity {
     private RequestManager requestManager;
 
 
+
     private AlbumService albumService;
     private Snackbar snackbar;
     private PictureConfig.OnSelectResultCallback portraitPickCallback;
@@ -130,6 +133,14 @@ public class TopicItemCreateActivity extends BaseActivity {
 
     private FindMoreService findMoreService;
 
+
+    private String choosedTittle;
+    private LatLonPoint choosedLatLonPoint;
+    private String choosedProvince;
+    private String choosedCity;
+    private String choosedArea;
+    private String choosedDetailAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,11 +158,53 @@ public class TopicItemCreateActivity extends BaseActivity {
 
         findMoreService=new FindMoreService(context);
 
+        getDataFromItent(getIntent());
         initView();
 
         initEvent();
         refreshLayout.setEnableLoadmore(false);
         refreshLayout.setEnableRefresh(false);
+
+
+    }
+
+
+//                    intent.putExtra("tittle",tittle);
+//                intent.putExtra("latLonPoint",latLonPoint);
+//                intent.putExtra("province",province);
+//                intent.putExtra("city",city);
+//                intent.putExtra("area",area);
+//                intent.putExtra("detailAddress",detailAddress);
+
+
+    public void getDataFromItent(Intent intent){
+//        choosedTittle=intent.getStringExtra("tittle");
+        choosedLatLonPoint=intent.getParcelableExtra("latLonPoint");
+        choosedProvince=intent.getStringExtra("province");
+        choosedCity=intent.getStringExtra("city");
+        choosedArea=intent.getStringExtra("area");
+//        choosedDetailAddress=intent.getStringExtra("detailAddress");
+
+
+        //浙江省 杭州市 滨江区|30.208837,120.208695
+        if(choosedLatLonPoint!=null){
+            currentCity=choosedProvince+" "+choosedCity+" "+choosedArea +"|"+choosedLatLonPoint.getLatitude()+","+choosedLatLonPoint.getLongitude();
+            Log.d("location",currentCity);
+
+            setInfo();
+        }
+
+
+
+
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getDataFromItent(intent);
+
 
 
     }
@@ -190,10 +243,11 @@ public class TopicItemCreateActivity extends BaseActivity {
                 break;
 
             case R.id.city_layout:
-                showCityDialog();
-//                intent = new Intent(this, LocationChooseActivity.class);
-//
-//                startActivity(intent);
+//                showCityDialog();
+                intent = new Intent(this, LocationChooseActivity.class);
+                intent.putExtra("type",1);
+
+                startActivity(intent);
 
 
                 break;

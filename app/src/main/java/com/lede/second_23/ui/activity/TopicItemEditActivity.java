@@ -10,12 +10,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
@@ -129,7 +131,10 @@ public class TopicItemEditActivity extends BaseActivity {
     private String currentTag;
     private long currentTopicID;
     private long currentTopicItemID;
-
+    private LatLonPoint choosedLatLonPoint;
+    private String choosedProvince;
+    private String choosedCity;
+    private String choosedArea;
     private boolean isInfoCardShown = false; //默认隐藏用户的详细资料卡
     private ObjectAnimator animator;
 
@@ -168,6 +173,7 @@ public class TopicItemEditActivity extends BaseActivity {
 
 
         findMoreService=new FindMoreService(context);
+        getDataFromItent(getIntent());
 
         initView();
 
@@ -175,6 +181,38 @@ public class TopicItemEditActivity extends BaseActivity {
         doRequest();
         refreshLayout.setEnableLoadmore(false);
         refreshLayout.setEnableRefresh(false);
+
+
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getDataFromItent(intent);
+
+
+
+    }
+    public void getDataFromItent(Intent intent){
+//        choosedTittle=intent.getStringExtra("tittle");
+        choosedLatLonPoint=intent.getParcelableExtra("latLonPoint");
+        choosedProvince=intent.getStringExtra("province");
+        choosedCity=intent.getStringExtra("city");
+        choosedArea=intent.getStringExtra("area");
+//        choosedDetailAddress=intent.getStringExtra("detailAddress");
+
+
+        //浙江省 杭州市 滨江区|30.208837,120.208695
+        if(choosedLatLonPoint!=null){
+            currentCity=choosedProvince+" "+choosedCity+" "+choosedArea +"|"+choosedLatLonPoint.getLatitude()+","+choosedLatLonPoint.getLongitude();
+            Log.d("location",currentCity);
+
+            setInfo();
+        }
+
+
+
 
 
     }
@@ -214,7 +252,10 @@ public class TopicItemEditActivity extends BaseActivity {
                 break;
 
             case R.id.city_layout:
-                showCityDialog();
+//                showCityDialog();
+                intent = new Intent(this, LocationChooseActivity.class);
+                intent.putExtra("type",2);
+                startActivity(intent);
                 break;
 
             case R.id.tag_layout:
@@ -425,7 +466,6 @@ public class TopicItemEditActivity extends BaseActivity {
             public void onFail(String mistakeInfo) {
                 businessImage.setVisibility(View.GONE);
 
-                Toast.makeText(context,"商家名称并不准确",Toast.LENGTH_SHORT).show();
 
                 currentBusinessName="";
                 userName.setText(currentBusinessName);

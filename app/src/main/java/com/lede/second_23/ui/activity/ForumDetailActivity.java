@@ -133,6 +133,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
     private TextView tv_likeCount;
     private TextView tv_commentCount;
     private ImageView iv_like;
+    private LinearLayout likeClick;
     private String mUserId;
     private ArrayList<ImageView> imgViews;
     private ArrayList<String> banner;
@@ -392,6 +393,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         tv_commentCount = (TextView) view.findViewById(R.id.tv_item_forum_commentcount);
 
         iv_like = (ImageView) view.findViewById(R.id.iv_item_forum_like);
+        likeClick= (LinearLayout) view.findViewById(R.id.like_click);
 
 
         return view;
@@ -1002,7 +1004,7 @@ public class ForumDetailActivity extends BaseActivity implements OnResponseListe
         } else {
             iv_like.setImageResource(R.mipmap.praise);
         }
-        iv_like.setOnClickListener(new View.OnClickListener() {
+        likeClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 forumLikeRequest(listBean.getForumId());

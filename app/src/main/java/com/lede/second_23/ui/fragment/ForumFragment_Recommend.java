@@ -58,6 +58,7 @@ import static com.lede.second_23.global.GlobalConstants.USERID;
  * Fragment
  * 后台推送的动态
  * 可以切换显示方式
+ * 因为是两种排列方式，所以需要做一下状态保存
  * Created by ld on 18/3/5.
  */
 
@@ -514,6 +515,7 @@ public class ForumFragment_Recommend extends Fragment{
                 TextView tv_commentCount = holder.getView(R.id.tv_item_forum_commentcount);
                 tv_commentCount.setText(listBean.getClickCount() + "");
                 final ImageView iv_like = holder.getView(R.id.iv_item_forum_like);
+
                 if (listBean.isLike()) {
                     iv_like.setImageResource(R.mipmap.praised);
                 } else {
@@ -522,25 +524,26 @@ public class ForumFragment_Recommend extends Fragment{
                 iv_like.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        int likenum = listBean.getLikeCount();
+                        Log.i("likeCount", "onClick: " + listBean.getLikeCount());
+                        if (listBean.isLike()) {
+                            listBean.setLike(false);
+                            iv_like.setImageResource(R.mipmap.praise);
+//                            tv_likeCount.setText((likenum-1) + "赞");
+                            listBean.setLikeCount(likenum - 1);
+                        } else {
+                            listBean.setLike(true);
+
+                            iv_like.setImageResource(R.mipmap.praised);
+//                            tv_likeCount.setText((likenum+1) + "赞");
+                            listBean.setLikeCount(likenum + 1);
+                        }
+                        tv_likeCount.setText(listBean.getLikeCount() + "");
 
                         forumService.praiseForum(listBean.getForumId(), new MyCallBack() {
                             @Override
                             public void onSuccess(Object o) {
-                                int likenum = listBean.getLikeCount();
-                                Log.i("likeCount", "onClick: " + listBean.getLikeCount());
-                                if (listBean.isLike()) {
-                                    listBean.setLike(false);
-                                    iv_like.setImageResource(R.mipmap.praise);
-//                            tv_likeCount.setText((likenum-1) + "赞");
-                                    listBean.setLikeCount(likenum - 1);
-                                } else {
-                                    listBean.setLike(true);
 
-                                    iv_like.setImageResource(R.mipmap.praised);
-//                            tv_likeCount.setText((likenum+1) + "赞");
-                                    listBean.setLikeCount(likenum + 1);
-                                }
-                                tv_likeCount.setText(listBean.getLikeCount() + "");
 
                             }
 
@@ -737,4 +740,8 @@ public class ForumFragment_Recommend extends Fragment{
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

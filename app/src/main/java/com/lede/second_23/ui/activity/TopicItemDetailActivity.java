@@ -14,12 +14,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.AMapUtils;
+import com.amap.api.maps2d.model.LatLng;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.lede.second_23.R;
 import com.lede.second_23.bean.FootMarksBean;
 import com.lede.second_23.bean.OnlyUserBean;
+import com.lede.second_23.global.GlobalConstants;
 import com.lede.second_23.interface_utils.MyCallBack;
 import com.lede.second_23.interface_utils.OnItemSelectedListener;
 import com.lede.second_23.service.FindMoreService;
@@ -491,11 +494,37 @@ public class TopicItemDetailActivity extends AppCompatActivity {
         FootMarksBean.DataBean.PNotesListBean topicItem=footMarksBean.getData().getpNotesList().get(0);
         name.setText(topicItem.getDetailsName());
         introduction.setText(topicItem.getDetailsAll());
-        if(topicItem.getCityName().contains(currentCity)){
-            isHere="0";
+
+        String location=topicItem.getCityName();
+
+        /**
+         * 判断当前版块是否收录了经纬度信息，
+         * 如果有，那么根据用户当前未位置计算距离
+         * 如果没有，判断用户当前位置是否与版块位于同一市
+         */
+        if(location.contains("|")){
+            String latLon=location.substring(location.indexOf("|")+1);
+            String lat=latLon.substring(0,latLon.indexOf(","));
+            String lon=latLon.substring(latLon.indexOf(",")+1);
+
+            LatLng mStartPoint = new LatLng(Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LATITUDE, "")), Double.parseDouble((String) SPUtils.get(this, GlobalConstants.LONGITUDE, "")));
+            LatLng mEndPoint = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
+            float distance = AMapUtils.calculateLineDistance(mStartPoint, mEndPoint);
+            if(distance<500){
+               isHere="0";
+            }else{
+                isHere="1";
+            }
         }else{
-            isHere="1";
+            if(topicItem.getCityName().contains(currentCity)){
+                isHere="0";
+            }else{
+                isHere="1";
+            }
         }
+
+
+
 
         if(topicItem.getBusinessName()!=null&&!topicItem.getBusinessName().equals("")){
             checkBusinessImage(topicItem.getBusinessName());

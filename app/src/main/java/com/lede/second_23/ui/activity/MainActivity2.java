@@ -9,9 +9,7 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
@@ -75,6 +73,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.CURRENT_AREA;
 import static com.lede.second_23.global.GlobalConstants.CURRENT_CITY;
 import static com.lede.second_23.global.GlobalConstants.CURRENT_PROVINCE;
 import static com.lede.second_23.global.GlobalConstants.LATITUDE;
@@ -186,15 +185,14 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
             personalFragment=new PersonalFragment2();
         }
 
-
-        fragmentList.add(findFragment);
         fragmentList.add(searchMoreFragment);
+        fragmentList.add(findFragment);
         fragmentList.add(recommendFragment);
         fragmentList.add(messageFragment);
         fragmentList.add(personalFragment);
 
 
-        viewPager.setAdapter(new FragmentPagerAdapter(this.getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return fragmentList.get(position);
@@ -230,14 +228,14 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
 
-                FragmentManager fragmentManager=getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+//                FragmentManager fragmentManager=getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
                 switch (i){
-                    case R.id.bt_find:
+                    case R.id.bt_search:
 
                         viewPager.setCurrentItem(0,false);
                         break;
-                    case R.id.bt_search:
+                    case R.id.bt_find:
 
                         viewPager.setCurrentItem(1,false);
                         break;
@@ -254,13 +252,13 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
                         break;
 
                 }
-                fragmentTransaction.commit();
+//                fragmentTransaction.commit();
 
 
 
             }
         });
-        radioGroup.check(R.id.bt_find);
+        radioGroup.check(R.id.bt_search);
         viewPager.setCurrentItem(0,false);
 
 
@@ -674,6 +672,8 @@ public class MainActivity2 extends BaseActivity implements AMapLocationListener 
 
                 SPUtils.put(this,CURRENT_PROVINCE,aMapLocation.getProvince());
                 SPUtils.put(this,CURRENT_CITY,aMapLocation.getCity());
+                SPUtils.put(this,CURRENT_AREA,aMapLocation.getDistrict());
+
                 upLoadLocation();
 
                 mLocationClient.stopLocation();

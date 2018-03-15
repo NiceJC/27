@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#ffffff"
     >
 
 
@@ -107,14 +108,14 @@
                     <LinearLayout
                         android:id="@+id/user_name_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:gravity="center_vertical">
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="商家用户名"
                             android:textColor="#000000"
                             android:textSize="18sp" />
@@ -133,6 +134,8 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp" />
 
+
+
                     </LinearLayout>
 
                     <View
@@ -143,14 +146,13 @@
                     <LinearLayout
                         android:id="@+id/topic_name_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"                        android:gravity="center_vertical">
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="名称"
                             android:textColor="#000000"
                             android:textSize="18sp" />
@@ -165,6 +167,21 @@
                             android:textColor="#000000"
                             android:textSize="18sp" />
 
+                        <!--<View-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="0dp"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/choose_button"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:background="@drawable/push_bg_1"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:text="选择商户"-->
+                            <!--android:textColor="#ffffff" />-->
+
                     </LinearLayout>
 
                     <View
@@ -175,15 +192,14 @@
                     <LinearLayout
                         android:id="@+id/introduction_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"                        android:gravity="center_vertical">
 
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="简介"
                             android:textColor="#000000"
                             android:textSize="18sp" />
@@ -207,14 +223,13 @@
                     <LinearLayout
                         android:id="@+id/city_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"                        android:gravity="center_vertical">
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="城市"
                             android:textColor="#000000"
                             android:textSize="18sp" />
@@ -237,14 +252,13 @@
                     <LinearLayout
                         android:id="@+id/tag_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"                        android:gravity="center_vertical">
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="标签"
                             android:textColor="#000000"
                             android:textSize="18sp" />
@@ -259,6 +273,36 @@
                             android:textSize="18sp" />
 
                     </LinearLayout>
+
+
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="1dp"-->
+                        <!--android:background="#dddddd" />-->
+                    <!--<LinearLayout-->
+                        <!--android:id="@+id/point_layout"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_margin="10dp"                        android:gravity="center_vertical">-->
+
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="坐标"-->
+                            <!--android:textColor="#000000"-->
+                            <!--android:textSize="18sp" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/point"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+
+                            <!--android:layout_marginLeft="40dp"-->
+                            <!--android:textColor="#000000"-->
+                            <!--android:textSize="18sp" />-->
+
+                    <!--</LinearLayout>-->
 
 
                     <View
@@ -278,6 +322,8 @@
 
 
     <LinearLayout
+
+
         android:id="@+id/topic_layout"
         android:orientation="vertical"
         android:background="#ffffff"

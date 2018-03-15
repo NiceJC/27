@@ -1,10 +1,13 @@
 package com.lede.second_23.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +72,7 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
     private int selectedPosition=-1;
     private CommonAdapter<PoiItem> mAdapter;
     private String locateText;
+    private int type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,10 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
         ButterKnife.bind(this);
 
         resultData = new ArrayList<>();
+
+        //create:1  edit:2
+        type=getIntent().getIntExtra("type",3);
+
         init();
 
     }
@@ -91,6 +99,7 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
 
             case R.id.searching_button:
                 doSearchQuery(keyWord.getText().toString());
+                break;
             default:
                 break;
         }
@@ -125,13 +134,38 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-//                selectedPosition=position;
-//                mAdapter.notifyDataSetChanged();
-//                locateText=resultData.get(position).getTitle();
-//                Intent intent=new Intent(LocationChooseActivity.this,AllIssueTextActivity.class);
-//                intent.putExtra("location",locateText);
-//                startActivity(intent);
-//                finish();
+                selectedPosition=position;
+                mAdapter.notifyDataSetChanged();
+
+                PoiItem poiItem=resultData.get(position);
+
+
+                String tittle=poiItem.getTitle(); //巴国布衣(滨江宝龙店)
+                LatLonPoint latLonPoint=poiItem.getLatLonPoint();
+                String province=poiItem.getProvinceName();//浙江省
+                String city=poiItem.getCityName(); //杭州市
+                String area=poiItem.getAdName(); //滨江区
+                String detailAddress=poiItem.getSnippet();//滨盛路3867号宝龙城3幢401-20室
+
+                Intent intent=null;
+                if(type==1){
+                    intent=new Intent(LocationChooseActivity.this,TopicItemCreateActivity.class);
+
+                }else{
+                    intent=new Intent(LocationChooseActivity.this,TopicItemEditActivity.class);
+
+                }
+//                intent.putExtra("tittle",tittle);
+                intent.putExtra("latLonPoint",latLonPoint);
+                intent.putExtra("province",province);
+                intent.putExtra("city",city);
+                intent.putExtra("area",area);
+//                intent.putExtra("detailAddress",detailAddress);
+                startActivity(intent);
+
+
+
+                finish();
             }
 
             @Override
@@ -141,7 +175,22 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
         });
 
         recyclerView.setAdapter(mAdapter);
+        keyWord.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String keyWords=keyWord.getText().toString();
+                doSearchQuery(keyWords);
+
+            }
+        });
 
 
     }
@@ -172,6 +221,10 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
     /**
      */
     private void doSearchQuery(String POIName) {
+        if(POIName==null||POIName.equals("")){
+            return;
+        }
+
         PoiSearch.Query query = new PoiSearch.Query(POIName,"","");
         query.setPageSize(30);
         query.setPageNum(0);
@@ -191,10 +244,11 @@ public class LocationChooseActivity extends BaseActivity implements  PoiSearch.O
         if (resultCode == AMapException.CODE_AMAP_SUCCESS){
             if (poiResult != null && poiResult.getPois().size() > 0){
                 List<PoiItem> poiItems = poiResult.getPois();
+                resultData.clear();
                 resultData.addAll(poiItems);
                 mAdapter.notifyDataSetChanged();
             } else {
-                Toast.makeText(LocationChooseActivity.this, "无搜索结果", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LocationChooseActivity.this, "无搜索结果", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(LocationChooseActivity.this, "搜索失败，错误 "+resultCode, Toast.LENGTH_SHORT).show();

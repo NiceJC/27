@@ -58,6 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static com.lede.second_23.global.GlobalConstants.CURRENT_AREA;
 import static com.lede.second_23.global.GlobalConstants.CURRENT_CITY;
 import static com.lede.second_23.global.GlobalConstants.CURRENT_PROVINCE;
 import static com.lede.second_23.global.GlobalConstants.ISMANAGER;
@@ -109,8 +110,9 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
     private boolean isRefresh;
     private String currentCity;
     private String currentProvence;
+    private String currenArea;
     private String location;
-    private boolean isProvince=false;
+    private int queryLevel=1; //区查询：3，如果返回空 使用市查询：2，如果返回空 使用省查询：1
     private ObjectAnimator animator;
 
     private AMapLocationClient mlocationClient;
@@ -118,8 +120,8 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
-
     public AMapLocationClientOption mLocationOption = null;
+
 
     private double myLatitude;//纬度
     private double myLongitude;//经度
@@ -132,7 +134,9 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
         currentCity= (String) SPUtils.get(getActivity(),CURRENT_CITY,"杭州市");
         currentProvence= (String) SPUtils.get(getActivity(),CURRENT_PROVINCE,"浙江省");
-        location=currentCity;
+        currenArea=(String) SPUtils.get(getActivity(),CURRENT_AREA,"江干区");
+        location=currentCity+" "+currenArea;
+
 
 
 
@@ -175,7 +179,9 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
             case R.id.edit:
                 intent=new Intent(getActivity(), TopicItemsRankActivity.class);
+                intent.putExtra("province",currentProvence);
                 intent.putExtra("city",currentCity);
+                intent.putExtra("area",currenArea);
                 startActivity(intent);
                 break;
             default:
@@ -338,13 +344,17 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
                 currentCity=aMapLocation.getCity();
                 currentProvence=aMapLocation.getProvince();
-                location=currentCity;
-                isProvince=false;
+
+                currenArea =aMapLocation.getDistrict();
+                location=currentCity+" "+currenArea;
+                queryLevel=3;
 
                 toRefresh();
 
                 SPUtils.put(getActivity(),CURRENT_PROVINCE,aMapLocation.getProvince());
                 SPUtils.put(getActivity(),CURRENT_CITY,aMapLocation.getCity());
+                SPUtils.put(getActivity(),CURRENT_AREA,aMapLocation.getDistrict());
+
 
 
                 mLocationClient.stopLocation();
@@ -394,7 +404,7 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
         if(isRefresh){
             FindMoreService findMoreService2=new FindMoreService(context);
-            findMoreService2.requestAllTopics(1, 6, new MyCallBack() {
+            findMoreService2.requestAllTopics(1, 50, new MyCallBack() {
                 @Override
                 public void onSuccess(Object o) {
                     refreshLayout.finishRefresh();
@@ -434,12 +444,18 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
                     currentPage = 1;
                     isHasNextPage = true;
 
-                    if(list.size()==0&&!isProvince){
-                        location=currentProvence;
-                        isProvince=true;
+                    if(list.size()==0&&queryLevel==3){
+                        location=currentCity;
+                        queryLevel=2;
                         toRefresh();
 
                     }
+                    if(list.size()==0&&queryLevel==2){
+                        location=currentProvence;
+                        queryLevel=1;
+                        toRefresh();
+                    }
+
 
                 } else {
                     if (list.size() == 0) {
@@ -453,9 +469,6 @@ public class SearchMoreFragment extends Fragment implements AMapLocationListener
 
                 topicItemsData.addAll(list);
                 topicItemAdapter.notifyDataSetChanged();
-
-
-
 
             }
 

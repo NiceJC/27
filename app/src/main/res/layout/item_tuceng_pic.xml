@@ -28,7 +28,9 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="visible"></LinearLayout>
+            android:visibility="visible">
+
+        </LinearLayout>
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
 </com.zhy.android.percent.support.PercentRelativeLayout>

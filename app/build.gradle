@@ -7,8 +7,8 @@ android {
         applicationId "com.lede.second_23"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 14
-        versionName "3.6.2"
+        versionCode 15
+        versionName "3.6.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         manifestPlaceholders=[UMENG_CHANNEL_VALUE:"umeng"]

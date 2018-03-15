@@ -288,7 +288,7 @@ public class ForumFragment_Concern extends Fragment {
                     } else {
                         view = layoutInflater.inflate(R.layout.item_tuceng_pic, rl_pic, true);
                         HackyViewPager hvp_imgs = (HackyViewPager) view.findViewById(R.id.hvp_item_tuceng_imgs);
-                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getChildFragmentManager(), banner));
+                        hvp_imgs.setAdapter(new ImageViewPagerAdapter_2(getActivity().getSupportFragmentManager(), banner));
                         final LinearLayout ll_inDicator = (LinearLayout) view.findViewById(R.id.ll_item_tuceng_indicator);
                         for (int i = 0; i < banner.size(); i++) {
                             ImageView inDicator = (ImageView) LayoutInflater.from(context).inflate(R.layout.layout_indicator, ll_inDicator, false);
@@ -339,33 +339,37 @@ public class ForumFragment_Concern extends Fragment {
                 TextView tv_commentCount = holder.getView(R.id.tv_item_forum_commentcount);
                 tv_commentCount.setText(listBean.getClickCount() + "");
                 final ImageView iv_like = holder.getView(R.id.iv_item_forum_like);
+                LinearLayout like_click=holder.getView(R.id.like_click);
                 if (listBean.isLike()) {
                     iv_like.setImageResource(R.mipmap.praised);
                 } else {
                     iv_like.setImageResource(R.mipmap.praise);
                 }
-                iv_like.setOnClickListener(new View.OnClickListener() {
+                like_click.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        int likenum = listBean.getLikeCount();
+                        Log.i("likeCount", "onClick: " + listBean.getLikeCount());
+                        if (listBean.isLike()) {
+                            listBean.setLike(false);
+                            iv_like.setImageResource(R.mipmap.praise);
+//                            tv_likeCount.setText((likenum-1) + "赞");
+                            listBean.setLikeCount(likenum - 1);
+                        } else {
+                            listBean.setLike(true);
+
+                            iv_like.setImageResource(R.mipmap.praised);
+//                            tv_likeCount.setText((likenum+1) + "赞");
+                            listBean.setLikeCount(likenum + 1);
+                        }
+                        tv_likeCount.setText(listBean.getLikeCount() + "");
+
 
                         forumService.praiseForum(listBean.getForumId(), new MyCallBack() {
                             @Override
                             public void onSuccess(Object o) {
-                                int likenum = listBean.getLikeCount();
-                                Log.i("likeCount", "onClick: " + listBean.getLikeCount());
-                                if (listBean.isLike()) {
-                                    listBean.setLike(false);
-                                    iv_like.setImageResource(R.mipmap.praise);
-//                            tv_likeCount.setText((likenum-1) + "赞");
-                                    listBean.setLikeCount(likenum - 1);
-                                } else {
-                                    listBean.setLike(true);
 
-                                    iv_like.setImageResource(R.mipmap.praised);
-//                            tv_likeCount.setText((likenum+1) + "赞");
-                                    listBean.setLikeCount(likenum + 1);
-                                }
-                                tv_likeCount.setText(listBean.getLikeCount() + "");
 
                             }
 
